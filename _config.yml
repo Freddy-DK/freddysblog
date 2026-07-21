@@ -1,0 +1,44 @@
+title: Freddys blog
+description: Learn something new… – then Teach someone!
+author: Freddy Kristiansen
+
+# Set url to "https://freddysblog.com" when the custom domain is switched over.
+# While testing on *.github.io, leave it empty — the deploy workflow supplies
+# the correct baseurl automatically.
+url: ""
+baseurl: ""
+
+timezone: Europe/Copenhagen
+
+theme: minima
+permalink: /:year/:month/:day/:title/
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-archives
+
+# Tag and category archive pages (the reason we build with GitHub Actions
+# instead of the restricted github-pages build container).
+jekyll-archives:
+  enabled:
+    - tags
+    - categories
+  layout: archive
+  permalinks:
+    tag: /tag/:name/
+    category: /category/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENSE
