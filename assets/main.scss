@@ -3,6 +3,15 @@
 ---
 @import "minima";
 
+// Keep the title bar and banner image fixed at the top;
+// only the content below them scrolls.
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: $background-color;
+}
+
 .site-banner {
   max-width: $content-width;
   margin: 0 auto;
@@ -24,4 +33,26 @@
   display: inline-block;
   margin: 0 10px;
   white-space: nowrap;
+}
+
+// Full-size image overlay (lightbox)
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 100;
+  cursor: zoom-out;
+}
+
+.lightbox-overlay.open {
+  display: flex;
+}
+
+.lightbox-overlay img {
+  max-width: 95vw;
+  max-height: 95vh;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
 }

@@ -1,0 +1,43 @@
+<div class="lightbox-overlay" id="lightbox" aria-hidden="true">
+  <img src="" alt="">
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var overlay = document.getElementById('lightbox');
+    var overlayImg = overlay.querySelector('img');
+
+    function openLightbox(src) {
+      overlayImg.src = src;
+      overlay.classList.add('open');
+    }
+    function closeLightbox() {
+      overlay.classList.remove('open');
+      overlayImg.src = '';
+    }
+
+    overlay.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    document.querySelectorAll('.post-content img').forEach(function (img) {
+      var link = img.closest('a');
+      if (link) {
+        // Old-style [thumbnail](full-size) images: open the full-size
+        // target in the lightbox instead of navigating to the file.
+        // Links to non-image targets keep their normal behavior.
+        if (/\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(link.getAttribute('href') || '')) {
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+            openLightbox(link.href);
+          });
+        }
+        return;
+      }
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', function () {
+        openLightbox(img.src);
+      });
+    });
+  });
+</script>
