@@ -3,6 +3,11 @@
 ---
 @import "minima";
 
+.site-banner {
+  max-width: $content-width;
+  margin: 0 auto;
+}
+
 .site-banner img {
   display: block;
   width: 100%;
