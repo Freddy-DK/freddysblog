@@ -1,0 +1,22 @@
+---
+# Overrides minima's default main.scss so we can add custom styles.
+---
+@import "minima";
+
+.site-banner img {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+}
+
+.tag-cloud {
+  line-height: 2.4;
+  text-align: center;
+}
+
+.tag-cloud a {
+  display: inline-block;
+  margin: 0 10px;
+  white-space: nowrap;
+}

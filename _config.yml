@@ -14,7 +14,11 @@ permalink: /:year/:month/:day/:title/
 # lists every page with a title — including all generated tag/category
 # archive pages.
 header_pages:
+  - categories.md
   - tags.md
+
+# Show the first paragraph of each post on the home page listing.
+show_excerpts: true
 
 plugins:
   - jekyll-feed
