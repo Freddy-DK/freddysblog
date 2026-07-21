@@ -70,6 +70,7 @@ Whether you are provisioning 10 or 100 VMs, it takes approx 1 hour since everyth
 
 Run this powershell piece to test whether your workshop VMs are ready to use:
 
+```
 $vmname = "fkb"
 $domain = "westeurope.cloudapp.azure.com"
 $offset = 1
@@ -80,17 +81,18 @@ $bad = 0
 $offset..($offset+$count-1) | % {
   $status = ""
   try {
-    $status = (New-Object System.Net.WebClient).DownloadString("http://$vmname$\_.$domain/status.aspx")
+    $status = (New-Object System.Net.WebClient).DownloadString("http://$vmname$_.$domain/status.aspx")
   } catch { }
   if ($status.Contains('Ready for connections!') -and $status.Contains('Desktop setup complete!')) {
     $good++
   } else {
     $bad++
-    Write-Host "$\_ failed"
+    Write-Host "$_ failed"
   }
 }
 Write-Host "Succeeded: $good"
 Write-Host "Failed: $bad"
+```
 
 As you probably can read, the script will inspect the status.aspx page to see whether the Desktop setup and the Container setup both completed successfully.
 

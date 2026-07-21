@@ -21,21 +21,22 @@ After this, the blog post will describe how you can add your own C/AL solution. 
 
 I will use Business Central Spring release for the move and my solution was originally created in NAV 2017 CU3. The [first blog post in this series](/2019/04/15/c-al-to-al-preparations/) explains how you can move your solution from NAV 2017 CU3 to Business Central, but I am sure most partners have mechanisms and processes in place to perform this move. If you didn’t go through the process in the first blog post, you can create a container with the result of the first blog post by running this script:
 
-\# Settings
+```
+# Settings
 $imageName = "mcr.microsoft.com/businesscentral/onprem:1904-rtm"
 $auth = "NavUserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-$licenseFile = "C:\\temp\\license.flf"
-$demoSolution2Path = "C:\\ProgramData\\NavContainerHelper\\DemoSolution2.txt"
+$licenseFile = "C:\temp\license.flf"
+$demoSolution2Path = "C:\ProgramData\NavContainerHelper\DemoSolution2.txt"
 
 # Create Business Central container
-New-NavContainer -accept\_eula \`
-                 -imageName $imageName \`
-                 -containerName "bc" \`
-                 -licenseFile $licenseFile \`
-                 -auth $auth \`
-                 -Credential $Credential \`
-                 -updateHosts \`
+New-NavContainer -accept_eula `
+                 -imageName $imageName `
+                 -containerName "bc" `
+                 -licenseFile $licenseFile `
+                 -auth $auth `
+                 -Credential $Credential `
+                 -updateHosts `
                  -includeCSide
 #
 # Import and compile objects
@@ -45,26 +46,29 @@ if (!(Test-Path $demoSolution2Path)) {
 }
 Import-ObjectsToNavContainer -containerName "bc" -objectsFile $demoSolution2Path
 Compile-ObjectsInNavContainer -containerName "bc" -filter "Modified=Yes"
+```
 
 # Create a development container
 
 Next up, I need to create a development container for my AL code customized solution. I will not be doing any changes in C/AL, meaning that I do not need to use **\-includeCSIDE** and I don’t need **\-enableSymbolLoading**. I will however use **\-includeAL** which will create a baseline of AL objects and also create a shared folder which I can use as assembly reference path from VS Code.
 
-\# Settings
+```
+# Settings
 $imageName = "mcr.microsoft.com/businesscentral/onprem:1904-rtm"
 $auth = "NavUserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-$licenseFile = "C:\\temp\\license.flf"
+$licenseFile = "C:\temp\license.flf"
 
 # Create Business Central container
-New-NavContainer -accept\_eula \`
-                 -imageName $imageName \`
-                 -containerName "myal" \`
-                 -licenseFile $licenseFile \`
-                 -auth $auth \`
-                 -Credential $Credential \`
-                 -updateHosts \`
+New-NavContainer -accept_eula `
+                 -imageName $imageName `
+                 -containerName "myal" `
+                 -licenseFile $licenseFile `
+                 -auth $auth `
+                 -Credential $Credential `
+                 -updateHosts `
                  -includeAL
+```
 
 Looking at the shared containerfolder for the myal container, you will find a folder called .netpackages:![dotnetpackages](/assets/images/2019/c-al-to-al-code-customizations/dotnetpackages.png)
 
@@ -74,7 +78,9 @@ The content of this folder is a copy of all the dotnet DLLs needed from VS Code 
 
 First thing I want to do is to create an AL project containing all the baseapp objects, without my own customizations. NavContainerHelper contains a function called **Create-AlProjectFolderFromNavContainer**, which will create a project folder with all base application objects, setup app.json with reference to platform only, launch.json with reference to your development container and a settings.json with assemblyProbingPaths to the shared folder from this container.
 
-Create-AlProjectFolderFromNavContainer -containerName "myal" -alProjectFolder "C:\\ProgramData\\NavContainerHelper\\AL\\DemoSolution" -useBaseLine -addGIT
+```
+Create-AlProjectFolderFromNavContainer -containerName "myal" -alProjectFolder "C:\ProgramData\NavContainerHelper\AL\DemoSolution" -useBaseLine -addGIT
+```
 
 The parameter **\-useBaseline** means that the function will copy the base app objects from the pre-exported baseline folder and **\-addGIT** means that the function will create a offline git repository on the folder and commit all objects.
 
@@ -92,12 +98,16 @@ Note that VS Code might still be very slow when working with projects of this si
 
 You can also compile the project using the **Compile-AppInNavContainer** function:
 
-Compile-AppInNavContainer -containerName "myal" -credential $credential -appProjectFolder "C:\\ProgramData\\NavContainerHelper\\AL\\DemoSolution"
+```
+Compile-AppInNavContainer -containerName "myal" -credential $credential -appProjectFolder "C:\ProgramData\NavContainerHelper\AL\DemoSolution"
+```
 
 It should give an output ending with:
 
-C:\\ProgramData\\NavContainerHelper\\AL\\DemoSolution\\output\\Default Publisher\_myal\_1.0.0.0.app successfully created in 131 seconds
-C:\\ProgramData\\NavContainerHelper\\AL\\DemoSolution\\output\\Default Publisher\_myal\_1.0.0.0.app
+```
+C:\ProgramData\NavContainerHelper\AL\DemoSolution\output\Default Publisher_myal_1.0.0.0.app successfully created in 131 seconds
+C:\ProgramData\NavContainerHelper\AL\DemoSolution\output\Default Publisher_myal_1.0.0.0.app
+```
 
 # Commit the changes done by the compiler
 
@@ -117,11 +127,13 @@ But, since we want to do code customizations, we need to replace the C/AL object
 
 NavContainerHelper contains a function called **Publish-NewApplicationToNavContainer**, which uninstalls all apps, removes all C/AL objects and use the development endpoint of the container to publish the new app.
 
-PS C:\\WINDOWS\\system32> Publish-NewApplicationToNavContainer -containerName "myal" -appDotNetPackagesFolder "C:\\ProgramData\\NavContainerHelper\\AL\\DemoSolution\\.netpackages" -appFile "C:\\ProgramData\\NavContainerHelper\\AL\\DemoSolution\\output\\Default Publisher\_myal\_1.0.0.0.app" -credential $credential -useCleanDatabase
+```
+PS C:\WINDOWS\system32> Publish-NewApplicationToNavContainer -containerName "myal" -appDotNetPackagesFolder "C:\ProgramData\NavContainerHelper\AL\DemoSolution\.netpackages" -appFile "C:\ProgramData\NavContainerHelper\AL\DemoSolution\output\Default Publisher_myal_1.0.0.0.app" -credential $credential -useCleanDatabase
 Uninstalling apps
 Removing C/AL Application Objects
-Publishing Default Publisher\_myal\_1.0.0.0.app to http://172.19.186.163:7049/NAV/dev/apps?SchemaUpdateMode=synchronize
+Publishing Default Publisher_myal_1.0.0.0.app to http://172.19.186.163:7049/NAV/dev/apps?SchemaUpdateMode=synchronize
 New Application successfully published to myal
+```
 
 Note that **\-useCleandatabase** is that flag signalling to remove C/AL objects and uninstall apps. You can use the same function (without the -useCleandatabase) or VS Code to do subsequent deployments of the app.
 
@@ -133,7 +145,9 @@ Like with AL extension development, you can call Convert-ModifiedObjectsToAl in 
 
 For converting and copying to my AL folder, I run this command:
 
-Convert-ModifiedObjectsToAl -containerName "bc" -sqlCredential $credential -startId 50100 -doNotUseDeltas -alProjectFolder "C:\\ProgramData\\NavContainerHelper\\AL\\DemoSolution" -alFilePattern "\*.al,\*.xlf"
+```
+Convert-ModifiedObjectsToAl -containerName "bc" -sqlCredential $credential -startId 50100 -doNotUseDeltas -alProjectFolder "C:\ProgramData\NavContainerHelper\AL\DemoSolution" -alFilePattern "*.al,*.xlf"
+```
 
 Specifying \*.al,\*.xlf in the file pattern means that we will not copy the reconverted reports and get all the 500+ changes when compiling the reports again. It is my recommendation to convert reports and the remaining app in  two rounds to avoid this.
 

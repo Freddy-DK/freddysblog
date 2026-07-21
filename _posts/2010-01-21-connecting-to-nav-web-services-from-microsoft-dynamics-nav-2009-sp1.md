@@ -35,120 +35,173 @@ The return value is always a nodeList and we only look at the responseXML proper
 
 The Code for InvokeNavWS looks like this:
 
-**InvokeNavWS(URL : Text\[250\];method : Text\[20\];nameSpace : Text\[80\];returnTag : Text\[20\];parameters : Text\[1024\];VAR nodeList : Automation “‘Microsoft XML, v6.0’.IXMLDOMNodeList”) result : Boolean  
-**result := FALSE;  
-// Create XML Document  
-CREATE(xmldoc,TRUE,TRUE);  
-// Create SOAP Envelope  
-soapEnvelope := xmldoc.createElement(‘Soap:Envelope’);  
-soapEnvelope.setAttribute(‘xmlns:Soap’, ‘[http://schemas.xmlsoap.org/soap/envelope/’);](http://schemas.xmlsoap.org/soap/envelope/'\);)  
-xmldoc.appendChild(soapEnvelope);  
-// Create SOAP Body  
-soapBody := xmldoc.createElement(‘Soap:Body’);  
-soapEnvelope.appendChild(soapBody);  
-// Create Method Element  
-soapMethod := xmldoc.createElement(method);  
-soapMethod.setAttribute(‘xmlns’, nameSpace);  
-soapBody.appendChild(soapMethod);  
-// Transfer parameters by loading them into a XML Document and move them  
-CREATE(parametersXmlDoc,TRUE,TRUE);  
-parametersXmlDoc.loadXML(‘<parameters>’+parameters+'</parameters>’);  
-IF parametersXmlDoc.firstChild.hasChildNodes THEN  
-BEGIN  
-WHILE parametersXmlDoc.firstChild.childNodes.length>0 DO  
-BEGIN  
-node := parametersXmlDoc.firstChild.firstChild;  
-node := parametersXmlDoc.firstChild.removeChild(node);  
-soapMethod.appendChild(node);  
-END;  
-END;  
-// Create XMLHTTP and SEND  
-CREATE(xmlhttp, TRUE, TRUE);  
-xmlhttp.open(‘POST’, URL, FALSE);  
-xmlhttp.setRequestHeader(‘Content-type’, ‘text/xml; charset=utf-8’);  
-xmlhttp.setRequestHeader(‘SOAPAction’, method);  
-xmlhttp.send(xmldoc);  
-// If status is OK – Get Result XML  
-IF xmlhttp.status=200 THEN  
-BEGIN  
-xmldoc := xmlhttp.responseXML;  
-xmldoc.setProperty(‘SelectionLanguage’,’XPath’);  
-xmldoc.setProperty(‘SelectionNamespaces’,’xmlns:tns=”‘+nameSpace+'”‘);  
-nodeList := xmldoc.selectNodes(‘//tns:’+returnTag);  
-result := TRUE;  
+```
+InvokeNavWS(URL : Text[250];method : Text[20];nameSpace : Text[80];returnTag : Text[20];parameters : Text[1024];VAR nodeList : Automation "'Microsoft XML, v6.0'.IXMLDOMNodeList") result : Boolean
+```
+
+```
+result := FALSE;
+// Create XML Document
+CREATE(xmldoc,TRUE,TRUE);
+// Create SOAP Envelope
+soapEnvelope := xmldoc.createElement('Soap:Envelope');
+soapEnvelope.setAttribute('xmlns:Soap', '
+```
+
+[`http://schemas.xmlsoap.org/soap/envelope/');`](http://schemas.xmlsoap.org/soap/envelope/'\);)  
+
+```
+xmldoc.appendChild(soapEnvelope);
+// Create SOAP Body
+soapBody := xmldoc.createElement('Soap:Body');
+soapEnvelope.appendChild(soapBody);
+// Create Method Element
+soapMethod := xmldoc.createElement(method);
+soapMethod.setAttribute('xmlns', nameSpace);
+soapBody.appendChild(soapMethod);
+// Transfer parameters by loading them into a XML Document and move them
+CREATE(parametersXmlDoc,TRUE,TRUE);
+parametersXmlDoc.loadXML('<parameters>'+parameters+'</parameters>');
+IF parametersXmlDoc.firstChild.hasChildNodes THEN
+BEGIN
+WHILE parametersXmlDoc.firstChild.childNodes.length>0 DO
+BEGIN
+node := parametersXmlDoc.firstChild.firstChild;
+node := parametersXmlDoc.firstChild.removeChild(node);
+soapMethod.appendChild(node);
 END;
+END;
+// Create XMLHTTP and SEND
+CREATE(xmlhttp, TRUE, TRUE);
+xmlhttp.open('POST', URL, FALSE);
+xmlhttp.setRequestHeader('Content-type', 'text/xml; charset=utf-8');
+xmlhttp.setRequestHeader('SOAPAction', method);
+xmlhttp.send(xmldoc);
+// If status is OK – Get Result XML
+IF xmlhttp.status=200 THEN
+BEGIN
+xmldoc := xmlhttp.responseXML;
+xmldoc.setProperty('SelectionLanguage','XPath');
+xmldoc.setProperty('SelectionNamespaces','xmlns:tns="'+nameSpace+'"');
+nodeList := xmldoc.selectNodes('//tns:'+returnTag);
+result := TRUE;
+END;
+```
 
 and the local variables for InvokeNavWS are
 
-Name              DataType      Subtype                                 Length  
-xmlhttp           Automation    ‘Microsoft XML, v6.0’.XMLHTTP  
-xmldoc            Automation    ‘Microsoft XML, v6.0’.DOMDocument  
-soapEnvelope      Automation    ‘Microsoft XML, v6.0’.IXMLDOMElement  
-soapBody          Automation    ‘Microsoft XML, v6.0’.IXMLDOMElement  
-soapMethod        Automation    ‘Microsoft XML, v6.0’.IXMLDOMElement  
-node              Automation    ‘Microsoft XML, v6.0’.IXMLDOMNode  
-parametersXmlDoc  Automation    ‘Microsoft XML, v6.0’.DOMDocument   
+```
+Name              DataType      Subtype                                 Length
+xmlhttp           Automation    'Microsoft XML, v6.0'.XMLHTTP
+xmldoc            Automation    'Microsoft XML, v6.0'.DOMDocument
+soapEnvelope      Automation    'Microsoft XML, v6.0'.IXMLDOMElement
+soapBody          Automation    'Microsoft XML, v6.0'.IXMLDOMElement
+soapMethod        Automation    'Microsoft XML, v6.0'.IXMLDOMElement
+node              Automation    'Microsoft XML, v6.0'.IXMLDOMNode
+parametersXmlDoc  Automation    'Microsoft XML, v6.0'.DOMDocument
+```
+
+   
 
 As in the Javascript sample I have create a couple of “high” level functions for easier access:
 
-**SystemService\_Companies(VAR nodeList : Automation “‘Microsoft XML, v6.0’.IXMLDOMNodeList”) result : Boolean  
-**result := InvokeNavWS(systemServiceURL, ‘Companies’, SystemServiceNS, ‘return\_value’, ”, nodeList);
+```
+SystemService_Companies(VAR nodeList : Automation "'Microsoft XML, v6.0'.IXMLDOMNodeList") result : Boolean
+result := InvokeNavWS(systemServiceURL, 'Companies', SystemServiceNS, 'return_value', ", nodeList);
+```
 
-**CustomerPage\_Read(No : Text\[20\];VAR nodeList : Automation “‘Microsoft XML, v6.0’.IXMLDOMNodeList”) result : Boolean  
-**result := InvokeNavWS(customerPageURL, ‘Read’, CustomerServiceNS, ‘Customer’, ‘<No>’+No+'</No>’, nodeList);
+```
+CustomerPage_Read(No : Text[20];VAR nodeList : Automation "'Microsoft XML, v6.0'.IXMLDOMNodeList") result : Boolean
+result := InvokeNavWS(customerPageURL, 'Read', CustomerServiceNS, 'Customer', '<No>'+No+'</No>', nodeList);
+```
 
-**CustomerPage\_ReadMultiple(filters : Text\[1024\];VAR nodeList : Automation “‘Microsoft XML, v6.0’.IXMLDOMNodeList”) result : Boolean  
-**result := InvokeNavWS(customerPageURL, ‘ReadMultiple’, CustomerServiceNS, ‘Customer’, filters, nodeList);
+```
+CustomerPage_ReadMultiple(filters : Text[1024];VAR nodeList : Automation "'Microsoft XML, v6.0'.IXMLDOMNodeList") result : Boolean
+result := InvokeNavWS(customerPageURL, 'ReadMultiple', CustomerServiceNS, 'Customer', filters, nodeList);
+```
 
 ### The “main” program
 
-**OnRun()**  
-baseURL := ‘[http://localhost:7047/DynamicsNAV/WS/’;](http://localhost:7047/DynamicsNAV/WS/';)  
-systemServiceURL := baseURL + ‘SystemService’;  
-SoapEnvelopeNS := ‘[http://schemas.xmlsoap.org/soap/envelope/’;](http://schemas.xmlsoap.org/soap/envelope/';)  
-SystemServiceNS := ‘urn:microsoft-dynamics-schemas/nav/system/’;  
-CustomerServiceNS := ‘urn:microsoft-dynamics-schemas/page/customer’;
+```
+OnRun()
+baseURL := '
+```
 
-CLEAR(nodeList);  
-IF SystemService\_Companies(nodeList) THEN  
-BEGIN  
-DISPLAY(‘Companies:’);  
-FOR i:=1 TO nodeList.length DO  
-BEGIN  
-node := nodeList.item(i-1);  
-DISPLAY(node.text);  
-IF i=1 THEN cur := node.text;  
+[`http://localhost:7047/DynamicsNAV/WS/';`](http://localhost:7047/DynamicsNAV/WS/';)  
+
+```
+systemServiceURL := baseURL + 'SystemService';
+SoapEnvelopeNS := '
+```
+
+[`http://schemas.xmlsoap.org/soap/envelope/';`](http://schemas.xmlsoap.org/soap/envelope/';)  
+
+```
+SystemServiceNS := 'urn:microsoft-dynamics-schemas/nav/system/';
+CustomerServiceNS := 'urn:microsoft-dynamics-schemas/page/customer';
+```
+
+```
+CLEAR(nodeList);
+IF SystemService_Companies(nodeList) THEN
+BEGIN
+DISPLAY('Companies:');
+FOR i:=1 TO nodeList.length DO
+BEGIN
+node := nodeList.item(i-1);
+DISPLAY(node.text);
+IF i=1 THEN cur := node.text;
 END;
+```
 
-  customerPageURL := baseURL + EncodeURIComponent(cur) + ‘/Page/Customer’;  
-DISPLAY(‘URL of Customer Page: ‘+ customerPageURL);
+  
 
-  IF CustomerPage\_Read(‘10000’, nodeList) THEN  
-BEGIN  
-DISPLAY(‘Name of Customer 10000: ‘ + nodeList.item(0).childNodes.item(2).firstChild.text);  
+```
+customerPageURL := baseURL + EncodeURIComponent(cur) + '/Page/Customer';
+DISPLAY('URL of Customer Page: '+ customerPageURL);
+```
+
+  
+
+```
+IF CustomerPage_Read('10000', nodeList) THEN
+BEGIN
+DISPLAY('Name of Customer 10000: ' + nodeList.item(0).childNodes.item(2).firstChild.text);
 END;
+```
 
-  IF CustomerPage\_ReadMultiple(‘<filter><Field>Country\_Region\_Code</Field><Criteria>GB</Criteria></filter>’+  
-‘<filter><Field>Location\_Code</Field><Criteria>RED|BLUE</Criteria></filter>’, nodeList) THEN  
-BEGIN  
-DISPLAY(‘Customers in GB served by RED or BLUE warehouse:’);  
-FOR i:=1 TO nodeList.length DO  
-BEGIN  
-node := nodeList.item(i-1);  
-DISPLAY(node.childNodes.item(2).firstChild.text);  
-END;  
+  
+
+```
+IF CustomerPage_ReadMultiple('<filter><Field>Country_Region_Code</Field><Criteria>GB</Criteria></filter>'+
+'<filter><Field>Location_Code</Field><Criteria>RED|BLUE</Criteria></filter>', nodeList) THEN
+BEGIN
+DISPLAY('Customers in GB served by RED or BLUE warehouse:');
+FOR i:=1 TO nodeList.length DO
+BEGIN
+node := nodeList.item(i-1);
+DISPLAY(node.childNodes.item(2).firstChild.text);
 END;
-
-  DISPLAY(‘THE END’);
-
 END;
+```
+
+  `DISPLAY('THE END');`
+
+`END;`
 
 with the following local variables:
 
-Name       DataType      Subtype                                 Length  
-nodeList   Automation    ‘Microsoft XML, v6.0’.IXMLDOMNodeList  
-node       Automation    ‘Microsoft XML, v6.0’.IXMLDOMNode  
-i          Integer       
+```
+Name       DataType      Subtype                                 Length
+```
+
+```
+nodeList   Automation    'Microsoft XML, v6.0'.IXMLDOMNodeList
+node       Automation    'Microsoft XML, v6.0'.IXMLDOMNode
+i          Integer
+```
+
+       
 
 As it was the case in the Javascript sample I am using simple xml nodelist code to navigate and display various values. baseURL, cur, SystemServiceURL etc. are all global Text variables used as constants.
 
@@ -168,17 +221,19 @@ DISPLAY points to a function that just does a IF CONFIRM(s) THEN ; to display wh
 
 Note that the URL of the Customer Page is different from all the other examples. This is because NAV doesn’t have a way of Encoding an URL, so I have to do the company name encoding myself and when I encode a company name, I just encode all characters, that works perfectly:
 
-**EncodeURIComponent(uri : Text\[80\]) encodedUri : Text\[240\]  
-**// No URI Encoding in NAV – we do it ourself…  
-HexDigits := ‘0123456789ABCDEF’;  
-encodedUri := ”;  
-FOR i:=1 TO STRLEN(uri) DO  
-BEGIN  
-b := uri\[i\];  
-encodedUri := encodedUri + ‘%  ‘;  
-encodedUri\[STRLEN(encodedUri)-1\] := HexDigits\[(b DIV 16)+1\];  
-encodedUri\[STRLEN(encodedUri)\] := HexDigits\[(b MOD 16)+1\];  
+```
+EncodeURIComponent(uri : Text[80]) encodedUri : Text[240]
+// No URI Encoding in NAV – we do it ourself…
+HexDigits := '0123456789ABCDEF';
+encodedUri := ";
+FOR i:=1 TO STRLEN(uri) DO
+BEGIN
+b := uri[i];
+encodedUri := encodedUri + '%  ';
+encodedUri[STRLEN(encodedUri)-1] := HexDigits[(b DIV 16)+1];
+encodedUri[STRLEN(encodedUri)] := HexDigits[(b MOD 16)+1];
 END;
+```
 
 (Again, there might be smarter ways to do this – I just haven’t found it).
 

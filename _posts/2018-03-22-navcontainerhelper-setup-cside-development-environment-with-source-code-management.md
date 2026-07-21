@@ -35,24 +35,27 @@ and if you look in the Source folder:
 
 Open PowerShell ISE as administrator and load the CreateDevEnv.ps1 file.
 
-$mylicense = "c:\\temp\\mylicense.flf"
+```
+$mylicense = "c:\temp\mylicense.flf"
 $imageName = "microsoft/dynamics-nav:2017-cu13"
 $sourceFolder = Join-Path $PSScriptRoot "Source"
 $containerName = Split-Path $PSScriptRoot -Leaf
-New-NavContainer -accept\_eula \`
-                 -containerName $containerName \`
-                 -imageName $imageName \`
-                 -auth Windows \`
-                 -licensefile $mylicense \`
-                 -updateHosts \`
-                 -includeCSide \`
-                 -additionalParameters @("--volume ${sourceFolder}:c:\\source") 
+New-NavContainer -accept_eula `
+                 -containerName $containerName `
+                 -imageName $imageName `
+                 -auth Windows `
+                 -licensefile $mylicense `
+                 -updateHosts `
+                 -includeCSide `
+                 -additionalParameters @("--volume ${sourceFolder}:c:\source") 
 Import-DeltasToNavContainer -containerName $containerName -deltaFolder $sourceFolder -compile
+```
 
 This script assumes that you have a license file in c:\\temp – please modify the line if needed.
 
 The script will create a NAV container called MyFirstApp, using Windows authentication, including CSIDE and sharing the source folder to the container. You should see an output like this:
 
+```
 ...
 Container IP Address: 172.19.157.232
 Container Hostname : MyFirstApp
@@ -66,20 +69,23 @@ Ready for connections!
 Reading CustomSettings.config from MyFirstApp
 Creating Desktop Shortcuts for MyFirstApp
 Nav container MyFirstApp successfully created
-Copy original objects to C:\\ProgramData\\NavContainerHelper\\Extensions\\MyFirstApp\\original for all objects that are modified (container path)
-Merging Deltas from c:\\source (container path)
-Importing Objects from C:\\ProgramData\\NavContainerHelper\\Extensions\\MyFirstApp\\mergedobjects.txt (container path)
+Copy original objects to C:\ProgramData\NavContainerHelper\Extensions\MyFirstApp\original for all objects that are modified (container path)
+Merging Deltas from c:\source (container path)
+Importing Objects from C:\ProgramData\NavContainerHelper\Extensions\MyFirstApp\mergedobjects.txt (container path)
 Objects successfully imported
 Compiling objects
 Objects successfully compiled
+```
 
 # Start CSIDE and develop your solution
 
 On your desktop you will find a shortcut to _MyFirstApp CSIDE_. Start this, and modify your solution. Try to add another field to the customer table: “My 2nd Field” and save the object. You can do multiple modifications to multiple objects and when you want to check in your modifications to GitHub, run the _GetChanges.ps1_ script, which looks like this:
 
+```
 $sourceFolder = Join-Path $PSScriptRoot "Source"
 $containerName = Split-Path $PSScriptRoot -Leaf
 Export-ModifiedObjectsAsDeltas -containerName $containerName -deltaFolder $sourceFolder
+```
 
 Now, switch to the GitHub Desktop app, which will show the modifications:
 
@@ -93,8 +99,10 @@ Now simply re-run the _CreateDevEnv.ps1_ script to re-create your development en
 
 When you are done working on the project, simply remove the container, using the _RemoveDevEnv.ps1_ script, which looks like:
 
+```
 $containerName = Split-Path $PSScriptRoot -Leaf
 Remove-NavContainer -containerName $containerName
+```
 
 **Note**, that you cannot re-create or remove the container if you have CSIDE or other files in the container open from the host.
 
@@ -102,21 +110,23 @@ Remove-NavContainer -containerName $containerName
 
 If you have .net add-ins, that your solution depends on, you can place those in a folder and share this folder to the container as _c:\\run\\add-ins_, meaning that _CreateDevEnv.ps1_ now looks like:
 
-$mylicense = "c:\\temp\\mylicense.flf"
+```
+$mylicense = "c:\temp\mylicense.flf"
 $imageName = "microsoft/dynamics-nav:2017-cu13"
 $sourceFolder = Join-Path $PSScriptRoot "Source"
 $containerName = Split-Path $PSScriptRoot -Leaf
-$addInsFolder = "C:\\temp\\addins"
-New-NavContainer -accept\_eula \`
-                 -containerName $containerName \`
-                 -imageName $imageName \`
-                 -auth Windows \`
-                 -licensefile $mylicense \`
-                 -updateHosts \`
-                 -includeCSide \`
-                 -additionalParameters @("--volume ${sourceFolder}:c:\\source",
-                                         "--volume ${addInsFolder}:c:\\run\\Add-Ins")
+$addInsFolder = "C:\temp\addins"
+New-NavContainer -accept_eula `
+                 -containerName $containerName `
+                 -imageName $imageName `
+                 -auth Windows `
+                 -licensefile $mylicense `
+                 -updateHosts `
+                 -includeCSide `
+                 -additionalParameters @("--volume ${sourceFolder}:c:\source",
+                                         "--volume ${addInsFolder}:c:\run\Add-Ins")
 Import-DeltasToNavContainer -containerName $containerName -deltaFolder $sourceFolder -compile
+```
 
 All files in the _c:\\run\\add-ins_ folder in the container will automatically be copied to the Add-ins folder in the Service folder and in the RoleTailored Client folder, for you to use when doing development.
 
@@ -124,29 +134,33 @@ All files in the _c:\\run\\add-ins_ folder in the container will automatically b
 
 If your solution depends on the Task Scheduler (which by default is not enabled in Docker images), then you normally would need to set the EnableTaskScheduler setting in CustomSettings.config and restart the service tier. This can also be done as part of running the container:
 
-$mylicense = "c:\\temp\\mylicense.flf"
+```
+$mylicense = "c:\temp\mylicense.flf"
 $imageName = "microsoft/dynamics-nav:2017-cu13"
 $sourceFolder = Join-Path $PSScriptRoot "Source"
 $containerName = Split-Path $PSScriptRoot -Leaf
-$addInsFolder = "C:\\temp\\addins"
-New-NavContainer -accept\_eula \`
-                 -containerName $containerName \`
-                 -imageName $imageName \`
-                 -auth Windows \`
-                 -licensefile $mylicense \`
-                 -updateHosts \`
-                 -includeCSide \`
-                 -additionalParameters @("--volume ${sourceFolder}:c:\\source",
-                                         "--volume ${addInsFolder}:c:\\run\\Add-Ins",
+$addInsFolder = "C:\temp\addins"
+New-NavContainer -accept_eula `
+                 -containerName $containerName `
+                 -imageName $imageName `
+                 -auth Windows `
+                 -licensefile $mylicense `
+                 -updateHosts `
+                 -includeCSide `
+                 -additionalParameters @("--volume ${sourceFolder}:c:\source",
+                                         "--volume ${addInsFolder}:c:\run\Add-Ins",
                                          "--env CustomNavSettings=EnableTaskScheduler=true")
 Import-DeltasToNavContainer -containerName $containerName -deltaFolder $sourceFolder -compile
+```
 
 You will see during initialization of the container, that the settings are transferred:
 
+```
 Modifying NAV Service Tier Config File with Instance Specific Settings
 Modifying NAV Service Tier Config File with settings from environment variable
 Setting EnableTaskScheduler to true
 Starting NAV Service Tier
+```
 
 and the Task Scheduler will be running.
 
@@ -162,7 +176,9 @@ I know this is a small solution and it is never as easy as it is here, but anywa
 
 Modify the imageName in CreateDevEnv.ps1 to
 
+```
 $imageName = "microsoft/dynamics-nav:2018"
+```
 
 and run the script.
 
@@ -178,12 +194,15 @@ In order to move the solution to AL, we need to import the changes to NAV 2018 o
 
 Modify the imageName in CreateDevEnv.ps1 to
 
+```
 $imageName = "microsoft/dynamics-nav:2018"
+```
 
 and run the script.
 
 You should see some info about Dev. Server in the output, which you should note down.
 
+```
 Container Hostname : MyFirstApp
 Container Dns Name : MyFirstApp
 Web Client : http://MyFirstApp/NAV/
@@ -194,12 +213,15 @@ Files:
 http://MyFirstApp:8080/al-0.12.17720.vsix
 
 Initialization took 45 seconds
+```
 
 Also you should download the .vsix file to your host from the container and install this in Visual Studio Code.
 
 After this, run this script
 
+```
 Convert-ModifiedObjectsToAl -containerName $containerName -startId 50100 -openFolder
+```
 
 In the same instance of ISE for the $containerName variable to be set.
 

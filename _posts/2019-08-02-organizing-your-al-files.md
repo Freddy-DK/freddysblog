@@ -34,27 +34,29 @@ Since the spring 2019 release of Business Central, it has been possible to conve
 
 Running this script:
 
+```
 $imageName = "mcr.microsoft.com/businesscentral/onprem:1904-rtm-ltsc2019"
 $containerName = "test"
 $auth = "UserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-$licenseFile = "c:\\temp\\mylicense.flf"
+$licenseFile = "c:\temp\mylicense.flf"
 
-New-BCContainer -accept\_eula -accept\_outdated \`
-                -imageName $imageName \`
-                -containerName $containerName \`
-                -auth $auth \`
-                -credential $credential \`
-                -licenseFile $licenseFile \`
-                -updateHosts \`
+New-BCContainer -accept_eula -accept_outdated `
+                -imageName $imageName `
+                -containerName $containerName `
+                -auth $auth `
+                -credential $credential `
+                -licenseFile $licenseFile `
+                -updateHosts `
                 -includeAL
 
-$alProjectFolder = "C:\\ProgramData\\NavContainerHelper\\AL\\BaseApp-rtm"
-Create-AlProjectFolderFromNavContainer -containerName $containerName \`
-                                       -alProjectFolder $alProjectFolder \`
-                                       -useBaseLine \`
-                                       -addGIT \`
+$alProjectFolder = "C:\ProgramData\NavContainerHelper\AL\BaseApp-rtm"
+Create-AlProjectFolderFromNavContainer -containerName $containerName `
+                                       -alProjectFolder $alProjectFolder `
+                                       -useBaseLine `
+                                       -addGIT `
                                        -useBaseAppProperties
+```
 
 will give you a folder with all files in one big pile. Running the same script on 1904-cu1 will give you a folder with cu1 files and if you compare the content of the rtm al folder and the cu1 al folder, you will see that 556 files have changed and a few have been added:
 
@@ -118,8 +120,9 @@ You do need a list of your modified objects, but I will share a PowerShell scrip
 
 The function definition looks like this:
 
+```
 $myModifiedObjects = @("table18","page21","report10", ".rdlc10")
-$alFileStructure = { Param (\[string\] $type, \[int\] $id, \[string\] $name)
+$alFileStructure = { Param ([string] $type, [int] $id, [string] $name)
     if ($myModifiedObjects.Contains("$type$id")) {
         $folder = "Modified"
     }
@@ -129,8 +132,9 @@ $alFileStructure = { Param (\[string\] $type, \[int\] $id, \[string\] $name)
     else {
         $folder = "BaseApp"
     }
-    "$folder\\$($name).$($type).al"
+    "$folder\$($name).$($type).al"
 }
+```
 
 If you have number ranges or naming conventions indicating functional areas of you added objects you can even arrange your added objects into functional folders very easily.
 
@@ -174,8 +178,9 @@ I realize that you have to spin up two containers, but the second container (the
 
 In the following script, I use a specific build of the insider 15.x container, where I know the tool is available. Note, that you will need NavContainerHelper version 0.6.2.91 in order to run this.
 
+```
 $myModifiedObjects = @("table18","page21","report10", ".rdlc10")
-$alFileStructure = { Param (\[string\] $type, \[int\] $id, \[string\] $name)
+$alFileStructure = { Param ([string] $type, [int] $id, [string] $name)
     if ($myModifiedObjects.Contains("$type$id")) {
         $folder = "Modified"
     }
@@ -185,51 +190,52 @@ $alFileStructure = { Param (\[string\] $type, \[int\] $id, \[string\] $name)
     else {
         $folder = "BaseApp"
     }
-    "$folder\\$($name).$($type).al"
+    "$folder\$($name).$($type).al"
 }
 
 $auth = "UserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-$licenseFile = "c:\\temp\\mylicense.flf"
+$licenseFile = "c:\temp\mylicense.flf"
 
 $imageName15 = "bcinsider.azurecr.io/bcsandbox-master:15.0.34731.0-w1-ltsc2019"
 $containerName15 = "test15"
-New-BCContainer -accept\_eula -accept\_outdated \`
-                -imageName $imageName15 \`
-                -containerName $containerName15 \`
-                -auth $auth \`
-                -credential $credential \`
-                -licenseFile $licenseFile \`
-                -updateHosts \`
+New-BCContainer -accept_eula -accept_outdated `
+                -imageName $imageName15 `
+                -containerName $containerName15 `
+                -auth $auth `
+                -credential $credential `
+                -licenseFile $licenseFile `
+                -updateHosts `
                 -includeAL
 
-$alProjectFolder = "C:\\ProgramData\\NavContainerHelper\\AL\\BaseApp-15x"
-Create-AlProjectFolderFromNavContainer -containerName $containerName15 \`
-                                       -alProjectFolder $alProjectFolder \`
-                                       -useBaseLine \`
-                                       -addGIT \`
-                                       -useBaseAppProperties \`
+$alProjectFolder = "C:\ProgramData\NavContainerHelper\AL\BaseApp-15x"
+Create-AlProjectFolderFromNavContainer -containerName $containerName15 `
+                                       -alProjectFolder $alProjectFolder `
+                                       -useBaseLine `
+                                       -addGIT `
+                                       -useBaseAppProperties `
                                        -alFileStructure $alFileStructure
 
 $imageName14 = "mcr.microsoft.com/businesscentral/onprem:1904-cu1-ltsc2019"
 $containerName14 = "test14"
-New-BCContainer -accept\_eula -accept\_outdated \`
-                -imageName $imageName14 \`
-                -containerName $containerName14 \`
-                -auth $auth \`
-                -credential $credential \`
-                -licenseFile $licenseFile \`
-                -updateHosts \`
-                -includeAL \`
+New-BCContainer -accept_eula -accept_outdated `
+                -imageName $imageName14 `
+                -containerName $containerName14 `
+                -auth $auth `
+                -credential $credential `
+                -licenseFile $licenseFile `
+                -updateHosts `
+                -includeAL `
                 -runTxt2AlInContainer $containerName15
 
-$alProjectFolder = "C:\\ProgramData\\NavContainerHelper\\AL\\BaseApp-14cu1"
-Create-AlProjectFolderFromNavContainer -containerName $containerName14 \`
-                                       -alProjectFolder $alProjectFolder \`
-                                       -useBaseLine \`
-                                       -addGIT \`
-                                       -useBaseAppProperties \`
+$alProjectFolder = "C:\ProgramData\NavContainerHelper\AL\BaseApp-14cu1"
+Create-AlProjectFolderFromNavContainer -containerName $containerName14 `
+                                       -alProjectFolder $alProjectFolder `
+                                       -useBaseLine `
+                                       -addGIT `
+                                       -useBaseAppProperties `
                                        -alFileStructure $alFileStructure
+```
 
 Only difference from the first script is that we use the 15.x container for running txt2al in the 14.x container and voila:
 

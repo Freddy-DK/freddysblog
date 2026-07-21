@@ -19,18 +19,22 @@ I will still post the source of the original loosely coupled XMLHTTP based Edit 
 
 To prepare ourselves for part 4 we need the following variables:
 
-/// <summary>  
-/// Page which is going to be used for Edit In Excel  
-/// Customer, Vendor, Item, etc…  
-/// The card page for this record needs to be exposed as webservice with that name  
-/// </summary>  
+```
+/// <summary>
+/// Page which is going to be used for Edit In Excel
+/// Customer, Vendor, Item, etc…
+/// The card page for this record needs to be exposed as webservice with that name
+/// </summary>
 string page;
+```
 
-/// <summary>  
-/// The filters to apply (format: GETVIEW(TRUE))  
-/// Sample: “SORTING(No.) WHERE(Balance (LCY)=FILTER(>10,000))”  
-/// </summary>  
+```
+/// <summary>
+/// The filters to apply (format: GETVIEW(TRUE))
+/// Sample: "SORTING(No.) WHERE(Balance (LCY)=FILTER(>10,000))"
+/// </summary>
 string view;
+```
 
 These are the parameters, which we in part 4 will transfer values to Excel in – for now we will build the Spreadsheet to use those.
 
@@ -38,29 +42,31 @@ BTW – I changed the Project name from CustomerTemplate to NAVTemplate (actuall
 
 Then I have moved the service connection initialization away from Load – and into Sheet\_Startup, the new Sheet1\_Startup code looks like this
 
-private void Sheet1\_Startup(object sender, System.EventArgs e)  
-{  
-switch (this.page)  
-{  
-case “Customer”:  
-this.service = new CustomerRef.Customer\_Service();  
-break;  
-case “Vendor”:  
-this.service = new VendorRef.Vendor\_Service();  
-break;  
-case “Item”:  
-this.service = new ItemRef.Item\_Service();  
-break;  
-default:  
-MessageBox.Show(string.Format(“Page {0} is not setup for Edit In Excel. Please contact your system administrator”, this.page), “Microsoft Dynamics NAV”, MessageBoxButtons.OK, MessageBoxIcon.Error);  
-break;  
-}  
-if (this.service != null)  
-{  
-this.service.UseDefaultCredentials = true;  
-Load();  
-}  
+```
+private void Sheet1_Startup(object sender, System.EventArgs e)
+{
+switch (this.page)
+{
+case "Customer":
+this.service = new CustomerRef.Customer_Service();
+break;
+case "Vendor":
+this.service = new VendorRef.Vendor_Service();
+break;
+case "Item":
+this.service = new ItemRef.Item_Service();
+break;
+default:
+MessageBox.Show(string.Format("Page {0} is not setup for Edit In Excel. Please contact your system administrator", this.page), "Microsoft Dynamics NAV", MessageBoxButtons.OK, MessageBoxIcon.Error);
+break;
 }
+if (this.service != null)
+{
+this.service.UseDefaultCredentials = true;
+Load();
+}
+}
+```
 
 and I have added references to all 3 services.
 
@@ -70,73 +76,121 @@ Service Connection classes code generated from Visual Studio doesn’t implement
 
 Looking through my code I really need the Customer\_Service to implement an interface like this:
 
-public interface INAVService  
-{  
-bool UseDefaultCredentials {get; set; }  
+```
+public interface INAVService
+{
+bool UseDefaultCredentials {get; set; }
 System.Net.ICredentials Credentials {get; set; }
+```
 
-    object\[\] ReadMultiple();  
-void Update(object obj);  
-void Create(object obj);  
+    
+
+```
+object[] ReadMultiple();
+void Update(object obj);
+void Create(object obj);
 bool Delete(string key);
+```
 
-    Type GetFieldsType();  
+    
+
+```
+Type GetFieldsType();
 Type GetObjectType();
+```
 
-    void ClearFilters();  
-void AddFilter(string field, string criteria);  
+    
+
+```
+void ClearFilters();
+void AddFilter(string field, string criteria);
 }
+```
 
 Some of these methods are already implemented by all Service Proxy classes and I use this to allow my code to look at the Service Connection via this interface only and the service variable I have in the sheet is actually type INAVService, flip side of this idea is, that for every new Page I want to add – I need to create a class like this:
 
-public partial class Customer\_Service : INAVService  
-{  
-List<Customer\_Filter> filters;
+```
+public partial class Customer_Service : INAVService
+{
+List<Customer_Filter> filters;
+```
 
-    #region INAVService Members
+    `#region INAVService Members`
 
-    public object\[\] ReadMultiple()  
-{  
-return this.ReadMultiple(this.filters.ToArray(), null, 0);  
+    
+
+```
+public object[] ReadMultiple()
+{
+return this.ReadMultiple(this.filters.ToArray(), null, 0);
 }
+```
 
-    public void Update(object obj)  
-{  
-Customer customer = (Customer)obj;  
-this.Update(ref customer);  
-}
+    
 
-    public void Create(object obj)  
-{  
-Customer customer = (Customer)obj;  
-this.Create(ref customer);  
+```
+public void Update(object obj)
+{
+Customer customer = (Customer)obj;
+this.Update(ref customer);
 }
+```
 
-    public Type GetObjectType()  
-{  
-return typeof(Customer);  
-}
+    
 
-    public Type GetFieldsType()  
-{  
-return typeof(Customer\_Fields);  
+```
+public void Create(object obj)
+{
+Customer customer = (Customer)obj;
+this.Create(ref customer);
 }
+```
 
-    public void ClearFilters()  
-{  
-this.filters = new List<Customer\_Filter>();  
-}
+    
 
-    public void AddFilter(string field, string criteria)  
-{  
-Customer\_Filter filter = new Customer\_Filter();  
-filter.Field = (Customer\_Fields)Enum.Parse(typeof(Customer\_Fields), field, true);  
-filter.Criteria = criteria;  
-this.filters.Add(filter);  
+```
+public Type GetObjectType()
+{
+return typeof(Customer);
 }
+```
 
-    #endregion  
+    
+
+```
+public Type GetFieldsType()
+{
+return typeof(Customer_Fields);
 }
+```
+
+    
+
+```
+public void ClearFilters()
+{
+this.filters = new List<Customer_Filter>();
+}
+```
+
+    
+
+```
+public void AddFilter(string field, string criteria)
+{
+Customer_Filter filter = new Customer_Filter();
+filter.Field = (Customer_Fields)Enum.Parse(typeof(Customer_Fields), field, true);
+filter.Criteria = criteria;
+this.filters.Add(filter);
+}
+```
+
+    
+
+```
+#endregion
+}
+```
 
 Not really nice – but it beats having a series of switch statements scattered around in the source files.
 
@@ -148,17 +202,19 @@ BTW – In my solution, I have added the classes to the solution in a folder cal
 
 The Load method now looks like this:
 
-/// <summary>  
-/// Load Records from NAV via Web Services  
-/// </summary>  
-private void Load()  
-{  
-PopulateFieldsCollection(this.service.GetObjectType(), this.service.GetFieldsType());  
-SetFilters(this.view);  
-this.objects = this.service.ReadMultiple();  
-PopulateDataTable();  
-AddDataToExcel();  
+```
+/// <summary>
+/// Load Records from NAV via Web Services
+/// </summary>
+private void Load()
+{
+PopulateFieldsCollection(this.service.GetObjectType(), this.service.GetFieldsType());
+SetFilters(this.view);
+this.objects = this.service.ReadMultiple();
+PopulateDataTable();
+AddDataToExcel();
 }
+```
 
 Note that we ask the Service connection class for the Object Type, the Fields Enum Type and we call the ReadMultiple on the Service Connection (all through the interface we just implemented).
 
@@ -174,11 +230,11 @@ VSName takes the enum identifier and removes special characters to get the Prope
 
 Confused? – well look at this:
 
-test  &&//(())==??++–\*\*test – is a perfectly good (maybe stupid) field name in NAV
+`test  &&//(())==??++–**test` – is a perfectly good (maybe stupid) field name in NAV
 
-test\_\_x0026\_\_x0026\_\_\_x003D\_\_x003D\_\_x003F\_\_x003F\_\_x002B\_\_x002B\_\_\_x002A\_\_x002A\_test is the same identifier in the xx\_Fields enum (from the WSDL)
+`test__x0026__x0026___x003D__x003D__x003F__x003F__x002B__x002B___x002A__x002A_test` is the same identifier in the xx\_Fields enum (from the WSDL)
 
-test\_\_\_test is the same identifier as property in Visual Studio (the code generated proxy class)
+`test___test` is the same identifier as property in Visual Studio (the code generated proxy class)
 
 and yes – you can generate fields, which will cause Web Services to fail. In fact, CTP4 (the US version) has an Option field in Customer and Vendor (Check Seperator), where the options causes Customer and Vendor to fail when exposed to Web Services. This special case is fixed for RTM – and the WSName in my sample contains the same name mangling as NAV 2009 RTM, but you can still create field names, which will end up having identical names in VS – and then your WebService proxy won’t work.
 
@@ -186,31 +242,37 @@ WSName and VSName works for my usage – they might not work for all purposes.
 
 There is really nothing fancy about the SetFilters code, but it works for the purpose:
 
-/// <summary>  
-/// Parse the view and apply these filters to the Service Connection  
-/// </summary>  
-/// <param name=”view”>View to parse (from AL: GETVIEW(TRUE))</param>  
-private void SetFilters(string view)  
-{  
-this.service.ClearFilters();  
-if (string.IsNullOrEmpty(view))  
-return;  
-string sorting = NAVFilterHelper.GetBlock(“SORTING”, ref view);  
-string where = NAVFilterHelper.GetBlock(“WHERE”, ref view);  
-do  
-{  
-int e = where.IndexOf(“=FILTER”);  
-if (e < 0)  
-break;  
-string field = NAVFilterHelper.WSName(where.Substring(0, e));  
-string criteria = NAVFilterHelper.GetBlock(“FILTER”, ref where);  
+```
+/// <summary>
+/// Parse the view and apply these filters to the Service Connection
+/// </summary>
+/// <param name="view">View to parse (from AL: GETVIEW(TRUE))</param>
+private void SetFilters(string view)
+{
+this.service.ClearFilters();
+if (string.IsNullOrEmpty(view))
+return;
+string sorting = NAVFilterHelper.GetBlock("SORTING", ref view);
+string where = NAVFilterHelper.GetBlock("WHERE", ref view);
+do
+{
+int e = where.IndexOf("=FILTER");
+if (e < 0)
+break;
+string field = NAVFilterHelper.WSName(where.Substring(0, e));
+string criteria = NAVFilterHelper.GetBlock("FILTER", ref where);
 this.service.AddFilter(field, criteria);
+```
 
-        if (where.StartsWith(“,”))  
-where.Remove(0, 1);  
-}  
-while (true);  
+        
+
+```
+if (where.StartsWith(","))
+where.Remove(0, 1);
 }
+while (true);
+}
+```
 
 Yes, yes – as you of course immediately spotted – this code doesn’t work if you have a field with **\=FILTER** in the field name – so don’t!
 
@@ -224,85 +286,89 @@ Reason for this is, that Excel swallows the Exception, and just ignores it.
 
 So – I have changed the Save() method to:
 
-/// <summary>  
-/// Save Changes to NAV via Web Service  
-/// </summary>  
-internal void Save()  
-{  
-if (DoSave())  
-{  
-Reload();  
-}  
+```
+/// <summary>
+/// Save Changes to NAV via Web Service
+/// </summary>
+internal void Save()
+{
+if (DoSave())
+{
+Reload();
 }
+}
+```
 
 and then created the DoSave() – with most of the content from Save() – but refactored inside one loop with error handling (Abort, Retry, Ignore).
 
-/// <summary>  
-/// Delete, Add and Update Records  
-/// </summary>  
-internal bool DoSave()  
-{  
-// Run through records marked for delete, create or modify  
-DataView dv = new DataView(this.dataTable, “”, “”, DataViewRowState.Deleted | DataViewRowState.Added | DataViewRowState.ModifiedCurrent);  
-foreach (DataRowView drv in dv)  
-{  
-bool retry;  
-do  
-{  
-retry = false;  
-try  
-{  
-if (drv.Row.RowState == DataRowState.Deleted)  
-{  
-object obj = GetRecordObject((string)drv\[0\]);  
-if (obj != null)  
-{  
-if (!service.Delete((string)drv\[0\]))  
-{  
-throw new Exception(string.Format(“Unable to delete record”));  
-}  
-}  
-}  
-else if (drv.Row.RowState == DataRowState.Added)  
-{  
-object obj = Activator.CreateInstance(this.service.GetObjectType());  
-foreach (NAVFieldInfo nfi in this.fields)  
-{  
-if (nfi.field != “Key”)  
-{  
-nfi.SetValue(obj, drv.Row\[nfi.field\]);  
-}  
-}  
-this.service.Create(obj);  
-}  
-else  
-{  
-object obj = GetRecordObject((string)drv\[0\]);  
-if (obj != null)  
-{  
-foreach (NAVFieldInfo nfi in this.fields)  
-{  
-if (nfi.field != “Key”)  
-{  
-nfi.SetValue(obj, drv\[nfi.field\]);  
-}  
-}  
-this.service.Update(obj);  
-}  
-}  
-}  
-catch (Exception e)  
-{  
-DialogResult reply = MessageBox.Show(string.Format(“{0} {1} {2}nn{3}”, this.dataTable.TableName, this.dataTable.Columns\[1\].Caption, drv\[1\].ToString(), e.Message), “Microsoft Dynamics NAV”, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);  
-if (reply == DialogResult.Abort)  
-return false;  
-if (reply == DialogResult.Retry)  
-retry = true;  
-}  
-} while (retry);  
-}  
-return true;  
+```
+/// <summary>
+/// Delete, Add and Update Records
+/// </summary>
+internal bool DoSave()
+{
+// Run through records marked for delete, create or modify
+DataView dv = new DataView(this.dataTable, "", "", DataViewRowState.Deleted | DataViewRowState.Added | DataViewRowState.ModifiedCurrent);
+foreach (DataRowView drv in dv)
+{
+bool retry;
+do
+{
+retry = false;
+try
+{
+if (drv.Row.RowState == DataRowState.Deleted)
+{
+object obj = GetRecordObject((string)drv[0]);
+if (obj != null)
+{
+if (!service.Delete((string)drv[0]))
+{
+throw new Exception(string.Format("Unable to delete record"));
 }
+}
+}
+else if (drv.Row.RowState == DataRowState.Added)
+{
+object obj = Activator.CreateInstance(this.service.GetObjectType());
+foreach (NAVFieldInfo nfi in this.fields)
+{
+if (nfi.field != "Key")
+{
+nfi.SetValue(obj, drv.Row[nfi.field]);
+}
+}
+this.service.Create(obj);
+}
+else
+{
+object obj = GetRecordObject((string)drv[0]);
+if (obj != null)
+{
+foreach (NAVFieldInfo nfi in this.fields)
+{
+if (nfi.field != "Key")
+{
+nfi.SetValue(obj, drv[nfi.field]);
+}
+}
+this.service.Update(obj);
+}
+}
+}
+catch (Exception e)
+{
+DialogResult reply = MessageBox.Show(string.Format("{0} {1} {2}nn{3}", this.dataTable.TableName, this.dataTable.Columns[1].Caption, drv[1].ToString(), e.Message), "Microsoft Dynamics NAV", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+if (reply == DialogResult.Abort)
+return false;
+if (reply == DialogResult.Retry)
+retry = true;
+}
+} while (retry);
+}
+return true;
+}
+```
 
 oh yes, and beside that – you can see that I now use the methods on the Service Connection Interface directly and I do not use the type safe references to Customer – but instead just object. A couple of comments:
 
@@ -310,11 +376,11 @@ The DataView is the only way (I know of) that we can see which records have been
 
 The Line
 
-object obj = Activator.CreateInstance(this.service.GetObjectType());
+`object obj = Activator.CreateInstance(this.service.GetObjectType());`
 
 does the same as using
 
-object obj = new CustomerRef.Customer();
+`object obj = new CustomerRef.Customer();`
 
 if the object type of the Service Connection is Customer.
 

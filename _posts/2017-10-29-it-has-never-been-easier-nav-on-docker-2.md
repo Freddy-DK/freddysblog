@@ -15,13 +15,17 @@ As of this morning, all shipped cumulative updates (+ all localizations) of Micr
 
 This means, that if you have a computer running Windows 10 Professional edition or Windows Server 2016, you can install Docker (follow [this](https://blogs.msdn.microsoft.com/webdev/2017/09/07/getting-started-with-windows-containers/) blog post until the _Set up an ASP.NET…_ section or for Windows Server 2016, you can install the EE version by following [this](https://docs.docker.com/engine/installation/windows/docker-ee/) blog post) and run:
 
-C:>docker run -e accept\_eula=Y -m 4G microsoft/dynamics-nav
+```
+C:>docker run -e accept_eula=Y -m 4G microsoft/dynamics-nav
+```
 
 in a Command Prompt running as **Administrator** and get the W1 country version of the latest cumulative update of the latest version of NAV running on your computer within a few minutes (the first time will take more time for downloading base components)
 
 Or you can run any other cumulative update (of 2016 or 2017), just by specifying the version, the CU and the country version you want as a tag:
 
-C:>docker run -e accept\_eula=Y -m 4G microsoft/dynamics-nav:2016-cu5-dk
+```
+C:>docker run -e accept_eula=Y -m 4G microsoft/dynamics-nav:2016-cu5-dk
+```
 
 **Note:** One of my next posts will be a troubleshooting blog post – what can you do if things doesn’t work.
 

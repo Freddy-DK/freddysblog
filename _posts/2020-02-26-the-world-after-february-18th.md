@@ -70,10 +70,13 @@ NavContainerHelper 0.6.5.0 supports this and in order for this to work, we of co
 
 Since yesterday, we now have generic images for most supported versions of the host. Try to run this command:
 
-(get-navcontainerimagetags -imageName "mcr.microsoft.com/dynamicsnav").tags | Where-Object { $\_.startswith('10.0.') -and $\_.endswith('-generic') }
+```
+(get-navcontainerimagetags -imageName "mcr.microsoft.com/dynamicsnav").tags | Where-Object { $_.startswith('10.0.') -and $_.endswith('-generic') }
+```
 
 and you should see:
 
+```
 10.0.14393.3025-generic
 10.0.14393.3085-generic
 10.0.14393.3144-generic
@@ -103,6 +106,7 @@ and you should see:
 10.0.18363.535-generic
 10.0.18363.592-generic
 10.0.18363.658-generic
+```
 
 # Get-BestGenericImageName
 
@@ -114,20 +118,23 @@ This function is used by New-NavContainer with -useBestContainerOS to find and u
 
 On my work PC, I have added the February update and I was unable to run NAV/BC with process isolation. Now, with NavContainerHelper 0.6.5.0, I can run this script:
 
+```
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-New-NavContainer \`
-    -accept\_eula \`
-    -imageName mcr.microsoft.com/businesscentral/onprem:dk \`
-    -containerName test \`
-    -auth UserPassword \`
-    -Credential $credential \`
-    -updateHosts \`
+New-NavContainer `
+    -accept_eula `
+    -imageName mcr.microsoft.com/businesscentral/onprem:dk `
+    -containerName test `
+    -auth UserPassword `
+    -Credential $credential `
+    -updateHosts `
     -useBestContainerOS
+```
 
 and the output I get is this (I have split it up to explain what is happening).
 
 **First part.** Some version numbers, pulling the best suitable image, removing the “old” container and displaying some more version numbers. Downloading the image of course only happens once.
 
+```
 NavContainerHelper is version 0.6.5.0
 NavContainerHelper is running as administrator
 Host is Microsoft Windows 10 Enterprise - 1909
@@ -149,7 +156,7 @@ Status: Downloaded newer image for mcr.microsoft.com/businesscentral/onprem:dk-l
 Using image mcr.microsoft.com/businesscentral/onprem:dk-ltsc2019
 Removing container test
 Removing test from host hosts file
-Removing C:\\ProgramData\\NavContainerHelper\\Extensions\\test
+Removing C:\ProgramData\NavContainerHelper\Extensions\test
 Creating Container test
 Version: 15.3.40074.40822-dk
 Style: onprem
@@ -157,9 +164,11 @@ Platform: 15.0.40073.40791
 Generic Tag: 0.0.9.99
 Container OS Version: 10.0.17763.973 (ltsc2019)
 Host OS Version: 10.0.18363.657 (1909)
+```
 
 **Second part**, the ContainerHelper discovers that you can run the image with a better generic container image. In order to do this, the ContainerHelper will create a container with the requested image (not run, just create) and extract all the files needed to run the generic image:
 
+```
 A better Generic Container OS exists for your host (mcr.microsoft.com/dynamicsnav:10.0.18363.658-generic)
 Creating temp container from mcr.microsoft.com/businesscentral/onprem:dk-ltsc2019 and extract necessary files
 Extracting Service Tier and WebClient Files
@@ -174,14 +183,16 @@ Extracting Applications.dk
 Extracting Files from Run folder
 Extracting Database Files
 Downloading prerequisites
-Downloading C:\\ProgramData\\NavContainerHelper\\15.3.40074.40822-dk-Files\\Prerequisite Components\\IIS URL Rewrite Module\\rewrite\_2.0\_rtw\_x64.msi
-Downloading C:\\ProgramData\\NavContainerHelper\\15.3.40074.40822-dk-Files\\Prerequisite Components\\Open XML SDK 2.5 for Microsoft Office\\OpenXMLSDKv25.msi
-Downloading C:\\ProgramData\\NavContainerHelper\\15.3.40074.40822-dk-Files\\Prerequisite Components\\DotNetCore\\DotNetCore.1.0.4\_1.1.1-WindowsHosting.exe
+Downloading C:\ProgramData\NavContainerHelper\15.3.40074.40822-dk-Files\Prerequisite Components\IIS URL Rewrite Module\rewrite_2.0_rtw_x64.msi
+Downloading C:\ProgramData\NavContainerHelper\15.3.40074.40822-dk-Files\Prerequisite Components\Open XML SDK 2.5 for Microsoft Office\OpenXMLSDKv25.msi
+Downloading C:\ProgramData\NavContainerHelper\15.3.40074.40822-dk-Files\Prerequisite Components\DotNetCore\DotNetCore.1.0.4_1.1.1-WindowsHosting.exe
 Performing cleanup
 Removing temp container
+```
 
 **Third part**, launch the generic image with information about the files just extracted:
 
+```
 Using generic image mcr.microsoft.com/dynamicsnav:10.0.18363.658-generic
 Generic Container OS Version: 10.0.18363.658 (1909)
 Generic Tag of better generic: 0.0.9.99
@@ -190,7 +201,7 @@ If you encounter issues, you might want to specify -isolation hyperv
 Using locale da-DK
 Using process isolation
 Disabling the standard eventlog dump to container log every 2 seconds (use -dumpEventLog to enable)
-Files in C:\\ProgramData\\NavContainerHelper\\Extensions\\test\\my:
+Files in C:\ProgramData\NavContainerHelper\Extensions\test\my:
 - AdditionalOutput.ps1
 - MainLoop.ps1
 - SetupVariables.ps1
@@ -198,9 +209,11 @@ Files in C:\\ProgramData\\NavContainerHelper\\Extensions\\test\\my:
 Creating container test from image mcr.microsoft.com/dynamicsnav:10.0.18363.658-generic
 3561f9614c4f77f520c2889f2e730f446eeb8dd4d31b98d0985c1508d819ec25
 Waiting for container test to be ready
+```
 
 **Fourth part**, when running the generic image, it has to install all pre-requisite components and Business Central, using the extracted files.
 
+```
 Installing OpenXML
 Installing DotNetCore
 Starting Local SQL Server
@@ -214,19 +227,21 @@ Copying ConfigurationPackages
 Copying Test Assemblies
 Copying Applications
 Copying ReportBuilder
-Changing Database Server Collation to Danish\_Greenlandic\_100\_CI\_AS
+Changing Database Server Collation to Danish_Greenlandic_100_CI_AS
 SQL Server 2017 transmits information about your installation experience, as well as other usage and performance data, to Microsoft to help improve the product. To learn more about SQL Server 2017 data processing and privacy
 controls, please see the Privacy Statement.
 Copying Cronus database
 Modifying Business Central Service Tier Config File for Docker
 Creating Business Central Service Tier
-Installing SIP crypto provider: 'C:\\Windows\\System32\\NavSip.dll'
+Installing SIP crypto provider: 'C:\Windows\System32\NavSip.dll'
 Starting Business Central Service Tier
 Installation took 191 seconds
 Installation complete
+```
 
 **Fifth part**, with the installation done, the remaining part is exactly the same as when running a normal Business Central container. The extra time spend for running the generic image is roughly 200 seconds + image download and file extraction, but those happens only once.
 
+```
 Initializing...
 Setting host.docker.internal to 192.168.0.16 in container hosts file (copy from host hosts file)
 Setting gateway.docker.internal to 192.168.0.16 in container hosts file (copy from host hosts file)
@@ -262,6 +277,7 @@ Ready for connections!
 Reading CustomSettings.config from test
 Creating Desktop Shortcuts for test
 Container test successfully created
+```
 
 And there you have it, your container is ready to be used using process isolation.
 

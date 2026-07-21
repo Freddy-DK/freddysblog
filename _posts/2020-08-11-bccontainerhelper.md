@@ -49,17 +49,23 @@ While writing this blog post version 1.0.2 is the latest build and insider build
 
 Like with NavContainerHelper, installing the latest version is easy
 
+```
 Install-Module BcContainerHelper -force
+```
 
 should give you the latest stable version of BcContainerHelper (1.0.0 while writing this blog post).
 
+```
 Install-Module BcContainerHelper -force -allowPrerelease
+```
 
 should give you the latest prerelease version (1.0.1-preview143 while starting to write this blog post)
 
 If PowerShell tells you that -allowPrerelease isn’t a known parameter, you will need to update your version of PowerShellGet. You should be able to do that using:
 
+```
 Install-Module -Name PowerShellGet -Repository PSGallery -Force
+```
 
 # Differences
 
@@ -71,10 +77,12 @@ A few things have changed between NavContainerHelper and BcContainerHelper. The 
 
 The two lines in the config file looks like:
 
+```
 {
-    "hostHelperFolder": "d:\\\\containerhelper",
-    "containerHelperFolder": "c:\\\\programdata\\\\bccontainerhelper"
+    "hostHelperFolder": "d:\\containerhelper",
+    "containerHelperFolder": "c:\\programdata\\bccontainerhelper"
 }
+```
 
 If you set both values to **c:\\\\programdata\\\\navcontainerhelper** the module will use the data from the NavContainerHelper, I don’t recomment this.
 

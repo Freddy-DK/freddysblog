@@ -31,34 +31,51 @@ Now this doesn’t mean that you have to do 2 + (no of Orderlines)\*2 roundtrips
 
 meaning that you can create all order lines in one go (together with updating header info) and you can update them all in one go.
 
-a code sample for doing this:
+`a code sample for doing this:`
 
-// Create Service Reference  
-var service = new SalesOrder\_Service();  
+```
+// Create Service Reference
+var service = new SalesOrder_Service();
 service.UseDefaultCredentials = true;
+```
 
-// Create the Order header  
-var newOrder = new SalesOrder();  
-service.Create(ref newOrder);
+```
+// Create the Order header
+var newOrder = new SalesOrder();
+```
 
-// Update Order header  
-newOrder.Sell\_to\_Customer\_No = “10000”;  
-// Create Order lines  
-newOrder.SalesLines = new Sales\_Order\_Line\[2\];  
-for (int idx = 0; idx < 2; idx++)  
-newOrder.SalesLines\[idx\] = new Sales\_Order\_Line();  
-service.Update(ref newOrder);
+`service.Create(ref newOrder);`
 
-// Update Order lines  
-var line1 = newOrder.SalesLines\[0\];  
-line1.Type = SalesOrderRef.Type.Item;  
-line1.No = “LS-75”;  
-line1.Quantity = 3;  
-var line2 = newOrder.SalesLines\[1\];  
-line2.Type = NewSalesOrderRef.Type.Item;  
-line2.No = “LS-100”;  
-line2.Quantity = 3;  
-service.Update(ref newOrder);
+```
+// Update Order header
+newOrder.Sell_to_Customer_No = "10000";
+```
+
+```
+// Create Order lines
+newOrder.SalesLines = new Sales_Order_Line[2];
+for (int idx = 0; idx < 2; idx++)
+newOrder.SalesLines[idx] = new Sales_Order_Line();
+```
+
+`service.Update(ref newOrder);`
+
+```
+// Update Order lines
+var line1 = newOrder.SalesLines[0];
+line1.Type = SalesOrderRef.Type.Item;
+line1.No = "LS-75";
+line1.Quantity = 3;
+```
+
+```
+var line2 = newOrder.SalesLines[1];
+line2.Type = NewSalesOrderRef.Type.Item;
+line2.No = "LS-100";
+line2.Quantity = 3;
+```
+
+`service.Update(ref newOrder);`
 
 After invoking Create(ref newOrder) or Update(ref newOrder) we get the updated sales order back from NAV, and we know that all the <field>Specified properties are set to true and all strings which has a value are not null – so we can just update the fields we want to update and call update(ref newOrder) again and utilize that SP1 only updates the fields that actually have changed.
 
@@ -74,36 +91,57 @@ The two functions are listed towards the end of this post.
 
 Our code from above would then look like:
 
-// Create Service Reference  
-var service = new SalesOrder\_Service();  
+```
+// Create Service Reference
+var service = new SalesOrder_Service();
 service.UseDefaultCredentials = true;
+```
 
-// Create the Order header  
-var newOrder = new SalesOrder();  
-service.Create(ref newOrder);  
+```
+// Create the Order header
+var newOrder = new SalesOrder();
+```
+
+```
+service.Create(ref newOrder);
 SalesOrder copy = (SalesOrder)GetCopy(newOrder);
+```
 
-// Update Order header  
-newOrder.Sell\_to\_Customer\_No = “10000”;  
-// Create Order lines  
-newOrder.SalesLines = new Sales\_Order\_Line\[2\];  
-for (int idx = 0; idx < 2; idx++)  
-newOrder.SalesLines\[idx\] = new Sales\_Order\_Line();  
-PrepareForUpdate(newOrder, copy);  
-service.Update(ref newOrder);  
-copy = (SalesOrder)GetCopy(newOrder);
+```
+// Update Order header
+newOrder.Sell_to_Customer_No = "10000";
+```
 
-// Update Order lines  
-var line1 = newOrder.SalesLines\[0\];  
-line1.Type = SalesOrderRef.Type.Item;  
-line1.No = “LS-75”;  
-line1.Quantity = 3;  
-var line2 = newOrder.SalesLines\[1\];  
-line2.Type = SalesOrderRef.Type.Item;  
-line2.No = “LS-100”;  
-line2.Quantity = 3;  
-PrepareForUpdate(newOrder, copy);  
+```
+// Create Order lines
+newOrder.SalesLines = new Sales_Order_Line[2];
+for (int idx = 0; idx < 2; idx++)
+newOrder.SalesLines[idx] = new Sales_Order_Line();
+```
+
+```
+PrepareForUpdate(newOrder, copy);
 service.Update(ref newOrder);
+copy = (SalesOrder)GetCopy(newOrder);
+```
+
+```
+// Update Order lines
+var line1 = newOrder.SalesLines[0];
+line1.Type = SalesOrderRef.Type.Item;
+line1.No = "LS-75";
+line1.Quantity = 3;
+```
+
+```
+var line2 = newOrder.SalesLines[1];
+line2.Type = SalesOrderRef.Type.Item;
+line2.No = "LS-100";
+line2.Quantity = 3;
+PrepareForUpdate(newOrder, copy);
+```
+
+`service.Update(ref newOrder);`
 
 and this code would actually run on SP1 as well – and cause smaller packages to be sent over the wire (not that I think that is an issue).
 
@@ -111,33 +149,39 @@ and this code would actually run on SP1 as well – and cause smaller packages t
 
 Now we have seen how to create a Sales Order with a number of lines – but what if you want to delete a line after having saved the Sales Order. On the Service object you will find a method called Delete\_SalesLines, which takes a key and delete that Sales Line.
 
-service.Delete\_SalesLines(line.Key);
+`service.Delete_SalesLines(line.Key);`
 
 The only caveat to this is, that if you want to do any more work on the Sales Order, you will have to re-read the Sales Order, else you will get an information that somebody changed the record (and that would be you).
 
 So deleting all lines from a Sales Order could be done by:
 
-foreach (Sales\_Order\_Line line in so.SalesLines)  
-service.Delete\_SalesLines(line.Key);
+```
+foreach (Sales_Order_Line line in so.SalesLines)
+service.Delete_SalesLines(line.Key);
+```
 
 and then you would typically re-read the Sales Order with the following line:
 
-so = service.Read(so.No);
+`so = service.Read(so.No);`
 
 That wasn’t so bad.
 
 My personal opinion is that we should change the Delete\_SalesLines to be:
 
-service.Delete\_SalesLines(ref so, line);
+`service.Delete_SalesLines(ref so, line);`
 
 Which is why I created a function that does exactly that:
 
-void Delete\_SalesLines(SalesOrder\_Service service, ref SalesOrder so, Sales\_Order\_Line line)  
-{  
-Debug.Assert(so.SalesLines.Contains<Sales\_Order\_Line>(line));  
-service.Delete\_SalesLines(line.Key);  
-so = service.Read(so.No);  
+`void Delete_SalesLines(SalesOrder_Service service,` 
+
+```
+ref SalesOrder so, Sales_Order_Line line)
+{
+Debug.Assert(so.SalesLines.Contains<Sales_Order_Line>(line));
+service.Delete_SalesLines(line.Key);
+so = service.Read(so.No);
 }
+```
 
 Note, that Í just re-read the order, loosing any changes you have made to the order or order lines. Another approach here could be to remove the line deleted from the lines collection, but things becomes utterly complicated when we try to mimic a behavior in the consumer that IMO should be on the Server side.
 
@@ -151,9 +195,11 @@ Actually it isn’t complicated to add the line – but it is complicated to loc
 
 Adding the line is:
 
-// Create a new Lines array with only the new line and update (meaning create the line)  
-so.SalesLines = so.SalesLines.Concat(new \[\] { new Sales\_Order\_Line() }).ToArray();  
+```
+// Create a new Lines array with only the new line and update (meaning create the line)
+so.SalesLines = so.SalesLines.Concat(new [] { new Sales_Order_Line() }).ToArray();
 service.Update(ref so);
+```
 
 This add’s a new line to the array of lines and update the order.
 
@@ -161,17 +207,19 @@ After invoking update the newly added line is the last in the array (unless some
 
 My personal opinion is that we should add another method to the service called
 
-service.Add\_SalesLines(ref so, ref line);
+`service.Add_SalesLines(ref so, ref line);`
 
 so that we would have the newly added line available to modify and the so available for service.Update(ref so), which is why I created a function that does exactly that:
 
-Sales\_Order\_Line AddLine(SalesOrder\_Service service, ref SalesOrder so)  
-{  
-// Create a new Lines array with only the new line and update (meaning create the line)  
-so.SalesLines = so.SalesLines.Concat(new \[\] { new Sales\_Order\_Line() }).ToArray();  
-service.Update(ref so);  
-return so.SalesLines\[so.SalesLines.Length-1\];  
+```
+Sales_Order_Line AddLine(SalesOrder_Service service, ref SalesOrder so)
+{
+// Create a new Lines array with only the new line and update (meaning create the line)
+so.SalesLines = so.SalesLines.Concat(new [] { new Sales_Order_Line() }).ToArray();
+service.Update(ref so);
+return so.SalesLines[so.SalesLines.Length-1];
 }
+```
 
 Again – If this method existed server side, automatically added by NAV WS, it would be able to do the right thing even though people had mangled in the application logic and change the line numbering sequence or whatever.
 
@@ -187,96 +235,109 @@ Although the samples in this post are using the Sales Orders, the same pattern c
 
 Here is a code-listing of GetCopy and PrepareForUpdate – I have tested these functions on a number of different record types and they should work generically
 
-/// <summary>  
-/// Get a copy of a record for comparison use afterwards  
-/// </summary>  
-/// <param name=”obj”>the record to copy</param>  
-/// <returns>a copy of the record</returns>  
-object GetCopy(object obj)  
-{  
-Type type = obj.GetType();  
-object copy = Activator.CreateInstance(type);  
-foreach (PropertyInfo pi in type.GetProperties())  
-{  
-if (pi.PropertyType.IsArray)  
-{  
-// Copy each object in an array of objects  
-Array arr = (Array)pi.GetValue(obj, null);  
-Array arrCopy = Array.CreateInstance(arr.GetType().GetElementType(), arr.Length);  
-for (int arrIdx = 0; arrIdx < arr.Length; arrIdx++)  
-arrCopy.SetValue(GetCopy(arr.GetValue(arrIdx)), arrIdx);  
-pi.SetValue(copy, arrCopy, null);  
-}  
-else  
-{  
-// Copy each field  
-pi.SetValue(copy, pi.GetValue(obj, null), null);  
-}  
-}  
-return copy;  
+```
+/// <summary>
+/// Get a copy of a record for comparison use afterwards
+/// </summary>
+/// <param name="obj">the record to copy</param>
+/// <returns>a copy of the record</returns>
+object GetCopy(object obj)
+{
+Type type = obj.GetType();
+object copy = Activator.CreateInstance(type);
+foreach (PropertyInfo pi in type.GetProperties())
+{
+if (pi.PropertyType.IsArray)
+{
+// Copy each object in an array of objects
+Array arr = (Array)pi.GetValue(obj, null);
+Array arrCopy = Array.CreateInstance(arr.GetType().GetElementType(), arr.Length);
+for (int arrIdx = 0; arrIdx < arr.Length; arrIdx++)
+arrCopy.SetValue(GetCopy(arr.GetValue(arrIdx)), arrIdx);
+pi.SetValue(copy, arrCopy, null);
 }
+else
+{
+// Copy each field
+pi.SetValue(copy, pi.GetValue(obj, null), null);
+}
+}
+return copy;
+}
+```
 
-/// <summary>  
-/// Prepare record for update  
-/// Set <field> to null if a string field hasn’t been updated  
-/// Set <field>Specified to false if a non-string field hasn’t been updated  
-/// </summary>  
-/// <param name=”obj”>record to prepare for update</param>  
-/// <param name=”copy”>copy of the record (a result of GetCopy)</param>  
-void PrepareForUpdate(object obj, object copy)  
-{  
-Debug.Assert(obj.GetType() == copy.GetType());  
-Type type = obj.GetType();  
-PropertyInfo\[\] properties = type.GetProperties();  
-for(int idx=0; idx<properties.Length; idx++)  
-{  
-PropertyInfo pi = properties\[idx\];  
-if (pi.Name != “Key” &&  
-pi.GetCustomAttributes(typeof(System.Xml.Serialization.XmlIgnoreAttribute), false).Length == 0)  
-{  
-if (pi.PropertyType.IsArray)  
-{  
-// Compare an array of objects – recursively  
-Array objArr = (Array)pi.GetValue(obj, null);  
-Array copyArr = (Array)pi.GetValue(copy, null);  
-for (int objArrIdx = 0; objArrIdx < objArr.Length; objArrIdx++)  
-{  
-object arrObj = objArr.GetValue(objArrIdx);  
-PropertyInfo keyPi = arrObj.GetType().GetProperty(“Key”);  
-string objKey = (string)keyPi.GetValue(arrObj, null);  
-for (int copyArrIdx = 0; copyArrIdx < copyArr.Length; copyArrIdx++)  
-{  
-object arrCopy = copyArr.GetValue(copyArrIdx);  
-if (objKey == (string)keyPi.GetValue(arrCopy, null))  
-PrepareForUpdate(arrObj, arrCopy);  
-}  
-}  
-}  
-else  
-{  
-object objValue = pi.GetValue(obj, null);  
-if (objValue != null && objValue.Equals(pi.GetValue(copy, null)))  
-{  
-// Values are the same – signal no change  
-if (pi.PropertyType == typeof(string))  
-{  
-// Strings doesn’t have a <field>Specified property – set the field to null  
-pi.SetValue(obj, null, null);  
-}  
-else  
-{  
-// The <field>Specified is autogenerated by Visual Studio as the next property  
-idx++;  
-PropertyInfo specifiedPi = properties\[idx\];  
-// Exception if this assumption for some reason isn’t true  
-Debug.Assert(specifiedPi.Name == pi.Name + “Specified”);  
-specifiedPi.SetValue(obj, false, null);  
-}  
-}  
-}  
-}  
-}  
+```
+/// <summary>
+/// Prepare record for update
+/// Set <field> to null if a string field hasn't been updated
+/// Set <field>Specified to false if a non-string field hasn't been updated
+/// </summary>
+/// <param name="obj">record to prepare for update</param>
+/// <param name="copy">copy of the record (a result of GetCopy)</param>
+void PrepareForUpdate(object obj, object copy)
+{
+Debug.Assert(obj.GetType() == copy.GetType());
+Type type = obj.GetType();
+PropertyInfo[] properties = type.GetProperties();
+for(int idx=0; idx<properties.Length; idx++)
+{
+PropertyInfo pi = properties[idx];
+if (pi.Name != "Key" &&
+```
+
+```
+pi.GetCustomAttributes(typeof(System.Xml.Serialization.XmlIgnoreAttribute), false).Length == 0)
+{
+if (pi.PropertyType.IsArray)
+{
+// Compare an array of objects – recursively
+Array objArr = (Array)pi.GetValue(obj, null);
+Array copyArr = (Array)pi.GetValue(copy, null);
+for (int objArrIdx = 0; objArrIdx < objArr.Length; objArrIdx++)
+{
+object arrObj = objArr.GetValue(objArrIdx);
+PropertyInfo keyPi = arrObj.GetType().GetProperty("Key");
+string objKey = (string)keyPi.GetValue(arrObj, null);
+for (int copyArrIdx = 0; copyArrIdx < copyArr.Length; copyArrIdx++)
+{
+object arrCopy = copyArr.GetValue(copyArrIdx);
+if (objKey == (string)keyPi.GetValue(arrCopy, null))
+PrepareForUpdate(arrObj, arrCopy);
 }
+}
+}
+else
+{
+object objValue = pi.GetValue(obj, null);
+if (objValue != null && objValue.Equals(pi.GetValue(copy, null)))
+{
+// Values are the same – signal no change
+if (pi.PropertyType == typeof(string))
+{
+// Strings doesn't have a <field>Specified property – set the field to null
+pi.SetValue(obj, null, null);
+}
+else
+{
+// The <field>Specified is autogenerated by Visual Studio as the next property
+```
+
+```
+idx++;
+PropertyInfo specifiedPi = properties[idx];
+// Exception if this assumption for some reason isn't true
+```
+
+```
+Debug.Assert(specifiedPi.Name == pi.Name + "Specified");
+specifiedPi.SetValue(obj, false, null);
+}
+}
+}
+}
+}
+}
+```
 
 That’s it, not as straightforward as you could have wished for, but SP1 definitely makes things easier once it comes out.
 

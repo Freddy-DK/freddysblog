@@ -15,18 +15,22 @@ If you didn’t read this blog post: [https://freddysblog.com/2019/04/13/running
 
 In order to run tests with 15.x containers you will need the latest NavContainerHelper ([version 0.6.3.2 or later](https://www.powershellgallery.com/packages/navcontainerhelper/0.6.3.2)) and you need Business Central 2019 Wave 2 insider build 15.0.35805.0 or later using
 
+```
 docker pull bcinsider.azurecr.io/bcsandbox-master:<country>-<platform>
+```
 
 where <country> is the localization and <platform> is ltsc2016 or ltsc2019 based on your version of Windows (see more here: [https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/](/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/)).
 
 docker inspect on your image should return the following labels (or newer):
 
+```
 "Labels": {
     ...
     "platform": "15.0.35510.0",
     "tag": "0.0.9.92",
     "version": "15.0.35805.0"
 },
+```
 
 # Include the test toolkit
 
@@ -46,49 +50,53 @@ Microsoft application tests are also available in the **C:\\Applications** folde
 
 If you run the following script:
 
+```
 $auth = "NavUserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $containerName = "runtest"
 $licenseFile = "<licenseFile>"
 $imageName = "bcinsider.azurecr.io/bcsandbox-master:w1-ltsc2019"
-New-BcContainer -accept\_eula \`
-                -containerName $containerName \`
-                -imageName $imageName \`
-                -auth $auth \`
-                -credential $credential \`
-                -updateHosts \`
-                -alwaysPull \`
-                -includeTestToolkit -includeTestLibrariesOnly \`
+New-BcContainer -accept_eula `
+                -containerName $containerName `
+                -imageName $imageName `
+                -auth $auth `
+                -credential $credential `
+                -updateHosts `
+                -alwaysPull `
+                -includeTestToolkit -includeTestLibrariesOnly `
                 -licenseFile $licenseFile
+```
 
 you should see an output ending with something like:
 
+```
 ...
 Ready for connections!
 Reading CustomSettings.config from runtest
 Creating Desktop Shortcuts for runtest
-Publishing C:\\Applications\\TestFramework\\TestLibraries\\Any\\Microsoft\_Any.app
+Publishing C:\Applications\TestFramework\TestLibraries\Any\Microsoft_Any.app
 Synchronizing Any on tenant default
 Installing Any on tenant default
 App successfully published
-Publishing C:\\Applications\\TestFramework\\TestLibraries\\Assert\\Microsoft\_Library Assert.app
+Publishing C:\Applications\TestFramework\TestLibraries\Assert\Microsoft_Library Assert.app
 Synchronizing Library Assert on tenant default
 Installing Library Assert on tenant default
 App successfully published
-Publishing C:\\Applications\\TestFramework\\TestRunner\\Microsoft\_Test Runner.app
+Publishing C:\Applications\TestFramework\TestRunner\Microsoft_Test Runner.app
 Synchronizing Test Runner on tenant default
 Installing Test Runner on tenant default
 App successfully published
-Publishing C:\\Applications\\System Application\\Test\\Microsoft\_System Application Test Library.app
+Publishing C:\Applications\System Application\Test\Microsoft_System Application Test Library.app
 Synchronizing System Application Test Library on tenant default
 Installing System Application Test Library on tenant default
 App successfully published
-Publishing C:\\Applications\\BaseApp\\Test\\Microsoft\_Tests-TestLibraries.app
+Publishing C:\Applications\BaseApp\Test\Microsoft_Tests-TestLibraries.app
 Synchronizing Tests-TestLibraries on tenant default
 Installing Tests-TestLibraries on tenant default
 App successfully published
 TestToolkit successfully imported
 Container runtest successfully created
+```
 
 As you see, the 5 apps are published and installed, the same happens if you omit the -includeTestToolkit and instead call the **Import-TestToolkitToBcContainer** function.
 
@@ -100,22 +108,30 @@ After this, you can open the Test Tool shortcut on the desktop and after invokin
 
 Now you can run the tests from the UI – or you can run them from PowerShell. Try:
 
+```
 Get-TestsFromBCContainer -containerName $containerName -credential $credential
+```
 
 and you should get:
 
+```
 Tests                  Name                  Id 
 -----                  ----                  -- 
 {WarmupInvoicePosting} Sys. Warmup Scenarios 130411
+```
 
 and if you try to run the tests using:
 
+```
 Run-TestsInBCContainer -containerName $containerName -credential $credential -detailed
+```
 
 you should get:
 
+```
   Codeunit 130411 Sys. Warmup Scenarios Success (0.472 seconds)
     Testfunction WarmupInvoicePosting Success (0.047 seconds)
+```
 
 # The Hello World of tests
 
@@ -123,14 +139,17 @@ Lets try to create a new AL test project. In VS Code, use **Ctrl+Shift+P** and s
 
 Select the latest target platform (4.0 Business Central 2019 release wave 2). Select your own server and change **Server**, **ServerInstance** and **startupObjectId** in **launch.json**:
 
+```
 "server": "http://<containername>",
 "serverInstance": "BC",
 "startupObjectId": 130451,
+```
 
 Replace <containerName> with the name of your container.
 
 In app.json, add dependencies on the Test Framework apps:
 
+```
 {
   "appId": "dd0be2ea-f733-4d65-bb34-a28f4624fb14",
   "publisher": "Microsoft",
@@ -155,9 +174,11 @@ In app.json, add dependencies on the Test Framework apps:
    "name": "Tests-TestLibraries",
    "version": "15.0.0.0"
 }
+```
 
 Remove the Helloworld.al and create a new Codeunit like this:
 
+```
 codeunit 50100 "My tests"
 {
     Subtype = Test;
@@ -166,20 +187,21 @@ codeunit 50100 "My tests"
     var
         Assert: Codeunit "Library Assert";
 
-    \[Test\]
-    \[Scope('OnPrem')\]
+    [Test]
+    [Scope('OnPrem')]
     procedure TestA()
     begin
         Assert.AreEqual(3, 3, '3 and 3 are equal');
     end;
 
-    \[Test\]
-    \[Scope('OnPrem')\]
+    [Test]
+    [Scope('OnPrem')]
     procedure TestB()
     begin
         Assert.AreEqual(3, 4, '3 and 4 are not equal');
     end;
 }
+```
 
 _**Note**, that the Library Assert codeunit is coming from the Library Assert application and that the TestLibraries contains the “old” Assert codeunit._
 
@@ -191,10 +213,13 @@ Publish the app without debugging and it should start the test tool page.
 
 Invoke the **Get Test Codeunits** action to include the new codeunit. Now you can run the tests directly in the UI (… -> Run Tests) or you can use PowerShell again:
 
+```
 Run-TestsInBCContainer -containerName $containerName -credential $credential -detailed
+```
 
 and the result should be something like this:
 
+```
   Codeunit 130411 Sys. Warmup Scenarios Success (0.331 seconds)
     Testfunction WarmupInvoicePosting Success (0 seconds)
   Codeunit 50100 My tests Failure (0.331 seconds)
@@ -210,6 +235,7 @@ and the result should be something like this:
         "Test Suite Mgt."(CodeUnit 130456).RunTests - Test Runner by Microsoft
         "Test Suite Mgt."(CodeUnit 130456).RunSelectedTests - Test Runner by Microsoft
         "Command Line Test Tool"(Page 130455).OnAction - Test Runner by Microsoft
+```
 
 # Include the Microsoft Tests
 

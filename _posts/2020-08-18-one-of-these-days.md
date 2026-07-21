@@ -17,10 +17,12 @@ As developers we often make assumptions and when we see these assumptions no lon
 
 This morning, I woke up at 5:30 and as usual, the first thing I do is to scan email subjects. One email from Ryan caught my attention and in the email I could see a short output of the problem he was encountering:
 
+```
 Downloading Prerequisite Components
-Downloading F:\\bcart.cache\\sandbox\\16.4.14693.15627\\platform\\Prerequisite Components\\Open XML SDK 2.5 for Microsoft Office\\OpenXMLSDKv25.msi
-Downloading F:\\bcart.cache\\sandbox\\16.4.14693.15627\\platform\\Prerequisite Components\\IIS URL Rewrite Module\\rewrite\_2.0\_rtw\_x64.msi
-\[2020-08-17 22:42:36\] Exception calling "DownloadFile" with "2" argument(s): "The remote server returned an error: (404) Not Found."
+Downloading F:\bcart.cache\sandbox\16.4.14693.15627\platform\Prerequisite Components\Open XML SDK 2.5 for Microsoft Office\OpenXMLSDKv25.msi
+Downloading F:\bcart.cache\sandbox\16.4.14693.15627\platform\Prerequisite Components\IIS URL Rewrite Module\rewrite_2.0_rtw_x64.msi
+[2020-08-17 22:42:36] Exception calling "DownloadFile" with "2" argument(s): "The remote server returned an error: (404) Not Found."
+```
 
 What…
 

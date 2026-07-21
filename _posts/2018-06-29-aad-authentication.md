@@ -25,10 +25,12 @@ Behind the scenes, the ARM template would invoke a function in the navcontainerh
 
 Now we have the AzureAD Powershell module, which is built for this purpose and creating an AAD App for Web Client single signon requires only one line of code:
 
-$ssoAdApp = New-AzureADApplication -DisplayName "NAV WebClient for $appIdUri" \`
-                                   -Homepage $publicWebBaseUrl \`
-                                   -IdentifierUris $appIdUri \`
+```
+$ssoAdApp = New-AzureADApplication -DisplayName "NAV WebClient for $appIdUri" `
+                                   -Homepage $publicWebBaseUrl `
+                                   -IdentifierUris $appIdUri `
                                    -ReplyUrls $publicWebBaseUrl
+```
 
 Wow.
 
@@ -46,7 +48,9 @@ Having the AzureAD PowerShell module also made it easy to create a function call
 
 As mentioned above, the AAD App for Edit In Excel is also created by the Create-AadAppsForNAV and as of today, the [http://aka.ms/getnav](http://aka.ms/getnav) ARM template will also configure Edit In Excel in  the NAV Container or the Business Central Sandbox Container. This is done by setting _ExcelAddInAzureActiveDirectoryClientId_ in CustomSettings.config to the AdAppId field in the object returned from the New-AzureAdApplication creating the Excel Aad App.
 
+```
 Set-NAVServerConfiguration -ServerInstance nav -KeyName "ExcelAddInAzureActiveDirectoryClientId" -KeyValue "$ExcelAdAppId"
+```
 
 Having done this, the Open In Excel menu item in NAV or Business Central automagically changes to Edit In Excel:
 
@@ -68,10 +72,12 @@ For embedded PowerBI we have to configure the app in NAV / Business Central. Thi
 
 In the navcontainerhelper, we have functions to help with this:
 
+```
 $fobfile = Join-Path $env:TEMP "AzureAdAppSetup.fob"
 Download-File -sourceUrl "http://aka.ms/azureadappsetupfob" -destinationFile $fobfile
 Import-ObjectsToNavContainer -containerName $containerName -objectsFile $fobfile -sqlCredential $sqlCredential
 Invoke-NavContainerCodeunit -containerName $containerName -tenant "default" -CodeunitId 50000 -MethodName SetupAzureAdApp -Argument ($AdProperties.PowerBiAdAppId+','+$AdProperties.PowerBiAdAppKeyValue)
+```
 
 And of course this is automagically done when using [http://aka.ms/getnav](http://aka.ms/getnav).
 

@@ -17,9 +17,11 @@ During the other posts, I have been describing how to make the Proxy and one way
 
 For this sample, I have created a new Proxy (Proxy2) and added 3 functions to this proxy:
 
-Customer\[\] GetMyCustomers(string username, string password)
-Vendor\[\] GetMyVendors(string username, string password)
-Item\[\] GetMyItems(string username, string password)
+```
+Customer[] GetMyCustomers(string username, string password)
+Vendor[] GetMyVendors(string username, string password)
+Item[] GetMyItems(string username, string password)
+```
 
 You can imagine that these functions are implemented in the Proxy simply by authenticating and calling the corresponding function in the MyStuff codeunit from [this post](/archive/2008/12/05/microsoft-windows-vista-gadget-my-stuff.aspx), I will not go into further detail about how the Proxy is done.
 
@@ -31,13 +33,15 @@ Try the following:
 -   Add a service reference to [sb://navdemo.servicebus.windows.net/Proxy2/mex](//navdemo.servicebus.windows.net/Proxy2/mex "sb://navdemo.servicebus.windows.net/Proxy2/mex") and use the namespace Proxy2 (note that you need the Windows Azure AppFabric SDK to do this and you can download that [here](http://www.microsoft.com/downloads/en/details.aspx?FamilyID=39856a03-1490-4283-908f-c8bf0bfad8a5&displaylang=en)).
 -   Use the following code in main:
 
-static void Main(string\[\] args) 
+```
+static void Main(string[] args) 
 { 
-    Proxy2.ProxyClassClient client = new Proxy2.ProxyClassClient("NetTcpRelayBinding\_IProxyClass"); 
+    Proxy2.ProxyClassClient client = new Proxy2.ProxyClassClient("NetTcpRelayBinding_IProxyClass"); 
     foreach(Proxy2.Customer customer in client.GetMyCustomers("freddy", "password")) 
         Console.WriteLine(string.Format("{0} {1}", customer.Name, customer.Phone)); 
     Console.ReadLine(); 
 }
+```
 
 -   Run the app, and you should get something like:
 
@@ -73,23 +77,28 @@ In Windows Phone applications it is common to have a ViewModel, which is the dat
 
 Declaring the collections:
 
+```
 /// 
 /// Collections for My stuff objects. 
 ///
+```
 
 public ObservableCollection MyCustomers { get; private set; } public ObservableCollection MyVendors { get; private set; } public ObservableCollection MyItems { get; private set; }
 
 Initializing the ViewModel:
 
+```
 public MainViewModel() 
 { 
     this.MyCustomers = new ObservableCollection(); 
     this.MyVendors = new ObservableCollection(); 
     this.MyItems = new ObservableCollection(); 
 }
+```
 
 Loading the data:
 
+```
 /// 
 /// Load data into collections 
 /// 
@@ -103,40 +112,42 @@ public void LoadData() {
   
     Proxy2.ProxyClassClient client = new Proxy2.ProxyClassClient(binding, endpoint);
 
-    client.GetMyCustomersCompleted += new EventHandler(client\_GetMyCustomersCompleted); 
+    client.GetMyCustomersCompleted += new EventHandler(client_GetMyCustomersCompleted); 
     client.GetMyCustomersAsync("freddy", "password");
 
-    client.GetMyVendorsCompleted += new EventHandler(client\_GetMyVendorsCompleted); 
+    client.GetMyVendorsCompleted += new EventHandler(client_GetMyVendorsCompleted); 
     client.GetMyVendorsAsync("freddy", "password");
 
-    client.GetMyItemsCompleted += new EventHandler(client\_GetMyItemsCompleted); 
+    client.GetMyItemsCompleted += new EventHandler(client_GetMyItemsCompleted); 
     client.GetMyItemsAsync("freddy", "password");
 
     this.IsDataLoaded = true; 
 }
 
-void client\_GetMyCustomersCompleted(object sender, Proxy2.GetMyCustomersCompletedEventArgs e) 
+void client_GetMyCustomersCompleted(object sender, Proxy2.GetMyCustomersCompletedEventArgs e) 
 { 
     foreach (Proxy2.Customer customer in e.Result) 
         this.MyCustomers.Add(customer); 
 }
 
-void client\_GetMyVendorsCompleted(object sender, Proxy2.GetMyVendorsCompletedEventArgs e) 
+void client_GetMyVendorsCompleted(object sender, Proxy2.GetMyVendorsCompletedEventArgs e) 
 { 
     foreach (Proxy2.Vendor vendor in e.Result) 
         this.MyVendors.Add(vendor); 
 }
 
-void client\_GetMyItemsCompleted(object sender, Proxy2.GetMyItemsCompletedEventArgs e) 
+void client_GetMyItemsCompleted(object sender, Proxy2.GetMyItemsCompletedEventArgs e) 
 { 
     foreach (Proxy2.Item item in e.Result) 
         this.MyItems.Add(item); 
 }
+```
 
 As you can see, the data is loaded using asynchronous data access – as everything on the phone works this way.
 
 In the SampleData folder, I have modified the Sample Data xaml for the ViewModel to:
 
+```
 <local:MainViewModel 
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
@@ -160,9 +171,11 @@ In the SampleData folder, I have modified the Sample Data xaml for the ViewModel
     </local:MainViewModel.MyItems>
 
 </local:MainViewModel>
+```
 
 Also the xaml for the panorama control in the MainPage has been modified to include 3 PanoramaItems, which binds to Customers, Vendors and Items:
 
+```
 <!--Panorama control--> 
 <controls:Panorama Title="my stuff"> 
     <controls:Panorama.Background> 
@@ -171,7 +184,7 @@ Also the xaml for the panorama control in the MainPage has been modified to incl
 
     <!-- My Customers --> 
     <controls:PanoramaItem Header="My Customers"> 
-        <ListBox Name="lbMyCustomers" Margin="0,0,-12,0" ItemsSource="{Binding MyCustomers}" ManipulationStarted="ListBox\_ManipulationStarted" ManipulationCompleted="ListBox\_ManipulationCompleted" MouseLeftButtonUp="ListBox\_MouseLeftButtonUp" ManipulationDelta="ListBox\_ManipulationDelta"> 
+        <ListBox Name="lbMyCustomers" Margin="0,0,-12,0" ItemsSource="{Binding MyCustomers}" ManipulationStarted="ListBox_ManipulationStarted" ManipulationCompleted="ListBox_ManipulationCompleted" MouseLeftButtonUp="ListBox_MouseLeftButtonUp" ManipulationDelta="ListBox_ManipulationDelta"> 
             <ListBox.ItemTemplate> 
                 <DataTemplate> 
                     <StackPanel Margin="0,0,0,17" Width="432"> 
@@ -185,7 +198,7 @@ Also the xaml for the panorama control in the MainPage has been modified to incl
 
     <!-- My Vendors --> 
     <controls:PanoramaItem Header="My Vendors"> 
-        <ListBox Name="lbMyVendors" Margin="0,0,-12,0" ItemsSource="{Binding MyVendors}" ManipulationDelta="lbMyVendors\_ManipulationDelta" ManipulationStarted="lbMyVendors\_ManipulationStarted" MouseLeftButtonUp="lbMyVendors\_MouseLeftButtonUp"> 
+        <ListBox Name="lbMyVendors" Margin="0,0,-12,0" ItemsSource="{Binding MyVendors}" ManipulationDelta="lbMyVendors_ManipulationDelta" ManipulationStarted="lbMyVendors_ManipulationStarted" MouseLeftButtonUp="lbMyVendors_MouseLeftButtonUp"> 
             <ListBox.ItemTemplate> 
                 <DataTemplate> 
                     <StackPanel Margin="0,0,0,17" Width="432"> 
@@ -212,6 +225,7 @@ Also the xaml for the panorama control in the MainPage has been modified to incl
     </controls:PanoramaItem>
 
 </controls:Panorama>
+```
 
 That’s it – running the application in the Windows Phone Emulator should give you the desired output.
 

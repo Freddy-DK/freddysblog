@@ -27,57 +27,59 @@ If your demo data include secrets (like a key), you might want to trigger the ac
 
 A script for creating a container, adding your app + demo data, prepared to use VS Code to do subsequent compilation and debugging of your app could look like this:
 
+```
 $imageName = "mcr.microsoft.com/businesscentral/onprem:ltsc2019"
 $auth = "UserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-$licenseFile = "C:\\temp\\license.flf"
+$licenseFile = "C:\temp\license.flf"
 $containerName = "test"
-$appProjectFolder = "C:\\ProgramData\\NavContainerHelper\\BingMaps\\app"
-$demoDataAppProjectFolder = "C:\\ProgramData\\NavContainerHelper\\BingMaps\\demodata"
+$appProjectFolder = "C:\ProgramData\NavContainerHelper\BingMaps\app"
+$demoDataAppProjectFolder = "C:\ProgramData\NavContainerHelper\BingMaps\demodata"
 
 # Create initial container
-New-BCContainer \`
-    -accept\_eula \`
-    -imageName $imageName \`
-    -containerName $containerName \`
-    -licenseFile $licenseFile \`
-    -auth $auth \`
-    -Credential $credential \`
+New-BCContainer `
+    -accept_eula `
+    -imageName $imageName `
+    -containerName $containerName `
+    -licenseFile $licenseFile `
+    -auth $auth `
+    -Credential $credential `
     -updateHosts
 
 # Compile app
-$appFile = Compile-AppInBCContainer \`
-    -containerName $containerName \`
-    -appProjectFolder $appProjectFolder \`
-    -credential $credential \`
+$appFile = Compile-AppInBCContainer `
+    -containerName $containerName `
+    -appProjectFolder $appProjectFolder `
+    -credential $credential `
     -appOutputFolder $appProjectFolder
 
 # Publish via dev endpoint - ready for development
-Publish-BCContainerApp \`
-    -containerName $containerName \`
-    -appFile $appFile \`
-    -useDevEndpoint \`
+Publish-BCContainerApp `
+    -containerName $containerName `
+    -appFile $appFile `
+    -useDevEndpoint `
     -credential $credential
 
 # Compile demo data app
-$demoDataAppFile = Compile-AppInBCContainer \`
-    -containerName $containerName \`
-    -appProjectFolder $demoDataAppProjectFolder \`
-    -credential $credential \`
+$demoDataAppFile = Compile-AppInBCContainer `
+    -containerName $containerName `
+    -appProjectFolder $demoDataAppProjectFolder `
+    -credential $credential `
     -appOutputFolder $demoDataAppProjectFolder
 
 # Publish and install demo data app
-Publish-BCContainerApp \`
-    -containerName $containerName \`
-    -appFile $appFile \`
-    -skipVerification \`
+Publish-BCContainerApp `
+    -containerName $containerName `
+    -appFile $appFile `
+    -skipVerification `
     -sync
 # Uninstall and unpublish demo data app
-UnPublish-BCContainerApp \`
-    -containerName $containerName \`
-    -appName "BingMapsDemoData" \`
-    -unInstall \`
+UnPublish-BCContainerApp `
+    -containerName $containerName `
+    -appName "BingMapsDemoData" `
+    -unInstall `
     -doNotSaveData
+```
 
 # Configuration Packages
 
@@ -93,75 +95,77 @@ When creating the development environment, we will publish apps and perform data
 
 The following script assumes that you have a database backup in **C:\\ProgramData\\NavContainerHelper\\mybackup\\database.bak** and want to do development of the **BingMaps app** placed in this folder: **C:\\ProgramData\\NavContainerHelper\\BingMaps\\app**
 
+```
 $imageName = "mcr.microsoft.com/businesscentral/onprem:ltsc2019"
 $auth = "UserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-$licenseFile = "C:\\temp\\license.flf"
+$licenseFile = "C:\temp\license.flf"
 $containerName = "test"
 
 # Create development container
-New-BCContainer \`
-    -accept\_eula \`
-    -imageName $imageName \`
-    -containerName $containerName \`
-    -licenseFile $licenseFile \`
-    -auth $auth \`
-    -Credential $credential \`
-    -updateHosts \`
-    -bakFile "C:\\ProgramData\\NavContainerHelper\\mybackup\\database.bak"
+New-BCContainer `
+    -accept_eula `
+    -imageName $imageName `
+    -containerName $containerName `
+    -licenseFile $licenseFile `
+    -auth $auth `
+    -Credential $credential `
+    -updateHosts `
+    -bakFile "C:\ProgramData\NavContainerHelper\mybackup\database.bak"
 
 # Unpublish old version of the app
-UnPublish-BCContainerApp \`
-    -containerName $containerName \`
-    -appName "BingMaps" \`
+UnPublish-BCContainerApp `
+    -containerName $containerName `
+    -appName "BingMaps" `
     -unInstall
 
 # Update version number for my development environment
-$projectFolder = "C:\\ProgramData\\NavContainerHelper\\BingMaps\\app"
+$projectFolder = "C:\ProgramData\NavContainerHelper\BingMaps\app"
 $appJsonFile = Join-Path $projectFolder "app.json"
 $appJson = Get-Content -path $appJsonFile | ConvertFrom-Json
-$appVersion = \[System.Version\]$appJson.version
-$appJson.version = (\[System.Version\]::new($appVersion.Major, $appVersion.Minor, $appVersion.Build, $appVersion.Revision+1)).ToString()
+$appVersion = [System.Version]$appJson.version
+$appJson.version = ([System.Version]::new($appVersion.Major, $appVersion.Minor, $appVersion.Build, $appVersion.Revision+1)).ToString()
 $appJson | ConvertTo-Json -Depth 99 | Set-Content -Path $appJsonFile
 
 # Compile
-$appFile = Compile-AppInBCContainer \`
-    -containerName $containerName \`
-    -appProjectFolder $projectFolder \`
-    -credential $credential \`
+$appFile = Compile-AppInBCContainer `
+    -containerName $containerName `
+    -appProjectFolder $projectFolder `
+    -credential $credential `
     -appOutputFolder $projectFolder
 
 # Publish new version of the app via PowerShell
-Publish-NavContainerApp \`
-    -containerName $containerName \`
-    -appFile $appFile \`
-    -skipVerification \`
+Publish-NavContainerApp `
+    -containerName $containerName `
+    -appFile $appFile `
+    -skipVerification `
     -sync
 
 # Perform data upgrade
-Start-NavContainerAppDataUpgrade \`
-    -containerName $containerName \`
+Start-NavContainerAppDataUpgrade `
+    -containerName $containerName `
     -appName "BingMaps"
 
 # Uninstall and unpublish app
-UnPublish-BCContainerApp \`
-    -containerName $containerName \`
-    -appName "BingMaps" \`
+UnPublish-BCContainerApp `
+    -containerName $containerName `
+    -appName "BingMaps" `
     -unInstall
 
 # Compile / Create a new app package - cannot republish the same package
-$appFile = Compile-AppInBCContainer \`
-    -containerName $containerName \`
-    -appProjectFolder $projectFolder \`
-    -credential $credential \`
+$appFile = Compile-AppInBCContainer `
+    -containerName $containerName `
+    -appProjectFolder $projectFolder `
+    -credential $credential `
     -appOutputFolder $projectFolder
 
 # Publish via dev endpoint - ready for development
-Publish-BCContainerApp \`
-    -containerName $containerName \`
-    -appFile $appFile \`
-    -useDevEndpoint \`
+Publish-BCContainerApp `
+    -containerName $containerName `
+    -appFile $appFile `
+    -useDevEndpoint `
     -credential $credential
+```
 
 A few things to notice in this script is the **double publish** and the **double compile**…
 

@@ -53,45 +53,47 @@ The .BAT files needs to be placed in the NAV installation directory (which typic
 
 ### RecreateOriginalService.bat
 
-@ECHO OFF  
-IF NOT “%1” == “” GOTO usage  
-SET NAVPATH=%~dp0  
-IF EXIST “%NAVPATH%serviceMicrosoft.Dynamics.Nav.Server.exe” GOTO NavPathOK  
-ECHO.  
-ECHO Unable to locate installation service directory  
-ECHO.  
-ECHO %NAVPATH%service  
-ECHO.  
-ECHO Maybe you already ran recreateoriginalservice.bat  
-goto :eof  
-:NavPathOK  
-IF NOT EXIST “%NAVPATH%service.orgMicrosoft.Dynamics.Nav.Server.exe” GOTO orgok  
-ECHO.  
-ECHO Directory already exists  
-ECHO.  
-ECHO %NAVPATH%service.org  
-ECHO.  
-ECHO Maybe you already ran recreateoriginalservice.bat  
-GOTO :eof  
-:orgok  
-C:  
-CD “%NAVPATH%”  
-SC stop MicrosoftDynamicsNavWS  
-CALL SLEEP.BAT 3  
-SC stop MicrosoftDynamicsNavServer  
-CALL SLEEP.BAT 3  
-SC delete MicrosoftDynamicsNavWS  
-SC delete MicrosoftDynamicsNavServer  
-RENAME Service Service.org  
-CALL createservice DynamicsNAV dummy dummy auto  
-COPY /Y customsettings.template service.orgcustomsettings.config  
-GOTO :eof  
-:usage  
-ECHO.  
-ECHO Usage:  
-ECHO.  
-ECHO recreateoriginalservice.bat  
+```
+@ECHO OFF
+IF NOT "%1" == "" GOTO usage
+SET NAVPATH=%~dp0
+IF EXIST "%NAVPATH%serviceMicrosoft.Dynamics.Nav.Server.exe" GOTO NavPathOK
 ECHO.
+ECHO Unable to locate installation service directory
+ECHO.
+ECHO %NAVPATH%service
+ECHO.
+ECHO Maybe you already ran recreateoriginalservice.bat
+goto :eof
+:NavPathOK
+IF NOT EXIST "%NAVPATH%service.orgMicrosoft.Dynamics.Nav.Server.exe" GOTO orgok
+ECHO.
+ECHO Directory already exists
+ECHO.
+ECHO %NAVPATH%service.org
+ECHO.
+ECHO Maybe you already ran recreateoriginalservice.bat
+GOTO :eof
+:orgok
+C:
+CD "%NAVPATH%"
+SC stop MicrosoftDynamicsNavWS
+CALL SLEEP.BAT 3
+SC stop MicrosoftDynamicsNavServer
+CALL SLEEP.BAT 3
+SC delete MicrosoftDynamicsNavWS
+SC delete MicrosoftDynamicsNavServer
+RENAME Service Service.org
+CALL createservice DynamicsNAV dummy dummy auto
+COPY /Y customsettings.template service.orgcustomsettings.config
+GOTO :eof
+:usage
+ECHO.
+ECHO Usage:
+ECHO.
+ECHO recreateoriginalservice.bat
+ECHO.
+```
 
 A couple of comments to the  “source”:
 
@@ -110,8 +112,10 @@ RecreateOriginalService.bat checks whether it has ran already – so please do n
 
 As you saw, RecreateOriginalService.bat uses a .BAT file called SLEEP.BAT. The main purpose of this .BAT file is to wait for a number of seconds – and there really isn’t any command line tool, which works in all versions of Windows that can do this – so I made this one
 
-@ping 127.0.0.1 -n 2 -w 1000 > nul  
+```
+@ping 127.0.0.1 -n 2 -w 1000 > nul
 @ping 127.0.0.1 -n %1% -w 1000 > nul
+```
 
 Works fine – but is kind of strange to look at (that is why it got its own .BAT file).  
 Vista, Windows Server 2003 and 2008 has a command called TIMEOUT, but that doesn’t work on XP.
@@ -126,93 +130,95 @@ When CreateService.bat is called it will replace these variables with values giv
 
 ### CreateService.bat
 
-Now this is the fun stuff…
+`Now this is the fun stuff…`
 
-@ECHO OFF  
-IF “%1” == “” GOTO usage  
-SET SERVICE=%1  
-SET DBSERVER=%2  
-SET DATABASE=%3  
-SET START=%4  
-SET WHICH=%5  
-IF “%START%” == “” SET START=demand  
-IF “%START%” == “auto” goto startok  
-IF “%START%” == “demand” goto startok  
-IF “%START%” == “disabled” goto startok  
-ECHO.  
-ECHO Illegal value for 4th parameter  
-GOTO usage  
-:startok  
-IF “%WHICH%” == “” SET WHICH=both  
-IF “%WHICH%” == “both” goto whichok  
-IF “%WHICH%” == “servicetier” goto whichok  
-IF “%WHICH%” == “ws” goto whichok  
-ECHO.  
-ECHO Illegal value for 5th parameter  
-GOTO usage  
-:whichok  
-SET type=own  
-IF “%WHICH%” == “both” SET type=share  
-SET NAVPATH=%~dp0  
-IF EXIST “%NAVPATH%service.orgMicrosoft.Dynamics.Nav.Server.exe” GOTO NavPathOK  
-ECHO.  
-ECHO Unable to locate original Service directory  
-ECHO.  
-ECHO in %NAVPATH%service.org  
-ECHO.  
-ECHO Maybe you need to run recreateoriginalservice.bat  
-goto :eof  
-:NavPathOk  
-IF EXIST “%NAVPATH%%SERVICE%Microsoft.Dynamics.Nav.Server.exe” GOTO serviceexists  
-C:  
-CD “%NAVPATH%”  
-MKDIR “%SERVICE%”  
-IF ERRORLEVEL 1 GOTO nodir  
-XCOPY service.org %SERVICE% /s/e  
-SET SERVICEDIR=%NAVPATH%%SERVICE%  
-replacestringinfile.vbs #INSTANCE# %SERVICE% “%SERVICEDIR%customsettings.config”  
-IF ‘%DBSERVER%’ == ” GOTO editconfig  
-replacestringinfile.vbs #DBSERVER# %DBSERVER% “%SERVICEDIR%customsettings.config”  
-IF ‘%DATABASE%’ == ” GOTO editconfig  
-replacestringinfile.vbs #DATABASE# %DATABASE% “%SERVICEDIR%customsettings.config”  
-GOTO configdone  
-:editconfig  
-NOTEPAD %SERVICEDIR%customsettings.config  
-:configdone  
-SC CONFIG NetTcpPortSharing start= demand  
-SET DEP=  
-if “%WHICH%” == “ws” goto onlyws  
-SC CREATE MicrosoftDynamicsNavServer$%SERVICE% binpath= “%SERVICEDIR%Microsoft.Dynamics.Nav.Server.exe $%SERVICE%” DisplayName= “NAV Server %SERVICE%” type= %type% start= %START% obj= “NT AuthorityNetworkService” depend= NetTcpPortSharing  
-SET DEP=/MicrosoftDynamicsNavServer$%SERVICE%  
-if “%WHICH%” == “servicetier” goto notws  
-:onlyws  
-SC CREATE MicrosoftDynamicsNavWS$%SERVICE% binpath= “%SERVICEDIR%Microsoft.Dynamics.Nav.Server.exe $%SERVICE%” DisplayName= “NAV Server %SERVICE% WS” type= %type% start= %START% obj= “NT AuthorityNetworkService” depend= HTTP/NetTcpPortSharing%DEP%  
-:notws  
-IF “%START%” == “demand” GOTO :eof  
-IF “%START%” == “disabled” GOTO :eof  
-if “%WHICH%” == “ws” goto startws  
-SC START MicrosoftDynamicsNavServer$%SERVICE%  
-if “%WHICH%” == “servicetier” goto :eof  
-:startws  
-SC START MicrosoftDynamicsNavWS$%SERVICE%  
-goto :eof  
-:serviceexists  
-ECHO.  
-ECHO Service already exists  
-ECHO.  
-GOTO :eof  
-:nodir  
-ECHO.  
-ECHO Could not create service directory  
-ECHO.  
-GOTO :eof  
-:usage  
-ECHO.  
-ECHO Usage:  
-ECHO.  
-ECHO CreateService servicetiername \[databaseserver\] \[“databasename”\] \[demand^|auto^|disabled\] \[both^|servicetier^|ws\]  
-ECHO.  
+```
+@ECHO OFF
+IF "%1" == "" GOTO usage
+SET SERVICE=%1
+SET DBSERVER=%2
+SET DATABASE=%3
+SET START=%4
+SET WHICH=%5
+IF "%START%" == "" SET START=demand
+IF "%START%" == "auto" goto startok
+IF "%START%" == "demand" goto startok
+IF "%START%" == "disabled" goto startok
 ECHO.
+ECHO Illegal value for 4th parameter
+GOTO usage
+:startok
+IF "%WHICH%" == "" SET WHICH=both
+IF "%WHICH%" == "both" goto whichok
+IF "%WHICH%" == "servicetier" goto whichok
+IF "%WHICH%" == "ws" goto whichok
+ECHO.
+ECHO Illegal value for 5th parameter
+GOTO usage
+:whichok
+SET type=own
+IF "%WHICH%" == "both" SET type=share
+SET NAVPATH=%~dp0
+IF EXIST "%NAVPATH%service.orgMicrosoft.Dynamics.Nav.Server.exe" GOTO NavPathOK
+ECHO.
+ECHO Unable to locate original Service directory
+ECHO.
+ECHO in %NAVPATH%service.org
+ECHO.
+ECHO Maybe you need to run recreateoriginalservice.bat
+goto :eof
+:NavPathOk
+IF EXIST "%NAVPATH%%SERVICE%Microsoft.Dynamics.Nav.Server.exe" GOTO serviceexists
+C:
+CD "%NAVPATH%"
+MKDIR "%SERVICE%"
+IF ERRORLEVEL 1 GOTO nodir
+XCOPY service.org %SERVICE% /s/e
+SET SERVICEDIR=%NAVPATH%%SERVICE%
+replacestringinfile.vbs #INSTANCE# %SERVICE% "%SERVICEDIR%customsettings.config"
+IF '%DBSERVER%' == " GOTO editconfig
+replacestringinfile.vbs #DBSERVER# %DBSERVER% "%SERVICEDIR%customsettings.config"
+IF '%DATABASE%' == " GOTO editconfig
+replacestringinfile.vbs #DATABASE# %DATABASE% "%SERVICEDIR%customsettings.config"
+GOTO configdone
+:editconfig
+NOTEPAD %SERVICEDIR%customsettings.config
+:configdone
+SC CONFIG NetTcpPortSharing start= demand
+SET DEP=
+if "%WHICH%" == "ws" goto onlyws
+SC CREATE MicrosoftDynamicsNavServer$%SERVICE% binpath= "%SERVICEDIR%Microsoft.Dynamics.Nav.Server.exe $%SERVICE%" DisplayName= "NAV Server %SERVICE%" type= %type% start= %START% obj= "NT AuthorityNetworkService" depend= NetTcpPortSharing
+SET DEP=/MicrosoftDynamicsNavServer$%SERVICE%
+if "%WHICH%" == "servicetier" goto notws
+:onlyws
+SC CREATE MicrosoftDynamicsNavWS$%SERVICE% binpath= "%SERVICEDIR%Microsoft.Dynamics.Nav.Server.exe $%SERVICE%" DisplayName= "NAV Server %SERVICE% WS" type= %type% start= %START% obj= "NT AuthorityNetworkService" depend= HTTP/NetTcpPortSharing%DEP%
+:notws
+IF "%START%" == "demand" GOTO :eof
+IF "%START%" == "disabled" GOTO :eof
+if "%WHICH%" == "ws" goto startws
+SC START MicrosoftDynamicsNavServer$%SERVICE%
+if "%WHICH%" == "servicetier" goto :eof
+:startws
+SC START MicrosoftDynamicsNavWS$%SERVICE%
+goto :eof
+:serviceexists
+ECHO.
+ECHO Service already exists
+ECHO.
+GOTO :eof
+:nodir
+ECHO.
+ECHO Could not create service directory
+ECHO.
+GOTO :eof
+:usage
+ECHO.
+ECHO Usage:
+ECHO.
+ECHO CreateService servicetiername [databaseserver] ["databasename"] [demand^|auto^|disabled] [both^|servicetier^|ws]
+ECHO.
+ECHO.
+```
 
 As you can see in the usage section, you can start the .BAT file with 5 parameters – but only the first is mandatory.
 
@@ -230,28 +236,31 @@ I use the replacestringinfile VB Script (can be found later in this post) to rep
 
 I guess the best way of describing the functionality of CreateService.bat is to give a bunch of examples – that you can validate against the above source.
 
-C:\\Pro….60>CreateService.bat test
+`C:\Pro….60>CreateService.bat test`
 
 Creates a Service Tier and a Web Service listener with the instance name test and opens Notepad to allow you to specify databaseserver and database name. Both Services are set to start manually and they share one process.
 
-C:\\Pro….60>CreateService.bat test localhost “Demo Database NAV (6-0)”
+`C:\Pro….60>CreateService.bat test localhost "Demo Database NAV (6-0)"`
 
 Creates a Service Tier and a Web Service listener with the instance name test, pointing to the demo database on localhost. Both Services are set to start manually and they share one process.
 
-C:\\Pro….60>CreateService.bat test localhost “Demo Database NAV (6-0)” auto servicetier
+`C:\Pro….60>CreateService.bat test localhost "Demo Database NAV (6-0)" auto servicetier`
 
 Creates a Service Tier with the instance name test, pointing to the demo database on localhost. The Service Tier has its own process and starts automatically.
 
-C:\\Pro….60>CreateService.bat test localhost “Demo Database NAV (6-0)” demand ws
+`C:\Pro….60>CreateService.bat test localhost "Demo Database NAV (6-0)" demand ws`
 
 Creates a Web Service listener with the instance name test, pointing to the demo database on localhost. The Service Tier has its own process and is set to start manually.
 
-C:\\Pro….60>CreateService.bat test mydbserver “Demo Database NAV (6-0)” auto servicetier  
-C:\\Pro….60>CreateService.bat test mydbserver “Demo Database NAV (6-0)” auto ws
+```
+C:\Pro….60>CreateService.bat test mydbserver "Demo Database NAV (6-0)" auto servicetier
+```
+
+`C:\Pro….60>CreateService.bat test mydbserver "Demo Database NAV (6-0)" auto ws`
 
 Creates a Service Tier and a Web Service listener with the instance name test, pointing to the demo database on mydbserver. Both Services are set to start automatically and they each have their own process.
 
-for /L %p in (1,1,50) DO ( createservice.bat test%p localhost “Demo Database NAV (6-0)” )
+`for /L %p in (1,1,50) DO ( createservice.bat test%p localhost "Demo Database NAV (6-0)" )`
 
 Creates 50 Service Tiers and Web Service listeners pointing to the demo database on localhost. All pairs share a process and all are set to demand load. Yes, I know that I am probably the only one in this world who would do something like this – but I just wanted to see how many Service Tiers I could install.
 
@@ -263,57 +272,60 @@ The picture is totally different if I set the Service Tiers to auto start – ap
 
 DeleteService really isn’t that bad. The majority of work here is to make sure that it is a service tier before killing the service, deleting it and removing the directory structure of the service without asking for permission. Should be safe though…
 
-@ECHO OFF  
-IF “%1” == “” GOTO usage  
-SET NAVPATH=%~dp0  
-IF EXIST “%NAVPATH%service.orgMicrosoft.Dynamics.Nav.Server.exe” GOTO NavPathOK  
-ECHO.  
-ECHO Unable to locate original Service directory  
-ECHO.  
-ECHO in %NAVPATH%service.org  
-ECHO.  
-ECHO Maybe you need to run recreateoriginalservice.bat  
-goto :eof  
-:NavPathOk  
-C:  
-CD “%NAVPATH%”  
-IF EXIST “%1Microsoft.Dynamics.Nav.Server.exe” GOTO serviceexists  
-ECHO.  
-ECHO Service doesn’t exist  
-GOTO usage  
-:serviceexists  
-SC query MicrosoftDynamicsNavServer$%1 | FINDSTR “STOPPED”  
-IF NOT ERRORLEVEL 1 GOTO dontstop  
-SC stop MicrosoftDynamicsNavWS$%1  
-CALL SLEEP.BAT 3  
-SC stop MicrosoftDynamicsNavServer$%1  
-CALL SLEEP.BAT 3  
-:dontstop  
-SC delete MicrosoftDynamicsNavWS$%1  
-SC delete MicrosoftDynamicsNavServer$%1  
-rd %1 /S /Q  
-GOTO :eof  
-:usage  
-ECHO.  
-ECHO Usage:  
-ECHO.  
-ECHO DeleteService servicename  
+```
+@ECHO OFF
+IF "%1" == "" GOTO usage
+SET NAVPATH=%~dp0
+IF EXIST "%NAVPATH%service.orgMicrosoft.Dynamics.Nav.Server.exe" GOTO NavPathOK
 ECHO.
+ECHO Unable to locate original Service directory
+ECHO.
+ECHO in %NAVPATH%service.org
+ECHO.
+ECHO Maybe you need to run recreateoriginalservice.bat
+goto :eof
+:NavPathOk
+C:
+CD "%NAVPATH%"
+IF EXIST "%1Microsoft.Dynamics.Nav.Server.exe" GOTO serviceexists
+ECHO.
+ECHO Service doesn't exist
+GOTO usage
+:serviceexists
+SC query MicrosoftDynamicsNavServer$%1 | FINDSTR "STOPPED"
+IF NOT ERRORLEVEL 1 GOTO dontstop
+SC stop MicrosoftDynamicsNavWS$%1
+CALL SLEEP.BAT 3
+SC stop MicrosoftDynamicsNavServer$%1
+CALL SLEEP.BAT 3
+:dontstop
+SC delete MicrosoftDynamicsNavWS$%1
+SC delete MicrosoftDynamicsNavServer$%1
+rd %1 /S /Q
+GOTO :eof
+:usage
+ECHO.
+ECHO Usage:
+ECHO.
+ECHO DeleteService servicename
+ECHO.
+```
 
 A couple of comments to the source:
 
 -   rd %1 /S /Q – removes a directory structure without asking for permission
--   SC query MicrosoftDynamicsNavServer$%1 | FINDSTR “STOPPED” will check whether the Service Tier is stopped
+-   SC query MicrosoftDynamicsNavServer$%1 \| FINDSTR “STOPPED” will check whether the Service Tier is stopped
 -   DeleteService does absolutely nothing to the database – it only unhooks a service and removes the directory in which it was installed.
 
 BTW – if you tried to create the 50 Service Tiers with CreateService – you can delete them using:
 
-for /L %p in (1,1,50) DO ( deleteservice.bat test%p )
+`for /L %p in (1,1,50) DO ( deleteservice.bat test%p )`
 
 ### ReplaceStringInFile.vbs
 
 As you saw, CreateService needs to replace a “variable” in a file with a value – like #DBSERVER# -> localhost etc. and there is no command line tool to do that. But fortunately we have the Internet – and I found a nice VBScript on [http://www.motobit.com/tips/detpg\_replfile/](http://www.motobit.com/tips/detpg_replfile/ "http://www.motobit.com/tips/detpg_replfile/") which does exactly what I want:
 
+```
 Dim FileName, Find, ReplaceWith, FileContents, dFileContents
 Find         = WScript.Arguments(0)
 ReplaceWith  = WScript.Arguments(1)
@@ -332,8 +344,8 @@ if dFileContents <> FileContents Then
 
   Wscript.Echo "Replace done."
   If Len(ReplaceWith) <> Len(Find) Then 'Can we count n of replacements?
-    Wscript.Echo \_
-    ( (Len(dFileContents) - Len(FileContents)) / (Len(ReplaceWith)-Len(Find)) ) & \_
+    Wscript.Echo _
+    ( (Len(dFileContents) - Len(FileContents)) / (Len(ReplaceWith)-Len(Find)) ) & _
     " replacements."
   End If
 Else
@@ -360,6 +372,7 @@ function WriteFile(FileName, Contents)
     Set OutStream = FS.OpenTextFile(FileName, 2, True)
     OutStream.Write Contents
 End Function
+```
 
 Please go to the Web Site and rate the article if you use the script – I gave it 5 stars:-)
 

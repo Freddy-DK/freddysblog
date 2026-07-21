@@ -41,12 +41,14 @@ I am definitely not a security expert – but whatever security system I want to
 
 I have created the following poor mans authentication to secure the access to NAV and make sure that nobody gets past the Proxy unless they have a valid username and password. I will of course always host the endpoint on a secure connection ([https://](https://)) and the easiest way around adding security is to extend the methods in the proxy to contain a username and a password – like:
 
-\[ServiceContract\] 
+```
+[ServiceContract] 
 public interface IProxyClass 
 { 
-    \[OperationContract\] 
+    [OperationContract] 
     string GetCustomerName(string username, string password, string No); 
 }
+```
 
 This username and password could then be a domain user and a domain password, but depending on the usage this might not be the best of ideas.
 
@@ -68,7 +70,8 @@ As a special option I have added a UseDefault – which basically means that the
 
 and created a Codeunit called AuthZ (which I have exposed as a Web Service as well):
 
-GetDomainUserPassword(VAR Username : Text\[80\];VAR Password : Text\[80\];VAR Domain : Text\[80\];VAR UseDefault : Boolean) : Boolean 
+```
+GetDomainUserPassword(VAR Username : Text[80];VAR Password : Text[80];VAR Domain : Text[80];VAR UseDefault : Boolean) : Boolean 
 IF NOT AuthZ.GET(Username) THEN 
 BEGIN 
   AuthZ.INIT; 
@@ -101,11 +104,13 @@ Username := AuthZ.DomainUsername;
 Password := AuthZ.DomainPassword; 
 Domain := AuthZ.DomainDomain; 
 EXIT(TRUE);
+```
 
 As you can see, the method will log the number of attempts done on a given user and it will automatically disable a user if it has more than 3 failed attempts. In my sample, I actually create a disabled account for attempts to use wrong usernames – you could discuss whether or not this is necessary.
 
 In my proxy (C#) I have added a method called Authenticate:
 
+```
 private void Authenticate(SoapHttpClientProtocol service, string username, string password) 
 { 
     if (string.IsNullOrEmpty(username)) 
@@ -118,15 +123,15 @@ private void Authenticate(SoapHttpClientProtocol service, string username, strin
     if (password.Length > 80) 
         throw new ArgumentException("password");
 
-    string\[\] creds = username.Split('\\\\');
+    string[] creds = username.Split('\\');
 
     if (creds.Length > 2) 
         throw new ArgumentException("username");
 
     if (creds.Length == 2) 
     { 
-        // Username is given by domain\\user - use this 
-        service.Credentials = new NetworkCredential(creds\[1\], password, creds\[0\]); 
+        // Username is given by domain\user - use this 
+        service.Credentials = new NetworkCredential(creds[1], password, creds[0]); 
     } 
     else 
     { 
@@ -144,15 +149,17 @@ private void Authenticate(SoapHttpClientProtocol service, string username, strin
             service.Credentials = new NetworkCredential(username, password, domain); 
     } 
 }
+```
 
 The only task for this function is to authenticate the user and set the Credentials on a NAV Web Reference (SoapHttpClientProtocol derived). If something goes wrong, this function will throw and exception and will return to the caller of the Service.
 
 The implementation of GetCustomerName is only slightly different in relation to the one implemented in part 3 – only addition is to call Authenticate after creating the service class:
 
+```
 public string GetCustomerName(string username, string password, string No) 
 { 
     Debug.Write(string.Format("GetCustomerName(No = {0}) = ", No)); 
-    CustomerCard\_Service service = new CustomerCard\_Service(); 
+    CustomerCard_Service service = new CustomerCard_Service(); 
     try 
     { 
         Authenticate(service, username, password); 
@@ -171,6 +178,7 @@ public string GetCustomerName(string username, string password, string No)
     Debug.WriteLine(customer.Name); 
     return customer.Name; 
 }
+```
 
 So, based on this we now have an endpoint on which we will have to specify a valid user/password combination in order to get the Customer Name – without having to create / give out users in the Active Directory.
 

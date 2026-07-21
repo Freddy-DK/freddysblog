@@ -51,9 +51,10 @@ Platform version 15.0.36510.0, which means that my online tenant apparently have
 
 We can investigate all existing docker images using this small script:
 
+```
 $repo = "mcr.microsoft.com/businesscentral/sandbox"
-(Get-NavContainerImageTags -imageName $repo).Tags | Where-Object { $\_ -like "15.\*-us-ltsc2019" } | % {
-    $labels = Get-NavContainerImageLabels -imageName "$($repo):$\_"
+(Get-NavContainerImageTags -imageName $repo).Tags | Where-Object { $_ -like "15.*-us-ltsc2019" } | % {
+    $labels = Get-NavContainerImageLabels -imageName "$($repo):$_"
     Write-Host "Platform: $($labels.Platform)   App: $($labels.version)"
 }
 Platform: 15.0.36510.0   App: 15.0.36560.0
@@ -75,6 +76,7 @@ Platform: 15.0.37492.0   App: 15.0.36626.37543
 Platform: 15.0.37582.0   App: 15.0.36626.37679
 Platform: 15.0.37582.0   App: 15.0.36626.37711
 Platform: 15.0.37867.0   App: 15.0.36626.37934
+```
 
 and find that no image fits directly. My recommandation is to just use the latest image, you should be able to mount and sync the database on that.
 
@@ -84,52 +86,56 @@ As always, I assume that you have the latest NavContainerHelper from the PowerSh
 
 First thing we need to do is to create a multitenant container using the latest sandbox image with us localization.
 
+```
 $auth = "UserPassword"
 $credential = New-Object PSCredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $imageName = "mcr.microsoft.com/businesscentral/sandbox:us-ltsc2019"
 $containerName = "test"
 
-New-BCContainer \`
-    -accept\_eula \`
-    -accept\_outdated \`
-    -containerName $containerName \`
-    -imageName $imageName \`
-    -auth $auth \`
-    -Credential $credential \`
-    -multitenant \`
-    -alwaysPull \`
-    -updateHosts \`
-    -licenseFile 'c:\\temp\\license.flf'
+New-BCContainer `
+    -accept_eula `
+    -accept_outdated `
+    -containerName $containerName `
+    -imageName $imageName `
+    -auth $auth `
+    -Credential $credential `
+    -multitenant `
+    -alwaysPull `
+    -updateHosts `
+    -licenseFile 'c:\temp\license.flf'
+```
 
 Next thing is to restore the .bacpac in the container, mount the database as a tenant, synchronize and create a user in the tenant. Note that I have placed the .bacpac file in a location, which is shared with the container.
 
-$tenantBacpac = "C:\\ProgramData\\NavContainerHelper\\Production\_20191110\_02.bacpac"
+```
+$tenantBacpac = "C:\ProgramData\NavContainerHelper\Production_20191110_02.bacpac"
 $tenantId = "mydata"
 Invoke-ScriptInBCContainer -containerName $containerName -scriptblock { Param($tenantId, $tenantBacpac)
-    Restore-BacpacWithRetry \`
-        -bacpac $tenantBacpac \`
-        -databasename $tenantId \`
+    Restore-BacpacWithRetry `
+        -bacpac $tenantBacpac `
+        -databasename $tenantId `
         -maxattempts 1
-    Mount-NavTenant \`
-        -ServerInstance $ServerInstance \`
-        -id $tenantId \`
-        -databasename $tenantId \`
-        -databaseserver localhost \`
-        -databaseinstance SQLEXPRESS \`
-        -EnvironmentType Sandbox \`
-        -OverwriteTenantIdInDatabase \`
+    Mount-NavTenant `
+        -ServerInstance $ServerInstance `
+        -id $tenantId `
+        -databasename $tenantId `
+        -databaseserver localhost `
+        -databaseinstance SQLEXPRESS `
+        -EnvironmentType Sandbox `
+        -OverwriteTenantIdInDatabase `
         -Force
-    Sync-NavTenant \`
-        -ServerInstance $ServerInstance \`
-        -Tenant $tenantId \`
+    Sync-NavTenant `
+        -ServerInstance $ServerInstance `
+        -Tenant $tenantId `
         -Force
 } -argumentList $tenantId, (Get-BCContainerPath -containerName $containerName -path $tenantBacpac)
-New-NavContainerNavUser \`
-    -containerName $containerName \`
-    -Credential $credential \`
-    -ChangePasswordAtNextLogOn:$false \`
-    -PermissionSetId SUPER \`
+New-NavContainerNavUser `
+    -containerName $containerName `
+    -Credential $credential `
+    -ChangePasswordAtNextLogOn:$false `
+    -PermissionSetId SUPER `
     -tenant $tenantId
+```
 
 and basically that’s it.
 
@@ -147,50 +153,52 @@ Fortunately, we can manage both cases. Publishing apps are done using the **Publ
 
 Instead of the above script, you would have to run a script like the script below to **publish the BingMaps app** and **delete the MyApp app** reference:
 
-$tenantBacpac = "C:\\ProgramData\\NavContainerHelper\\Production\_20191110\_02.bacpac"
+```
+$tenantBacpac = "C:\ProgramData\NavContainerHelper\Production_20191110_02.bacpac"
 $tenantId = "mydata"
 $removeApps = @("MyApp")
-Publish-BCContainerApp \`
-    -containerName $containerName \`
-    -appFile "C:\\Users\\freddyk\\Downloads\\Freddy Kristiansen\_BingMaps\_15.0.56.0.app" \`
-    -skipVerification \`
-    -sync \`
+Publish-BCContainerApp `
+    -containerName $containerName `
+    -appFile "C:\Users\freddyk\Downloads\Freddy Kristiansen_BingMaps_15.0.56.0.app" `
+    -skipVerification `
+    -sync `
     -install
 Invoke-ScriptInBCContainer -containerName $containerName -scriptblock { Param($tenantId, $tenantBacpac, $removeApps)
-    Restore-BacpacWithRetry \`
-        -bacpac $tenantBacpac \`
-        -databasename $tenantId \`
+    Restore-BacpacWithRetry `
+        -bacpac $tenantBacpac `
+        -databasename $tenantId `
         -maxattempts 1
     $removeApps | ForEach-Object {
-        Invoke-Sqlcmd -Query "USE \[$tenantId\]
+        Invoke-Sqlcmd -Query "USE [$tenantId]
 GO
-DELETE FROM \[dbo\].\[NAV App Published App\]
-WHERE Name = '$\_'
-DELETE FROM \[dbo\].\[NAV App Installed App\]
-WHERE Name = '$\_'
+DELETE FROM [dbo].[NAV App Published App]
+WHERE Name = '$_'
+DELETE FROM [dbo].[NAV App Installed App]
+WHERE Name = '$_'
 GO"
     }
-    Mount-NavTenant \`
-        -ServerInstance $ServerInstance \`
-        -id $tenantId \`
-        -databasename $tenantId \`
-        -databaseserver localhost \`
-        -databaseinstance SQLEXPRESS \`
-        -EnvironmentType Sandbox \`
-        -OverwriteTenantIdInDatabase \`
+    Mount-NavTenant `
+        -ServerInstance $ServerInstance `
+        -id $tenantId `
+        -databasename $tenantId `
+        -databaseserver localhost `
+        -databaseinstance SQLEXPRESS `
+        -EnvironmentType Sandbox `
+        -OverwriteTenantIdInDatabase `
         -Force
-    Sync-NavTenant \`
-        -ServerInstance $ServerInstance \`
-        -Tenant $tenantId \`
+    Sync-NavTenant `
+        -ServerInstance $ServerInstance `
+        -Tenant $tenantId `
         -Force 
 } -argumentList $tenantId, (Get-BCContainerPath -containerName $containerName -path $tenantBacpac), $removeApps
 
-New-NavContainerNavUser \`
-    -containerName $containerName \`
-    -Credential $credential \`
-    -ChangePasswordAtNextLogOn:$false \`
-    -PermissionSetId SUPER \`
+New-NavContainerNavUser `
+    -containerName $containerName `
+    -Credential $credential `
+    -ChangePasswordAtNextLogOn:$false `
+    -PermissionSetId SUPER `
     -tenant $tenantId
+```
 
 Now, I can logon to mydata tenant in my container using [http://test/BC?tenant=mydata](http://test/BC?tenant=mydata) and get:
 

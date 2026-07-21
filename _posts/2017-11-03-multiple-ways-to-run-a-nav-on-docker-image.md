@@ -23,11 +23,15 @@ Upcoming blog posts will then attempt to explain how to achieve various scenario
 
 Docker run is the raw way of spinning up a new container based on a Docker image. Most of the other ways listed below will end up in a docker run command somewhere behind the scenes. The format of Docker run is:
 
-docker run \[options\] image\[:tag\] \[command\] \[args\]
+```
+docker run [options] image[:tag] [command] [args]
+```
 
 When running the NAV on Docker images, we don’t use command and args. As you might have seen in other places, as one of the options, you need to accept the eula using
 
-\-e accept\_eula=Y
+```
+-e accept_eula=Y
+```
 
 \-e is really short for –env, meaning that what you do here is to set an environment variable called **accept\_eula** to **Y**. This is the way you transfer parameters to the container.Inside the image, a script will check that accept\_eula indeed is set to Y before starting the container.
 
@@ -47,7 +51,9 @@ If all these options, I will mention those, we frequently use when running NAV o
 
 A very typical docker run command could look like:
 
-docker run -e accept\_eula=Y --name test -h test -m 4G -e useSSL=N -e licensefile=c:\\run\\my\\license.flf -v c:\\myfolder:c:\\run\\my --restart always -e exitonerror=N -e locale=en-us microsoft/dynamics-nav:devpreview
+```
+docker run -e accept_eula=Y --name test -h test -m 4G -e useSSL=N -e licensefile=c:\run\my\license.flf -v c:\myfolder:c:\run\my --restart always -e exitonerror=N -e locale=en-us microsoft/dynamics-nav:devpreview
+```
 
 Which will accept the eula and run the dynamics-nav:devpreview container with 4Gb of memory, test as the name and hostname, http (not https), restart option set to always, locale to en-US, and use the licensefile, which is located in c:\\myfolder\\license.flf on the host computer.
 
@@ -63,21 +69,27 @@ PowerShell Gallery: [https://www.powershellgallery.com/packages/navcontainerhel
 
 On a Windows 10 or Windows Server 2016, start Powershell and write:
 
+```
 install-module navcontainerhelper -force
 Write-NavContainerHelperWelcomeText
+```
 
 You should now see:  
 [![](/assets/images/2017/multiple-ways-to-run-a-nav-on-docker-image/5ac5e-navcontainerhelper-1.png)](/assets/images/2017/multiple-ways-to-run-a-nav-on-docker-image/5ac5e-navcontainerhelper.png)
 
 In order to see the syntax for the functions, you can use
 
+```
 help new-navcontainer -detailed
+```
 
 and you will get  see the syntax for new-navcontainer, the description for all parameters and some examples.
 
 Try
 
-new-navcontainer -accept\_eula -containerName test -imageName microsoft/dynamics-nav:devpreview
+```
+new-navcontainer -accept_eula -containerName test -imageName microsoft/dynamics-nav:devpreview
+```
 
 The navcontainerhelper will create a folder on the C:\\ drive called DEMO and will place all files underneath that folder. The demo folder will be shared to the container for transfer of files etc. If you do not specify a username and a password, then it will ask for your password and use the current Windows username as the username. If you specify your windows password, the container setup will use Windows Authentication integrated with the host. The password will be transferred to the container in a secure way and the random 128bit key generated to encrypt the password will be deleted, in order to avoid that your domain password is exploited.
 
@@ -87,9 +99,11 @@ The navcontainerhelper module also allows you to add the -includeCSide switch in
 
 Try:
 
-new-navcontainer -accept\_eula -containername test -imageName microsoft/dynamics-nav:devpreview -includecside
+```
+new-navcontainer -accept_eula -containername test -imageName microsoft/dynamics-nav:devpreview -includecside
 (start CSide, add a field, add the field to a page)
 Convert-ModifiedObjectsToAl -containername test
+```
 
 and you should have a v2 app with your field and your control.
 
@@ -97,7 +111,9 @@ There are a lot more you can do with the navcontainerhelper. Documentation comin
 
 The new-navcontainer will predefine a lot of the options for docker run, but it allows you to specify additional parameters by adding:
 
-\-additionalParameters @("-e usessl=Y", "-e accept\_outdated=Y")
+```
+-additionalParameters @("-e usessl=Y", "-e accept_outdated=Y")
+```
 
 You will also find a new-csidedevcontainer function, which is really just new-navcontainer with -includecside.
 

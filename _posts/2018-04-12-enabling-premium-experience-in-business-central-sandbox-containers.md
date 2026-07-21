@@ -17,6 +17,7 @@ Business Central Sandbox Containers are for development and test and of course w
 
 This blog post will describe how to assign the premium plan to your default super user in the NavContainer. It will also describe how you can create a number of test users and assign user groups and permissions to these users, so that you can test your app using the different users.
 
+```
 Username             User Groups              Permission Sets
 EXTERNALACCOUNTANT   D365 EXT. ACCOUNTANT     D365 BUS FULL ACCESS
                      D365 EXTENSION MGT       D365 EXTENSION MGT
@@ -39,6 +40,7 @@ DELEGATEDADMIN       D365 EXTENSION MGT       D365 BASIC
                      D365 RAPIDSTART          D365 FULL ACCESS
                                               D365 RAPIDSTART
                                               LOCAL
+```
 
 and… – I will describe how to do this, whether you use Azure VMs, navcontainerhelper or docker run.
 
@@ -56,13 +58,17 @@ If you are using New-NavContainer to create your Business Central Sandbox Contai
 
 Now you will have a new switch called assignPremiumPlan on New-NavContainer, use it like this:
 
-New-NavContainer -accept\_eula -assignPremiumPlan -containerName test -imageName microsoft/bcsandbox
+```
+New-NavContainer -accept_eula -assignPremiumPlan -containerName test -imageName microsoft/bcsandbox
+```
 
 Adding this option will assign the premium plan to your default admin user. Internally this just adds a record to the User Plan table.
 
 In order to create the test users you will have to call a function called
 
+```
 Setup-NavContainerTestUsers containerName test -tenant default -password $securePassword
+```
 
 and specify the container and the password you want to use for the new users.
 
@@ -76,14 +82,16 @@ When you are using docker run to run your containers, you have a little more wor
 
 First of all, you need to override the SetupNavUsers.ps1 by sharing a local folder to c:\\run\\my in the container and place a file called SetupNavUsers.ps1 in that folder with this content:
 
-\# Invoke default behavior
+```
+# Invoke default behavior
 . (Join-Path $runPath $MyInvocation.MyCommand.Name)
  
 Get-NavServerUser -serverInstance NAV -tenant default |? LicenseType -eq "FullUser" | % {
-    $UserId = $\_.UserSecurityId
-    Write-Host "Assign Premium plan for $($\_.Username)"
-    sqlcmd -S 'localhostSQLEXPRESS' -d $DatabaseName -Q "INSERT INTO \[dbo\].\[User Plan\] (\[Plan ID\],\[User Security ID\]) VALUES ('{8e9002c0-a1d8-4465-b952-817d2948e6e2}','$userId')" | Out-Null
+    $UserId = $_.UserSecurityId
+    Write-Host "Assign Premium plan for $($_.Username)"
+    sqlcmd -S 'localhostSQLEXPRESS' -d $DatabaseName -Q "INSERT INTO [dbo].[User Plan] ([Plan ID],[User Security ID]) VALUES ('{8e9002c0-a1d8-4465-b952-817d2948e6e2}','$userId')" | Out-Null
 }
+```
 
 This will assign the premium plan to the admin user in the database.
 

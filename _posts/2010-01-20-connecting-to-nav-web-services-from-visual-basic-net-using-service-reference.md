@@ -17,57 +17,91 @@ First I create a Visual Basic Console application and add the two service refere
 
 After that, it is really just to write the code
 
-Module Module1
+`Module Module1`
 
-    Sub Main()  
-Dim baseURL As String = “[http://localhost:7047/DynamicsNAV/WS/”](http://localhost:7047/DynamicsNAV/WS/")
+    
+
+```
+Sub Main()
+Dim baseURL As String = "
+```
+
+[`http://localhost:7047/DynamicsNAV/WS/"`](http://localhost:7047/DynamicsNAV/WS/")
 
 First, connect to the System Web Service and list all companies:
 
-        Dim systemService As New SystemServiceRef.SystemService\_PortClient(“SystemService\_Port”, baseURL + “SystemService”)  
-Dim companies() As String = systemService.Companies()  
-Console.WriteLine(“Companies:”)  
-For Each company As String In companies  
-Console.WriteLine(company)  
-Next  
+        
+
+```
+Dim systemService As New SystemServiceRef.SystemService_PortClient("SystemService_Port", baseURL + "SystemService")
+Dim companies() As String = systemService.Companies()
+Console.WriteLine("Companies:")
+For Each company As String In companies
+Console.WriteLine(company)
+Next
 Dim cur As String = companies(0)
+```
 
 Now I have the company I want to use in _cur_ and the way I create a URL to the Customer page is by doing:
 
-        Dim customerPageURL As String = baseURL + Uri.EscapeDataString(cur) + “/Page/Customer”  
-Console.WriteLine(vbCrLf + “URL of Customer Page: ” + customerPageURL)
+        
+
+```
+Dim customerPageURL As String = baseURL + Uri.EscapeDataString(cur) + "/Page/Customer"
+Console.WriteLine(vbCrLf + "URL of Customer Page: " + customerPageURL)
+```
 
 and then I can create a Service Class to the Customer Page:
 
-        Dim customerService As New CustomerPageRef.Customer\_PortClient(“Customer\_Port”, customerPageURL)
+        `Dim customerService As New CustomerPageRef.Customer_PortClient("Customer_Port", customerPageURL)`
 
 and using this, I read customer 10000 and output the name:
 
-        Dim customer10000 As CustomerPageRef.Customer = customerService.Read(“10000”)  
-Console.WriteLine(vbCrLf + “Name of Customer 10000: ” + customer10000.Name)
+        
+
+```
+Dim customer10000 As CustomerPageRef.Customer = customerService.Read("10000")
+Console.WriteLine(vbCrLf + "Name of Customer 10000: " + customer10000.Name)
+```
 
 Last, but not least – lets create a filter and read all customers in GB that has Location Code set to RED or BLUE:
 
-        Dim filter1 As New CustomerPageRef.Customer\_Filter()  
-filter1.Field = CustomerPageRef.Customer\_Fields.Country\_Region\_Code  
-filter1.Criteria = “GB”
+        
 
-        Dim filter2 As New CustomerPageRef.Customer\_Filter()  
-filter2.Field = CustomerPageRef.Customer\_Fields.Location\_Code  
-filter2.Criteria = “RED|BLUE”
+```
+Dim filter1 As New CustomerPageRef.Customer_Filter()
+filter1.Field = CustomerPageRef.Customer_Fields.Country_Region_Code
+filter1.Criteria = "GB"
+```
 
-        Console.WriteLine(vbCrLf + “Customers in GB served by RED or BLUE warehouse:”)  
-Dim filters() As CustomerPageRef.Customer\_Filter = New CustomerPageRef.Customer\_Filter(1) {filter1, filter2}  
-Dim customers() As CustomerPageRef.Customer = customerService.ReadMultiple(filters, Nothing, 0)  
-For Each customer As CustomerPageRef.Customer In customers  
-Console.WriteLine(customer.Name)  
+        
+
+```
+Dim filter2 As New CustomerPageRef.Customer_Filter()
+filter2.Field = CustomerPageRef.Customer_Fields.Location_Code
+filter2.Criteria = "RED|BLUE"
+```
+
+        
+
+```
+Console.WriteLine(vbCrLf + "Customers in GB served by RED or BLUE warehouse:")
+Dim filters() As CustomerPageRef.Customer_Filter = New CustomerPageRef.Customer_Filter(1) {filter1, filter2}
+Dim customers() As CustomerPageRef.Customer = customerService.ReadMultiple(filters, Nothing, 0)
+For Each customer As CustomerPageRef.Customer In customers
+Console.WriteLine(customer.Name)
 Next
+```
 
-        Console.WriteLine(vbCrLf + “THE END”)  
-Console.ReadLine()  
+        
+
+```
+Console.WriteLine(vbCrLf + "THE END")
+Console.ReadLine()
 End Sub
+```
 
-End Module
+`End Module`
 
 ### Using Visual Basic code
 
@@ -75,60 +109,106 @@ If we want to avoid the .config file, the trick is very much like [this post](ht
 
 Basically with the above solution, delete the app.config file and change the code to
 
-Module Module1
+`Module Module1`
 
-    Sub Main()  
-Dim baseURL As String = “[http://localhost:7047/DynamicsNAV/WS/”](http://localhost:7047/DynamicsNAV/WS/")
+    
 
-        Dim navWSBinding As New System.ServiceModel.BasicHttpBinding()  
-navWSBinding.Security.Mode = ServiceModel.BasicHttpSecurityMode.TransportCredentialOnly  
+```
+Sub Main()
+Dim baseURL As String = "
+```
+
+[`http://localhost:7047/DynamicsNAV/WS/"`](http://localhost:7047/DynamicsNAV/WS/")
+
+        
+
+```
+Dim navWSBinding As New System.ServiceModel.BasicHttpBinding()
+navWSBinding.Security.Mode = ServiceModel.BasicHttpSecurityMode.TransportCredentialOnly
 navWSBinding.Security.Transport.ClientCredentialType = ServiceModel.HttpClientCredentialType.Windows
+```
 
-        Dim systemService As New SystemServiceRef.SystemService\_PortClient(navWSBinding, New System.ServiceModel.EndpointAddress(baseURL + “SystemService”))  
-systemService.ClientCredentials.Windows.AllowedImpersonationLevel = Security.Principal.TokenImpersonationLevel.Delegation  
+        
+
+```
+Dim systemService As New SystemServiceRef.SystemService_PortClient(navWSBinding, New System.ServiceModel.EndpointAddress(baseURL + "SystemService"))
+systemService.ClientCredentials.Windows.AllowedImpersonationLevel = Security.Principal.TokenImpersonationLevel.Delegation
 systemService.ClientCredentials.Windows.AllowNtlm = True
+```
 
-        Dim companies() As String = systemService.Companies()  
-Console.WriteLine(“Companies:”)  
-For Each company As String In companies  
-Console.WriteLine(company)  
-Next  
-Dim cur As String = companies(0)
+        
 
-        Dim customerPageURL As String = baseURL + Uri.EscapeDataString(cur) + “/Page/Customer”  
-Console.WriteLine(vbCrLf + “URL of Customer Page: ” + customerPageURL)
-
-        Dim customerService As New CustomerPageRef.Customer\_PortClient(navWSBinding, New System.ServiceModel.EndpointAddress(customerPageURL))  
-customerService.ClientCredentials.Windows.AllowedImpersonationLevel = Security.Principal.TokenImpersonationLevel.Delegation  
-customerService.ClientCredentials.Windows.AllowNtlm = True
-
-        Dim customer10000 As CustomerPageRef.Customer = customerService.Read(“10000”)  
-Console.WriteLine(vbCrLf + “Name of Customer 10000: ” + customer10000.Name)
-
-        Dim filter1 As New CustomerPageRef.Customer\_Filter()  
-filter1.Field = CustomerPageRef.Customer\_Fields.Country\_Region\_Code  
-filter1.Criteria = “GB”
-
-        Dim filter2 As New CustomerPageRef.Customer\_Filter()  
-filter2.Field = CustomerPageRef.Customer\_Fields.Location\_Code  
-filter2.Criteria = “RED|BLUE”
-
-        Console.WriteLine(vbCrLf + “Customers in GB served by RED or BLUE warehouse:”)  
-Dim filters() As CustomerPageRef.Customer\_Filter = New CustomerPageRef.Customer\_Filter(1) {filter1, filter2}  
-Dim customers() As CustomerPageRef.Customer = customerService.ReadMultiple(filters, Nothing, 0)  
-For Each customer As CustomerPageRef.Customer In customers  
-Console.WriteLine(customer.Name)  
+```
+Dim companies() As String = systemService.Companies()
+Console.WriteLine("Companies:")
+For Each company As String In companies
+Console.WriteLine(company)
 Next
+Dim cur As String = companies(0)
+```
 
-        Console.WriteLine(vbCrLf + “THE END”)  
-Console.ReadLine()  
+        
+
+```
+Dim customerPageURL As String = baseURL + Uri.EscapeDataString(cur) + "/Page/Customer"
+Console.WriteLine(vbCrLf + "URL of Customer Page: " + customerPageURL)
+```
+
+        
+
+```
+Dim customerService As New CustomerPageRef.Customer_PortClient(navWSBinding, New System.ServiceModel.EndpointAddress(customerPageURL))
+customerService.ClientCredentials.Windows.AllowedImpersonationLevel = Security.Principal.TokenImpersonationLevel.Delegation
+customerService.ClientCredentials.Windows.AllowNtlm = True
+```
+
+        
+
+```
+Dim customer10000 As CustomerPageRef.Customer = customerService.Read("10000")
+Console.WriteLine(vbCrLf + "Name of Customer 10000: " + customer10000.Name)
+```
+
+        
+
+```
+Dim filter1 As New CustomerPageRef.Customer_Filter()
+filter1.Field = CustomerPageRef.Customer_Fields.Country_Region_Code
+filter1.Criteria = "GB"
+```
+
+        
+
+```
+Dim filter2 As New CustomerPageRef.Customer_Filter()
+filter2.Field = CustomerPageRef.Customer_Fields.Location_Code
+filter2.Criteria = "RED|BLUE"
+```
+
+        
+
+```
+Console.WriteLine(vbCrLf + "Customers in GB served by RED or BLUE warehouse:")
+Dim filters() As CustomerPageRef.Customer_Filter = New CustomerPageRef.Customer_Filter(1) {filter1, filter2}
+Dim customers() As CustomerPageRef.Customer = customerService.ReadMultiple(filters, Nothing, 0)
+For Each customer As CustomerPageRef.Customer In customers
+Console.WriteLine(customer.Name)
+Next
+```
+
+        
+
+```
+Console.WriteLine(vbCrLf + "THE END")
+Console.ReadLine()
 End Sub
+```
 
-End Module
+`End Module`
 
 In both cases you can change the user used to connect to Web Services by setting _service.ClientCredentials.Windows.ClientCredential_ to an instance of System.Net.NetworkCredential like:
 
-systemService.ClientCredentials.Windows.ClientCredential = New System.Net.NetworkCredential(“user”, “password”, “domain”)
+`systemService.ClientCredentials.Windows.ClientCredential = New System.Net.NetworkCredential("user", "password", "domain")`
 
 I hope this is helpful.
 

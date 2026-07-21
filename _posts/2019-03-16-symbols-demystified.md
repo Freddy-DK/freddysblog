@@ -26,16 +26,21 @@ You can look at the symbols as the application programming interface to the syst
 
 Try to create a very simple container called mytest:
 
+```
 $credential = New-Object pscredential -ArgumentList 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $imageName = "mcr.microsoft.com/businesscentral/onprem:dk-ltsc2019"
-New-NavContainer -accept\_eula -imageName $imageName -containerName mytest -auth NavUserPassword -Credential $credential -updateHosts
+New-NavContainer -accept_eula -imageName $imageName -containerName mytest -auth NavUserPassword -Credential $credential -updateHosts
+```
 
 Then run the command
 
+```
 Get-NavContainerAppInfo -containerName mytest -symbolsOnly
+```
 
 and you should see something like:
 
+```
 ServerInstance : MicrosoftDynamicsNavServer$NAV
 AppId : 9512e682-f74f-4213-8d3a-d7e19f3f0260
 Name : Application
@@ -59,6 +64,7 @@ Publisher : Microsoft
 Version : 13.0.12929.0
 ExtensionType : ModernDev
 Scope : Global
+```
 
 You get the same if you make a standard installation of Business Central and run Get-NavAppInfo -symbolsOnly, this is nothing special for Containers.
 
@@ -76,7 +82,9 @@ You might have noticed that the container also had Test symbols in the list of S
 
 If you try to add a reference to the test symbols in app.json by adding:
 
+```
 "test": "13.0.0.0"
+```
 
 and Download the symbols. You will now have:
 
@@ -84,6 +92,7 @@ and Download the symbols. You will now have:
 
 Change the OnOpenPage trigger to:
 
+```
 trigger OnOpenPage();
 var
     Assert: Codeunit Assert;
@@ -91,6 +100,7 @@ begin
     Message('App published: Hello world');
     Assert.AreEqual(2, 2, 'Works!');
 end;
+```
 
 Build the app and run using F5 and you should see an error in the debugger. If you press F5 to that error, you should see the error in the UI:
 
@@ -100,7 +110,9 @@ Build the app and run using F5 and you should see an error in the debugger. If y
 
 Now run this command in PowerShell:
 
+```
 Import-TestToolkitToNavContainer -containerName mytest -sqlCredential $credential -includeTestLibrariesOnly
+```
 
 and then retry F5. The runtime error is gone.
 
@@ -123,9 +135,11 @@ The generated symbols will get the application version number from the database,
 
 Let’s try to recreate the container with EnableSymbolLoading:
 
+```
 $credential = New-Object pscredential -ArgumentList 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $imageName = "mcr.microsoft.com/businesscentral/onprem:dk-ltsc2019"
-New-NavContainer -accept\_eula -imageName $imageName -containerName mytest -auth NavUserPassword -Credential $credential -updateHosts -enableSymbolLoading -includeTestToolkit -includeTestLibrariesOnly
+New-NavContainer -accept_eula -imageName $imageName -containerName mytest -auth NavUserPassword -Credential $credential -updateHosts -enableSymbolLoading -includeTestToolkit -includeTestLibrariesOnly
+```
 
 Then switch back to VS Code and re-download the symbols. The first thing you might see is, that now (due to the error described earlier) you might have 2 sets of application symbols:
 
@@ -135,13 +149,17 @@ The generated set is 13.0.28871.0 – not the same version as the published app.
 
 If you are using the latest NavContainerHelper, you will get an error saying:
 
+```
 The request for path /NAV/dev/packages?publisher=Microsoft&appName=Test&versionText=13.0.0.0 failed with code NotFound. Reason: No published package matches the provided arguments.
+```
 
 This is because NavContainerHelper from version 0.5.0.5 will unpublish the Application and the Test symbols when running with EnableSymbolLoading – they are not intended to be used.
 
 If you are using NavContainerHelper 0.5.0.4 (or earlier), you will not get an error when downloading symbols, but when you try to build the application you will get:
 
+```
 error AL0265: Reference to object Assert is ambiguous. Make sure you are not referencing packages containing objects with the same names.
+```
 
 **Using EnableSymbolLoading will rebuild ALL symbols into the Application symbols including the Test Objects. This means that** **you will have the Test symbols twice if you also reference the Test Symbols App and download the symbols from this.**
 

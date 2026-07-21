@@ -71,7 +71,9 @@ Using the ContainerHelper, it will actually download the artifacts beforehand an
 
 The very first thing you need to do is, to update the NavContainerHelper to 0.7.0.7 or later. The next thing you need to do is to find the artifactUrl. There is a function for this:
 
+```
 $artifactUrl = Get-BCArtifactUrl -version 16.2 -country us -select Latest
+```
 
 This will give you the artifactUrl for the latest 16.2 Business Central sandbox artifacts. This artiactUrl can be passed directly to New-BcContainer instead of the imagename:
 

@@ -43,116 +43,155 @@ Assuming that you are now a shark in creating Add-Ins – we can continue:-)
 
 Let’s first of all create the native WinForms Control. We can use the WebBrowser unchanged – although the WebBrowser comes with an error, which sometimes surfaces in NAV. If you set the DocumentText in the browser control before it is done rendering the last value of DocumentText – it will ignore the new value. Frankly I want an implementation where the last value wins – NOT the first value. I handle that by subscribing to the DocumentCompleted event and check whether there is a newer value available. I also don’t want to set the value in the WebBrowser if it hasn’t changed.
 
-public class MyWebBrowser : WebBrowser  
-{  
-private string text;  
+```
+public class MyWebBrowser : WebBrowser
+{
+private string text;
 private string html = Resources.Empty;
+```
 
-    /// <summary>  
-/// Constructor for WebBrowser Control  
-/// </summary>  
-public MyWebBrowser()  
-{  
-this.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(MyWebBrowser\_DocumentCompleted);  
-}
+    
 
-    /// <summary>  
-/// Handler for DocumentCompleted event  
-/// If we are trying to set the DocumentText while the WebBrowser is rendering – it is ignored  
-/// Catching this event to see whether the DocumentText should change fixes that problem  
-/// </summary>  
-void MyWebBrowser\_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)  
-{  
-if (this.DocumentText != this.html)  
-{  
-this.DocumentText = this.html;  
-}  
+```
+/// <summary>
+/// Constructor for WebBrowser Control
+/// </summary>
+public MyWebBrowser()
+{
+this.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(MyWebBrowser_DocumentCompleted);
 }
+```
 
-    /// <summary>  
-/// Get/Set the Text of the WebBrowser  
-/// </summary>  
-public override string Text  
-{  
-get  
-{  
-return text;  
-}  
-set  
-{  
-if (text != value)  
-{  
-text = value;  
-if (string.IsNullOrEmpty(value))  
-{  
-html = Resources.Empty;  
-}  
-else  
-{  
-html = text;  
-}  
-this.DocumentText = html;  
-}  
-}  
-}  
+    
+
+```
+/// <summary>
+/// Handler for DocumentCompleted event
+/// If we are trying to set the DocumentText while the WebBrowser is rendering – it is ignored
+/// Catching this event to see whether the DocumentText should change fixes that problem
+/// </summary>
+void MyWebBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+{
+if (this.DocumentText != this.html)
+{
+this.DocumentText = this.html;
 }
+}
+```
+
+    
+
+```
+/// <summary>
+/// Get/Set the Text of the WebBrowser
+/// </summary>
+public override string Text
+{
+get
+{
+return text;
+}
+set
+{
+if (text != value)
+{
+text = value;
+if (string.IsNullOrEmpty(value))
+{
+html = Resources.Empty;
+}
+else
+{
+html = text;
+}
+this.DocumentText = html;
+}
+}
+}
+}
+```
 
 and now the Add-In part of the Control.
 
-\[ControlAddInExport(“FreddyK.BrowserControl”)\]  
-public class BrowserControl : StringControlAddInBase, IStringControlAddInDefinition  
-{  
+```
+[ControlAddInExport("FreddyK.BrowserControl")]
+public class BrowserControl : StringControlAddInBase, IStringControlAddInDefinition
+{
 MyWebBrowser control;
+```
 
-    protected override Control CreateControl()  
-{  
-control = new MyWebBrowser();  
-control.MinimumSize = new Size(16, 16);  
-control.MaximumSize = new Size(4096, 4096);  
-control.IsWebBrowserContextMenuEnabled = false;  
-control.ObjectForScripting = new MyScriptManager(this);  
-control.ScrollBarsEnabled = false;  
-control.ScriptErrorsSuppressed = true;  
-control.WebBrowserShortcutsEnabled = false;  
-control.Dock = DockStyle.Fill;  
-return control;  
-}
+    
 
-    public void clickevent(int i, string s)  
-{  
-this.RaiseControlAddInEvent(i, s);  
-}
+```
+protected override Control CreateControl()
+{
+control = new MyWebBrowser();
+control.MinimumSize = new Size(16, 16);
+```
 
-    public override bool AllowCaptionControl  
-{  
-get  
-{  
-return false;  
-}  
+```
+control.MaximumSize = new Size(4096, 4096);
+control.IsWebBrowserContextMenuEnabled = false;
+control.ObjectForScripting = new MyScriptManager(this);
+control.ScrollBarsEnabled = false;
+control.ScriptErrorsSuppressed = true;
+control.WebBrowserShortcutsEnabled = false;
+control.Dock = DockStyle.Fill;
+return control;
 }
+```
 
-    public override bool HasValueChanged  
-{  
-get  
-{  
-return false;  
-}  
-}
+    
 
-    public override string Value  
-{  
-get  
-{  
-return base.Value;  
-}  
-set  
-{  
-base.Value = value;  
-if (this.control != null)  
-this.control.Text = value;  
-}  
-}  
+```
+public void clickevent(int i, string s)
+{
+this.RaiseControlAddInEvent(i, s);
 }
+```
+
+    
+
+```
+public override bool AllowCaptionControl
+{
+get
+{
+return false;
+}
+}
+```
+
+    
+
+```
+public override bool HasValueChanged
+{
+get
+{
+return false;
+}
+}
+```
+
+    
+
+```
+public override string Value
+{
+get
+{
+return base.Value;
+}
+set
+{
+base.Value = value;
+if (this.control != null)
+this.control.Text = value;
+}
+}
+}
+```
 
 Things to note:
 
@@ -162,25 +201,35 @@ Things to note:
 
 The MyScriptManager could look like this:
 
-\[ComVisible(true)\]  
-public class MyScriptManager  
-{  
+```
+[ComVisible(true)]
+public class MyScriptManager
+{
 BrowserControl browserControl;
+```
 
-    public MyScriptManager(BrowserControl browserControl)  
-{  
-this.browserControl = browserControl;  
-}
+    
 
-    public void clickevent(int i, string s)  
-{  
-browserControl.clickevent(i, s);  
-}  
+```
+public MyScriptManager(BrowserControl browserControl)
+{
+this.browserControl = browserControl;
 }
+```
+
+    
+
+```
+public void clickevent(int i, string s)
+{
+browserControl.clickevent(i, s);
+}
+}
+```
 
 and as you might have guessed – this allows Javascript in the WebBrowser to invoke statements like:
 
-window.external.clickevent(i, s);
+`window.external.clickevent(i, s);`
 
 Note that you need to have **ComVisible(true)** on the ScriptManager class.
 
@@ -202,9 +251,11 @@ on the Value field – set the DecimalPlaces to **0:10** and on the browser fiel
 
 Now in the OnOpenPage of the page – put the following lines:
 
-**OnOpenPage()  
-**CLEAR(HTML);  
-HTML.ADDTEXT(‘<html><body>Hello World</body><html>’);
+```
+OnOpenPage()
+CLEAR(HTML);
+HTML.ADDTEXT('<html><body>Hello World</body><html>');
+```
 
 this should give us the following page when running:
 
@@ -217,67 +268,93 @@ A couple of things to think about when writing the “real” code:
 
 The code to download the 3 images used (normal button, wide button and tall button) could be:
 
-buttonurl := ‘file:///’+CONVERTSTR(TT.DownloadTempFile(APPLICATIONPATH + ‘button.png’),”,’/’);  
-tallbuttonurl := ‘file:///’+CONVERTSTR(TT.DownloadTempFile(APPLICATIONPATH + ‘tallbutton.png’),”,’/’);  
-widebuttonurl := ‘file:///’+CONVERTSTR(TT.DownloadTempFile(APPLICATIONPATH + ‘widebutton.png’),”,’/’);
+```
+buttonurl := 'file:///'+CONVERTSTR(TT.DownloadTempFile(APPLICATIONPATH + 'button.png'),",'/');
+tallbuttonurl := 'file:///'+CONVERTSTR(TT.DownloadTempFile(APPLICATIONPATH + 'tallbutton.png'),",'/');
+widebuttonurl := 'file:///'+CONVERTSTR(TT.DownloadTempFile(APPLICATIONPATH + 'widebutton.png'),",'/');
+```
 
 and the code to create the HTML/Javascript code could look like this:
 
-CLEAR(TEMP);  
-TEMP.ADDTEXT(‘<!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” ‘);  
-TEMP.ADDTEXT(‘”[http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd”](http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")\>’);  
-TEMP.ADDTEXT(‘<html xmlns=”[http://www.w3.org/1999/xhtml”](http://www.w3.org/1999/xhtml") >’);  
-TEMP.ADDTEXT(‘<head>’);
+```
+CLEAR(TEMP);
+TEMP.ADDTEXT('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" ');
+TEMP.ADDTEXT('"
+```
 
-// Create Stylesheet for the visuals  
-TEMP.ADDTEXT(‘<style type=”text/css”>’);  
-TEMP.ADDTEXT(‘  td { width:64px; font-size:xx-large; background-image:url(”’+buttonurl+”’) }’);  
-TEMP.ADDTEXT(‘  tr { height:64px }’);  
-TEMP.ADDTEXT(‘  a { color:#000000; text-decoration:none }’);  
-TEMP.ADDTEXT(‘  body { margin:0px; background-color:#FAFAFA }’);  
-TEMP.ADDTEXT(‘</style>’);
+[`http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"`](http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")
 
-// Create Javascript function for invoking AL Event  
-TEMP.ADDTEXT(”);  
-TEMP.ADDTEXT(‘  function click(i, s) {‘);  
-TEMP.ADDTEXT(‘    window.external.clickevent(i, s);’);  
-TEMP.ADDTEXT(‘  }’);  
-TEMP.ADDTEXT(”);
+```
+>');
+TEMP.ADDTEXT('<html xmlns="
+```
 
-TEMP.ADDTEXT(‘</head>’);  
-TEMP.ADDTEXT(‘<body>’);
+[`http://www.w3.org/1999/xhtml"`](http://www.w3.org/1999/xhtml") 
 
-// Create Table with Controls  
-TEMP.ADDTEXT(‘<table cellpadding=”0″ cellspacing=”5″>’);  
-TEMP.ADDTEXT(‘<tr>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(7, ””)”>7</a></td>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(8, ””)”>8</a></td>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(9, ””)”>9</a></td>’);  
-tempstyle := ‘background-image:url(”’+tallbuttonurl+”’)’;  
-TEMP.ADDTEXT(‘<td style=”‘+tempstyle+'” rowspan=”2″ align=”center”><a href=”javascript:click(-1, ”+”)”>+</a></td>’);  
-TEMP.ADDTEXT(‘</tr>’);  
-TEMP.ADDTEXT(‘<tr>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(4, ””)”>4</a></td>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(5, ””)”>5</a></td>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(6, ””)”>6</a></td>’);  
-TEMP.ADDTEXT(‘</tr>’);  
-TEMP.ADDTEXT(‘<tr>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(1, ””)”>1</a></td>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(2, ””)”>2</a></td>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(3, ””)”>3</a></td>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(-1, ”-”)”>-</a></td>’);  
-TEMP.ADDTEXT(‘</tr>’);  
-TEMP.ADDTEXT(‘<tr>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(-1, ”.”)”>.</a></td>’);  
-TEMP.ADDTEXT(‘<td align=”center”><a href=”javascript:click(0, ””)”>0</a></td>’);  
-tempstyle := ‘width:133px; background-image:url(”’+widebuttonurl+”’)’;  
-TEMP.ADDTEXT(‘<td style=”‘+tempstyle+'” colspan=”2″ align=”center”><a href=”javascript:click(-1, ”=”)”>=</a></td>’);  
-TEMP.ADDTEXT(‘</tr>’);  
-TEMP.ADDTEXT(‘</table>’);
+```
+>');
+TEMP.ADDTEXT('<head>');
+```
 
-TEMP.ADDTEXT(‘</body>’);  
-TEMP.ADDTEXT(‘</html>’);  
+```
+// Create Stylesheet for the visuals
+TEMP.ADDTEXT('<style type="text/css">');
+TEMP.ADDTEXT('  td { width:64px; font-size:xx-large; background-image:url("'+buttonurl+"') }');
+TEMP.ADDTEXT('  tr { height:64px }');
+TEMP.ADDTEXT('  a { color:#000000; text-decoration:none }');
+TEMP.ADDTEXT('  body { margin:0px; background-color:#FAFAFA }');
+TEMP.ADDTEXT('</style>');
+```
+
+```
+// Create Javascript function for invoking AL Event
+TEMP.ADDTEXT(");
+TEMP.ADDTEXT('  function click(i, s) {');
+TEMP.ADDTEXT('    window.external.clickevent(i, s);');
+TEMP.ADDTEXT('  }');
+TEMP.ADDTEXT(");
+```
+
+```
+TEMP.ADDTEXT('</head>');
+TEMP.ADDTEXT('<body>');
+```
+
+```
+// Create Table with Controls
+TEMP.ADDTEXT('<table cellpadding="0″ cellspacing="5″>');
+TEMP.ADDTEXT('<tr>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(7, "")">7</a></td>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(8, "")">8</a></td>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(9, "")">9</a></td>');
+tempstyle := 'background-image:url("'+tallbuttonurl+"')';
+TEMP.ADDTEXT('<td style="'+tempstyle+'" rowspan="2″ align="center"><a href="javascript:click(-1, "+")">+</a></td>');
+TEMP.ADDTEXT('</tr>');
+TEMP.ADDTEXT('<tr>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(4, "")">4</a></td>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(5, "")">5</a></td>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(6, "")">6</a></td>');
+TEMP.ADDTEXT('</tr>');
+TEMP.ADDTEXT('<tr>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(1, "")">1</a></td>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(2, "")">2</a></td>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(3, "")">3</a></td>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(-1, "-")">-</a></td>');
+TEMP.ADDTEXT('</tr>');
+TEMP.ADDTEXT('<tr>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(-1, ".")">.</a></td>');
+TEMP.ADDTEXT('<td align="center"><a href="javascript:click(0, "")">0</a></td>');
+tempstyle := 'width:133px; background-image:url("'+widebuttonurl+"')';
+TEMP.ADDTEXT('<td style="'+tempstyle+'" colspan="2″ align="center"><a href="javascript:click(-1, "=")">=</a></td>');
+TEMP.ADDTEXT('</tr>');
+TEMP.ADDTEXT('</table>');
+```
+
+```
+TEMP.ADDTEXT('</body>');
+TEMP.ADDTEXT('</html>');
 HTML := TEMP;
+```
 
 Meaning that every click on any button is routed back to the Add-In Event – and the actual calculator is then implemented in AL Code.
 

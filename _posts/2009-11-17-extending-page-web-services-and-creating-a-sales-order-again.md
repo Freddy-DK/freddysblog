@@ -43,11 +43,15 @@ Creating an order is a 3 step process:
 
 Is really simple
 
-Order\_Service service = new Order\_Service();  
+```
+Order_Service service = new Order_Service();
 service.UseDefaultCredentials = true;
+```
 
-Order order = new Order();  
+```
+Order order = new Order();
 service.Create(ref order);
+```
 
 After this we have a Order Number and an empty order – exactly like leaving the order No. field on the Sales Order Page.
 
@@ -55,26 +59,30 @@ After this we have a Order Number and an empty order – exactly like leaving th
 
 In this sample I will just fill out the Sell\_to\_Customer\_No – a number of the other Order Header fields will be auto-updated when updating the order
 
-order.Sell\_to\_Customer\_No = “10000”;
+`order.Sell_to_Customer_No = "10000";`
 
 Then we need to create the Order lines – in this sample I will create 5. BTW – It is NOT trivial to add an order line after the fact, so I suggest you add the needed number of lines in one go:
 
-order.SalesLines = new Sales\_Order\_Line\[5\];  
-for (int i = 0; i < 5; i++)  
-order.SalesLines\[i\] = new Sales\_Order\_Line();  
+```
+order.SalesLines = new Sales_Order_Line[5];
+for (int i = 0; i < 5; i++)
+order.SalesLines[i] = new Sales_Order_Line();
 service.Update(ref order);
+```
 
 ### Fill out the Order lines
 
 In this sample, I will just create 5 lines with green ROME guest chairs.
 
-for (int i = 0; i < 5; i++)  
-{  
-order.SalesLines\[i\].Type = OrderPageRef.Type.Item;  
-order.SalesLines\[i\].No = “1960-S”;  
-order.SalesLines\[i\].Quantity = 1;  
-}  
+```
+for (int i = 0; i < 5; i++)
+{
+order.SalesLines[i].Type = OrderPageRef.Type.Item;
+order.SalesLines[i].No = "1960-S";
+order.SalesLines[i].Quantity = 1;
+}
 service.Update(ref order);
+```
 
 That’s it – the order is created and you can find it in the Client.
 
@@ -82,7 +90,7 @@ That’s it – the order is created and you can find it in the Client.
 
 Having created the order, now it is time to post the order
 
-service.PostOrder(order.Key);
+`service.PostOrder(order.Key);`
 
 As you can see, the function takes a Record parameter, but we give it a Key.
 

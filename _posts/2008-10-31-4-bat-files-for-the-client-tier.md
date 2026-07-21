@@ -30,27 +30,29 @@ The four scripts really makes things easier when dealing with multiple Service T
 
 ### StartService.bat
 
-@ECHO OFF  
-IF “%1” == “” GOTO usage  
-SETLOCAL  
-SET SERVICETIER=%2  
-IF NOT “%SERVICETIER%” == “” SET SERVICETIER=\\%SERVICETIER%  
-SET NAVPATH=%~dp0  
-SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 > nul  
-IF ERRORLEVEL 1 GOTO :eof  
-SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 | FINDSTR “RUNNING”  
-IF NOT ERRORLEVEL 1 GOTO :eof  
-SC %SERVICETIER% start MicrosoftDynamicsNavServer$%1  
-CALL “%NAVPATH%SLEEP.BAT” 3  
-SC %SERVICETIER% start MicrosoftDynamicsNavWS$%1  
-CALL “%NAVPATH%SLEEP.BAT” 3  
-GOTO :eof  
-:usage  
-ECHO.  
-ECHO Usage:  
-ECHO.  
-ECHO startservice instancename \[servicetier\]  
+```
+@ECHO OFF
+IF "%1" == "" GOTO usage
+SETLOCAL
+SET SERVICETIER=%2
+IF NOT "%SERVICETIER%" == "" SET SERVICETIER=\%SERVICETIER%
+SET NAVPATH=%~dp0
+SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 > nul
+IF ERRORLEVEL 1 GOTO :eof
+SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 | FINDSTR "RUNNING"
+IF NOT ERRORLEVEL 1 GOTO :eof
+SC %SERVICETIER% start MicrosoftDynamicsNavServer$%1
+CALL "%NAVPATH%SLEEP.BAT" 3
+SC %SERVICETIER% start MicrosoftDynamicsNavWS$%1
+CALL "%NAVPATH%SLEEP.BAT" 3
+GOTO :eof
+:usage
 ECHO.
+ECHO Usage:
+ECHO.
+ECHO startservice instancename [servicetier]
+ECHO.
+```
 
 SETLOCAL means that the changes we do to environment variables here are not reflected outside this .BAT file.  
 The .BAT files checks whether the service exists and whether it already has been started – if that is the case, there is no real reason for starting it.  
@@ -58,27 +60,29 @@ Note BTW that you will need the Sleep.bat file described in the Multiple Service
 
 ### StopService.bat
 
-@ECHO OFF  
-IF “%1” == “” GOTO usage  
-SETLOCAL  
-SET SERVICETIER=%2  
-IF NOT “%SERVICETIER%” == “” SET SERVICETIER=\\%SERVICETIER%  
-SET NAVPATH=%~dp0  
-SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 > nul  
-IF ERRORLEVEL 1 GOTO :eof  
-SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 | FINDSTR “STOPPED”  
-IF NOT ERRORLEVEL 1 GOTO :eof  
-SC %SERVICETIER% stop MicrosoftDynamicsNavWS$%1  
-CALL “%NAVPATH%SLEEP.BAT” 3  
-SC %SERVICETIER% stop MicrosoftDynamicsNavServer$%1  
-CALL “%NAVPATH%SLEEP.BAT” 3  
-GOTO :eof  
-:usage  
-ECHO.  
-ECHO Usage:  
-ECHO.  
-ECHO stopservice instancename \[servicetier\]  
+```
+@ECHO OFF
+IF "%1" == "" GOTO usage
+SETLOCAL
+SET SERVICETIER=%2
+IF NOT "%SERVICETIER%" == "" SET SERVICETIER=\%SERVICETIER%
+SET NAVPATH=%~dp0
+SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 > nul
+IF ERRORLEVEL 1 GOTO :eof
+SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 | FINDSTR "STOPPED"
+IF NOT ERRORLEVEL 1 GOTO :eof
+SC %SERVICETIER% stop MicrosoftDynamicsNavWS$%1
+CALL "%NAVPATH%SLEEP.BAT" 3
+SC %SERVICETIER% stop MicrosoftDynamicsNavServer$%1
+CALL "%NAVPATH%SLEEP.BAT" 3
+GOTO :eof
+:usage
 ECHO.
+ECHO Usage:
+ECHO.
+ECHO stopservice instancename [servicetier]
+ECHO.
+```
 
 Kind of the same story as StartService.bat – if the Service is stopped, there is no real reason to try and stop it.
 
@@ -86,32 +90,34 @@ Kind of the same story as StartService.bat – if the Service is stopped, there 
 
 You probably guessed by now what this .BAT file is doing – so no reason in explaining.
 
-@ECHO OFF  
-IF “%1” == “” GOTO usage  
-SETLOCAL  
-SET SERVICETIER=%2  
-IF NOT “%SERVICETIER%” == “” SET SERVICETIER=\\%SERVICETIER%  
-SET NAVPATH=%~dp0  
-SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 > nul  
-IF ERRORLEVEL 1 GOTO :eof  
-SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 | FINDSTR “STOPPED”  
-IF NOT ERRORLEVEL 1 GOTO dontstop  
-SC %SERVICETIER% stop MicrosoftDynamicsNavWS$%1  
-CALL “%NAVPATH%SLEEP.BAT” 3  
-SC %SERVICETIER% stop MicrosoftDynamicsNavServer$%1  
-CALL “%NAVPATH%SLEEP.BAT” 3  
-:dontstop  
-SC %SERVICETIER% start MicrosoftDynamicsNavServer$%1  
-CALL “%NAVPATH%SLEEP.BAT” 3  
-SC %SERVICETIER% start MicrosoftDynamicsNavWS$%1  
-CALL “%NAVPATH%SLEEP.BAT” 3  
-GOTO :eof  
-:usage  
-ECHO.  
-ECHO Usage:  
-ECHO.  
-ECHO restartservice instancename \[servicetier\]  
+```
+@ECHO OFF
+IF "%1" == "" GOTO usage
+SETLOCAL
+SET SERVICETIER=%2
+IF NOT "%SERVICETIER%" == "" SET SERVICETIER=\%SERVICETIER%
+SET NAVPATH=%~dp0
+SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 > nul
+IF ERRORLEVEL 1 GOTO :eof
+SC %SERVICETIER% query MicrosoftDynamicsNavServer$%1 | FINDSTR "STOPPED"
+IF NOT ERRORLEVEL 1 GOTO dontstop
+SC %SERVICETIER% stop MicrosoftDynamicsNavWS$%1
+CALL "%NAVPATH%SLEEP.BAT" 3
+SC %SERVICETIER% stop MicrosoftDynamicsNavServer$%1
+CALL "%NAVPATH%SLEEP.BAT" 3
+:dontstop
+SC %SERVICETIER% start MicrosoftDynamicsNavServer$%1
+CALL "%NAVPATH%SLEEP.BAT" 3
+SC %SERVICETIER% start MicrosoftDynamicsNavWS$%1
+CALL "%NAVPATH%SLEEP.BAT" 3
+GOTO :eof
+:usage
 ECHO.
+ECHO Usage:
+ECHO.
+ECHO restartservice instancename [servicetier]
+ECHO.
+```
 
 The .BAT file more or less just does a StopService followed by a StartService.
 
@@ -119,44 +125,52 @@ The .BAT file more or less just does a StopService followed by a StartService.
 
 Now this is the fun stuff – this .BAT file starts the Role Tailored Client connecting to a specific Service Tier – but first it starts the Service Tier in question if it wasn’t already started.
 
-@ECHO OFF  
-IF “%1” == “” GOTO usage  
-SETLOCAL  
-SET COMPANY=%3  
-REM IF ‘%COMPANY%’ == ” SET COMPANY=”CRONUS International Ltd.”  
-IF ‘%COMPANY%’ == ” SET COMPANY=”CRONUS USA, Inc.”  
-ECHO.%COMPANY%  
-SET COMPANY=%COMPANY:”=%  
-SET COMPANY=%COMPANY:,=#%  
-:again  
-SET BEFORE=%COMPANY%  
-FOR /F “tokens=1\* delims= ” %%A IN (‘ECHO.%COMPANY%’) DO (  
-IF NOT “%%B” == “” SET COMPANY=%%A%%20%%B  
-)  
-IF NOT “%BEFORE%” == “%COMPANY%” GOTO again  
-SET COMPANY=%COMPANY:#=,%  
-SET MACHINE=%2  
-SET SERVICETIER=%MACHINE%  
-IF “%SERVICETIER%” == “” SET SERVICETIER=localhost  
-CALL STARTSERVICE.BAT %1 %SERVICETIER%  
-START dynamicsnav://%SERVICETIER%/%1/%COMPANY%/  
-GOTO :eof  
-:usage  
-ECHO.  
-ECHO Usage:  
-ECHO.  
-ECHO RTC instancename \[servicetier\] \[“Company”\]  
+```
+@ECHO OFF
+IF "%1" == "" GOTO usage
+SETLOCAL
+SET COMPANY=%3
+```
+
+```
+REM IF '%COMPANY%' == " SET COMPANY="CRONUS International Ltd."
+IF '%COMPANY%' == " SET COMPANY="CRONUS USA, Inc."
+ECHO.%COMPANY%
+SET COMPANY=%COMPANY:"=%
+SET COMPANY=%COMPANY:,=#%
+:again
+SET BEFORE=%COMPANY%
+FOR /F "tokens=1* delims= " %%A IN ('ECHO.%COMPANY%') DO (
+IF NOT "%%B" == "" SET COMPANY=%%A%%20%%B
+)
+IF NOT "%BEFORE%" == "%COMPANY%" GOTO again
+SET COMPANY=%COMPANY:#=,%
+SET MACHINE=%2
+```
+
+```
+SET SERVICETIER=%MACHINE%
+IF "%SERVICETIER%" == "" SET SERVICETIER=localhost
+CALL STARTSERVICE.BAT %1 %SERVICETIER%
+START dynamicsnav://%SERVICETIER%/%1/%COMPANY%/
+GOTO :eof
+:usage
 ECHO.
+ECHO Usage:
+ECHO.
+ECHO RTC instancename [servicetier] ["Company"]
+ECHO.
+```
 
 As you can see in the usage section, RTC can be started specifying the Service Tier instance name, the Service Tier machine and the Company name.
 
 Launching a Role Tailored Client pointing to the default installed Service Tier would be:
 
-C:\\Prog…60>RTC DynamicsNAV localhost “CRONUS International Ltd.”
+`C:\Prog…60>RTC DynamicsNAV localhost "CRONUS International Ltd."`
 
 or just
 
-C:\\Prog…60>RTC DynamicsNAV
+`C:\Prog…60>RTC DynamicsNAV`
 
 because localhost and CRONUS are the default values for the 2nd and 3rd parameters. No real reason for that except for the fact that this has been working for me.
 
@@ -166,7 +180,7 @@ If you have other special characters or if you do have # in your company names y
 
 I use this .BAT file for a number of shortcuts on my desktop to launch Role Tailored Clients to specific Service Tiers and on my Service Tier box I run a command every night shutting down all my service Tiers:
 
-for /f %D in (‘dir /ad/b’) do ( CALL STOPSERVICE.BAT %D )
+`for /f %D in ('dir /ad/b') do ( CALL STOPSERVICE.BAT %D )`
 
 The .BAT files can of course also be used on the Service Tier (except for the RTC one) for stopping and starting services – but they are a big help on the Client Tier – the way I am running things at least.
 

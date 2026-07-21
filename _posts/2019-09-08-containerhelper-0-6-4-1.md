@@ -44,11 +44,15 @@ New parameter **\-bakFolder on New-BCContainer** can be used to start a contain
 
 After creating your container, you can run
 
+```
 Backup-BCContainerDatabases -containername <containername>
+```
 
 To create a snapshot of the databases. When you later want to restore the snapshot, you just run
 
+```
 Restore-DatabasesInBCContainer -containername <containername>
+```
 
 and you can of course do this as many times you want.
 
@@ -60,25 +64,27 @@ The database backups will be stored in a location determined by the bakFolder pa
 
 Try to run this script twice:.
 
+```
 $containername = 'test'
 $navdockerimage = 'mcr.microsoft.com/businesscentral/sandbox:dk'
-$license = 'c:\\temp\\build.flf'
+$license = 'c:\temp\build.flf'
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 Measure-command {
-    New-NavContainer -accept\_eula \`
-                     -containername $containername \`
-                     -auth UserPassword \`
-                     -Credential $credential \`
-                     -updateHosts \`
-                     -assignPremiumPlan \`
-                     -imageName $navdockerimage \`
-                     -includeTestToolkit \`
-                     -licenseFile $license \`
+    New-NavContainer -accept_eula `
+                     -containername $containername `
+                     -auth UserPassword `
+                     -Credential $credential `
+                     -updateHosts `
+                     -assignPremiumPlan `
+                     -imageName $navdockerimage `
+                     -includeTestToolkit `
+                     -licenseFile $license `
                      -finalizeDatabasesScriptBlock { 
                          Setup-NavContainerTestUsers -containerName $containername -password $credential.Password -credential $credential
-                     } \`
+                     } `
                      -bakFolder "mysetup"
 }
+```
 
 On my machine, the first run takes ~4 minutes and the second run takes ~1 minute and 40 seconds. The following things are skipped during the second run, as they are assumed to already be in the database backup:
 
@@ -95,20 +101,22 @@ _**Note:** Please do understand the functionality of -bakFolder before you put i
 
 If you have a database you want to restore into a running container, you can do this using Restore-DatabaseInBcContainer as well:
 
-New-NavContainer -accept\_eula \`
-                 -accept\_outdated \`
-                 -containerName "to" \`
-                 -imageName "mcr.microsoft.com/businesscentral/onprem:1904-cu1-w1" \`
-                 -auth UserPassword \`
-                 -Credential $credential \`
-                 -updateHosts \`
-                 -includeCSIDE \`
+```
+New-NavContainer -accept_eula `
+                 -accept_outdated `
+                 -containerName "to" `
+                 -imageName "mcr.microsoft.com/businesscentral/onprem:1904-cu1-w1" `
+                 -auth UserPassword `
+                 -Credential $credential `
+                 -updateHosts `
+                 -includeCSIDE `
                  -doNotExportObjectsToText
 
-Restore-DatabasesInBCContainer -containerName "to" \`
-                               -bakFile "c:\\programdata\\navcontainerhelper\\converttest\\database.bak" \`
-                               -databaseName "newdb" \`
-                               -databaseFolder "c:\\databases\\newdb"
+Restore-DatabasesInBCContainer -containerName "to" `
+                               -bakFile "c:\programdata\navcontainerhelper\converttest\database.bak" `
+                               -databaseName "newdb" `
+                               -databaseFolder "c:\databases\newdb"
+```
 
 Connecting to the container with SSMS (SQL Server Management Studio), shows that we indeed have 2 databases:
 
@@ -142,33 +150,35 @@ Beside some general improvements to run-tests, two new parameters was added to R
 
 The following script shows one way of running all tests, including a rerun of failed tests:
 
+```
 $tests = Get-TestsFromBCContainer -containerName $containerName -credential $credential -ignoreGroups
 $rerunTests = $()
 $failedTests = $()
 $first = $true
 $tests | % {
-    if (-not (Run-TestsInBcContainer -containerName $containerName \`
-                                     -credential $credential \`
-                                     -XUnitResultFileName 'c:\\programdata\\navcontainerhelper\\results.xml' \`
-                                     -AppendToXUnitResultFile:(!$first) \`
-                                     -testCodeunit $\_.Id \`
-                                     -returnTrueIfAllPassed \`
-                                     -restartContainerAndRetry)) { $rerunTests += $\_ }
+    if (-not (Run-TestsInBcContainer -containerName $containerName `
+                                     -credential $credential `
+                                     -XUnitResultFileName 'c:\programdata\navcontainerhelper\results.xml' `
+                                     -AppendToXUnitResultFile:(!$first) `
+                                     -testCodeunit $_.Id `
+                                     -returnTrueIfAllPassed `
+                                     -restartContainerAndRetry)) { $rerunTests += $_ }
     $first = $false
 }
 if ($rerunTests.Count -gt 0) {
     Restart-BCContainer -containerName $containername
     $rerunTests | % {
-        if (-not (Run-TestsInBcContainer -containerName $containerName \`
-                                         -credential $credential \`
-                                         -XUnitResultFileName 'c:\\programdata\\navcontainerhelper\\results.xml' \`
-                                         -AppendToXUnitResultFile:(!$first) \`
-                                         -testCodeunit $\_.Id \`
-                                         -returnTrueIfAllPassed \`
-                                         -restartContainerAndRetry)) { $failedTests += $\_ }
+        if (-not (Run-TestsInBcContainer -containerName $containerName `
+                                         -credential $credential `
+                                         -XUnitResultFileName 'c:\programdata\navcontainerhelper\results.xml' `
+                                         -AppendToXUnitResultFile:(!$first) `
+                                         -testCodeunit $_.Id `
+                                         -returnTrueIfAllPassed `
+                                         -restartContainerAndRetry)) { $failedTests += $_ }
         $first = $false
     }
 }
+```
 
 Enjoy
 

@@ -19,6 +19,7 @@ Of course we can, and the answer is PowerShell.
 
 In the new Azure PowerShell CmdLets there are a set of CmdLets for handling Azure Resource Manager deployments. The following code will produce demo environments with 5 different country versions of NAV:
 
+```
 $VerbosePreference = "Continue"
 $ErrorActionPreference = "stop"
 Import-Module -Name "AzureRM.Resources"
@@ -35,7 +36,7 @@ $templateUri = "https://raw.githubusercontent.com/NAVDEMO/NAV2017/master/deployd
 
 "W1", "DK", "GB", "NA", "DE" | % {
   # Setup parameter array for ARM template
-  $country = $\_
+  $country = $_
   $name = "mynav2017$country"
   $Parameters = New-Object -TypeName Hashtable
   $Parameters.Add("vmName", $name)
@@ -54,15 +55,18 @@ $templateUri = "https://raw.githubusercontent.com/NAVDEMO/NAV2017/master/deployd
   $resourceGroup | Test-AzureRmResourceGroupDeployment -TemplateUri $templateUri -TemplateParameterObject $Parameters
   $resourceGroup | New-AzureRmResourceGroupDeployment -TemplateUri $templateUri -TemplateParameterObject $Parameters -Name $name
 }
+```
 
 and the following code will remove all 5 environments again:
 
+```
 "W1", "DK", "GB", "NA", "DE" | % {
   # Setup parameter array for ARM template
-  $country = $\_
+  $country = $_
   $name = "mynav2017$country"
   Remove-AzureRmResourceGroup -Name $name -Force
 }
+```
 
 It might not be much faster, but it is a whole lot easier.
 

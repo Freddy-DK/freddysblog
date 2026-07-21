@@ -19,7 +19,9 @@ If you are developing for Microsoft Dynamics NAV, you will find Docker images on
 
 In the public Docker hub, you will find all cumulative updates to NAV 2016, 2017 and 2018 in all country versions and you can use the images simply by specifying the right tag. The tagging strategy used in microsoft/dynamics-nav is:
 
+```
 microsoft/dynamics-nav:version-cu-country
+```
 
 where
 
@@ -29,10 +31,12 @@ where
 
 Image name examples:
 
+```
 microsoft/dynamics-nav
 microsoft/dynamics-nav:2018-cu3-de
 microsoft/dynamics-nav:2017
 microsoft/dynamics-nav:2016-dk
+```
 
 You will also be able to run earlier versions of Microsoft Dynamics NAV using the generic image as explained [here](/2017/11/29/can-i-run-nav-2015-and-earlier-on-docker/).
 
@@ -42,7 +46,9 @@ If you are developing for the current version of Dynamics 365 Business Central, 
 
 You will find the current version of Dynamics 365 Business Central using
 
+```
 microsoft/bcsandbox:build-country
+```
 
 where
 
@@ -51,10 +57,12 @@ where
 
 Image name examples:
 
+```
 microsoft/bcsandbox
 microsoft/bcsandbox:us
 microsoft/bcsandbox:dk
 microsoft/bcsandbox:12.0.21229.0-us
+```
 
 You should normally never use the image with a specific build number unless instructed to do so. This is primarily used when you spin up Container Sandbox images from within Dynamics 365 Business Central (page search for Sandbox).
 
@@ -66,7 +74,9 @@ The insider builds are normally updated daily and the Dynamics 365 Business Cent
 
 The image name follows the same tagging strategy as the public Dynamics 365 Business Central images:
 
+```
 bcinsider.azurecr.io/bcsandbox:build-country
+```
 
 where
 
@@ -75,10 +85,12 @@ where
 
 Image name examples:
 
+```
 bcinsider.azurecr.io/bcsandbox
 bcinsider.azurecr.io/bcsandbox:us
 bcinsider.azurecr.io/bcsandbox:dk
 bcinsider.azurecr.io/bcsandbox:12.1.21581.0-nl
+```
 
 You should never use the image with a specific build number unless instructed to do so. Setup Continuous Integration and Continuous Deployment by pulling the daily update of the Dynamics 365 Business Central Sandbox Container image.
 
@@ -92,7 +104,9 @@ Please be aware that these insider builds might be more unstable than builds fro
 
 The image name follows the same tagging strategy as the public Dynamics 365 Business Central images, but with a different namespace:
 
+```
 bcinsider.azurecr.io/bcsandbox-master:build-country
+```
 
 where
 
@@ -101,10 +115,12 @@ where
 
 Image name examples:
 
+```
 bcinsider.azurecr.io/bcsandbox-master
 bcinsider.azurecr.io/bcsandbox-master:us
 bcinsider.azurecr.io/bcsandbox-master:dk
 bcinsider.azurecr.io/bcsandbox-master:12.1.21581.0-nl
+```
 
 You should never use the image with a specific build number unless instructed to do so.
 

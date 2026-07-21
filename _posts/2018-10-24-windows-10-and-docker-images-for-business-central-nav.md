@@ -61,7 +61,8 @@ Combining this with a new function in NavContainerHelper 0.4.0.0 called Extract
 
 Update your NavContainerHelper and try:
 
-PS C:\\Windows\\System32> Extract-FilesFromNavContainerImage -imageName microsoft/bcsandbox:us -path c:\\temp\\bcsandbox -extract all
+```
+PS C:\Windows\System32> Extract-FilesFromNavContainerImage -imageName microsoft/bcsandbox:us -path c:\temp\bcsandbox -extract all
 Creating temp container from microsoft/bcsandbox:us and extract necessary files
 Extracting Service Tier and WebClient Files
 Extracting Windows Client Files
@@ -74,6 +75,7 @@ Extracting Files from Run folder
 Extracting Database Files
 Performing cleanup
 Removing temp container
+```
 
 You should now have the following in your c:\\temp\\bcsandbox folder:
 
@@ -81,16 +83,20 @@ You should now have the following in your c:\\temp\\bcsandbox folder:
 
 Which is exactly the files needed to do:
 
-New-NavContainer -accept\_eula -navDvdPath c:\\temp\\bcsandbox -containerName test -auth NavUserPassword -updateHosts
+```
+New-NavContainer -accept_eula -navDvdPath c:\temp\bcsandbox -containerName test -auth NavUserPassword -updateHosts
+```
 
 and among the other output you should see:
 
+```
 Using image microsoft/dynamics-nav:generic-1803
 Creating Nav container test
 NAV Version: 13.0.24623.24800
 Generic Tag: 0.0.7.0
 Container OS Version: 10.0.17134.345 (1803)
 Host OS Version: 10.0.17763.0 (1809)
+```
 
 Note, that it automatically selects the best generic image for your host. I am running 1809 and we do not have a generic image for that yet, but it will automatically pick the latest supported image. Yes – it takes 3-6 minutes extra startup time, but it should make it possible to run containers for a number of people who couldn’t run containers before.
 
@@ -102,12 +108,15 @@ Using NavContainerHelper, you can also just specify -UseBestContainerOS to New-N
 
 Try:
 
-New-NavContainer -accept\_eula -imageName microsoft/bcsandbox:us -containerName test -auth NavUserPassword -updateHosts -UseBestContainerOS
+```
+New-NavContainer -accept_eula -imageName microsoft/bcsandbox:us -containerName test -auth NavUserPassword -updateHosts -UseBestContainerOS
+```
 
 and you should see that the NavContainerHelper automatically extracts the needed files into a folder in the containerspecific folder (c:\\programdata\\navcontainerhelper\\extensions\\navdvd) and uses that. This means that the dvd content will automatically be cleaned up when you remove the container.
 
 The output could look like this:
 
+```
 ...
 Using image microsoft/bcsandbox:us
 Creating Nav container test
@@ -119,6 +128,7 @@ A better Container OS exists for your host (1803)
 Creating temp container from microsoft/bcsandbox:us and extract necessary files
 Extracting Service Tier and WebClient Files
 ...
+```
 
 UseBestContainerOS will be check whether the host and container OS’ match before running the generic image, meaning that when 1809 ships, it will automatically select the new images and only switch to hyperv isolation if necessary.
 
@@ -128,11 +138,15 @@ NavContainerHelper 0.4.0.0 contains a lot of other enhancements and fixes, espec
 
 You can install the NavContainerhelper by using:
 
+```
 install-module navcontainerhelper -force
+```
 
 or update it to .04.0.0 using:
 
+```
 update-module navcontainerhelper -force
+```
 
 Enjoy
 

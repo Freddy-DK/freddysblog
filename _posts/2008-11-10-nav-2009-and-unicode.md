@@ -25,7 +25,7 @@ Lets take an example:
 
 In a codeunit I write the following line:
 
-txt := ‘ÆØÅ are three Danish letters, ß is used in German and Greek.’;
+`txt := 'ÆØÅ are three Danish letters, ß is used in German and Greek.';`
 
 Now, I export this as a .txt file, and view this in my favorite DOS text viewer:
 
@@ -35,11 +35,11 @@ As you can see – the Ø has changed and a quick look at my codepage reveals th
 
 Opening the exported file in Notepad looks different:
 
-Txt := ‘’î are three Danish letters, á is used in German and Greek.’;
+`Txt := ''î are three Danish letters, á is used in German and Greek.';`
 
 Primary reason for this is, that Notepad assumes Unicode and the .txt file is OEM. When I launch the RoleTailored Client, and take a look at that line in the generated C# source file in Notepad:
 
-txt = new NavText(1024, @”ÆØÅ are three Danish letters, ß is used in German and Greek.”);
+`txt = new NavText(1024, @"ÆØÅ are three Danish letters, ß is used in German and Greek.");`
 
 Nice – and we know that Notepad is Unicode compliant and C# uses Unicode strings, so the AL -> C# compiler converts the string to Unicode – how does this look in my favorite DOS text viewer:
 
@@ -53,13 +53,15 @@ If NAV 2009 converts my text constants to Unicode – what if I write this strin
 
 I added the following code to a Codeunit and ran it from both the Role Tailored Client and from the Classic Client.
 
-file.CREATETEMPFILE();  
-filename := file.NAME;  
-file.CLOSE();  
-file.CREATE(filename);  
-file.CREATEOUTSTREAM(OutStr);  
-OutStr.WRITETEXT(Txt);  
+```
+file.CREATETEMPFILE();
+filename := file.NAME;
 file.CLOSE();
+file.CREATE(filename);
+file.CREATEOUTSTREAM(OutStr);
+OutStr.WRITETEXT(Txt);
+file.CLOSE();
+```
 
 and don’t worry, the results are identical – both platforms actually writes the file in OEM format (we might have preferred Unicode, but for compatibility reasons this is probably a good thing).
 
@@ -87,7 +89,7 @@ Example – you have a Web Service provider who can verify credit card numbers �
 
 Create a function in a new COM object which might be named:
 
-int CheckCreditCard(string CreditCardNo, string NameOnCard, int ExpireMonth, int ExpireYear, int SecurityCode)
+`int CheckCreditCard(string CreditCardNo, string NameOnCard, int ExpireMonth, int ExpireYear, int SecurityCode)`
 
 Then your business logic in AL would just call and check – without a lot of XML parsing and stuff.
 
@@ -103,44 +105,56 @@ The idea here is that files (and byte\[\]) are binary data – strings are not.
 
 The function in the COM object could look like:
 
-public int SendFileContent(object NAVxmlhttp, string filename)  
-{  
-MSXML2.ServerXMLHTTP xmlHttp = NAVxmlhttp as MSXML2.ServerXMLHTTP;  
-FileStream fs = File.OpenRead(filename);  
-BinaryReader br = new BinaryReader(fs);  
-int len = (int)fs.Length;  
-byte\[\] buffer = new byte\[len\];  
-br.Read(buffer, 0, len);  
-br.Close();  
+```
+public int SendFileContent(object NAVxmlhttp, string filename)
+{
+MSXML2.ServerXMLHTTP xmlHttp = NAVxmlhttp as MSXML2.ServerXMLHTTP;
+FileStream fs = File.OpenRead(filename);
+BinaryReader br = new BinaryReader(fs);
+int len = (int)fs.Length;
+byte[] buffer = new byte[len];
+br.Read(buffer, 0, len);
+br.Close();
 fs.Close();
+```
 
-    xmlHttp.send(buffer);
+    `xmlHttp.send(buffer);`
 
-    buffer = xmlHttp.responseBody as byte\[\];  
-fs = File.Create(filename);  
-BinaryWriter bw = new BinaryWriter(fs);  
-bw.Write(buffer);  
-bw.Close();  
+    
+
+```
+buffer = xmlHttp.responseBody as byte[];
+fs = File.Create(filename);
+BinaryWriter bw = new BinaryWriter(fs);
+bw.Write(buffer);
+bw.Close();
 fs.Close();
+```
 
-    return xmlHttp.status;  
+    
+
+```
+return xmlHttp.status;
 }
+```
 
 If you went for this approach your AL code would change from:
 
-XmlHttp.Send(Txt);
+`XmlHttp.Send(Txt);`
 
 (followed by opening the ResponseStream) to
 
-file.CREATETEMPFILE();  
-filename := file.NAME;  
-file.CLOSE();  
-file.CREATE(filename);  
-file.CREATEOUTSTREAM(OutStr);  
-OutStr.WRITETEXT(Txt);  
+```
+file.CREATETEMPFILE();
+filename := file.NAME;
 file.CLOSE();
+file.CREATE(filename);
+file.CREATEOUTSTREAM(OutStr);
+OutStr.WRITETEXT(Txt);
+file.CLOSE();
+```
 
-myCOMobject.SendFileContent(XmlHttp, filename);
+`myCOMobject.SendFileContent(XmlHttp, filename);`
 
 (followed by opening the file <filename> again – reading the result).
 
@@ -152,10 +166,12 @@ In the Edit In Excel – Part 4, you can see how to create a COM object – shou
 
 You could create a function in a COM object, which returns a character based on a numeric value:
 
-public string GetChar(int ch)  
-{  
-return “”+(char)ch;  
+```
+public string GetChar(int ch)
+{
+return ""+(char)ch;
 }
+```
 
 Problem with this direction is, that this function should ONLY be used when running in the Role Tailored Client.
 
@@ -169,106 +185,144 @@ Well – you can create a function, which converts the string back to OEM (makin
 
 Seems like a lot of conversion back and forth – but it would actually work from both the Classic and the Role Tailored Client, the code for that goes here:
 
-public class MyCOMobject : IMyCOMobject  
-{  
-private static Byte\[\] oem2AnsiTable;  
-private static Byte\[\] ansi2OemTable;
+```
+public class MyCOMobject : IMyCOMobject
+{
+private static Byte[] oem2AnsiTable;
+private static Byte[] ansi2OemTable;
+```
 
-    /// <summary>  
-/// Initialize COM object  
-/// </summary>  
-public MyCOMobject()  
-{  
-oem2AnsiTable = new Byte\[256\];  
-ansi2OemTable = new Byte\[256\];  
-for (Int32 i = 0; i < 256; i++)  
-{  
-oem2AnsiTable\[i\] = (Byte)i;  
-ansi2OemTable\[i\] = (Byte)i;  
-}  
-NativeMethods.OemToCharBuff(oem2AnsiTable, oem2AnsiTable, oem2AnsiTable.Length);  
-NativeMethods.CharToOemBuff(ansi2OemTable, ansi2OemTable, ansi2OemTable.Length);  
-// Remove “holes” in the convertion structure  
-Int32 ch1 = 255;  
-Int32 ch2 = 255;  
-for (;; ch1–, ch2–)  
-{  
-while (ansi2OemTable\[oem2AnsiTable\[ch1\]\] == ch1)  
-{  
-if (ch1 == 0)  
-break;  
-else  
-ch1–;  
-}  
-while (oem2AnsiTable\[ansi2OemTable\[ch2\]\] == ch2)  
-{  
-if (ch2 == 0)  
-break;  
-else  
-ch2–;  
-}  
-if (ch1 == 0)  
-break;  
-oem2AnsiTable\[ch1\] = (Byte)ch2;  
-ansi2OemTable\[ch2\] = (Byte)ch1;  
-}  
+    
+
+```
+/// <summary>
+/// Initialize COM object
+/// </summary>
+public MyCOMobject()
+{
+oem2AnsiTable = new Byte[256];
+ansi2OemTable = new Byte[256];
+for (Int32 i = 0; i < 256; i++)
+{
+oem2AnsiTable[i] = (Byte)i;
+ansi2OemTable[i] = (Byte)i;
 }
-
-    /// <summary>  
-/// Convert Unicode string to OEM string  
-/// </summary>  
-/// <param name=”str”>Unicode string</param>  
-/// <returns>OEM string</returns>  
-private byte\[\] UnicodeToOem(string str)  
-{  
-Byte\[\] buffer = Encoding.Default.GetBytes(str);  
-for (Int32 i = 0; i < buffer.Length; i++)  
-{  
-buffer\[i\] = ansi2OemTable\[buffer\[i\]\];  
-}  
-return buffer;  
+NativeMethods.OemToCharBuff(oem2AnsiTable, oem2AnsiTable, oem2AnsiTable.Length);
+NativeMethods.CharToOemBuff(ansi2OemTable, ansi2OemTable, ansi2OemTable.Length);
+// Remove "holes" in the convertion structure
+Int32 ch1 = 255;
+Int32 ch2 = 255;
+for (;; ch1–, ch2–)
+{
+while (ansi2OemTable[oem2AnsiTable[ch1]] == ch1)
+{
+if (ch1 == 0)
+break;
+else
+ch1–;
 }
-
-    /// <summary>  
-/// Convert OEM string to Unicode string  
-/// </summary>  
-/// <param name=”oem”>OEM string</param>  
-/// <returns>Unicode string</returns>  
-private string OemToUnicode(byte\[\] oem)  
-{  
-for (Int32 i = 0; i < oem.Length; i++)  
-{  
-oem\[i\] = oem2AnsiTable\[oem\[i\]\];  
-}  
-return Encoding.Default.GetString(oem);  
+while (oem2AnsiTable[ansi2OemTable[ch2]] == ch2)
+{
+if (ch2 == 0)
+break;
+else
+ch2–;
 }
-
-    /// <summary>  
-/// Send data through XMLHTTP  
-/// </summary>  
-/// <param name=”NAVxmlhttp”>XmlHttp object</param>  
-/// <param name=”data”>string containing data (in Unicode)</param>  
-/// <returns>The response from the XMLHTTP Send</returns>  
-public string Send(object NAVxmlhttp, string data)  
-{  
-MSXML2.ServerXMLHTTP xmlHttp = NAVxmlhttp as MSXML2.ServerXMLHTTP;  
-byte\[\] oem = UnicodeToOem(data);  
-xmlHttp.send(oem);        return OemToUnicode((byte\[\])xmlHttp.responseBody);  
-}  
+if (ch1 == 0)
+break;
+oem2AnsiTable[ch1] = (Byte)ch2;
+ansi2OemTable[ch2] = (Byte)ch1;
 }
+}
+```
 
-internal static partial class NativeMethods  
-{  
+    
+
+```
+/// <summary>
+/// Convert Unicode string to OEM string
+/// </summary>
+/// <param name="str">Unicode string</param>
+/// <returns>OEM string</returns>
+private byte[] UnicodeToOem(string str)
+{
+Byte[] buffer = Encoding.Default.GetBytes(str);
+for (Int32 i = 0; i < buffer.Length; i++)
+{
+buffer[i] = ansi2OemTable[buffer[i]];
+}
+return buffer;
+}
+```
+
+    
+
+```
+/// <summary>
+/// Convert OEM string to Unicode string
+/// </summary>
+/// <param name="oem">OEM string</param>
+/// <returns>Unicode string</returns>
+private string OemToUnicode(byte[] oem)
+{
+for (Int32 i = 0; i < oem.Length; i++)
+{
+oem[i] = oem2AnsiTable[oem[i]];
+}
+return Encoding.Default.GetString(oem);
+}
+```
+
+    
+
+```
+/// <summary>
+/// Send data through XMLHTTP
+/// </summary>
+/// <param name="NAVxmlhttp">XmlHttp object</param>
+/// <param name="data">string containing data (in Unicode)</param>
+/// <returns>The response from the XMLHTTP Send</returns>
+public string Send(object NAVxmlhttp, string data)
+{
+MSXML2.ServerXMLHTTP xmlHttp = NAVxmlhttp as MSXML2.ServerXMLHTTP;
+byte[] oem = UnicodeToOem(data);
+xmlHttp.send(oem);
+```
+
+        
+
+```
+return OemToUnicode((byte[])xmlHttp.responseBody);
+}
+}
+```
+
+```
+internal static partial class NativeMethods
+{
 #region Windows OemToChar/CharToOem imports
+```
 
-    \[DllImport(“user32”, EntryPoint = “OemToCharBuffA”)\]  
-internal static extern Int32 OemToCharBuff(Byte\[\] source, Byte\[\] dest, Int32 bytesize);
+    
 
-    \[DllImport(“user32”, EntryPoint = “CharToOemBuffA”)\]  
-internal static extern Int32 CharToOemBuff(Byte\[\] source, Byte\[\] dest, Int32 bytesize);
+```
+[DllImport("user32", EntryPoint = "OemToCharBuffA")]
+internal static extern Int32 OemToCharBuff(Byte[] source, Byte[] dest, Int32 bytesize);
+```
 
-    #endregion  
+    
+
+```
+[DllImport("user32", EntryPoint = "CharToOemBuffA")]
+internal static extern Int32 CharToOemBuff(Byte[] source, Byte[] dest, Int32 bytesize);
+```
+
+    
+
+```
+#endregion
 }
+```
 
 Unfortunately I have not found a way to do this without having a COM object in play.
 

@@ -37,21 +37,22 @@ I have chosen that the contract I want to implement is to get the Customer name 
 
 A WCF Service Contract and the service itself is only these few lines of code:
 
-\[ServiceContract\] 
+```
+[ServiceContract] 
 interface IMyInternalProxy 
 { 
-    \[OperationContract\] 
+    [OperationContract] 
     string GetCustomerName(string No); 
 }
 
-\[ServiceBehavior(InstanceContextMode=InstanceContextMode.Single)\] 
+[ServiceBehavior(InstanceContextMode=InstanceContextMode.Single)] 
 class MyInternalProxy : IMyInternalProxy 
 { 
     #region IMyInternalProxy Members
 
     public string GetCustomerName(string No) 
     { 
-        Customer\_Service service = new Customer\_Service(); 
+        Customer_Service service = new Customer_Service(); 
         service.Credentials = CredentialCache.DefaultNetworkCredentials; 
         Customer customer = service.Read(No); 
         return customer.Name; 
@@ -59,6 +60,7 @@ class MyInternalProxy : IMyInternalProxy
 
     #endregion 
 }
+```
 
 as you can see I chose to connect to NAV using a Web Reference. I could of course have done this using Service Reference as well as described in [this post](/2010/01/20/connecting-to-nav-web-services-from-c-using-service-reference-code-version/).
 
@@ -66,6 +68,7 @@ as you can see I chose to connect to NAV using a Web Reference. I could of cours
 
 No and actually by hosting the WCF Service in a Windows service you just need to create the ServiceHost and perform the open and close in the proper event handlers like:
 
+```
 public partial class Service1 : ServiceBase 
 { 
     string URL = Uri.UriSchemeHttp + Uri.SchemeDelimiter + Environment.MachineName + ":8123"; 
@@ -83,7 +86,7 @@ public partial class Service1 : ServiceBase
         host.Description.Behaviors.Add(smb); 
     }
 
-    protected override void OnStart(string\[\] args) 
+    protected override void OnStart(string[] args) 
     { 
         if (host.State != CommunicationState.Opened && host.State != CommunicationState.Opening) 
             host.Open(); 
@@ -95,6 +98,7 @@ public partial class Service1 : ServiceBase
             host.Close(); 
     } 
 }
+```
 
 # Well that’s not complicated either – but something must be?
 

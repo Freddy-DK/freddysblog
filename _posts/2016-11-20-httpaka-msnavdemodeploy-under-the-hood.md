@@ -73,6 +73,7 @@ Probably the best tool for ARM template editing. Visual Studio has a project tem
 
 Lets look a little closer at the deploydemo.json file. I have collapsed the variables, the resources and the outputs and this lists the parameters. These parameters are the same as you see when you launch the deployment. I have expanded a few of the parameters to give an indication of how the parameters are defined:
 
+```
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
@@ -94,7 +95,7 @@ Lets look a little closer at the deploydemo.json file. I have collapsed the vari
     "clickonce": {
       "type": "string",
       "defaultValue": "No",
-      "allowedValues": \[ "Yes", "No" \],
+      "allowedValues": [ "Yes", "No" ],
       "metadata": {
         "Description": "Install Clickonce Support?"
       }
@@ -108,6 +109,7 @@ Lets look a little closer at the deploydemo.json file. I have collapsed the vari
   "resources": ...,
   "outputs": ...
 }
+```
 
 Under variables, you will find a list of variables needed for the deployment. Stuff like the StorageAccountName is calculated here based on the name you have specified. The VM Size is hardcoded to be a D2 and the name of virtual networks, security groups etc. are all hardcoded here.
 
@@ -129,32 +131,34 @@ If we remove resource #7 – then you will basically just deploy the NAV Image o
 
 If you navigate to the last resource, you will find the CustomScriptExtension (the PowerShell extension). This extension depends on the Virtual Machine, meaning that it won’t start until the Virtual Machine is complete. The Virtual Machine depends on some of the other artefacts, which basically means that the script will be executed when everything else is done.
 
+```
 {
   "apiVersion": "2015-06-15",
   "type": "Microsoft.Compute/virtualMachines/extensions",
-  "name": "\[concat(variables('server1Name'),'/vmextension1')\]",
-  "location": "\[resourceGroup().location\]",
+  "name": "[concat(variables('server1Name'),'/vmextension1')]",
+  "location": "[resourceGroup().location]",
   "tags": {
     "displayName": "PowerShellScript2"
   },
-  "dependsOn": \[
-    "\[concat('Microsoft.Compute/virtualMachines/', variables('server1Name'))\]"
-  \],
+  "dependsOn": [
+    "[concat('Microsoft.Compute/virtualMachines/', variables('server1Name'))]"
+  ],
   "properties": {
     "publisher": "Microsoft.Compute",
     "type": "CustomScriptExtension",
     "typeHandlerVersion": "1.4",
     "autoUpgradeMinorVersion": true,
     "settings": {
-      "fileUris": \[
-        "\[concat(variables('ScriptFilePath'), 'initialize.ps1')\]"
-      \],
-      "commandToExecute": "\[concat(variables('ScriptCommandToExecute'),'initialize.ps1',' -PatchPath "',variables('ScriptFilePath'),'" -StorageAccountName "...
+      "fileUris": [
+        "[concat(variables('ScriptFilePath'), 'initialize.ps1')]"
+      ],
+      "commandToExecute": "[concat(variables('ScriptCommandToExecute'),'initialize.ps1',' -PatchPath "',variables('ScriptFilePath'),'" -StorageAccountName "...
     },
     "protectedSettings": {
     }
   }
 }
+```
 
 The script to execute is called initialize.ps1 and it is downloaded from the ScriptFilePath (which is the same folder as the .json file).
 

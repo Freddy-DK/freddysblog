@@ -45,12 +45,16 @@ In NAV 2009 SP1 we added a key in the Service Tier configuration file called Web
 
 The config file you need to modify is placed in the directory where the Service Tier executable is and is called CustomSettings.config. The section you are looking for is:
 
-    <!–  
-Turns on or off NTLM authentication protocol for Web Services  
-false: Use SPNEGO (recommended)  
-true: Use NTLM only  
-–>  
-<add key=”WebServicesUseNTLMAuthentication” value=”true”></add>
+    
+
+```
+<!–
+Turns on or off NTLM authentication protocol for Web Services
+false: Use SPNEGO (recommended)
+true: Use NTLM only
+–>
+<add key="WebServicesUseNTLMAuthentication" value="true"></add>
+```
 
 Note that .net works with both values of this settings.
 

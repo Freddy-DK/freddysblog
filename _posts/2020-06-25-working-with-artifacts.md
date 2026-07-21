@@ -30,6 +30,7 @@ Originally submitted by Waldo and slightly modified to fit the needs of everybod
 
 try to run this PowerShell snippet and investigate the return values.
 
+```
 Write-Host -ForegroundColor Yellow "Get US sandbox artifact url for current version (Latest)"
 Get-BCArtifactUrl -country "us"
 
@@ -47,6 +48,7 @@ Get-BCArtifactUrl -country "us" -version "15"
 
 Write-Host -ForegroundColor Yellow "Get all Danish NAV and Business Central artifact urls"
 Get-BCArtifactUrl -type OnPrem -country "dk" -select All
+```
 
 With Business Central, we do not use CU numbers, we use version numbers like 14.7, 15.4 and 16.2 and with this function you can easily find the versions available with a major, minor version.
 
@@ -63,11 +65,13 @@ If you however need an artifact url for a specify CU, you can use Get-NavArtifac
 
 a couple of examples in how to use Get-NavArtifactUrl:
 
+```
 Write-Host -ForegroundColor Yellow "Get all NAV 2017 DK artifact Urls"
 (Get-NavArtifactUrl -nav 2017 -country 'dk' -select all).count
 
 Write-Host -ForegroundColor Yellow "Get latest NA onprem artifact Url"
 Get-BCArtifactUrl -country "na" -type OnPrem
+```
 
 having the aritfact url, you can try to download it.
 
@@ -84,22 +88,24 @@ The parameters are:
 
 You can see a sample of the command and the output here:
 
-PS c:\\temp> Download-Artifacts -artifactUrl (Get-BCArtifactUrl -country "us") -includePlatform
+```
+PS c:\temp> Download-Artifacts -artifactUrl (Get-BCArtifactUrl -country "us") -includePlatform
 
 Downloading application artifact /sandbox/16.2.13509.14082/us
-Downloading C:\\Users\\freddyk\\AppData\\Local\\Temp\\9f550271-a1c8-4125-96c5-2b781e2b9a3e.zip
+Downloading C:\Users\freddyk\AppData\Local\Temp\9f550271-a1c8-4125-96c5-2b781e2b9a3e.zip
 Unpacking application artifact
-c:\\bcartifacts.cache\\sandbox\\16.2.13509.14082\\us
+c:\bcartifacts.cache\sandbox\16.2.13509.14082\us
 https://bcartifacts.azureedge.net/sandbox/16.2.13509.14082/platform
 Downloading platform artifact /sandbox/16.2.13509.14082/platform
-Downloading C:\\Users\\freddyk\\AppData\\Local\\Temp\\45959ba6-b934-470f-9603-8867135a3dcd.zip
+Downloading C:\Users\freddyk\AppData\Local\Temp\45959ba6-b934-470f-9603-8867135a3dcd.zip
 Unpacking platform artifact
 Downloading Prerequisite Components
-Downloading c:\\bcartifacts.cache\\sandbox\\16.2.13509.14082\\platform\\Prerequisite Components\\Open XML SDK 2.5 for Microsoft Office\\OpenXMLSDKv25.msi
-Downloading c:\\bcartifacts.cache\\sandbox\\16.2.13509.14082\\platform\\Prerequisite Components\\Microsoft Report Viewer 2015\\ReportViewer.msi
-Downloading c:\\bcartifacts.cache\\sandbox\\16.2.13509.14082\\platform\\Prerequisite Components\\IIS URL Rewrite Module\\rewrite\_2.0\_rtw\_x64.msi
-Downloading c:\\bcartifacts.cache\\sandbox\\16.2.13509.14082\\platform\\Prerequisite Components\\Microsoft Report Viewer 2015\\SQLSysClrTypes.msi
-c:\\bcartifacts.cache\\sandbox\\16.2.13509.14082\\platform
+Downloading c:\bcartifacts.cache\sandbox\16.2.13509.14082\platform\Prerequisite Components\Open XML SDK 2.5 for Microsoft Office\OpenXMLSDKv25.msi
+Downloading c:\bcartifacts.cache\sandbox\16.2.13509.14082\platform\Prerequisite Components\Microsoft Report Viewer 2015\ReportViewer.msi
+Downloading c:\bcartifacts.cache\sandbox\16.2.13509.14082\platform\Prerequisite Components\IIS URL Rewrite Module\rewrite_2.0_rtw_x64.msi
+Downloading c:\bcartifacts.cache\sandbox\16.2.13509.14082\platform\Prerequisite Components\Microsoft Report Viewer 2015\SQLSysClrTypes.msi
+c:\bcartifacts.cache\sandbox\16.2.13509.14082\platform
+```
 
 It will download the artifacts and return the path. If you specify -includePlatform it will return two urls – if not, only one. Looking into the filesystem on the host, you will find the artifacts extracted in the bcartifacts.cache folder:
 
@@ -109,6 +115,7 @@ In the US folder you will find a manifest.json + all the things that are specifi
 
 The manifest.json contains:
 
+```
 {
     "version":  "16.2.13509.14082",
     "platformUrl":  "sandbox/16.2.13509.14082/platform",
@@ -116,8 +123,9 @@ The manifest.json contains:
     "isBcSandbox":  true,
     "country":  "us",
     "platform":  "16.0.13440.13997",
-    "database":  "database\\\\database.bak"
+    "database":  "database\\database.bak"
 }
+```
 
 In this specific sample, the cronus licensefile is already in the database and is not in the artifact. The platformUrl tag might be missing in which case the platform is grabbed by replacing the country with platform in the artifact url.
 
@@ -133,7 +141,9 @@ Basically a lot of stuff from the DVD.
 
 This function is not new, but it does have a new parameter and a new option.
 
+```
 Flush-ContainerHelperCache -cache bcartifacts -keepDays 7
+```
 
 will flush the artifacts cache but keep the artifacts, which has been used the last 7 days.
 
@@ -157,10 +167,12 @@ Mostly you will use these parameters:
 
 Try
 
+```
 $artifactUrl = Get-BCArtifactUrl -country "us" -version "15"
 New-BcImage -artifactUrl $artifactUrl -imageName myownimage:latest
 docker images
 docker inspect myownimage:latest
+```
 
 Yes, this is an image, which is totally like the images you have been used to use.
 
@@ -178,19 +190,21 @@ Wait… – what?
 
 Yes, try this twice:
 
+```
 Remove-NavContainer test
 Measure-Command {
     $artifactUrl = Get-BCArtifactUrl -version 16.1 -select Latest -country us
     $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-    New-NavContainer \`
-        -accept\_eula \`
-        -containerName test \`
-        -artifactUrl $artifactUrl \`
-        -Credential $credential \`
-        -auth UserPassword \`
-        -updateHosts \`
+    New-NavContainer `
+        -accept_eula `
+        -containerName test `
+        -artifactUrl $artifactUrl `
+        -Credential $credential `
+        -auth UserPassword `
+        -updateHosts `
         -imagename myown
 }
+```
 
 The first run takes 8 minutes 35 seconds on my machine – the second run only a little more than 3 minutes and after the first run, I have a docker image called **myown:sandbox-16.1.12629.14076-us**. (BTW – you need ContainerHelper 0.7.0.8 or higher for this to work)
 

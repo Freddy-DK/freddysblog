@@ -53,13 +53,14 @@ You should setup a **Key Vault** for your secrets (like described [here](/2021/0
 
 The first code section will read the Key Vault and set the 4 secrets as described above, then retrieve information about the environment (specified in the $environment variable) and retrieve the base app version number. Based on this, we find the right artifact url,
 
+```
 if (!($licenseFileSecret)) {
     Write-Host -ForegroundColor Yellow "Reading Key Vault"
     Get-AzKeyVaultSecret $vaultName  | % {
-        Write-Host $\_.Name
-        Set-Variable \`
-            -Name "$($\_.Name)Secret" \`
-            -Value (Get-AzKeyVaultSecret $vaultName -Name $\_.Name)
+        Write-Host $_.Name
+        Set-Variable `
+            -Name "$($_.Name)Secret" `
+            -Value (Get-AzKeyVaultSecret $vaultName -Name $_.Name)
     }
 }
 
@@ -67,29 +68,34 @@ Write-Host -ForegroundColor Yellow "SaaS Settings"
 $environment = "Production"
 $refreshToken = $BcSaasRefreshTokenSecret.SecretValue | Get-PlainText
 $authContext = New-BcAuthContext -refreshToken $refreshToken
-$bcEnvironment = Get-BcEnvironments \`
+$bcEnvironment = Get-BcEnvironments `
     -bcAuthContext $authContext | Where-Object {
-        $\_.Name -eq $environment }
-$baseApp = Get-BcPublishedApps \`
-    -bcAuthContext $authContext \`
+        $_.Name -eq $environment }
+$baseApp = Get-BcPublishedApps `
+    -bcAuthContext $authContext `
     -environment $environment | Where-Object { 
-        $\_.Name -eq "Base Application" }
-$artifactUrl = Get-BCArtifactUrl \`
-    -country $bcEnvironment.countryCode \`
-    -version $baseApp.Version \`
+        $_.Name -eq "Base Application" }
+$artifactUrl = Get-BCArtifactUrl `
+    -country $bcEnvironment.countryCode `
+    -version $baseApp.Version `
     -select Closest
+```
 
 After running this on my setup, $baseApp is
 
+```
 id        : 437dbf0e-84ff-417a-965d-ed2bb9650972
 name      : Base Application
 publisher : Microsoft
 version   : 17.4.21491.22501
 state     : installed
+```
 
 and $artifactUrl is
 
+```
 https://bcartifacts.azureedge.net/sandbox/17.4.21491.22501/us
+```
 
 We need the artifacts as the online tenant is just a tenant database. I will need to create a multitenant sandbox container with the right version to be able to mount the tenant database.
 
@@ -97,19 +103,20 @@ We need the artifacts as the online tenant is just a tenant database. I will nee
 
 Next code section will either reuse an existing database backup, or create a new backup. When the backup is complete, it will download the backup to the local temp folder as a .bacpac file. This code snippet uses the storageAccountName secret to locate the storage account in which the backup is or should be placed and create a shared access service token for this. The $bcAuthContext from the previous code snippet will be used for authentication to the Business Central environment.
 
+```
 $UseLatestBackup = $true
 $stoAcc = Get-AzStorageAccount | Where-Object { 
-    $\_.StorageAccountName -eq ($storageAccountNameSecret.SecretValue | Get-PlainText) }
-$stoToken = $stoAcc | New-AzStorageAccountSASToken \`
-    -Service Blob \`
-    -ResourceType Container,Object \`
-    -Permission "cdrw" \`
-    -ExpiryTime (Get-Date).AddHours(25) \`
+    $_.StorageAccountName -eq ($storageAccountNameSecret.SecretValue | Get-PlainText) }
+$stoToken = $stoAcc | New-AzStorageAccountSASToken `
+    -Service Blob `
+    -ResourceType Container,Object `
+    -Permission "cdrw" `
+    -ExpiryTime (Get-Date).AddHours(25) `
     -Protocol HttpsOnly
 if ($UseLatestBackup) {
-    $export = Get-BcDatabaseExportHistory \`
-        -bcAuthContext $authContext \`
-        -environment $environment | Sort-Object \`
+    $export = Get-BcDatabaseExportHistory `
+        -bcAuthContext $authContext `
+        -environment $environment | Sort-Object `
             -Property blob | Select-Object -Last 1
     if ($export) {
         Write-Host -ForegroundColor Yellow "Use Latest Database Export"
@@ -124,28 +131,30 @@ if (!$UseLatestBackup) {
     Write-Host -ForegroundColor Yellow "Create New Database Export"
     $uri = "$($stoAcc.PrimaryEndpoints.Blob)$stoToken"
     $blobCtName = "$($environment)backup".ToLowerInvariant()
-    $blobName = "$(\[datetime\]::Now.ToString('yyyyMMddHHmm')).bacpac"
-    New-BcDatabaseExport \`
-        -bcAuthContext $authContext \`
-        -environment $environment \`
-        -storageAccountSasUri $uri \`
-        -blobContainerName $blobCtName \`
+    $blobName = "$([datetime]::Now.ToString('yyyyMMddHHmm')).bacpac"
+    New-BcDatabaseExport `
+        -bcAuthContext $authContext `
+        -environment $environment `
+        -storageAccountSasUri $uri `
+        -blobContainerName $blobCtName `
         -blobName $blobName
 }
 Write-Host -ForegroundColor Yellow "Download Database Export"
 $uri = "$($stoAcc.PrimaryEndpoints.Blob)$blobCtName/$blobName$stoToken"
 $backupFile = Join-Path $env:TEMP $blobName
-Download-File \`
-    -sourceUrl $uri \`
+Download-File `
+    -sourceUrl $uri `
     -destinationFile $backupFile
+```
 
 # Create a multitenant container from the artifacts
 
 Much like described [here](/2021/02/28/running-business-central-in-docker-using-sql-on-the-host/), create a multitenant container called saas using the artifacts with the same version of your online tenant.
 
+```
 $containerName = "saas"
 $auth = "UserPassword"
-$credential = New-Object pscredential \`
+$credential = New-Object pscredential `
     -ArgumentList 'admin', $passwordSecret.SecretValue
 $licenseFile = $licenseFileSecret.SecretValue | Get-PlainText
 $databaseParams = @{
@@ -153,25 +162,27 @@ $databaseParams = @{
     "databaseInstance" = ""
     "databasePrefix" = "$($containerName)-"
     "databaseName" = "CRONUS"
-    "databaseCredential" = New-Object pscredential \`
+    "databaseCredential" = New-Object pscredential `
         -ArgumentList 'sa', $passwordSecret.SecretValue
     "multitenant" = $true
 }
-New-BcContainer @databaseParams -replaceExternalDatabases \`
-    -accept\_eula \`
-    -containerName "$containerName" \`
-    -credential $credential \`
-    -auth $auth \`
-    -artifactUrl $artifactUrl \`
-    -enableTaskScheduler \`
+New-BcContainer @databaseParams -replaceExternalDatabases `
+    -accept_eula `
+    -containerName "$containerName" `
+    -credential $credential `
+    -auth $auth `
+    -artifactUrl $artifactUrl `
+    -enableTaskScheduler `
     -licenseFile $licenseFile
+```
 
 # Restore the backup from your online environment
 
 Using the DAC framework, we can restore the downloaded .bacpac file to a name which consists of the database prefix (from above) and the tenant name (environment name).
 
+```
 $tenantId = $environment
-$dacdll = Get-Item "C:\\Program Files\\Microsoft SQL Server\\\*\\DAC\\bin\\Microsoft.SqlServer.Dac.dll"
+$dacdll = Get-Item "C:\Program Files\Microsoft SQL Server\*\DAC\bin\Microsoft.SqlServer.Dac.dll"
 if (!($dacdll)) {
     throw "DAC Framework is not installed"
 }
@@ -186,45 +197,49 @@ $conn = @(
 ) -join ";"
 Write-Host "Restoring Database from $backupFile as $databaseName"
 $AppimportBac = New-Object Microsoft.SqlServer.Dac.DacServices $conn
-$ApploadBac = \[Microsoft.SqlServer.Dac.BacPackage\]::Load($backupFile)
+$ApploadBac = [Microsoft.SqlServer.Dac.BacPackage]::Load($backupFile)
 $AppimportBac.ImportBacpac($ApploadBac, $databaseName)
+```
 
 # Install 3rd Party Apps
 
 Before mounting the tenant, we need to install the apps, which the tenant are depending on. This is done using an array of the apps we want to install:
 
+```
 $baseUrl = "https://businesscentralapps.blob.core.windows.net"
 $installApps = @(
     "$baseUrl/bingmaps-appsource/latest/apps.zip"
     "$baseUrl/helloworld-preview/latest/apps.zip"
 )
-Publish-BCContainerApp \`
-    -containerName $containerName \`
-    -appFile $installApps \`
-    -skipVerification \`
-    -sync \`
+Publish-BCContainerApp `
+    -containerName $containerName `
+    -appFile $installApps `
+    -skipVerification `
+    -sync `
     -install
+```
 
 # Remove Unknown Apps
 
 Having installed the known apps, we need to analyze if all necessary apps are present and detect which apps we have to remove from the Installed Apps table.
 
-$dockerApps = Get-BcContainerAppInfo \`
+```
+$dockerApps = Get-BcContainerAppInfo `
     -containerName $containerName
-$tenantApps = Get-BcInstalledExtensions \`
-    -bcAuthContext $authContext \`
+$tenantApps = Get-BcInstalledExtensions `
+    -bcAuthContext $authContext `
     -environment $environment 
 $allApps = $true
 $removeApps = $tenantApps | ForEach-Object {
-    $appId = $\_.id
-    $appName = $\_.DisplayName
-    $appPub = $\_.Publisher
-    $appVer = \[Version\]::new(
-        $\_.versionMajor,
-        $\_.versionMinor,
-        $\_.versionBuild,
-        $\_.versionRevision)
-    $app = $dockerApps | Where-Object { $\_.appid -eq $appid }
+    $appId = $_.id
+    $appName = $_.DisplayName
+    $appPub = $_.Publisher
+    $appVer = [Version]::new(
+        $_.versionMajor,
+        $_.versionMinor,
+        $_.versionBuild,
+        $_.versionRevision)
+    $app = $dockerApps | Where-Object { $_.appid -eq $appid }
     if (!($app)) {
         Write-Host "- $appName from $appPub version $appVer is missing"
         $appName
@@ -237,15 +252,17 @@ $removeApps = $tenantApps | ForEach-Object {
         $allApps = $false
     }
 }
+```
 
 and now remove the apps from the NAV App Published App and the NAV App Installed App tables:
 
+```
 if ($allApps) {
     Write-Host -ForegroundColor Green "All apps are present in container"
 }
 else {
-    Invoke-ScriptInBcContainer \`
-        -containerName $containerName \`
+    Invoke-ScriptInBcContainer `
+        -containerName $containerName `
         -scriptBlock {
             Param(
                 $databaseServer,
@@ -254,34 +271,36 @@ else {
                 $databaseName,
                 $removeApps)
             $removeApps | ForEach-Object {
-                Write-Host "Remove $\_"
-                Invoke-SqlCmdWithRetry \`
-                    -DatabaseServer $databaseServer \`
-                    -DatabaseInstance $databaseInstance \`
-                    -DatabaseName $databaseName \`
-                    -databaseCredentials $databaseCredential \`
+                Write-Host "Remove $_"
+                Invoke-SqlCmdWithRetry `
+                    -DatabaseServer $databaseServer `
+                    -DatabaseInstance $databaseInstance `
+                    -DatabaseName $databaseName `
+                    -databaseCredentials $databaseCredential `
                     -maxattempts 1 -Query "
-                DELETE FROM \[dbo\].\[NAV App Published App\]
-                WHERE Name = '$\_'
-                DELETE FROM \[dbo\].\[NAV App Installed App\]
-                WHERE Name = '$\_'
+                DELETE FROM [dbo].[NAV App Published App]
+                WHERE Name = '$_'
+                DELETE FROM [dbo].[NAV App Installed App]
+                WHERE Name = '$_'
                 GO"
         }
-    } -argumentList \`
+    } -argumentList `
         $databaseParams.databaseServer,
         $databaseParams.databaseInstance, 
         $databaseParams.databaseCredential,
         $databaseName,
         $removeApps
 }
+```
 
 # Mount and sync the tenant database
 
 The tenant database is now ready and we can mount and sync the database
 
+```
 Write-Host "Mount and sync tenant $tenantId"
-Invoke-ScriptInBcContainer \`
-    -containerName $containerName \`
+Invoke-ScriptInBcContainer `
+    -containerName $containerName `
     -scriptBlock { 
     Param(
         $databaseServer,
@@ -289,100 +308,111 @@ Invoke-ScriptInBcContainer \`
         $databaseCredential,
         $tenantId,
         $databaseName)
-    Mount-NavTenant \`
-        -ServerInstance $ServerInstance \`
-        -id $tenantId \`
-        -databaseserver $databaseServer \`
-        -databaseinstance $databaseInstance \`
-        -databasename $databaseName \`
-        -databaseCredentials $databaseCredential \`
-        -EnvironmentType Sandbox \`
-        -OverwriteTenantIdInDatabase \`
+    Mount-NavTenant `
+        -ServerInstance $ServerInstance `
+        -id $tenantId `
+        -databaseserver $databaseServer `
+        -databaseinstance $databaseInstance `
+        -databasename $databaseName `
+        -databaseCredentials $databaseCredential `
+        -EnvironmentType Sandbox `
+        -OverwriteTenantIdInDatabase `
         -Force
-    Sync-NavTenant \`
-        -ServerInstance $ServerInstance \`
-        -Tenant $tenantId \`
-        -Mode ForceSync \`
+    Sync-NavTenant `
+        -ServerInstance $ServerInstance `
+        -Tenant $tenantId `
+        -Mode ForceSync `
         -Force
-} -argumentList \`
+} -argumentList `
     $databaseServer,
     $databaseInstance,
     $databaseCredential,
     $tenantId,
     $databaseName
+```
 
 # Sync all apps
 
 After mounting and sync’ing the tenant, the tenant will not be ready, you will need sync and upgrade apps, and also upgrade the tenant. First, sync all apps:
 
-Get-NavContainerAppInfo \`
-    -containername $containerName \`
-    -tenant $tenantId \`
-    -tenantSpecificProperties \`
+```
+Get-NavContainerAppInfo `
+    -containername $containerName `
+    -tenant $tenantId `
+    -tenantSpecificProperties `
     -sort DependenciesFirst | ForEach-Object {
-        $syncState = $\_.SyncState.ToString()
-        $appName = $\_.Name
+        $syncState = $_.SyncState.ToString()
+        $appName = $_.Name
         if ($SyncState -eq "NotSynced") {
-            Sync-NavContainerApp \`
-                -containerName $containerName \`
-                -tenant $tenantId \`
-                -appName $appName \`
+            Sync-NavContainerApp `
+                -containerName $containerName `
+                -tenant $tenantId `
+                -appName $appName `
                 -Force
         }
 }
+```
 
 # Upgrade all apps
 
 Next up, run data upgrade for apps that needs it:
 
-Get-NavContainerAppInfo \`
-    -containername $containerName \`
-    -tenant $tenantId \`
-    -tenantSpecificProperties \`
+```
+Get-NavContainerAppInfo `
+    -containername $containerName `
+    -tenant $tenantId `
+    -tenantSpecificProperties `
     -sort DependenciesFirst | ForEach-Object {
-        if ($\_.NeedsUpgrade) {
-            Start-BcContainerAppDataUpgrade \`
-                -containerName $containerName \`
-                -tenant $tenantId \`
-                -appName $\_.Name
+        if ($_.NeedsUpgrade) {
+            Start-BcContainerAppDataUpgrade `
+                -containerName $containerName `
+                -tenant $tenantId `
+                -appName $_.Name
         }
 }
+```
 
 # Upgrade the tenant
 
 Next up, upgrade the tenant
 
-Invoke-ScriptInBcContainer \`
-    -containerName $containerName \`
+```
+Invoke-ScriptInBcContainer `
+    -containerName $containerName `
     -scriptblock { Param( $tenantId )
-        Start-NAVDataUpgrade \`
-            -ServerInstance $serverInstance \`
-            -Tenant $tenantId \`
-            -Force \`
-            -FunctionExecutionMode Serial \`
+        Start-NAVDataUpgrade `
+            -ServerInstance $serverInstance `
+            -Tenant $tenantId `
+            -Force `
+            -FunctionExecutionMode Serial `
             -SkipIfAlreadyUpgraded
-        Get-NAVDataUpgrade \`
-            -ServerInstance $serverInstance \`
-            -Tenant $tenantId \`
+        Get-NAVDataUpgrade `
+            -ServerInstance $serverInstance `
+            -Tenant $tenantId `
             -Progress
 } -argumentList $tenantId
+```
 
 # Create the user
 
 Last, but still necessary, create a user for login
 
-New-BcContainerBcUser \`
-    -containerName $containerName \`
-    -tenant $tenantId \`
-    -Credential $credential \`
-    -PermissionSetId 'SUPER' \`
+```
+New-BcContainerBcUser `
+    -containerName $containerName `
+    -tenant $tenantId `
+    -Credential $credential `
+    -PermissionSetId 'SUPER' `
     -ChangePasswordAtNextLogOn:$false
+```
 
 # Start the Web Client
 
 Starting the Web Client can be done using:
 
+```
 Start-Process "http://$containerName/BC?tenant=$tenantId"
+```
 
 and we should have the Web Client with our production environment
 

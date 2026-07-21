@@ -23,14 +23,18 @@ The Create-AlProjectFolderFromBCContainer function will extract the AL Source an
 
 The Create-AlProjectFolderFromBCContainer can be called with either:
 
-\-useBaseAppProperties
+```
+-useBaseAppProperties
+```
 
 or by specifying:
 
-\-id $appId \`
--publisher $appPublisher \`
--name $appName \`
+```
+-id $appId `
+-publisher $appPublisher `
+-name $appName `
 -version $appVersion
+```
 
 If you decide to use the baseapp properties, your new Base Application will inherit the id, name publisher and version from the existing Microsoft Base Application and you will be able to save the demo data from the container when publishing your new Base Application.
 
@@ -113,6 +117,7 @@ The value for to be specified in **\-replaceDependencies** should be a **hashtab
 
 Example:
 
+```
 $appId = "88b7902e-1655-4e7b-812e-ee9f0667b01b"
 $appPublisher = "Freddy Kristiansen"
 $appName = "MyBaseApp"
@@ -125,6 +130,7 @@ $replaceDependencies = @{
         "minversion" = $appVersion
     }
 }
+```
 
 Transferring this value will replace all dependencies to the Microsoft Base Application (437…) with the values I have defined above.
 
@@ -134,25 +140,26 @@ The **\-replaceDependencies** is also added to **Import-TestToolkitToBCContainer
 
 # The Script
 
+```
 $imageName = "bcinsider.azurecr.io/bcsandbox-master:w1-ltsc2019"
 $containerName = "mycontainer"
 $auth = "UserPassword"
 $credential = New-Object PSCredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-$licenseFile = "c:\\temp\\license.flf"
-$alProjectFolder = "C:\\ProgramData\\NavContainerHelper\\MyBaseApp"
+$licenseFile = "c:\temp\license.flf"
+$alProjectFolder = "C:\ProgramData\NavContainerHelper\MyBaseApp"
 
-New-BCContainer -accept\_eula \`
-                -imageName $imageName \`
-                -containerName $containerName \`
-                -auth $auth \`
-                -Credential $credential \`
-                -licenseFile $licenseFile \`
-                -updateHosts \`
-                -includeAL \`
+New-BCContainer -accept_eula `
+                -imageName $imageName `
+                -containerName $containerName `
+                -auth $auth `
+                -Credential $credential `
+                -licenseFile $licenseFile `
+                -updateHosts `
+                -includeAL `
                 -memoryLimit 10G
 
 $myModifiedObjects = @()
-$alFileStructure = { Param (\[string\] $type, \[int\] $id, \[string\] $name) 
+$alFileStructure = { Param ([string] $type, [int] $id, [string] $name) 
     if ($myModifiedObjects.Contains("$type$id")) {
         $folder = "Modified"
     }
@@ -163,13 +170,13 @@ $alFileStructure = { Param (\[string\] $type, \[int\] $id, \[string\] $name)
         $folder = "BaseApp"
     }
 
-    $name = -join ($name.ToCharArray() | Where-Object { \[char\]::IsLetterOrDigit($\_) })
+    $name = -join ($name.ToCharArray() | Where-Object { [char]::IsLetterOrDigit($_) })
     switch ($type) {
-        "dotnet" { "$folder\\$($name).al" }
-        ".rdlc"  { "\*\\layouts\\\*.rdlc" }
-        ".docx"  { "\*\\layouts\\\*.docx" }
-        ".xlf"   { "$folder\\$($name).xlf" }
-        default  { "$folder\\$($name).$($type).al" }
+        "dotnet" { "$folder\$($name).al" }
+        ".rdlc"  { "*\layouts\*.rdlc" }
+        ".docx"  { "*\layouts\*.docx" }
+        ".xlf"   { "$folder\$($name).xlf" }
+        default  { "$folder\$($name).$($type).al" }
     }
 }
 
@@ -178,13 +185,13 @@ $appPublisher = "Freddy Kristiansen"
 $appName = "MyBaseApp"
 $appVersion = "1.0.0.0"
 
-Create-AlProjectFolderFromBCContainer -containerName $containerName \`
-                                      -alProjectFolder $alProjectFolder \`
-                                      -useBaseLine \`
-                                      -id $appId \`
-                                      -publisher $appPublisher \`
-                                      -name $appName \`
-                                      -version $appVersion \`
+Create-AlProjectFolderFromBCContainer -containerName $containerName `
+                                      -alProjectFolder $alProjectFolder `
+                                      -useBaseLine `
+                                      -id $appId `
+                                      -publisher $appPublisher `
+                                      -name $appName `
+                                      -version $appVersion `
                                       -alFileStructure $alFileStructure
 
 $replaceDependencies = @{
@@ -196,25 +203,26 @@ $replaceDependencies = @{
     }
 }
 
-$app = Compile-AppInBCContainer -containerName $containerName \`
-                                -credential $credential \`
-                                -appProjectFolder $alProjectFolder \`
-                                -appOutputFolder $alProjectFolder \`
+$app = Compile-AppInBCContainer -containerName $containerName `
+                                -credential $credential `
+                                -appProjectFolder $alProjectFolder `
+                                -appOutputFolder $alProjectFolder `
                                 -UpdateSymbols
 
-Publish-NewApplicationToBCContainer -containerName $containerName \`
-                                    -appDotNetPackagesFolder (Join-Path $alProjectFolder ".netpackages") \`
-                                    -appFile $app \`
-                                    -credential $credential \`
-                                    -useNewDatabase \`
-                                    -restoreApps Yes \`
-                                    -doNotUseDevEndpoint \`
+Publish-NewApplicationToBCContainer -containerName $containerName `
+                                    -appDotNetPackagesFolder (Join-Path $alProjectFolder ".netpackages") `
+                                    -appFile $app `
+                                    -credential $credential `
+                                    -useNewDatabase `
+                                    -restoreApps Yes `
+                                    -doNotUseDevEndpoint `
                                     -replaceDependencies $replaceDependencies
 
-Import-TestToolkitToBCContainer -containerName $containerName \`
-                                -includeTestLibrariesOnly \`
-                                -credential $credential \`
+Import-TestToolkitToBCContainer -containerName $containerName `
+                                -includeTestLibrariesOnly `
+                                -credential $credential `
                                 -replaceDependencies $replaceDependencies
+```
 
 After this you can use the script here [http://freddysblog.com/2019/09/19/using-apis-on-containers/](/2019/09/19/using-apis-on-containers/) to import and apply a configuration package.
 

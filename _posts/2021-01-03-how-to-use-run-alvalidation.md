@@ -77,55 +77,65 @@ _The following is a few examples on how to run validation for your app depending
 
 ## Example #1 – a new submission – a single app
 
-Run-AlValidation \`
-    -licenseFile $licenseFile \`
-    -apps "C:\\apps\\my.app" \`
-    -affixes "fab" \`
+```
+Run-AlValidation `
+    -licenseFile $licenseFile `
+    -apps "C:\apps\my.app" `
+    -affixes "fab" `
     -countries "us"
+```
 
 Will validate **c:\\apps\\my.app** requiring affix **fab** for country **us** on the **current** version of Business Central and the version **indicated by app.json**.
 
 ## Example #2 – an update to your app – a single app
 
-Run-AlValidation \`
-    -licenseFile $licenseFile \`
-    -previousApps "c:\\prevApps\\my.app" \`
-    -apps "C:\\apps\\my.app" \`
-    -affixes "fab" \`
+```
+Run-AlValidation `
+    -licenseFile $licenseFile `
+    -previousApps "c:\prevApps\my.app" `
+    -apps "C:\apps\my.app" `
+    -affixes "fab" `
     -countries "us"
+```
 
 Will validate **c:\\apps\\my.app** as an update to **c:\\prevApps\\my.app** requiring affix **fab** for country **us** on the **current** version of Business Central and the version **indicated by app.json**.
 
 ## Example #3 – a new submission – an app with a library app
 
-Run-AlValidation \`
-    -licenseFile $licenseFile \`
-    -apps @("C:\\apps\\my.app", "c:\\apps\\mylib.app") \`
-    -affixes @("fab", "con") \`
+```
+Run-AlValidation `
+    -licenseFile $licenseFile `
+    -apps @("C:\apps\my.app", "c:\apps\mylib.app") `
+    -affixes @("fab", "con") `
     -countries @("us", "ca")
+```
 
 Will validate **c:\\apps\\my.app** with a library app **c:\\apps\\mylib.app** requiring affixes **fab** or **con** for countries **us** and **ca** on the **current** version of Business Central and the version **indicated by app.json**.
 
 ## Example #4 – a update to your apps – an app with a library app
 
-Run-AlValidation \`
-    -licenseFile $licenseFile \`
-    -previousApps @("c:\\prevApps\\my.app", "c:\\prevApps\\mylib.app") \`
-    -apps @("C:\\apps\\my.app", "c:\\apps\\mylib.app") \`
-    -affixes @("fab", "con") \`
+```
+Run-AlValidation `
+    -licenseFile $licenseFile `
+    -previousApps @("c:\prevApps\my.app", "c:\prevApps\mylib.app") `
+    -apps @("C:\apps\my.app", "c:\apps\mylib.app") `
+    -affixes @("fab", "con") `
     -countries @("us", "ca")
+```
 
 Will validate **c:\\apps\\my.app** with a library app **c:\\apps\\mylib.app** as an update to **c:\\prevApps\\my.app** and **c:\\prevApps\\mylib.app** requiring affixes **fab** or **con** for countries **us** and **ca** on the **current** version of Business Central and the version **indicated by app.json**.
 
 ## Example #5 – a update to your apps – an app with a library app and a third party dependency app
 
-Run-AlValidation \`
-    -licenseFile $licenseFile \`
-    -installApps @("c:\\thirdparty\\licensing.app") \`
-    -previousApps @("c:\\prevApps\\my.app", "c:\\prevApps\\mylib.app") \`
-    -apps @("C:\\apps\\my.app", "c:\\apps\\mylib.app") \`
-    -affixes @("fab", "con") \`
+```
+Run-AlValidation `
+    -licenseFile $licenseFile `
+    -installApps @("c:\thirdparty\licensing.app") `
+    -previousApps @("c:\prevApps\my.app", "c:\prevApps\mylib.app") `
+    -apps @("C:\apps\my.app", "c:\apps\mylib.app") `
+    -affixes @("fab", "con") `
     -countries @("us", "ca")
+```
 
 Will validate **c:\\apps\\my.app** with a library app **c:\\apps\\mylib.app** and a dependency to **c:\\thirdparty\\licensing.app** as an update to **c:\\prevApps\\my.app** and **c:\\prevApps\\mylib.app** requiring affixes **fab** or **con** for countries **us** and **ca** on the **current** version of Business Central and the version **indicated by app.json**.
 

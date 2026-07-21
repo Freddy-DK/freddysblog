@@ -25,6 +25,7 @@ This means that all computers running a version of Docker, which doesn’t suppo
 
 Open a command prompt and run **docker version**.
 
+```
 Client: Docker Engine - Community
  Version: 19.03.5
  API version: 1.40
@@ -43,6 +44,7 @@ Server: Docker Engine - Community
   Built: Wed Nov 13 07:36:50 2019
   OS/Arch: windows/amd64
   Experimental: false
+```
 
 if the docker client or server version is **lower than 18.03.0** – **you need to update**.
 
@@ -50,15 +52,19 @@ if the docker client or server version is **lower than 18.03.0** – **you need 
 
 NavContainerHelper also displays the docker version when creating containers:
 
+```
 NavContainerHelper is version 0.6.4.20
 NavContainerHelper is running as administrator
 Host is Microsoft Windows 10 Pro - ltsc2019
 Docker Client Version is 19.03.5
 Docker Server Version is 19.03.5
+```
 
 You should be able to see this in the build output of the agents used by your CI/CD pipelines. With the next version of NavContainerHelper, you will also see a warning if your version of docker is prior to 18.03.0:
 
+```
 WARNING: Microsoft container registries will switch to TLS v1.2 very soon and your version of Docker does not support this. You should install a new version of docker asap (version 18.03.0 or later)
+```
 
 This will be visible in the output of your build agent in CI/CD scenarios when using NavContainerHelper.
 

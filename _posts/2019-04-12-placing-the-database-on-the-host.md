@@ -62,9 +62,11 @@ and the flipside:
 
 First of all, you need the .mdf + .ldf files. There is a function in NavContainerHelper called **Extract-FilesFromNavContainerImage** which can extract selected files from a container image. Running this code:
 
+```
 $imageName = "mcr.microsoft.com/businesscentral/onprem:w1-ltsc2019"
-$path = "c:\\temp\\hostdbfolder"
+$path = "c:\temp\hostdbfolder"
 Extract-FilesFromNavContainerImage -imageName $imageName -path $path -extract database -force
+```
 
 will place the database files from the latest BusinessCentral on premises container in c:\\temp\\hostdbfolder\\databases.
 
@@ -72,17 +74,19 @@ There is another function called **Extract-FilesFromStoppedNavContainer**, which
 
 Creating a container, using a new database created by attaching the .mdf + .ldf files on the host, can be done using this script:
 
+```
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $containerName = "mytemp"
 $attachdbSetupDatabaseScript = "https://raw.githubusercontent.com/Microsoft/nav-docker/master/override/attachdb/SetupDatabase.ps1"
-New-NavContainer -accept\_eula \`
-                 -imageName $imageName \`
-                 -containerName $containerName \`
-                 -additionalParameters @("--volume $path\\databases:c:\\mydb") \`
-                 -myScripts @($attachdbSetupDatabaseScript) \`
-                 -auth "NavUserPassword" \`
-                 -Credential $credential \`
+New-NavContainer -accept_eula `
+                 -imageName $imageName `
+                 -containerName $containerName `
+                 -additionalParameters @("--volume $path\databases:c:\mydb") `
+                 -myScripts @($attachdbSetupDatabaseScript) `
+                 -auth "NavUserPassword" `
+                 -Credential $credential `
                  -updateHosts
+```
 
 Basically, you share the folder with the .mdf + .ldf files to c:\\mydb inside the container and then you override the SetupDatabase script with the script located here:  [https://raw.githubusercontent.com/Microsoft/nav-docker/master/override/attachdb/SetupDatabase.ps1](https://raw.githubusercontent.com/Microsoft/nav-docker/master/override/attachdb/SetupDatabase.ps1)
 

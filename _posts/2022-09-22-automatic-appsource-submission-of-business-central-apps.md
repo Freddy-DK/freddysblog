@@ -25,42 +25,52 @@ In order to get started, you need a way to authenticate to the Partner Center in
 
 To get started with S2S, you need to complete Step 1 from here: [https://docs.microsoft.com/en-us/azure/marketplace/azure-app-apis](https://docs.microsoft.com/en-us/azure/marketplace/azure-app-apis). After this, you should have a ClientID and a ClientSecret, stored in a KeyVault and the actual authentication is done using the **New-BcAuthContext** function from BcContainerHelper:
 
-$authcontext = New-BcAuthContext \`
-    -clientID ($PublisherAppClientIdSecret.SecretValue | Get-PlainText) \`
-    -clientSecret $PublisherAppClientSecretSecret.SecretValue \`
-    -Scopes "https://api.partner.microsoft.com/.default" \`
+```
+$authcontext = New-BcAuthContext `
+    -clientID ($PublisherAppClientIdSecret.SecretValue | Get-PlainText) `
+    -clientSecret $PublisherAppClientSecretSecret.SecretValue `
+    -Scopes "https://api.partner.microsoft.com/.default" `
     -TenantID "<your AAD tenant>"
+```
 
 ### User Impersonation
 
 If you, for some reason, can’t or won’t create an AAD App registration for S2S authentication, then the other option for getting an authcontext is to use user impersonation.
 
-$authcontext = New-BcAuthContext \`
-    -includeDeviceLogin \`
-    -Scopes "https://api.partner.microsoft.com/user\_impersonation offline\_access" \`
+```
+$authcontext = New-BcAuthContext `
+    -includeDeviceLogin `
+    -Scopes "https://api.partner.microsoft.com/user_impersonation offline_access" `
     -tenantID "<your AAD tenant>"
+```
 
 This will invoke the device flow and display a code, which you need to use when authenticating to [https://aka.ms/devicelogin](https://aka.ms/devicelogin)
 
 Now, you will have an authcontext, which contains an access token and a refresh token. The access token can typically be used for authentication for 60 minutes. The refreshtoken can be used to get a new access token for typically 90 days and you can store the refresh token in a keyvault to be able to get a new authContext based on the refreshtoken by using this code:
 
-$authcontext = New-BcAuthContext \`
-    -refreshToken $refreshtoken \`
-    -Scopes "https://api.partner.microsoft.com/user\_impersonation offline\_access" \`
+```
+$authcontext = New-BcAuthContext `
+    -refreshToken $refreshtoken `
+    -Scopes "https://api.partner.microsoft.com/user_impersonation offline_access" `
     -tenantID "<your AAD tenant>"
+```
 
 ## AuthContext
 
 The **$authContext** needs to be specified to all functions and you should never need to look insider the Auth Context. Reason for carrying around the AuthContext and not “just” an AccessToken is, that the AccessToken expires after 60 minutes and frequently, pipelines/scripts/tests run longer than 60 minutes. For this reason, the AuthContext contains enough information to renew the AccessToken and all functions in ContainerHelper will check and renew if necessary.  If you ever need to create an authorization header based on the AuthContext, you can do it like this:
 
+```
 $authContext = Renew-BcAuthContext -bcAuthContext $authContext 
 $headers += @{ "Authorization" = "Bearer $($authcontext.AccessToken)" }
+```
 
 But again, you won’t need to for the scenarios below, the authcontext is automatically renewed in all functions and uses either the ClientID and ClientSecret or the refresh token to renew.
 
 When you have an AuthContext – you can validate by running:
 
+```
 Get-AppSourceProduct -authContext $authcontext -silent
+```
 
 And you should see a list of all your apps in AppSource.
 
@@ -72,20 +82,27 @@ The **New-AppSourceSubmission** function does include an **\-autoPromote** param
 
 With your AuthContext from above, you can get all your products by using:
 
+```
 $products = Get-AppSourceProduct -authContext $authcontext -silent
+```
 
 and get the Product Id of the product you want to work with:
 
+```
 $productName = 'BingMaps.AppSource'
-$productId = ($products | Where-Object { $\_.name -eq $productName }).id
+$productId = ($products | Where-Object { $_.name -eq $productName }).id
+```
 
 If you want to get full details of the product, you can use:
 
+```
 $product = Get-AppSourceProduct -authContext $authcontext -productId $productId -includeAll
+```
 
 Now, you can inspect properties of $product. Exaamples:
 
-$product.FeatureAvailability\[0\].marketStates
+```
+$product.FeatureAvailability[0].marketStates
 
 marketCode state   
 ---------- -----   
@@ -102,7 +119,9 @@ DK         Enabled
 EE         Disabled
 ES         Disabled 
 ...
+```
 
+```
 $product.Property
 
 resourceType          : AzureProperty
@@ -125,12 +144,14 @@ marketingOnlyChange   : False
 globalAmendmentTerms  : 
 customAmendments      : {}
 leveledIndustries     : 
-leveledCategories     : @{geolocation=System.Object\[\]}
+leveledCategories     : @{geolocation=System.Object[]}
 @odata.etag           : "0800a065-0000-0800-0000-62ee043a0000"
 id                    : 009f7479-f506-216f-d445-5315d5fb9e62
+```
 
 You can also get information about your latest submission by using:
 
+```
 Get-AppSourceSubmission -authContext $authcontext -productId $productId -includeWorkflowDetails
 GET https://api.partner.microsoft.com/v1.0/ingestion/products/5fbe0803-a545-4504-b41a-d9d158112360/submissions
 GET https://api.partner.microsoft.com/v1.0/ingestion/products/5fbe0803-a545-4504-b41a-d9d158112360/submissions/1152921505695125040
@@ -148,9 +169,10 @@ releaseNumber      : 28
 friendlyName       : Submission 28
 areResourcesReady  : True
 id                 : 1152921505695125040
-WorkflowDetails    : {@{type=Push; state=Success; targetEnvironment=Preview; workflowSteps=System.Object\[\]; startDateTimeInUtc=2022-08-04T10:37:37.4038218; 
-                     completeDateTimeInUtc=2022-08-04T10:51:26.8132496}, @{type=Push; state=Success; targetEnvironment=Live; workflowSteps=System.Object\[\]; 
+WorkflowDetails    : {@{type=Push; state=Success; targetEnvironment=Preview; workflowSteps=System.Object[]; startDateTimeInUtc=2022-08-04T10:37:37.4038218; 
+                     completeDateTimeInUtc=2022-08-04T10:51:26.8132496}, @{type=Push; state=Success; targetEnvironment=Live; workflowSteps=System.Object[]; 
                      startDateTimeInUtc=2022-08-04T10:51:57.0499235; completeDateTimeInUtc=2022-08-04T13:53:30.8277395}}
+```
 
 The state/substate of your submission can have the following values:
 
@@ -161,12 +183,13 @@ The state/substate of your submission can have the following values:
 
 You can also monitor a submission while running using the Get-AppSourceSubmission function:
 
+```
 $submission = Get-AppSourceSubmission -authContext $authcontext -productId $productId -includeWorkflowDetails
 GET https://api.partner.microsoft.com/v1.0/ingestion/products/5fbe0803-a545-4504-b41a-d9d158112360/submissions
 GET https://api.partner.microsoft.com/v1.0/ingestion/products/5fbe0803-a545-4504-b41a-d9d158112360/submissions/1152921505695131860
 GET https://api.partner.microsoft.com/v1.0/ingestion/products/5fbe0803-a545-4504-b41a-d9d158112360/submissions/1152921505695131860/workflowdetails
 
-PS C:\\> $submission.WorkflowDetails
+PS C:\> $submission.WorkflowDetails
 
 type                  : Push
 state                 : InProgress
@@ -184,15 +207,17 @@ workflowSteps         : {@{name=Certification; state=NotStarted; startDateTimeIn
                         state=NotStarted; startDateTimeInUtc=0001-01-01T00:00:00; completeDateTimeInUtc=0001-01-01T00:00:00}}
 startDateTimeInUtc    : 0001-01-01T00:00:00
 completeDateTimeInUtc : 0001-01-01T00:00:00
+```
 
 The workflowDetails is an array, consisting of two PSCustomObjects. The first is the details about the preview (before pressing Go Live button) and the second is the details about the Go Live (after pressing Go Live button). A little later, the workflowDetails will look like this:
 
+```
 $submission = Get-AppSourceSubmission -authContext $authcontext -productId $productId -includeWorkflowDetails
 GET https://api.partner.microsoft.com/v1.0/ingestion/products/5fbe0803-a545-4504-b41a-d9d158112360/submissions
 GET https://api.partner.microsoft.com/v1.0/ingestion/products/5fbe0803-a545-4504-b41a-d9d158112360/submissions/1152921505695131860
 GET https://api.partner.microsoft.com/v1.0/ingestion/products/5fbe0803-a545-4504-b41a-d9d158112360/submissions/1152921505695131860/workflowdetails
 
-PS C:\\> $submission
+PS C:\> $submission
 
 resourceType       : Submission
 state              : Published
@@ -206,8 +231,8 @@ releaseNumber      : 29
 friendlyName       : Submission 29
 areResourcesReady  : True
 id                 : 1152921505695131860
-WorkflowDetails    : {@{type=Push; state=Success; targetEnvironment=Preview; workflowSteps=System.Object\[\]; startDateTimeInUtc=2022-08-06T06:37:47.6696794; 
-                     completeDateTimeInUtc=2022-08-06T06:47:35.721944}, @{type=Push; state=NotStarted; targetEnvironment=Live; workflowSteps=System.Object\[\]; 
+WorkflowDetails    : {@{type=Push; state=Success; targetEnvironment=Preview; workflowSteps=System.Object[]; startDateTimeInUtc=2022-08-06T06:37:47.6696794; 
+                     completeDateTimeInUtc=2022-08-06T06:47:35.721944}, @{type=Push; state=NotStarted; targetEnvironment=Live; workflowSteps=System.Object[]; 
                      startDateTimeInUtc=0001-01-01T00:00:00; completeDateTimeInUtc=0001-01-01T00:00:00}}
 type                  : Push
 state                 : Success
@@ -225,6 +250,7 @@ workflowSteps         : {@{name=Certification; state=NotStarted; startDateTimeIn
                         state=NotStarted; startDateTimeInUtc=0001-01-01T00:00:00; completeDateTimeInUtc=0001-01-01T00:00:00}}
 startDateTimeInUtc    : 0001-01-01T00:00:00
 completeDateTimeInUtc : 0001-01-01T00:00:00
+```
 
 This means that your partner center UI will look like this:
 
@@ -236,8 +262,9 @@ And you can press **Go Live** (or run **Promote-AppSourceSubmission**) in order 
 
 At this state, you can submit a new version for validation – you do not need to take the submission live. Submitting a new version of your app is done using the **New-AppSourceSubmission** function:
 
+```
 New-AppSourceSubmission -authContext $authContext -productId $product.Id -appFile $appFile -silent
-Extracting C:\\Users\\freddyk\\Downloads\\BingMaps.AppSource-main-Apps-3.0.164.0\\Freddy Kristiansen\_BingMaps.AppSource\_3.0.164.0.app
+Extracting C:\Users\freddyk\Downloads\BingMaps.AppSource-main-Apps-3.0.164.0\Freddy Kristiansen_BingMaps.AppSource_3.0.164.0.app
 Automated validation........ Success
 Preview Creation.......... Success
 Publisher Signoff Success
@@ -255,6 +282,7 @@ releaseNumber      : 31
 friendlyName       : Submission 31
 areResourcesReady  : True
 id                 : 1152921505695131645
+```
 
 If you include the **\-autoPromote** flag, the function will wait and automatically promote the submission to production / Go Live. If you include the **doNotWait** flag, the function will not wait for completion. If you include the **autoPromote** AND the **doNotWait** flag, the function will (in the current version) **still wait** for the preview creation to be complete and then promote the submission. For a later version of the API (when **IsAutoPromote** is supported for Business Central Apps) the function will be rewritten to utilize the API’s support of autoPromote instead of waiting and calling the API again.
 

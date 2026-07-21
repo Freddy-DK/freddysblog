@@ -55,6 +55,7 @@ very very helpful when converting and coding in YAML.
 
 While writing this blog post, the CI.yml file looks like this:
 
+```
 variables:
   build.clean: all
   platform: x64
@@ -68,11 +69,11 @@ steps:
   inputs:
     errorActionPreference: silentlyContinue
     targetType: inline
-    script: 'if ("$(version)" -eq "")  { Write-Host "Version not defined, using current container version"; Write-Host "##vso\[task.setvariable variable=version\]current" } else { Write-Host "Using $(version) container version" }'
+    script: 'if ("$(version)" -eq "")  { Write-Host "Version not defined, using current container version"; Write-Host "##vso[task.setvariable variable=version]current" } else { Write-Host "Using $(version) container version" }'
 
 - task: PowerShell@2
   displayName: 'Login to bcinsider repository'
-  condition: and(succeeded(),or(eq(variables\['version'\],'nextminor'),eq(variables\['version'\],'nextmajor')))
+  condition: and(succeeded(),or(eq(variables['version'],'nextminor'),eq(variables['version'],'nextmajor')))
   inputs:
     targetType: inline
     script: 'docker login "bcinsider.azurecr.io" -u "$(bcInsiderUsername)" -p "$(bcinsiderPassword)"'
@@ -88,44 +89,44 @@ steps:
   inputs:
     targetType: filePath
     filePath: 'scriptsCreate-Container.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -licenseFile "$(LicenseFile)"'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -licenseFile "$(LicenseFile)"'
 
 - task: PowerShell@2
   displayName: 'Compile App'
   inputs:
     targetType: filePath
     filePath: 'scriptsCompile-App.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildProjectFolder "$(Build.Repository.LocalPath)" -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("app")'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildProjectFolder "$(Build.Repository.LocalPath)" -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("app")'
     failOnStderr: true
 
 - task: PowerShell@2
   displayName: 'Sign App'
-  condition: and(succeeded(),ne(variables\['CodeSignPfxFile'\],''),ne(variables\['CodeSignPfxPassword'\],''))
+  condition: and(succeeded(),ne(variables['CodeSignPfxFile'],''),ne(variables['CodeSignPfxPassword'],''))
   inputs:
     targetType: filePath
     filePath: 'scriptsSign-App.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("app") -PfxFile (ConvertTo-SecureString -String "$(CodeSignPfxFile)" -AsPlainText -Force) -PfxPassword (ConvertTo-SecureString -String "$(CodeSignPfxPassword)" -AsPlainText -Force)'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("app") -PfxFile (ConvertTo-SecureString -String "$(CodeSignPfxFile)" -AsPlainText -Force) -PfxPassword (ConvertTo-SecureString -String "$(CodeSignPfxPassword)" -AsPlainText -Force)'
 
 - task: PowerShell@2
   displayName: 'Publish App'
   inputs:
     targetType: filePath
     filePath: 'scriptsPublish-App.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("app") -skipVerification:("$(CodeSignPfxFile)$(CodeSignPfxPassword)" -eq "")'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("app") -skipVerification:("$(CodeSignPfxFile)$(CodeSignPfxPassword)" -eq "")'
 
 - task: PowerShell@2
   displayName: 'Import TestToolkit'
   inputs:
     targetType: filePath
     filePath: 'scriptsImport-TestToolkit.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force)))'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force)))'
 
 - task: PowerShell@2
   displayName: 'Compile Test App'
   inputs:
     targetType: filePath
     filePath: 'scriptsCompile-App.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildProjectFolder "$(Build.Repository.LocalPath)" -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("test")'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildProjectFolder "$(Build.Repository.LocalPath)" -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("test")'
     failOnStderr: true
 
 - task: PowerShell@2
@@ -133,14 +134,14 @@ steps:
   inputs:
     targetType: filePath
     filePath: 'scriptsPublish-App.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("test") -skipVerification'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -buildArtifactFolder "$(Build.ArtifactStagingDirectory)" -appFolders @("test") -skipVerification'
 
 - task: PowerShell@2
   displayName: 'Run Tests'
   inputs:
     targetType: filePath
     filePath: 'scriptsRun-Tests.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -TestResultsFile (Join-Path "$(System.DefaultWorkingDirectory)" "TestResults.xml") -test "unittests"'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -TestResultsFile (Join-Path "$(System.DefaultWorkingDirectory)" "TestResults.xml") -test "unittests"'
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results'
@@ -160,7 +161,8 @@ steps:
   inputs:
     targetType: filePath
     filePath: 'scriptsRemove-Container.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force)))'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force)))'
+```
 
 Very straightforward. As you can see, the YAML file consists of a series of tasks.
 
@@ -172,23 +174,27 @@ The script will have to have a Param section, matching the parameters from the b
 
 Example, the Param section of the Create-Container script looks like:
 
+```
 Param(
-    \[ValidateSet('AzureDevOps','Local')\]
-    \[string\] $run = "AzureDevOps",
-    \[ValidateSet('current','nextminor','nextmajor')\]
-    \[string\] $version = "current",
-    \[ValidateSet('bld','dev')\]
-    \[string\] $type = "bld",
-    \[Parameter(Mandatory=$true)\]
-    \[pscredential\] $credential,
-    \[String\] $licenseFile = ""
+    [ValidateSet('AzureDevOps','Local')]
+    [string] $run = "AzureDevOps",
+    [ValidateSet('current','nextminor','nextmajor')]
+    [string] $version = "current",
+    [ValidateSet('bld','dev')]
+    [string] $type = "bld",
+    [Parameter(Mandatory=$true)]
+    [pscredential] $credential,
+    [String] $licenseFile = ""
 )
+```
 
 Matching the parameters transferred in CI.yml:
 
-\-version "$(version)"
--credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) 
+```
+-version "$(version)"
+-credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) 
 -licenseFile "$(LicenseFile)"'
+```
 
 It is possible to run things in parallel, but in our case, the pipeline is really a single threaded thing, which cannot be parallelized.
 
@@ -210,12 +216,14 @@ I have decided NOT to include a CI.json (pipeline export format) in the template
 
 Let’s have a look at the very first step in the pipeline, which task is to set the version pipeline variable to current, if it hasn’t been set already:
 
-\- task: PowerShell@2
+```
+- task: PowerShell@2
   displayName: 'Defaulting container version'
   inputs:
     errorActionPreference: silentlyContinue
     targetType: inline
-    script: 'if ("$(version)" -eq "")  { Write-Host "Version not defined, using current container version"; Write-Host "##vso\[task.setvariable variable=version\]current" } else { Write-Host "Using $(version) container version" }'
+    script: 'if ("$(version)" -eq "")  { Write-Host "Version not defined, using current container version"; Write-Host "##vso[task.setvariable variable=version]current" } else { Write-Host "Using $(version) container version" }'
+```
 
 In the Visual Designer you add a Task to the Agent Job and search for PowerShell (not Azure PowerShell, not Service Fabric PowerShell, not PowerShell on Target Machines – just PowerShell). Add this task and fill out the properties:
 
@@ -232,12 +240,14 @@ The above step in the Visual Designer will look something like this:
 
 The second step in the pipeline is logging into the bcinsider repo, if you are building against nextminor or nextmajor. It looks like
 
-\- task: PowerShell@2
+```
+- task: PowerShell@2
   displayName: 'Login to bcinsider repository'
-  condition: and(succeeded(),or(eq(variables\['version'\],'nextminor'),eq(variables\['version'\],'nextmajor')))
+  condition: and(succeeded(),or(eq(variables['version'],'nextminor'),eq(variables['version'],'nextmajor')))
   inputs:
     targetType: inline
     script: 'docker login "bcinsider.azurecr.io" -u "$(bcInsiderUsername)" -p "$(bcinsiderPassword)"'
+```
 
 This task is also a PowerShell task and the only difference to the first step is that this step only executes if the conditions are met.  
 The conditions here are:
@@ -253,11 +263,13 @@ In the Visual Designer, you find the conditions under Control Options:
 
 The third step in the pipeline will install the NavContainerHelper module if not already installed. It looks like
 
-\- task: PowerShell@2
+```
+- task: PowerShell@2
   displayName: 'Install NavContainerHelper'
   inputs:
     targetType: filePath
     filePath: 'scriptsInstall-NavContainerHelper.ps1'
+```
 
 Again, a PowerShell task, but in this case, it is not an inline script, instead the targetType is a filePath and the FilePath refers to a script in the script folder. The conditions are default, meaning that all previous tasks have to succeed before this task is run.
 
@@ -267,12 +279,14 @@ Again, a PowerShell task, but in this case, it is not an inline script, instead 
 
 The forth step in the pipeline is creating the build container. This also uses a filePath but this one comes with arguments:
 
-\- task: PowerShell@2
+```
+- task: PowerShell@2
   displayName: 'Create Build Container'
   inputs:
     targetType: filePath
     filePath: 'scriptsCreate-Container.ps1'
-    arguments: '-version "$(version)" -credential (\[PSCredential\]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -licenseFile "$(LicenseFile)"'
+    arguments: '-version "$(version)" -credential ([PSCredential]::new("$(Username)", (ConvertTo-SecureString -String "$(Password)" -AsPlainText -Force))) -licenseFile "$(LicenseFile)"'
+```
 
 The arguments are using the exact same syntax as the aguments in the Visual Designer, just remove the ‘.
 
@@ -288,11 +302,13 @@ Note that the Remove Build Container task is using always() in conditions, meani
 
 After running the tests, the tests results needs to be published. As the run tests task will store the test results in XUnit format in the file TestResults.xml, the task for publishing the tests looks like:
 
-\- task: PublishTestResults@2
+```
+- task: PublishTestResults@2
   displayName: 'Publish Test Results'
   inputs:
     testResultsFormat: XUnit
     testResultsFiles: TestResults.xml
+```
 
 In the Visual Designer, it is really just as simple
 
@@ -302,11 +318,13 @@ In the Visual Designer, it is really just as simple
 
 If everything succeeded, we need to publish the build artifact (our app) where it can be accessed after the build. For that we use the Publish Build Artifact task
 
-\- task: PublishBuildArtifacts@1
+```
+- task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: app'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)app'
     ArtifactName: app
+```
 
 Like when publishing tests results, the Visual Designer task is just as easy
 

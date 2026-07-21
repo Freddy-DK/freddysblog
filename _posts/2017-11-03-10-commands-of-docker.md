@@ -20,7 +20,9 @@ docker images will show a list of the current images available on the host:
 
 In this list, you can see, that I only have one image on my machine, which is the w1 version of the devpreview.
 
+```
 microsoft/dynamics-nav:devpreview
+```
 
 As you probably know, docker is using a layering technology, meaning that when I have this image I also have all the components for the images, on which this relies. I just haven’t combined the tags of these versions. If I perform a docker pull of microsoft/windowsservercore (which is one of the base images of the NAV on Docker image) you will see that Docker says that the layers already exists and now we have another image in the list:  
 [![](/assets/images/2017/10-commands-of-docker/033ac-dockerimages2-1.png)](/assets/images/2017/10-commands-of-docker/033ac-dockerimages2.png)
@@ -76,6 +78,7 @@ docker inspect is used to inspect a container or an image:
 
 When inspecting an image, one of the interesting pieces are the Labels:
 
+```
 "Labels": {
     "country": "W1",
     "created": "201710262345",
@@ -88,6 +91,7 @@ When inspecting an image, one of the interesting pieces are the Labels:
     "tag": "0.0.3.1",
     "version": "11.0.18712.0"
  }
+```
 
 Here you will find some useful information like:
 
@@ -101,6 +105,7 @@ Here you will find some useful information like:
 
 If you inspect a container instead of an image, you will have other things to inspect like healthcheck, environment variables and network:
 
+```
 "Networks": {
     "nat": {
     "IPAMConfig": null,
@@ -117,6 +122,7 @@ If you inspect a container instead of an image, you will have other things to in
     "MacAddress": "00:15:5d:f4:8d:56",
     "DriverOpts": null
 }
+```
 
 **Note:** every issue created on the github repository: [http://www.github.com/microsoft/nav-docker](http://www.github.com/microsoft/nav-docker) should be accompanied with a docker inspect output of the container not working.  If it isn’t included, it is probably the first things you will be asked for.
 

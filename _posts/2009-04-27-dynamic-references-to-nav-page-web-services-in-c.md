@@ -23,34 +23,43 @@ Last week I stumbled over a very interesting blog called [crowsprogramming](http
 
 which in details shows how to ask the read the WSDL, build a service description and compile it into an assembly, and it basically consists of 3 methods:
 
-/// <summary>  
-/// Builds an assembly from a web service description.  
-/// The assembly can be used to execute the web service methods.  
-/// </summary>  
-/// <param name=”webServiceUri”>Location of WSDL.</param>  
-/// <returns>A web service assembly.</returns>  
-public static Assembly BuildAssemblyFromWSDL(Uri webServiceUri)  
+```
+/// <summary>
+/// Builds an assembly from a web service description.
+/// The assembly can be used to execute the web service methods.
+/// </summary>
+/// <param name="webServiceUri">Location of WSDL.</param>
+/// <returns>A web service assembly.</returns>
+public static Assembly BuildAssemblyFromWSDL(Uri webServiceUri)
+```
 
-/// <summary>  
-/// Builds the web service description importer, which allows us to generate a proxy class based on the  
-/// content of the WSDL described by the XmlTextReader.  
-/// </summary>  
-/// <param name=”xmlreader”>The WSDL content, described by XML.</param>  
-/// <returns>A ServiceDescriptionImporter that can be used to create a proxy class.</returns>  
+```
+/// <summary>
+/// Builds the web service description importer, which allows us to generate a proxy class based on the
+/// content of the WSDL described by the XmlTextReader.
+/// </summary>
+/// <param name="xmlreader">The WSDL content, described by XML.</param>
+/// <returns>A ServiceDescriptionImporter that can be used to create a proxy class.</returns>
 private static ServiceDescriptionImporter BuildServiceDescriptionImporter(XmlTextReader xmlreader)
+```
 
-/// <summary>  
-/// Compiles an assembly from the proxy class provided by the ServiceDescriptionImporter.  
-/// </summary>  
-/// <param name=”descriptionImporter”></param>  
-/// <returns>An assembly that can be used to execute the web service methods.</returns>  
+```
+/// <summary>
+/// Compiles an assembly from the proxy class provided by the ServiceDescriptionImporter.
+/// </summary>
+/// <param name="descriptionImporter"></param>
+/// <returns>An assembly that can be used to execute the web service methods.</returns>
 private static Assembly CompileAssembly(ServiceDescriptionImporter descriptionImporter)
+```
 
 When you call the first method with our NAV WebServices URL, it reads the WSDL, creates a CodeDom of the proxy classes, compiles the proxy and returns an assembly, which you can reflect over – all it takes is the following line of code:
 
-// create an assembly from the web service description  
-Assembly webServiceAssembly = BuildAssemblyFromWSDL(  
-new Uri(“[http://localhost:7047/DynamicsNAV/WS/CRONUS\_International\_Ltd/Page/Customer”));](http://localhost:7047/DynamicsNAV/WS/CRONUS_International_Ltd/Page/Customer"\)\);)
+```
+// create an assembly from the web service description
+Assembly webServiceAssembly = BuildAssemblyFromWSDL(
+```
+
+`new Uri("`[`http://localhost:7047/DynamicsNAV/WS/CRONUS_International_Ltd/Page/Customer"));`](http://localhost:7047/DynamicsNAV/WS/CRONUS_International_Ltd/Page/Customer"\)\);)
 
 ### Type weak
 
@@ -58,28 +67,32 @@ So, what can you really do with an Assembly in your hand…
 
 You cannot use statements like:
 
-if (customer.No == “10000”)
+`if (customer.No == "10000")`
 
 if the webservice isn’t added to the project. How should Visual Studio know that there is a No field in customer. So any Web References you add dynamically will only be there to reflect over and use via reflection, but you can do everything using reflection – it is just harder.
 
 First of all – we can enumerate the public types in the assembly:
 
-// Create Service Reference  
-Type\[\] types = webServiceAssembly.GetExportedTypes();  
-foreach (Type type in types)  
+```
+// Create Service Reference
+Type[] types = webServiceAssembly.GetExportedTypes();
+foreach (Type type in types)
 Console.WriteLine(type.ToString());
+```
 
 running this, will output the following:
 
-Customer\_Service  
-Customer  
-Blocked  
-Copy\_Sell\_to\_Addr\_to\_Qte\_From  
-Application\_Method  
-Reserve  
-Shipping\_Advice  
-Customer\_Filter  
-Customer\_Fields
+```
+Customer_Service
+Customer
+Blocked
+Copy_Sell_to_Addr_to_Qte_From
+Application_Method
+Reserve
+Shipping_Advice
+Customer_Filter
+Customer_Fields
+```
 
 Which are the public types from an assembly, which is the proxy to a NAV Customer Page Webservice. Knowing that all pages follows the same pattern and that everything in Edit In Excel uses reflection over these classes anyway, it really became too compelling to rip out the Web Service References and make everything dynamic (that post will follow this one).
 
@@ -87,38 +100,46 @@ Which are the public types from an assembly, which is the proxy to a NAV Custome
 
 I am not going to go into detail about how reflection works and what you can do with reflection, but I will show some examples of how to work with the dynamic assembly. First of all we want to create our service class:
 
-Type serviceType = webServiceAssembly.GetType(“Customer\_Service”);  
+```
+Type serviceType = webServiceAssembly.GetType("Customer_Service");
 object service = Activator.CreateInstance(serviceType);
+```
 
-if using static web references, this would be Customer\_Service service = new Customer\_Service();
+if using static web references, this would be `Customer_Service service = new Customer_Service();`
 
 Now we need to set the UseDefaultCredentials property to true:
 
-PropertyInfo useDefaultCredentials = service.GetType().GetProperty(“UseDefaultCredentials”);  
-useDefaultCredentials.SetValue(service, (object)true, new object\[\] { });
+```
+PropertyInfo useDefaultCredentials = service.GetType().GetProperty("UseDefaultCredentials");
+useDefaultCredentials.SetValue(service, (object)true, new object[] { });
+```
 
 in other words, get the info-class about the property based on the type, and call the setValue on the propertyinfo, specifying the object instance you want to set the value in, the value and an empty array, specifying that there are no parameters for this call.
 
-Using static web references, this would be service.UseDefaultCredentials = true;
+Using static web references, this would be `service.UseDefaultCredentials = true;`
 
 Next thing we want to do, is to call ReadMultiple and get all customers:
 
-MethodInfo readMultiple = service.GetType().GetMethod(“ReadMultiple”);  
-object\[\] customers = (object\[\])readMultiple.Invoke(service, new object\[\] { null, null, 0 });
+```
+MethodInfo readMultiple = service.GetType().GetMethod("ReadMultiple");
+object[] customers = (object[])readMultiple.Invoke(service, new object[] { null, null, 0 });
+```
 
 You see the picture – get the method info-class based on the type, and invoke the instance based method, specifying the instance and an object\[\] which contains the parameters you want to use.
 
-In the static world this would be Customer\[\] customers = service.ReadMultiple(null, null, 0);
+In the static world this would be `Customer[] customers = service.ReadMultiple(null, null, 0);`
 
 Now, we have an array of objects and the objects are of type Customer – but we don’t know about the customer type – only from reflection, so if we want to write the names of all customers we have to do something like:
 
-Type customerType = webServiceAssembly.GetType(“Customer”);  
-PropertyInfo no = customerType.GetProperty(“No”);  
-PropertyInfo name = customerType.GetProperty(“Name”);  
-foreach (object customer in customers)  
-Console.WriteLine(no.GetValue(customer, new object\[\] { }) + ” ” + name.GetValue(customer, new object\[\] { }));
+```
+Type customerType = webServiceAssembly.GetType("Customer");
+PropertyInfo no = customerType.GetProperty("No");
+PropertyInfo name = customerType.GetProperty("Name");
+foreach (object customer in customers)
+Console.WriteLine(no.GetValue(customer, new object[] { }) + " " + name.GetValue(customer, new object[] { }));
+```
 
-Which in a static implementation would be foreach(Customer customer in customers) Console.Writeline(customer.No + “ “ + customer.Name);
+Which in a static implementation would be `foreach(Customer customer in customers) Console.Writeline(customer.No + " " + customer.Name);`
 
 ### When to use dynamic Web References?
 

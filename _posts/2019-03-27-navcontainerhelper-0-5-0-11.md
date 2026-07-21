@@ -40,19 +40,21 @@ The new version has two new functions for communicating with APIs:
 
 The best way to describe the functions is to display how Setup-NavContainerTestUsers works in the new version:
 
+```
 $appfile = Join-Path $env:TEMP "CreateTestUsers.app"
-Download-File -sourceUrl "http://aka.ms/Microsoft\_createtestusers\_13.0.0.0.app" -destinationFile $appfile
+Download-File -sourceUrl "http://aka.ms/Microsoft_createtestusers_13.0.0.0.app" -destinationFile $appfile
 Publish-NavContainerApp -containerName $containerName -appFile $appFile -skipVerification -install -sync
 
 $companyId = Get-NavContainerApiCompanyId -containerName $containerName -tenant $tenant -credential $credential
 
 $parameters = @{ 
   "name" = "CreateTestUsers"
-  "value" = (\[System.Runtime.InteropServices.Marshal\]::PtrToStringAuto(\[System.Runtime.InteropServices.Marshal\]::SecureStringToBSTR($Password)))
+  "value" = ([System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)))
 }
 Invoke-NavContainerApi -containerName $containerName -tenant $tenant -credential $credential -APIPublisher "Microsoft" -APIGroup "Setup" -APIVersion "beta" -CompanyId $companyId -Method "POST" -Query "testUsers" -body $parameters | Out-Null
 
 UnPublish-NavContainerApp -containerName $containerName -appName CreateTestUsers -unInstall
+```
 
 Yes, I could have used **Invoke-RestMethod** directly, but then I would have to handle authentication and other things in all locations.
 
@@ -72,25 +74,27 @@ This will make git disover the changes in your objects.
 
 Try to run this:
 
+```
 $imageName = "bcinsider.azurecr.io/bconprem:w1-ltsc2019"
-$myalfolder = "c:\\temp\\myal"
+$myalfolder = "c:\temp\myal"
 $containerName = "temp"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 
-New-NavContainer -accept\_eula -containerName $containerName -imageName $imageName -includeCSide -licensefile C:\\temp\\license.flf -auth NavUserPassword -Credential $credential -updateHosts
+New-NavContainer -accept_eula -containerName $containerName -imageName $imageName -includeCSide -licensefile C:\temp\license.flf -auth NavUserPassword -Credential $credential -updateHosts
 $version = Get-NavContainerNavVersion -containerOrImageName $containerName
-$baseAppFolder = "C:\\ProgramData\\NavContainerHelper\\Extensions\\Original-$version-al"
+$baseAppFolder = "C:\ProgramData\NavContainerHelper\Extensions\Original-$version-al"
 if (Test-Path $myalfolder) {
-  remove-item -Path (Join-Path $myalfolder "\*") -Recurse -Force
+  remove-item -Path (Join-Path $myalfolder "*") -Recurse -Force
 }
 else {
   New-Item $myalfolder -ItemType Directory
 }
 Set-Location $myalfolder
 & git init
-Copy-Item -Path (Join-Path $baseAppFolder "\*") -Destination $myalfolder
+Copy-Item -Path (Join-Path $baseAppFolder "*") -Destination $myalfolder
 & git add .
 & git commit --message "baseapp"
+```
 
 Now open $myalfolder in VSCode and you will see all your files:
 
@@ -100,8 +104,10 @@ You should also see that the source control branch indicates no changes.
 
 Now you import your C/AL object modifications (or just modify a few objects) and then run this script (Remember that everything must be compiled in C/Side):
 
+```
 $ModifiedFolder = Convert-ModifiedObjectsToAl -containerName $containerName -sqlCredential $credential -doNotUseDeltas
-Copy-Item -Path (Join-Path $ModifiedFolder "\*") -Destination $myalfolder
+Copy-Item -Path (Join-Path $ModifiedFolder "*") -Destination $myalfolder
+```
 
 As you can see this script just re-exports everything as AL and copies it on top of your baseline. Git will compare and discover what you actually changed:
 

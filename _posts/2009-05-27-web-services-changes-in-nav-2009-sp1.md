@@ -61,17 +61,21 @@ In some cases this have caused problems. Primarily because when you read a custo
 
 In NAV 2009 SP1 that has changed. Visual Studio of course still uses <field>Specified and string field <> NULL to determine what comes over the wire, but on the NAV side we only persist what you actually changed, so in NAV 2009 SP1 you can do:
 
-Customer customer = custService.Read(“10000”);  
-customer.Name = “The Cannon Group, Inc.”;  
+```
+Customer customer = custService.Read("10000");
+customer.Name = "The Cannon Group, Inc.";
 custService.Update(ref customer);
+```
 
 and it will only update the name of the Customer. In NAV 2009 you would have to either set all the other fields in the customer to NULL or <field>Specified to false in order to get the same behavior – OR you could do like this:
 
-Customer readCustomer = custService.Read(“10000”);  
-Customer updateCustomer = new Customer();  
-updateCustomer.Key = readCustomer.Key;  
-updateCustomer.Name = “The Cannon Group, Inc.”;  
+```
+Customer readCustomer = custService.Read("10000");
+Customer updateCustomer = new Customer();
+updateCustomer.Key = readCustomer.Key;
+updateCustomer.Name = "The Cannon Group, Inc.";
 custService.Update(ref updateCustomer);
+```
 
 Which also will update only the name (just a small trick, instantiating a new Customer() will have all string fields set to NULL and <field>Specified for other fields set to false – and now we can just set the fields we want to change. Remember setting <field>Specified to true for all non-string fields.).
 

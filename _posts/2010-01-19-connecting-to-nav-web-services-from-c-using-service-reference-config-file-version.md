@@ -51,84 +51,108 @@ You have to change a couple of things in the app.config file before using these.
 
 Under every binding configuration setting you will find a section like this:
 
-<security mode=”None”>  
-<transport clientCredentialType=”None” proxyCredentialType=”None”  
-realm=””>  
-<extendedProtectionPolicy policyEnforcement=”Never” />  
-</transport>  
-<message clientCredentialType=”UserName” algorithmSuite=”Default” />  
+```
+<security mode="None">
+<transport clientCredentialType="None" proxyCredentialType="None"
+realm="">
+<extendedProtectionPolicy policyEnforcement="Never" />
+</transport>
+<message clientCredentialType="UserName" algorithmSuite="Default" />
 </security>
+```
 
 this does not match whats needed for NAV Web Services. NAV Web Services absolutely do not run without security. You will have to change this section with:
 
-<security mode=”TransportCredentialOnly”>  
-<transport clientCredentialType=”Windows”  />  
+```
+<security mode="TransportCredentialOnly">
+<transport clientCredentialType="Windows"  />
 </security>
+```
 
 which matches the security mode and transport of the binding used by NAV when using Windows Authentication (SPNEGO). If the Service Tier is setup to run Ntlm – the ClientCredentialType needs to be “Ntlm” in the config file.
 
 Furthermore you will have to add a behavior indicating that the Web Service Listener is allowed to use Delegation on your credentials (between </bindings> and <client>:
 
-<behaviors>  
-<endpointBehaviors>  
-<behavior name=”allowDelegation”>  
-<clientCredentials>  
-<windows allowedImpersonationLevel=”Delegation”  
-allowNtlm=”true”/>  
-</clientCredentials>  
-</behavior>  
-</endpointBehaviors>  
+```
+<behaviors>
+<endpointBehaviors>
+<behavior name="allowDelegation">
+<clientCredentials>
+<windows allowedImpersonationLevel="Delegation"
+allowNtlm="true"/>
+</clientCredentials>
+</behavior>
+</endpointBehaviors>
 </behaviors>
+```
 
 and last, but not least you will have to add this behavior to all endpoints like:
 
-<endpoint address=”[http://localhost:7047/DynamicsNAV/WS/CRONUS%20International%20Ltd/Page/Customer”](http://localhost:7047/DynamicsNAV/WS/CRONUS%20International%20Ltd/Page/Customer")  
-          binding=”basicHttpBinding”  
-bindingConfiguration=”Customer\_Binding”  
-behaviorConfiguration=”allowDelegation”  
-contract=”CustomerPageRef.Customer\_Port”  
-name=”Customer\_Port” />
+`<endpoint address="`[`http://localhost:7047/DynamicsNAV/WS/CRONUS%20International%20Ltd/Page/Customer"`](http://localhost:7047/DynamicsNAV/WS/CRONUS%20International%20Ltd/Page/Customer")  
+          
+
+```
+binding="basicHttpBinding"
+bindingConfiguration="Customer_Binding"
+behaviorConfiguration="allowDelegation"
+contract="CustomerPageRef.Customer_Port"
+name="Customer_Port" />
+```
 
 If we strip away all the unnecessary defaults and modify a couple of things by hand, the **ENTIRE** config file could look like this:
 
-<?xml version=”1.0″ encoding=”utf-8″ ?>  
-<configuration>  
-<system.serviceModel>  
-<bindings>  
-<basicHttpBinding>  
-<binding name=”NavWSBinding”>  
-<security mode=”TransportCredentialOnly”>  
-<transport clientCredentialType=”Windows”  />  
-</security>  
-</binding>  
-</basicHttpBinding>  
-</bindings>  
-<behaviors>  
-<endpointBehaviors>  
-<behavior name=”allowDelegation”>  
-<clientCredentials>  
-<windows allowedImpersonationLevel=”Delegation”  
-allowNtlm=”true”/>  
-</clientCredentials>  
-</behavior>  
-</endpointBehaviors>  
-</behaviors>  
-<client>  
-<endpoint address=”[http://localhost:7047/DynamicsNAV/WS/CRONUS%20International%20Ltd/Page/Customer”](http://localhost:7047/DynamicsNAV/WS/CRONUS%20International%20Ltd/Page/Customer")  
-                binding=”basicHttpBinding”  
-bindingConfiguration=”NavWSBinding”  
-behaviorConfiguration=”allowDelegation”  
-contract=”CustomerPageRef.Customer\_Port”  
-name=”Customer\_Port” />  
-<endpoint address=”[http://localhost:7047/DynamicsNAV/WS/SystemService”](http://localhost:7047/DynamicsNAV/WS/SystemService")  
-                binding=”basicHttpBinding”  
-bindingConfiguration=”NavWSBinding”  
-behaviorConfiguration=”allowDelegation”  
-contract=”SystemServiceRef.SystemService\_Port”  
-name=”SystemService\_Port” />  
-</client>  
-</system.serviceModel>  
+```
+<?xml version="1.0″ encoding="utf-8″ ?>
+<configuration>
+<system.serviceModel>
+<bindings>
+<basicHttpBinding>
+<binding name="NavWSBinding">
+<security mode="TransportCredentialOnly">
+<transport clientCredentialType="Windows"  />
+</security>
+</binding>
+</basicHttpBinding>
+</bindings>
+<behaviors>
+<endpointBehaviors>
+<behavior name="allowDelegation">
+<clientCredentials>
+<windows allowedImpersonationLevel="Delegation"
+allowNtlm="true"/>
+</clientCredentials>
+</behavior>
+</endpointBehaviors>
+</behaviors>
+<client>
+<endpoint address="
+```
+
+[`http://localhost:7047/DynamicsNAV/WS/CRONUS%20International%20Ltd/Page/Customer"`](http://localhost:7047/DynamicsNAV/WS/CRONUS%20International%20Ltd/Page/Customer")  
+                
+
+```
+binding="basicHttpBinding"
+bindingConfiguration="NavWSBinding"
+behaviorConfiguration="allowDelegation"
+contract="CustomerPageRef.Customer_Port"
+name="Customer_Port" />
+<endpoint address="
+```
+
+[`http://localhost:7047/DynamicsNAV/WS/SystemService"`](http://localhost:7047/DynamicsNAV/WS/SystemService")  
+                
+
+```
+binding="basicHttpBinding"
+bindingConfiguration="NavWSBinding"
+behaviorConfiguration="allowDelegation"
+contract="SystemServiceRef.SystemService_Port"
+name="SystemService_Port" />
+</client>
+</system.serviceModel>
 </configuration>
+```
 
 Confused?
 
@@ -136,72 +160,94 @@ Confused?
 
 First a couple of using statements (including the two reference namespaces) and the main body of a console app:
 
-using System;  
-using System.Net;  
-using testAppWCF2.SystemServiceRef;  
+```
+using System;
+using System.Net;
+using testAppWCF2.SystemServiceRef;
 using testAppWCF2.CustomerPageRef;
+```
 
-namespace testAppWCF2  
-{  
-class Program  
-{  
-static void Main(string\[\] args)  
-{  
-// main program code  
-}  
-}  
+```
+namespace testAppWCF2
+{
+class Program
+{
+static void Main(string[] args)
+{
+// main program code
 }
+}
+}
+```
 
 The main code follows.
 
 First, connect to the System Web Service and list all companies:
 
-string baseURL = “[http://localhost:7047/DynamicsNAV/WS/”;](http://localhost:7047/DynamicsNAV/WS/";)
+`string baseURL = "`[`http://localhost:7047/DynamicsNAV/WS/";`](http://localhost:7047/DynamicsNAV/WS/";)
 
-// Create the SystemService Client  
-SystemService\_PortClient systemService = new SystemService\_PortClient(“SystemService\_Port”, baseURL + “SystemService”);
+```
+// Create the SystemService Client
+SystemService_PortClient systemService = new SystemService_PortClient("SystemService_Port", baseURL + "SystemService");
+```
 
-Console.WriteLine(“Companies:”);  
-string\[\] companies = systemService.Companies();  
-foreach (string company in companies)  
-Console.WriteLine(company);  
-string cur = companies\[0\];
+```
+Console.WriteLine("Companies:");
+string[] companies = systemService.Companies();
+foreach (string company in companies)
+Console.WriteLine(company);
+string cur = companies[0];
+```
 
 Note, that when creating a System Service Client, I specify the name of an endpoint configuration and a URL. I didn’t have to specify anything, then all defaults would be taken from the Config file, but I like to show how you can calculate the URL and specify that at runtime.
 
 Now I have the company I want to use in _cur_ and the way I create a URL to the Customer page is by doing:
 
-string customerPageURL = baseURL + Uri.EscapeDataString(cur) + “/Page/Customer”;  
-Console.WriteLine(“nURL of Customer Page: ” + customerPageURL);
+```
+string customerPageURL = baseURL + Uri.EscapeDataString(cur) + "/Page/Customer";
+Console.WriteLine("nURL of Customer Page: " + customerPageURL);
+```
 
 and then I can create a Service Class to the Customer Page by specifying the config section and a URL again:
 
-// Create the SystemService Client  
-Customer\_PortClient customerService = new Customer\_PortClient(“Customer\_Port”, customerPageURL);
+```
+// Create the SystemService Client
+Customer_PortClient customerService = new Customer_PortClient("Customer_Port", customerPageURL);
+```
 
 and using this, I read customer 10000 and output the name:
 
-Customer customer10000 = customerService.Read(“10000”);  
-Console.WriteLine(“nName of Customer 10000: ” + customer10000.Name);
+```
+Customer customer10000 = customerService.Read("10000");
+Console.WriteLine("nName of Customer 10000: " + customer10000.Name);
+```
 
 Last, but not least – lets create a filter and read all customers in GB that has Location Code set to RED or BLUE:
 
-Customer\_Filter filter1 = new Customer\_Filter();  
-filter1.Field = Customer\_Fields.Country\_Region\_Code;  
-filter1.Criteria = “GB”;
+```
+Customer_Filter filter1 = new Customer_Filter();
+filter1.Field = Customer_Fields.Country_Region_Code;
+filter1.Criteria = "GB";
+```
 
-Customer\_Filter filter2 = new Customer\_Filter();  
-filter2.Field = Customer\_Fields.Location\_Code;  
-filter2.Criteria = “RED|BLUE”;
+```
+Customer_Filter filter2 = new Customer_Filter();
+filter2.Field = Customer_Fields.Location_Code;
+filter2.Criteria = "RED|BLUE";
+```
 
-Console.WriteLine(“nCustomers in GB served by RED or BLUE warehouse:”);  
-Customer\_Filter\[\] filters = new Customer\_Filter\[\] { filter1, filter2 };  
-Customer\[\] customers = customerService.ReadMultiple(filters, null, 0);  
-foreach (Customer customer in customers)  
+```
+Console.WriteLine("nCustomers in GB served by RED or BLUE warehouse:");
+Customer_Filter[] filters = new Customer_Filter[] { filter1, filter2 };
+Customer[] customers = customerService.ReadMultiple(filters, null, 0);
+foreach (Customer customer in customers)
 Console.WriteLine(customer.Name);
+```
 
-Console.WriteLine(“nTHE END”);  
+```
+Console.WriteLine("nTHE END");
 Console.ReadLine();
+```
 
 As you can see the code is actually as simple as the Web Reference version, but the config file complicates things a lot. All of the above will output the following to a console prompt (on my machine running NAV 2009SP1 W1)
 
@@ -211,7 +257,7 @@ As you can see the code is actually as simple as the Web Reference version, but 
 
 BTW – this sample will by default run Windows Authentication. If you want to specify a different user you will need to set the ClientCredential property like this:
 
-customerService.ClientCredentials.Windows.ClientCredential = new NetworkCredential(“user”, “password”, “domain”);
+`customerService.ClientCredentials.Windows.ClientCredential = new NetworkCredential("user", "password", "domain");`
 
 You would need to set this on each Service Client you create.
 

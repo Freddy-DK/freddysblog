@@ -27,7 +27,9 @@ Perf testing is slightly different.
 
 If you investigate the settings in the perf test solution you will find a setting called _NAVClientService_, which is set to
 
+```
 https:///NAV/WebClient/cs
+```
 
 cs?
 
@@ -59,11 +61,13 @@ Lets follow the flow when we run the CreateAndPostSalesOrder:
 
 The Test Method looks like this:
 
-\[TestMethod\]
+```
+[TestMethod]
 public void CreateAndPostSalesOrder()
 {
     TestScenario.Run(OrderProcessorUserContextManager, TestContext, RunCreateAndPostSalesOrder);
 }
+```
 
 _TestScenario.Run_ is a helper function, which takes a _UserContextManager_, a _TestContext_ and the actual test method as parameters.
 
@@ -75,6 +79,7 @@ _TestContext_ is the test context provided by Visual Studio Load Test Framework.
 
 Let’s look at what TestScenario.Run actually does:
 
+```
 public static void Run(UserContextManager manager, TestContext testContext, Action action, string actionName = null)
 {
     var userContext = manager.GetUserContext(testContext);
@@ -84,6 +89,7 @@ public static void Run(UserContextManager manager, TestContext testContext, Acti
     userContext.WaitForReady();
     manager.ReturnUserContext(testContext, userContext);
 }
+```
 
 Line by line:
 
@@ -102,9 +108,11 @@ The _UserContextManager_ is also responsible for distributing users between mult
 
 The two methods you want to override are
 
+```
 ///
 /// Get the UserName for the current virtual user
 ///
+```
 
 /// current test context /// protected abstract string GetUserName(TestContext testContext); ///  
 /// Create a new user context for the current virtual user ///
@@ -138,6 +146,7 @@ Opening a Page is not an interaction the user typically is doing. The typical in
 
 With this in mind, lets look at the RunCreateAndPostSalesOrder code:
 
+```
 public void RunCreateAndPostSalesOrder(UserContext userContext)
 {
     // Invoke using the new sales order action on Role Center
@@ -166,56 +175,75 @@ public void RunCreateAndPostSalesOrder(UserContext userContext)
     // Close the page
     TestScenario.ClosePage(TestContext, userContext, newSalesOrderPage);
 }
+```
 
 The first thing that happens here is:
 
+```
 userContext.RoleCenterPage.Action("Sales Order").InvokeCatchForm()
+```
 
 Locate the Sales Order Action on the Role Center, Invoke it and catch the Form that it opens.
 
 This call is encapsulated in a call to EnsurePage, which basically checks whether the page opened by the action is the SalesOrderPage. If this is not the case, the method will throw an exception.
 
+```
 var newSalesOrderPage = userContext.EnsurePage(SalesOrderPageId, userContext.RoleCenterPage.Action("Sales Order").InvokeCatchForm());
+```
 
 This means that we can continue our test scenario flow, knowing that newSalesOrderPage is indeed the Sales Order Page.
 
 The first thing we do in the newSalesOrderPage is to activate the No. field. It is the responsibility of the display target to activate the first control and since we are the display target, we have to do this:
 
+```
 newSalesOrderPage.Control("No.").Activate();
+```
 
 Next thing is activating the Customer control which, as all NAV users will know, means that the actual record is created and the Sales Order No. is filled out. After activating the Customer control, we can inspect the No. control and get the new Sales Order No. (and write it to the test output).
 
+```
 newSalesOrderPage.Control("Customer").Activate();
 var newSalesOrderNo = newSalesOrderPage.Control("No.").StringValue;
 TestContext.WriteLine("Created Sales Order No. {0}", newSalesOrderNo);
+```
 
 Next thing is to simulate the user pressing the drop down button and select a random customer. In this sample we don’t actually invoke the drop down but instead we select a random customer from the list page that lies behind the drop down.
 
+```
 var custno = TestScenario.SelectRandomRecordFromListPage(TestContext, CustomerListPageId, userContext, "No.");
+```
 
 Next thing – set the value of the customer in the Customer field:
 
+```
 TestScenario.SaveValueAndIgnoreWarning(TestContext, userContext, newSalesOrderPage.Control("Customer"), custno);
+```
 
 The _SaveValueAndIgnoreWarning_ is a method, which will save the value in a field (with delay) and if that action causes a dialog to popup, it automatically tries to press Ignore. If there isn’t an ignore button on the dialog, the function will throw and the test will fail. This is to ensure that stuff like credit limit doesn’t prevent our tests from running.
 
 After setting the Customer, set the _External Document No._ to the customer no as well (or any random number really):
 
+```
 TestScenario.SaveValueWithDelay(newSalesOrderPage.Control("External Document No."), custno);
+```
 
 _SaveValueWithDelay_ will save the value in a control and sleep for 400ms. This delay is set in _DelayTiming.cs_ and can of course be changed.
 
 The next thing that happens in not really a user interaction, but it is ensuring that we don’t have any validation errors before starting to add lines to the sales order:
 
+```
 userContext.ValidateForm(newSalesOrderPage);
+```
 
 Next up is adding the lines, in the sample we add a random number of lines:
 
+```
 int noOfLines = SafeRandom.GetRandomNext(2, 6);
 for (int line = 0; line < noOfLines; line++)
 {
     AddSalesOrderLine(userContext, newSalesOrderPage, line);
 }
+```
 
 In the AddSalesOrderLine it does really the same things as above. Only difference is getting the current line and adding a think delay after filling out the line.
 
@@ -225,11 +253,14 @@ After this, check for validation errors, post the order and close the page.
 
 When dealing with lines (repeaters), you need to find the repeater and then find the right line. In the sample project this is done by:
 
+```
 // Get Line
-var itemsLine = newSalesOrderPage.Repeater().DefaultViewport\[line\];
+var itemsLine = newSalesOrderPage.Repeater().DefaultViewport[line];
+```
 
 If you are going to add more than 5 lines, you will need to scroll down to the desired line (exactly like a user would do in the UI) and then get the desired line. In the NAVLoadTest repository you will find a sample on how this is done:
 
+```
 var repeater = newSalesOrderPage.Repeater();
 var rowCount = repeater.Offset + repeater.DefaultViewport.Count;
 if (line >= rowCount)
@@ -238,36 +269,47 @@ if (line >= rowCount)
     userContext.InvokeInteraction(new ScrollRepeaterInteraction(repeater, 1));
 }
 var rowIndex = (int)(line - repeater.Offset);
-var itemsLine = repeater.DefaultViewport\[rowIndex\];
+var itemsLine = repeater.DefaultViewport[rowIndex];
+```
 
 If you look into the Repeater() method, it is an Extension method to the ClientLogicalForm and finds the first ClientRepeaterControl in the control tree under the page (including sub pages).
 
+```
 return form.ContainedControls.OfType().First();
+```
 
 If you want to find a different repeater (if multiple exists) you will have to write your own extension method to do that.
 
 After getting the Repeater, we need to find the correct line, potentially scrolling down and then get the desired line. The line has controls just like the page, meaning that you can do stuff like this on a line:
 
+```
 // set Type = Item
 TestScenario.SaveValueWithDelay(itemsLine.Control("Type"), "Item");
+```
 
 ### Posting the Order
 
 Posting the order seems straightforward, but it is a little more complicated than. Locate the **Post…** action and invoke the action:
 
+```
 postConfirmationDialog = newSalesOrderPage.Action("Post...").InvokeCatchDialog();
+```
 
 On the postConfirmationDialog, locate the OK button and press that.
 
+```
 ClientLogicalForm dialog = userContext.CatchDialog(postConfirmationDialog.Action("OK").Invoke);
+```
 
 If pressing OK on the confirmation dialog causes a dialog to popup, press No on that:
 
+```
 if (dialog != null)
 {
     // The order has been posted and moved to the posted invoices tab, do you want to open...
     dialog.Action("No").Invoke();
 }
+```
 
 You probably got the picture now, every time the user is expected to do something, you need to code that.
 

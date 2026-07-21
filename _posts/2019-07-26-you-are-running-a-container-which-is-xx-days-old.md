@@ -11,8 +11,10 @@ permalink: /2019/07/26/you-are-running-a-container-which-is-xx-days-old/
 
 Recently, when running an instance of a Microsoft Dynamics NAV Docker image from the docker hub, you will get a message like:
 
+```
 You are running a container which is 78 days old.
 Microsoft recommends that you always run the latest version of our containers.
+```
 
 What does this mean? what happens if you just ignore this? and what can you do about it?
 

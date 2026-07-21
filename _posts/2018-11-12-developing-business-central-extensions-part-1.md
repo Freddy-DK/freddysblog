@@ -49,8 +49,10 @@ If you do not install Docker, you will need to setup your sandbox environment el
 
 On your Windows Development machine, open PowerShell ISE and run
 
+```
 Set-ExecutionPolicy unrestricted
-Install-Module -Name “AzureRM” -Force
+Install-Module -Name "AzureRM" -Force
+```
 
 If you get a question about updating NuGet, you will need to answer Yes.
 
@@ -76,12 +78,16 @@ Select Visual Studio Code as Git’s default editor during installation Wizard.
 
 Configure your user name and email in git by starting a command prompt and type:
 
+```
 git config --global user.name ""
 git config --global user.email ""
+```
 
 **Note**, in order to make authentication work against my Azure DevOps repository, I had to update my credential manager with the latest version from [https://github.com/Microsoft/Git-Credential-Manager-for-Windows/releases](https://github.com/Microsoft/Git-Credential-Manager-for-Windows/releases) and run
 
+```
 git config --global credential.helper manager
+```
 
 in a command prompt afterwards.
 
@@ -95,20 +101,25 @@ Having Installed the other prerequisites, the easiest way to create your Azure K
 
 Open PowerShell ISE and run
 
+```
 Add-AzureRmAccount -Environment 'AzureCloud'
 Set-AzureRmContext -SubscriptionID ''
+```
 
 where is the subscription id of your Azure Subscription. This will ask you to login to your Azure Subscription.
 
 After this, you can create a Resource Group and an Azure Key Vault using:
 
+```
 New-AzureRmResourceGroup -Name "" -Location ""
 New-AzureRmKeyVault -Name "" -ResourceGroupName "" -Location "" -Sku Standard
+```
 
 where you need to replace , and with the values of your choice.
 
 Now, you need to set **Username** and **Password** secrets and you will need to create empty secrets for **LicenseFile**, **CodeSignPfxFile** and **CodeSignPfxPassword**:
 
+```
 $Username = "admin"
 $Password = ""
 Set-AzureKeyVaultSecret -VaultName "" -Name Username            -SecretValue (ConvertTo-SecureString -String $Username -AsPlainText -Force)
@@ -116,13 +127,16 @@ Set-AzureKeyVaultSecret -VaultName "" -Name Password            -SecretValue (Co
 Set-AzureKeyVaultSecret -VaultName "" -Name LicenseFile         -SecretValue (new-object System.Security.SecureString)
 Set-AzureKeyVaultSecret -VaultName "" -Name CodeSignPfxFile     -SecretValue (new-object System.Security.SecureString)
 Set-AzureKeyVaultSecret -VaultName "" -Name CodeSignPfxPassword -SecretValue (new-object System.Security.SecureString)
+```
 
 where should be replaced by the password you want to use for your containers. You can also modify the username if needed.
 
 You can retrieve these values again using:
 
+```
 $Username = (Get-AzureKeyVaultSecret -VaultName "" -Name Username).SecretValueText
 $Password = (Get-AzureKeyVaultSecret -VaultName "" -Name Password).SecretValue
+```
 
 Where $Username will be of type string and $Password will be of type SecureString.
 

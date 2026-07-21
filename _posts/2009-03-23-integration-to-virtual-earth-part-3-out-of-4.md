@@ -35,7 +35,7 @@ In the customer card open the site actions and add an action called View Area Ma
 
 Switch to code view and add the following line to the action:
 
-HYPERLINK(‘[http://localhost/mysite/default.htm?latitude=’+FORMAT(Latitude,0,2)+’&longitude=’+FORMAT(Longitude,0,2)+’&zoom=10&#8217](http://localhost/mysite/default.htm?latitude=’+FORMAT\(Latitude,0,2\)+’&longitude=’+FORMAT\(Longitude,0,2\)+’&zoom=10&#8217););
+`HYPERLINK('http://localhost/mysite/default.htm?latitude='+FORMAT(Latitude,0,2)+'&longitude='+FORMAT(Longitude,0,2)+'&zoom=10&#8217;);`
 
 FORMAT(xxx,0,2) ensures that the latitude and longitude are in the correct format and when you launch the action on the Cannon Group you will get:
 

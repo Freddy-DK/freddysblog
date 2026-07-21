@@ -33,11 +33,15 @@ You can ignore the hosts file permission check by adding –**IgnoreHosts**.
 
 Which also indicates that I can run
 
+```
 Check-NavContainerHelperPermissions -Fix
+```
 
 or
 
+```
 Check-NavContainerHelperPermissions -Fix -IgnoreHosts
+```
 
 to fix the permissions for me:
 
@@ -75,7 +79,9 @@ Tobias Fenster has written a blog post and created a small PowerShell module, wh
 
 In the new NavContainerHelper you will find a function called Invoke-ScriptInNavContainer and it does exactly like the name says – it invokes a script in a NavContainer.
 
+```
 Invoke-ScriptInNavContainer -containerName test -scriptblock { Get-NavServerUser NAV }
+```
 
 If you are running as an administrator, NavContainerHelper will create a PsSession to the container and invoke the script in a session.
 
@@ -87,7 +93,9 @@ If you are running as an end user, NavContainerHelper will save the script in a 
 
 Example:
 
+```
 $a = Invoke-ScriptInNavContainer -containerName test -scriptblock { Write-Host "This is a test" }
+```
 
 When run as administrator, **this will output the string “This is a test” to the Host and $a will be empty**. When you run this as an end user, **nothing will output to the Host and $a will contain “This is a test”**.
 
@@ -109,11 +117,14 @@ adding -useBestContainerOS will force NavContainerHelper to use the optimal imag
 
 Try to run this script:
 
+```
 $imageName = "mcr.microsoft.com/businesscentral/onprem"
-$tags = (Get-NavContainerImageTags -imageName $imageName).Tags | Where-Object { $\_.contains("w1-ltsc2019") }
+$tags = (Get-NavContainerImageTags -imageName $imageName).Tags | Where-Object { $_.contains("w1-ltsc2019") }
+```
 
 $tags will now contain all tags of ltsc2019 images with w1. While writing this blog post, that is:
 
+```
 13.0.24630.0-w1-ltsc2019
 13.1.25940.0-w1-ltsc2019
 13.2.26556.0-w1-ltsc2019
@@ -124,6 +135,7 @@ cu3-w1-ltsc2019
 latest-w1-ltsc2019
 rtm-w1-ltsc2019
 w1-ltsc2019
+```
 
 Grabbing all tags will right now return 572 image tags, which is 3 platforms (default (which is the same as ltsc2016), ltsc2016 and ltsc2019), 4 CU’s, 2 CU tags (version number and CU) – and all of that times 20 localizations. On top of that there are a number of latest tags.
 
@@ -133,14 +145,19 @@ I have often found that I would like to know whether there is a new version of a
 
 Get-NavContainerImageLabels will download the labels section of the image manifests without pulling the image.
 
+```
 Get-NavContainerImageLabels -imageName "mcr.microsoft.com/businesscentral/onprem:cu4"
+```
 
 will return nothing until cu4 ships.
 
+```
 Get-NavContainerImageLabels -imageName "mcr.microsoft.com/businesscentral/onprem:cu3
+```
 
 will (today) return
 
+```
 country : W1
 created : 201901171250
 cu : 
@@ -152,30 +169,38 @@ osversion : 10.0.14393.2665
 platform : 13.0.27183.0
 tag : 0.0.9.0
 version : 13.3.27233.0
+```
 
 Indicating that the cu field in the labels isn’t set, which is an error that will be fixed with the next rebuild round. When the images are being rebuild, the created date will also change.
 
 Also if you want to know the labels of the latest Business Central On Prem image:
 
+```
 Get-NavContainerImageLabels -imageName "mcr.microsoft.com/businesscentral/onprem:latest-ltsc2019"
+```
 
 Finally, if you want to have all Business Central tags, sorted by image creation date:
 
+```
 $imageName = "mcr.microsoft.com/businesscentral/onprem"
-$tags = (Get-NavContainerImageTags -imageName $imageName).Tags | Where-Object { $\_.contains("w1-ltsc2019") }
-($tags | % { Get-NavContainerImageLabels -imageName "${imageName}:$\_" } | Sort-Object -Descending -Property created).version | Select -Unique
+$tags = (Get-NavContainerImageTags -imageName $imageName).Tags | Where-Object { $_.contains("w1-ltsc2019") }
+($tags | % { Get-NavContainerImageLabels -imageName "${imageName}:$_" } | Sort-Object -Descending -Property created).version | Select -Unique
+```
 
 Which won’t return the images ordered by version number…
 
 If you want to see all versions of NAV 2018, ordered by version number, you need to
 
+```
 $imageName = "microsoft/dynamics-nav"
-$tags = (Get-NavContainerImageTags -imageName $imageName).Tags | Where-Object { $\_.startswith("11.0") } | Where-Object { $\_.contains("w1-ltsc2019") }
-$labels = $tags | % { Get-NavContainerImageLabels -imageName "${imageName}:$\_" }
+$tags = (Get-NavContainerImageTags -imageName $imageName).Tags | Where-Object { $_.startswith("11.0") } | Where-Object { $_.contains("w1-ltsc2019") }
+$labels = $tags | % { Get-NavContainerImageLabels -imageName "${imageName}:$_" }
 ($labels | Sort-Object -Descending -Property version).version
+```
 
 You should see:
 
+```
 11.0.26893.0
 11.0.26401.0
 11.0.25466.0
@@ -190,6 +215,7 @@ You should see:
 11.0.20348.0
 11.0.19846.0
 11.0.19394.0
+```
 
 Enjoy
 

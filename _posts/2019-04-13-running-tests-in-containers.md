@@ -15,17 +15,19 @@ Since the very start of NAV and Business Central on Containers, it has been poss
 
 When creating the Container, you can specify **\-IncludeTestToolkit** in order to include Test Toolkit and all standard tests:
 
+```
 $imageName = "mcr.microsoft.com/businesscentral/onprem:w1-ltsc2019"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $containerName = "mytest"
-New-NavContainer -accept\_eula \`
-                 -imageName $imageName \`
-                 -containerName $containerName \`
-                 -auth "NavUserPassword" \`
-                 -Credential $credential \`
-                 -updateHosts \`
-                 -includeTestToolkit \`
-                 -licenseFile "C:\\temp\\license.flf"
+New-NavContainer -accept_eula `
+                 -imageName $imageName `
+                 -containerName $containerName `
+                 -auth "NavUserPassword" `
+                 -Credential $credential `
+                 -updateHosts `
+                 -includeTestToolkit `
+                 -licenseFile "C:\temp\license.flf"
+```
 
 This resembles importing the .fob files in the TestToolKit folder on the DVD or in the Docker image.
 
@@ -76,19 +78,21 @@ Run-TestsInNavContainer can also create an XUnit compatible output from test exe
 
 Example XUnit result file:
 
+```
 <?xml version="1.0" encoding="UTF-8"?>
 <assemblies>
   <assembly name="Sales Document Posting Errors" test-framework="PS Test Runner" run-date="2019-04-13" run-time="10:56:31" total="1" passed="1" failed="0" time="0.563">
     <collection name="Sales Document Posting Errors" total="1" passed="1" failed="0" skipped="0" time="0.563">
-      <test name="Sales Document Posting Errors:T001\_PostingDateIsInNotAllowedPeriodInGLSetup" method="T001\_PostingDateIsInNotAllowedPeriodInGLSetup" time="0.563" result="Pass" />
+      <test name="Sales Document Posting Errors:T001_PostingDateIsInNotAllowedPeriodInGLSetup" method="T001_PostingDateIsInNotAllowedPeriodInGLSetup" time="0.563" result="Pass" />
     </collection>
   </assembly>
   <assembly name="Purch. Document Posting Errors" test-framework="PS Test Runner" run-date="2019-04-13" run-time="10:56:32" total="1" passed="1" failed="0" time="0.5">
     <collection name="Purch. Document Posting Errors" total="1" passed="1" failed="0" skipped="0" time="0.5">
-      <test name="Purch. Document Posting Errors:T001\_PostingDateIsInNotAllowedPeriodInGLSetup" method="T001\_PostingDateIsInNotAllowedPeriodInGLSetup" time="0.5" result="Pass" />
+      <test name="Purch. Document Posting Errors:T001_PostingDateIsInNotAllowedPeriodInGLSetup" method="T001_PostingDateIsInNotAllowedPeriodInGLSetup" time="0.5" result="Pass" />
     </collection>
   </assembly>
 </assemblies>
+```
 
 XUnit is one of the formats supported by Azure DevOps.
 

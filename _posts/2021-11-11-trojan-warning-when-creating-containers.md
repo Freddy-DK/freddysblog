@@ -15,7 +15,9 @@ Well, I don’t – it is a false positive and there is probably no good workaro
 
 On my machine, running the Windows Server Core image in process isolation like:
 
+```
 docker run -it --isolation process mcr.microsoft.com/windows/servercore:ltsc2022 powershell
+```
 
 Immediately pops up a warning:
 

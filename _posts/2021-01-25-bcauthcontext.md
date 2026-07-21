@@ -7,7 +7,7 @@ tags: ["AAD", "AAD App", "Access Token", "BcAuthContext", "Refresh Token"]
 permalink: /2021/01/25/bcauthcontext/
 ---
 
-The latest version of BcContainerHelper ([BcContainerHelper version 2.0.1 | Freddys blog](/2021/01/24/bccontainerhelper-version-2-0-1/)) comes with a new concept called a BcAuthContext. A BcAuthContext is really just a hashtable with authentication information for a Business Central online tenant.
+The latest version of BcContainerHelper ([BcContainerHelper version 2.0.1 \| Freddys blog](/2021/01/24/bccontainerhelper-version-2-0-1/)) comes with a new concept called a BcAuthContext. A BcAuthContext is really just a hashtable with authentication information for a Business Central online tenant.
 
 This blog post describes the concept and how to obtain and refresh a BcAuthContext. Subsequent blog posts will describe how to use them.
 

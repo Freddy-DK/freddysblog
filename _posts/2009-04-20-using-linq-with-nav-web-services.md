@@ -15,34 +15,46 @@ I thought YES – so I set out to find out what it took…
 
 The goal was to be able to replace code like this:
 
-CustomerRef.Customer\_Service cservice = new CustomerRef.Customer\_Service();  
+```
+CustomerRef.Customer_Service cservice = new CustomerRef.Customer_Service();
 cservice.UseDefaultCredentials = true;
+```
 
-CustomerRef.Customer\_Filter filter = new CustomerRef.Customer\_Filter();  
-filter.Field = CustomerRef.Customer\_Fields.Location\_Code;  
-filter.Criteria = “=YELLOW|=BLUE”;  
-CustomerRef.Customer\_Filter\[\] filters = new CustomerRef.Customer\_Filter\[\] { filter };
+```
+CustomerRef.Customer_Filter filter = new CustomerRef.Customer_Filter();
+filter.Field = CustomerRef.Customer_Fields.Location_Code;
+filter.Criteria = "=YELLOW|=BLUE";
+CustomerRef.Customer_Filter[] filters = new CustomerRef.Customer_Filter[] { filter };
+```
 
-CustomerRef.Customer\[\] customers = cservice.ReadMultiple(filters, null, 0);
+`CustomerRef.Customer[] customers = cservice.ReadMultiple(filters, null, 0);`
 
-foreach (CustomerRef.Customer customer in customers)  
-{  
-// do stuff  
+```
+foreach (CustomerRef.Customer customer in customers)
+{
+// do stuff
 }
+```
 
 with code like this:
 
-CustomerRef.Customer\_Service cservice = new CustomerRef.Customer\_Service();  
+```
+CustomerRef.Customer_Service cservice = new CustomerRef.Customer_Service();
 cservice.UseDefaultCredentials = true;
+```
 
-var cquery = from c in new FreddyK.NAVPageQuery<CustomerRef.Customer>(cservice)  
-where c.Location\_Code == “YELLOW” || c.Location\_Code == “BLUE”  
+```
+var cquery = from c in new FreddyK.NAVPageQuery<CustomerRef.Customer>(cservice)
+where c.Location_Code == "YELLOW" || c.Location_Code == "BLUE"
 select c;
+```
 
-foreach (CustomerRef.Customer customer in cquery)  
-{  
-// do stuff  
+```
+foreach (CustomerRef.Customer customer in cquery)
+{
+// do stuff
 }
+```
 
 Which I personally find more readable and has a lot of other advantages:
 
@@ -59,21 +71,27 @@ I always heard that you only needed 3 good reasons for doing something – so th
 
 Lets look at the above code. The following
 
-CustomerRef.Customer\_Service cservice = new CustomerRef.Customer\_Service();  
+```
+CustomerRef.Customer_Service cservice = new CustomerRef.Customer_Service();
 cservice.UseDefaultCredentials = true;
+```
 
 initializes the Service (as usually) and
 
-var cquery = from c in new FreddyK.NAVPageQuery<CustomerRef.Customer>(cservice)  
-where c.Location\_Code == “YELLOW” || c.Location\_Code == “BLUE”  
+```
+var cquery = from c in new FreddyK.NAVPageQuery<CustomerRef.Customer>(cservice)
+where c.Location_Code == "YELLOW" || c.Location_Code == "BLUE"
 select c;
+```
 
 creates a query (which contains an expression tree of the where clause) and
 
-foreach (CustomerRef.Customer customer in cquery)  
-{  
-// do stuff  
+```
+foreach (CustomerRef.Customer customer in cquery)
+{
+// do stuff
 }
+```
 
 invokes the query (calls Web Services ReadMultiple) and returns the customers.
 
@@ -86,46 +104,54 @@ For a class to be usable in a LINQ query it needs to implement [IQueryable<type>
 Instead of listing the interfaces, I will list what happens when the query is build (when the line with var cquery = is executed):
 
 1.  The NAVPageQuery gets instantiated
-2.  LINQ calls the method IQueryProvider IQueryable.Provider to get the IQueryProvider class
-3.  LINQ calls the method System.Linq.Expressions.Expression IQueryable.Expression to get the initial expression
-4.  Now LINQ builds the expression tree and calls IQueryable<S> IQueryProvider.CreateQuery<S>(Expression expression) from which it expects a IQueryable<type> object.
+2.  LINQ calls the method `IQueryProvider IQueryable.Provider` to get the IQueryProvider class
+3.  LINQ calls the method `System.Linq.Expressions.Expression IQueryable.Expression` to get the initial expression
+4.  Now LINQ builds the expression tree and calls `IQueryable<S> IQueryProvider.CreateQuery<S>(Expression expression)` from which it expects a IQueryable<type> object.
 
 Now we are done building the query and our variable cquery is set to be of type IQueryable<Customer>
 
 When we then do a foreach on the cquery a little later, the following this happens:
 
-1.  foreach calls into the IEnumerable interface IEnumerator<T> IEnumerable<T>.GetEnumerator() and ask for an enumerator
-2.  In this method, I call the Execute method (TResult IQueryProvider.Execute<TResult>(Expression expression)) on the Provider (which is ‘this’)
+1.  foreach calls into the IEnumerable interface `IEnumerator<T> IEnumerable<T>.GetEnumerator()` and ask for an enumerator
+2.  In this method, I call the Execute method (`TResult IQueryProvider.Execute<TResult>(Expression expression)`) on the Provider (which is ‘this’)
 3.  In the Execute method I run through the Expression tree and builds a number of Filter objects, collect them into an array of filters and call ReadMultiple.
 
 You could argue that it would be a good idea to run through the expression tree while building the query – but the primary reason for NOT doing this is that you could imagine queries like:
 
-decimal amount = 10000;
+`decimal amount = 10000;`
 
-var cquery = from c in new FreddyK.NAVPageQuery<CustomerRef.Customer>(cservice)  
-where c.Balance\_LCY > amount  
+```
+var cquery = from c in new FreddyK.NAVPageQuery<CustomerRef.Customer>(cservice)
+where c.Balance_LCY > amount
 select c;
+```
 
 In this case you want to separate building the query and creating the filters, since you could:
 
-foreach (CustomerRef.Customer customer in cquery)  
-{  
-// do stuff  
+```
+foreach (CustomerRef.Customer customer in cquery)
+{
+// do stuff
 }
+```
 
-amount = 100000;  
-foreach (CustomerRef.Customer customer in cquery)  
-{  
-// do other stuff  
+```
+amount = 100000;
+foreach (CustomerRef.Customer customer in cquery)
+{
+// do other stuff
 }
+```
 
 this demonstrates the need for having the ability to decouple the query and the values used by the query and this is the reason for not creating the filter specs while building the query – but keeping the expression tree.
 
 Another sample:
 
-cquery = from c in new FreddyK.NAVPageQuery<CustomerRef.Customer>(cservice)  
-where c.Last\_Date\_Modified >= DateTime.Today.AddDays(-5)  
+```
+cquery = from c in new FreddyK.NAVPageQuery<CustomerRef.Customer>(cservice)
+where c.Last_Date_Modified >= DateTime.Today.AddDays(-5)
 select c;
+```
 
 At the time of execution, this query will give you customers modified the last 5 days (imagine building that one with filters easy)
 
@@ -135,7 +161,9 @@ It is important to realize that NAVPageQuery doesn’t give you any functionalit
 
 If you try to type in a where clause like
 
-where c.Location\_Code == “YELLOW” || c.Country\_Region\_Code == “US”
+```
+where c.Location_Code == "YELLOW" || c.Country_Region_Code == "US"
+```
 
 It will fail – intentionally!
 
@@ -147,11 +175,15 @@ The error will be thrown when you try to use the query and it will typically be 
 
 Another thing to notice is that AND’s and OR’s cannot be combined (as this isn’t possible in the filter spec):
 
-where c.Location\_Code == “YELLOW” && (c.Balance\_LCY > amount || c.Location\_Code == “BLUE”)
+```
+where c.Location_Code == "YELLOW" && (c.Balance_LCY > amount || c.Location_Code == "BLUE")
+```
 
 is not allowed, but
 
-where c.Balance\_LCY > amount && (c.Location\_Code == “YELLOW” || c.Location\_Code == “BLUE”) && c.No != “”
+```
+where c.Balance_LCY > amount && (c.Location_Code == "YELLOW" || c.Location_Code == "BLUE") && c.No != ""
+```
 
 works just fine.
 

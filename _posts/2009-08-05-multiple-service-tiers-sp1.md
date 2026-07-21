@@ -21,14 +21,20 @@ However – if we want to take advantage of the named instances in SQL Server or
 
 I have created a new CustomSettings.template based on the SP1 config file – copy the config file and change the following keys:
 
-    <add key=”DatabaseServer” value=”#DBSERVER#”></add>  
-<add key=”DatabaseInstance” value=”#DBINSTANCE#”></add>  
-<add key=”DatabaseName” value=”#DATABASE#”></add>  
-<add key=”ServerInstance” value=”#INSTANCE#”></add>
+    
+
+```
+<add key="DatabaseServer" value="#DBSERVER#"></add>
+<add key="DatabaseInstance" value="#DBINSTANCE#"></add>
+<add key="DatabaseName" value="#DATABASE#"></add>
+<add key="ServerInstance" value="#INSTANCE#"></add>
+```
 
 and extended the createservice.bat file to also allow a database instance to be specified, meaning that the usage is now:
 
-CreateService name \[dbserver\] \[“dbinstance”\] \[“dbname”\] \[demand|auto|disabled\] \[both|servicetier|ws\]
+```
+CreateService name [dbserver] ["dbinstance"] ["dbname"] [demand|auto|disabled] [both|servicetier|ws]
+```
 
 The new .zip file is available for download [here](http://www.freddy.dk/MultipleServiceTiers-SP1.zip).
 

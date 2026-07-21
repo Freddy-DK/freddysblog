@@ -58,43 +58,57 @@ and call the reference CustomerRef.
 
 Add the following code to Sheet1\_Startup and run your solution.
 
-// Postpone Screen updating  
+```
+// Postpone Screen updating
 Application.ScreenUpdating = false;
+```
 
-// Initialize the Service  
-CustomerRef.Customer\_Service service = new CustomerSimple.CustomerRef.Customer\_Service();  
+```
+// Initialize the Service
+CustomerRef.Customer_Service service = new CustomerSimple.CustomerRef.Customer_Service();
 service.UseDefaultCredentials = true;
+```
 
-// Read the customers  
-CustomerRef.Customer\[\] customers = service.ReadMultiple(null, null, 0);
+```
+// Read the customers
+CustomerRef.Customer[] customers = service.ReadMultiple(null, null, 0);
+```
 
-// Populate the header line  
-int row = 1;  
-this.Cells\[row, 1\] = “No”;  
-this.Cells\[row, 2\] = “Name”;  
-this.Cells\[row, 3\] = “Address”;  
-this.Cells\[row, 4\] = “Address\_2”;  
+```
+// Populate the header line
+int row = 1;
+this.Cells[row, 1] = "No";
+this.Cells[row, 2] = "Name";
+this.Cells[row, 3] = "Address";
+this.Cells[row, 4] = "Address_2";
 // etc.
+```
 
-// Fill the spreadsheet  
-foreach (CustomerRef.Customer customer in customers)  
-{  
-row++;  
-this.Cells\[row, 1\] = customer.No;  
-this.Cells\[row, 2\] = customer.Name;  
-this.Cells\[row, 3\] = customer.Address;  
-this.Cells\[row, 4\] = customer.Address\_2;  
-// etc.  
+```
+// Fill the spreadsheet
+foreach (CustomerRef.Customer customer in customers)
+{
+row++;
+this.Cells[row, 1] = customer.No;
+this.Cells[row, 2] = customer.Name;
+this.Cells[row, 3] = customer.Address;
+this.Cells[row, 4] = customer.Address_2;
+// etc.
 }
+```
 
-// Set formatting for the added cells  
-Microsoft.Office.Interop.Excel.Range range = this.Range\[this.Cells\[1, 1\], this.Cells\[row, 4\]\];  
-range.EntireColumn.NumberFormat = “@”;  
-range.EntireColumn.HorizontalAlignment = Microsoft.Office.Interop.Excel.Constants.xlLeft;  
+```
+// Set formatting for the added cells
+Microsoft.Office.Interop.Excel.Range range = this.Range[this.Cells[1, 1], this.Cells[row, 4]];
+range.EntireColumn.NumberFormat = "@";
+range.EntireColumn.HorizontalAlignment = Microsoft.Office.Interop.Excel.Constants.xlLeft;
 range.EntireColumn.AutoFit();
+```
 
-// Update the Screen  
+```
+// Update the Screen
 Application.ScreenUpdating = true;
+```
 
 That’s it and that’s that! This should bring up Excel looking like this:
 

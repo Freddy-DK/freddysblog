@@ -34,14 +34,18 @@ You need to set EnableThreadThrottling and EnablePrioritizedThreadThrottling to
 
 When using New-NavContainer, you can specify additional native Docker paramaters using additionalParameters. Using the **–env** docker parameter, you can transfer parameters like CustomNavSettings to the Business Central Container to set custom settings for the Service Tier:
 
+```
  -additionalParameters @("--env CustomNavSettings=EnableThreadThrottling=False,EnablePrioritizedThreadThrottling=False")
+```
 
 During startup of the Container, it should display:
 
+```
 Modifying Service Tier Config File with settings from environment variable
 Creating EnableThreadThrottling and setting it to False
 Creating EnablePrioritizedThreadThrottling and setting it to False
 Starting Service Tier
+```
 
 # Assign 4 logical processors
 
@@ -49,13 +53,17 @@ The other way of fixing the issue is to allow the container to use more logical 
 
 When using New-NavContainer, you can specify additional native Docker paramaters using additionalParameters. Using the **–cpu-count** you can set the number of logical processors available to the container:
 
-\-additionalParameters @('--cpu-count 4')
+```
+-additionalParameters @('--cpu-count 4')
+```
 
 You will not see this during startup of the container, but if you want to see how many logical processors your container has available you can issue this command in the Cmd prompt:
 
-C:\\>docker exec <containername> wmic cpu get NumberOfLogicalProcessors
+```
+C:\>docker exec <containername> wmic cpu get NumberOfLogicalProcessors
 NumberOfLogicalProcessors
 4
+```
 
 # NavContainerHelper
 

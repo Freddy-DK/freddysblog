@@ -36,13 +36,15 @@ If you are running into this problem with an existing container image, you have 
 
 2\. If you are using Docker without NavContainerHelper, you can override the AdditionalSetup.ps1 script with the same script as NavContainerHelper is using:
 
+```
 Write-Host "Registering event sources"
 "MicrosoftDynamicsNAVClientWebClient","MicrosoftDynamicsNAVClientClientService" | % {
-    if (-not \[System.Diagnostics.EventLog\]::SourceExists($\_)) {
-        $frameworkDir =  (Get-Item "HKLM:\\SOFTWARE\\Microsoft\\.NETFramework").GetValue("InstallRoot")
-        New-EventLog -LogName Application -Source $\_ -MessageResourceFile (get-item (Join-Path $frameworkDir "\*\\EventLogMessages.dll")).FullName
+    if (-not [System.Diagnostics.EventLog]::SourceExists($_)) {
+        $frameworkDir =  (Get-Item "HKLM:\SOFTWARE\Microsoft\.NETFramework").GetValue("InstallRoot")
+        New-EventLog -LogName Application -Source $_ -MessageResourceFile (get-item (Join-Path $frameworkDir "*\EventLogMessages.dll")).FullName
     }
 }
+```
 
 This script will also work with new images, it will check whether the event log has been created before creating it.
 

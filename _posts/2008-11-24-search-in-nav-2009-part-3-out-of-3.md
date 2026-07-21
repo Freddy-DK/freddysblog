@@ -41,7 +41,7 @@ As a hint – try to rename the file to **Something.Gadget.zip** – and you wil
 
 The file extension Gadget is known by Windows Sidebar, which will look for a Gadget.xml in the .zip file and if a correct Gadget.xml is present, it will display this installation dialog and if you select to Install, the .zip file is unpacked into a directory under
 
-C:\\Users\\<username>\\AppData\\Local\\Microsoft\\Windows Sidebar\\Gadgets
+`C:\Users\<username>\AppData\Local\Microsoft\Windows Sidebar\Gadgets`
 
 and add the gadget to the sidebar.
 
@@ -51,27 +51,35 @@ Note that the .zip file should NOT contain the outer directory – only the cont
 
 The Gadget is actually just a small html document, which can contain Javascript, VB Script code or other client side code, supported in html. The first file read by the Sidebar is the Gadget.xml file, which in my Search example looks like:
 
-<?xml version=”1.0″ encoding=”utf-8″ ?>  
-<gadget>  
-<name>NAV Search Gadget</name>  
-<namespace>NAVsearch</namespace>  
-<version>1.0</version>  
-<author name=”Freddy Kristiansen”>  
-<info url=”[http://blogs.msdn.com/freddyk”](http://blogs.msdn.com/freddyk) />  
-</author>  
-<copyright>None, feel free to use!</copyright>  
-<description>Freddys NAV Search Gadget</description>  
-<icons>  
-<icon height=”48″ width=”48″ src=”Images/Navision.ico” />  
-</icons>  
-<hosts>  
-<host name=”sidebar”>  
-<base type=”HTML” apiVersion=”1.0.0″ src=”gadget.html” mce\_src=”gadget.html” />  
-<permissions>full</permissions>  
-<platform minPlatformVersion=”0.3″ />  
-</host>  
-</hosts>  
+```
+<?xml version="1.0″ encoding="utf-8″ ?>
+<gadget>
+<name>NAV Search Gadget</name>
+<namespace>NAVsearch</namespace>
+<version>1.0</version>
+<author name="Freddy Kristiansen">
+<info url="
+```
+
+[`http://blogs.msdn.com/freddyk"`](http://blogs.msdn.com/freddyk) 
+
+```
+/>
+</author>
+<copyright>None, feel free to use!</copyright>
+<description>Freddys NAV Search Gadget</description>
+<icons>
+<icon height="48″ width="48″ src="Images/Navision.ico" />
+</icons>
+<hosts>
+<host name="sidebar">
+<base type="HTML" apiVersion="1.0.0″ src="gadget.html" mce_src="gadget.html" />
+<permissions>full</permissions>
+<platform minPlatformVersion="0.3″ />
+</host>
+</hosts>
 </gadget>
+```
 
 So, this is where you define Name, Namespace, Version, Author, etc.  But also Icon to display in the Add Gadget and the html document to display in the sidebar (in this case gadget.html).
 
@@ -83,19 +91,21 @@ Note, that this is not an HTML tutorial, I expect you to know the basic construc
 
 The body section of my gadget looks like this:
 
-<body bgcolor=”0″ leftmargin=”0″ topmargin=”0″ >  
-<g:background opacity=”100″></g:background>  
-<table width=”100%” height=”100%” border=”0″ hspace=”0″ vspace=”0″ cellpadding=”0″ cellspacing=”0″>  
-<tr>  
-<td height=”36″ align=”left” valign=”top” background=”Images/gadgettop.png” nowrap><p style=”margin-top: 10px”><strong><font color=”#FFFFFF” size=”3″ face=”Segoe UI”>&nbsp;NAV Search</font></strong></p></td>  
-</tr>  
-<tr>  
-<td height=”22″ valign=”middle” background=”Images/gadgetmiddle.png”>  
-<input type=”textbox” id=”SearchText” onFocus=”hideFlyout();”><input type=”image” src=”Images/search.png” id=”doSearch” onClick=”search();”>  
-</td>  
-</tr>  
-<tr>  
-<td height=”28″ border=”0″ background=”Images/gadgetbottom.png”>  
+```
+<body bgcolor="0″ leftmargin="0″ topmargin="0″ >
+<g:background opacity="100″></g:background>
+<table width="100%" height="100%" border="0″ hspace="0″ vspace="0″ cellpadding="0″ cellspacing="0″>
+<tr>
+<td height="36″ align="left" valign="top" background="Images/gadgettop.png" nowrap><p style="margin-top: 10px"><strong><font color="#FFFFFF" size="3″ face="Segoe UI"> NAV Search</font></strong></p></td>
+</tr>
+<tr>
+<td height="22″ valign="middle" background="Images/gadgetmiddle.png">
+<input type="textbox" id="SearchText" onFocus="hideFlyout();"><input type="image" src="Images/search.png" id="doSearch" onClick="search();">
+</td>
+</tr>
+<tr>
+<td height="28″ border="0″ background="Images/gadgetbottom.png">
+```
 
 ![Microsoft Dynamics NAV](Images/weelogo.png)
 
@@ -113,31 +123,37 @@ and of course our Gadget has references to some images from an Images folder.
 
 The main search function looks like this
 
-// Main search function  
-// search after the content in the textbox  
-function search()  
-{  
-// If flyout is shown, hide it  
-if (System.Gadget.Flyout.show)  
-{  
-hideFlyout();  
+```
+// Main search function
+// search after the content in the textbox
+function search()
+{
+// If flyout is shown, hide it
+if (System.Gadget.Flyout.show)
+{
+hideFlyout();
 }
+```
 
-    // Get search string  
-str = document.getElementById(“SearchText”).value;  
-if (str != “”)  
-{  
-// Perform search  
-result = doSearch(str);  
-if (result != “”)  
-{  
-// Store HTML to use when flyout pops out  
-newHTML = result;  
-// Display result in flyout  
-System.Gadget.Flyout.show = true;  
-}  
-}  
+    
+
+```
+// Get search string
+str = document.getElementById("SearchText").value;
+if (str != "")
+{
+// Perform search
+result = doSearch(str);
+if (result != "")
+{
+// Store HTML to use when flyout pops out
+newHTML = result;
+// Display result in flyout
+System.Gadget.Flyout.show = true;
 }
+}
+}
+```
 
 System.Gadget.Flyout is part of the Gadget Framework and gives you access to set a document used for flyouts, show the flyout and hide it again.
 
@@ -145,36 +161,64 @@ The flyout is (as you can imagine) also just a HTML document – even though it 
 
 As you can see, the function, which will be doing the Web Service connection and the “real” search is doSearch:
 
-// the “real” search function  
-function doSearch(searchstring)  
-{  
-// Get the URL for the NAV 2009 Search Codeunit  
-var URL = GetBaseURL() + “Codeunit/Search”;
+```
+// the "real" search function
+function doSearch(searchstring)
+{
+// Get the URL for the NAV 2009 Search Codeunit
+var URL = GetBaseURL() + "Codeunit/Search";
+```
 
-// Create XMLHTTP and send SOAP document  
-xmlhttp = new ActiveXObject(“Msxml2.XMLHTTP.4.0”);  
-xmlhttp.open(“POST”, URL, false, null, null);  
-xmlhttp.setRequestHeader(“Content-Type”, “text/xml; charset=utf-8”);  
-xmlhttp.setRequestHeader(“SOAPAction”, “DoSearch”);  
-xmlhttp.Send(‘<?xml version=”1.0″ encoding=”utf-8″?><soap:Envelope xmlns:soap=”[http://schemas.xmlsoap.org/soap/envelope/”](http://schemas.xmlsoap.org/soap/envelope/)\><soap:Body><DoSearch xmlns=”urn:microsoft-dynamics-schemas/codeunit/Search”><searchstring>’+searchstring+'</searchstring><result></result></DoSearch></soap:Body></soap:Envelope>’);  
-  
-// Find the result in the soap result and return the rsult  
-xmldoc = xmlhttp.ResponseXML;  
-xmldoc.setProperty(‘SelectionLanguage’, ‘XPath’);  
-xmldoc.setProperty(‘SelectionNamespaces’, ‘xmlns:soap=”[http://schemas.xmlsoap.org/soap/envelope/”](http://schemas.xmlsoap.org/soap/envelope/) xmlns:tns=”urn:microsoft-dynamics-schemas/codeunit/Search”‘);  
-result = xmldoc.selectSingleNode(“/soap:Envelope/soap:Body/tns:DoSearch\_Result/tns:result”).text;
+```
+// Create XMLHTTP and send SOAP document
+xmlhttp = new ActiveXObject("Msxml2.XMLHTTP.4.0");
+xmlhttp.open("POST", URL, false, null, null);
+xmlhttp.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
+xmlhttp.setRequestHeader("SOAPAction", "DoSearch");
+xmlhttp.Send('<?xml version="1.0″ encoding="utf-8″?><soap:Envelope xmlns:soap="
+```
+
+[`http://schemas.xmlsoap.org/soap/envelope/"`](http://schemas.xmlsoap.org/soap/envelope/)
+
+```
+><soap:Body><DoSearch xmlns="urn:microsoft-dynamics-schemas/codeunit/Search"><searchstring>'+searchstring+'</searchstring><result></result></DoSearch></soap:Body></soap:Envelope>');
+```
+
+```
+// Find the result in the soap result and return the rsult
+xmldoc = xmlhttp.ResponseXML;
+xmldoc.setProperty('SelectionLanguage', 'XPath');
+xmldoc.setProperty('SelectionNamespaces', 'xmlns:soap="
+```
+
+[`http://schemas.xmlsoap.org/soap/envelope/"`](http://schemas.xmlsoap.org/soap/envelope/) 
+
+```
+xmlns:tns="urn:microsoft-dynamics-schemas/codeunit/Search"');
+result = xmldoc.selectSingleNode("/soap:Envelope/soap:Body/tns:DoSearch_Result/tns:result").text;
+```
 
 // Load result into XML Document  
 xmldoc = new ActiveXObject(“Msxml2.DOMDocument.4.0”);  
 xmldoc.loadXML(result);
 
-    // Load XSL document  
-xsldoc = new ActiveXObject(“Msxml2.DOMDocument.4.0”);  
-xsldoc.load(“SearchResultToHTML.xslt”); 
+    
 
-    // Transform  
-return xmldoc.transformNode(xsldoc);  
+```
+// Load XSL document
+xsldoc = new ActiveXObject("Msxml2.DOMDocument.4.0");
+xsldoc.load("SearchResultToHTML.xslt");
+```
+
+ 
+
+    
+
+```
+// Transform
+return xmldoc.transformNode(xsldoc);
 }
+```
 
 Wow – a lot of code.
 
@@ -184,17 +228,27 @@ I will post other examples of Gadgets communicating with NAV Web Services, stay 
 
 The basic initialization of the gadget is done in
 
-// Microsoft suggests using onreadystatechange instead of onLoad  
-document.onreadystatechange = function()  
-{  
-if(document.readyState==”complete”)  
-{  
-// Initialize Settings and Flyout  
-System.Gadget.settingsUI = “settings.html”;  
-System.Gadget.Flyout.file = “flyout.html”; 
+```
+// Microsoft suggests using onreadystatechange instead of onLoad
+document.onreadystatechange = function()
+{
+if(document.readyState=="complete")
+{
+// Initialize Settings and Flyout
+System.Gadget.settingsUI = "settings.html";
+System.Gadget.Flyout.file = "flyout.html";
+```
 
-        // Add eventhandler for Flyout onShow  
-System.Gadget.Flyout.onShow = flyoutShowing;  
+ 
+
+        
+
+```
+// Add eventhandler for Flyout onShow
+System.Gadget.Flyout.onShow = flyoutShowing;
+```
+
+  
 
 // Write default Base URL in settings if not already done  
 GetBaseURL();  
@@ -207,57 +261,67 @@ There is no code in the Flyout – the only special thing is with the flyout is 
 
 The GetBaseURL function is used under startup – and when we need to connect.
 
-// Get the Base Web Services URL  
-function GetBaseURL()  
-{  
-// Read the URL from settings  
-var URL = System.Gadget.Settings.readString(“URL”);  
-if (URL == “”)  
-{  
-// No settings in the settings.ini – write the default URL  
-URL = defaultURL;  
-System.Gadget.Settings.writeString(“URL”, URL);  
-}  
-// Always terminate with /  
-if (URL.substr(URL.length-1,1) != “/”)  
-{  
-URL = URL + “/”;  
-}  
-return URL;  
+```
+// Get the Base Web Services URL
+function GetBaseURL()
+{
+// Read the URL from settings
+var URL = System.Gadget.Settings.readString("URL");
+if (URL == "")
+{
+// No settings in the settings.ini – write the default URL
+URL = defaultURL;
+System.Gadget.Settings.writeString("URL", URL);
 }
+// Always terminate with /
+if (URL.substr(URL.length-1,1) != "/")
+{
+URL = URL + "/";
+}
+return URL;
+}
+```
 
 The reason for calling the function at startup is, that we set the settings to the default URL if it isn’t already defined. It is better that the settings dialog comes up with “some” default than just a blank URL – IMO.
 
 The settings.html contains two functions for doing the housekeeping of the settings:
 
-// Initialize settings Form  
-document.onreadystatechange = function()  
-{  
-if(document.readyState==”complete”)  
-{  
-// Read settings and set in form  
-URL.value = System.Gadget.Settings.read(“URL”);  
-}  
+```
+// Initialize settings Form
+document.onreadystatechange = function()
+{
+if(document.readyState=="complete")
+{
+// Read settings and set in form
+URL.value = System.Gadget.Settings.read("URL");
 }
-
-// Event handler for onSettingsClosing  
-System.Gadget.onSettingsClosing = function(event)  
-{  
-if (event.closeAction == event.Action.commit)  
-{  
-// Write new URL into settings  
-System.Gadget.Settings.writeString(“URL”, URL.value);
-
-        // State that it is OK to close the settings form  
-event.cancel = false;  
-}  
 }
+```
+
+```
+// Event handler for onSettingsClosing
+System.Gadget.onSettingsClosing = function(event)
+{
+if (event.closeAction == event.Action.commit)
+{
+// Write new URL into settings
+System.Gadget.Settings.writeString("URL", URL.value);
+```
+
+        
+
+```
+// State that it is OK to close the settings form
+event.cancel = false;
+}
+}
+```
 
 I will let the code speak for itself.
 
 The System.Gadget.Settings read and write functions stores the settings in
 
-C:\\Users\\<username>\\AppData\\Local\\Microsoft\\Windows Sidebar\\settings.ini
+`C:\Users\<username>\AppData\Local\Microsoft\Windows Sidebar\settings.ini`
 
 and the settings will be stored in clear text, you will actually be able to modify this file as well.
 

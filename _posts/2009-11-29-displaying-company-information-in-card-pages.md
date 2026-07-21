@@ -35,7 +35,7 @@ In a standard NAV, there is no DataCaptionExpr nor DataCaptionFields defined on 
 
 In order to add the Company name behind the caption you will need to change the DataCaptionExpr on the Customer Card to f.ex.
 
-“No.” + ‘ · ‘ + Name + ‘ \[‘+COMPANYNAME+’\]’
+`"No." + ' · ' + Name + ' ['+COMPANYNAME+']'`
 
 which would cause the Customer Card to look like
 

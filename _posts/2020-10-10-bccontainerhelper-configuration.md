@@ -15,17 +15,23 @@ With the shift to BcContainerHelper – this is now possible.
 
 Before you rush out and uninstall NavContainerHelper and install BcContainerHelper – please remove all containers first:
 
+```
 Get-NavContainers | Remove-NavContainer
+```
 
 After this, you can run
 
+```
 Uninstall-Module NavContainerHelper -Force -AllVersions
+```
 
 and then remove the C:\\ProgramData\\NavContainerHelper folder.
 
 Now you can install the BcContainerHelper using
 
+```
 Install-Module BcContainerHelper -Force
+```
 
 like also explained here: [https://freddysblog.com/2020/08/11/bccontainerhelper/](/2020/08/11/bccontainerhelper/)
 
@@ -41,17 +47,23 @@ and it should output something like:
 
 These are all the settings, which you can use when configuring BcContainerHelper at this time and their default values. All values except for _ContainerHelperFolder_ and _HostHelperFolder_ er settable at runtime and will work in the PowerShell session in which they are set. At startup, the settings are read from a file:
 
-C:\\ProgramData\\BcContainerHelper\\BcContainerHelper.config.json
+```
+C:\ProgramData\BcContainerHelper\BcContainerHelper.config.json
+```
 
 You cannot change the location of this one file, but if you want to write your changed settings to this file, you can use this line:
 
-$bcContainerHelperConfig | ConvertTo-Json | Set-Content "C:\\ProgramData\\BcContainerHelper\\BcContainerHelper.config.json"
+```
+$bcContainerHelperConfig | ConvertTo-Json | Set-Content "C:\ProgramData\BcContainerHelper\BcContainerHelper.config.json"
+```
 
 meaning that this script:
 
-$bcContainerHelperConfig.hostHelperFolder = "D:\\BcContainerHelper"
-$bcContainerHelperConfig.bcartifactsCacheFolder = "D:\\Artifacts.cache"
-$bcContainerHelperConfig | ConvertTo-Json | Set-Content "C:\\ProgramData\\BcContainerHelper\\BcContainerHelper.config.json"
+```
+$bcContainerHelperConfig.hostHelperFolder = "D:\BcContainerHelper"
+$bcContainerHelperConfig.bcartifactsCacheFolder = "D:\Artifacts.cache"
+$bcContainerHelperConfig | ConvertTo-Json | Set-Content "C:\ProgramData\BcContainerHelper\BcContainerHelper.config.json"
+```
 
 would mean that next time you restart BcContainerHelper, you would place all temp. files on D:. You can of course also modify the .json file manually, but be aware. If the config file isn’t correctly formatted, BcContainerHelper won’t start.
 
@@ -75,14 +87,17 @@ Default: _bcserver_
 
 This is a hashtable of default parameters for New-BcContainer. If you f.ex. know that on this machine, you always want to use process isolation, you could specify:
 
+```
 $bcContainerHelperConfig.defaultNewContainerParameters = @{ "Isolation" = "Process" }
+```
 
 and write that to the .json file, meaning that all calls on this machine would get -isolation process added (unless otherwise specified).
 
 Stuff like isolation, authentication and updateHosts is often machine specific and not necessarily related to the individual container. Memory is more related to what you use the container for and what version of the container you use. On my machine I have run this:
 
+```
 $bcContainerHelperConfig.defaultNewContainerParameters = @{
-    "Accept\_Eula" = $true
+    "Accept_Eula" = $true
     "Auth" = "UserPassword"
     "Credential" = @{
         "Username" = $credential.UserName
@@ -91,20 +106,23 @@ $bcContainerHelperConfig.defaultNewContainerParameters = @{
     "UpdateHosts" = $true
     "Isolation" = "Process"
 }
-$bcContainerHelperConfig | ConvertTo-Json | Set-Content "C:\\ProgramData\\BcContainerHelper\\BcContainerHelper.config.json"
+$bcContainerHelperConfig | ConvertTo-Json | Set-Content "C:\ProgramData\BcContainerHelper\BcContainerHelper.config.json"
+```
 
 will cause this part to be added to my config file:
 
+```
 "defaultNewContainerParameters":  {
     "Credential":  {
         "Password":  "01000000d08c9ddf0115d1118c7a00c04fc297eb010000009ef6655e3dafde43a2d80063bf4c457e00000000020000000000106600000001000020000000455606faf894727669f14bdfb841b51e3391901a373b0f24261b8cd83ff6d1b9000000000e80000000020000200000009994142904a3b286453a55caa4404303ad3469394b8de9c996bce3fa10aa33ef20000000c17ec4ac1648a40dde1efe932dd1bf36fff3a79e15a04a468438ef57e76e5eb040000000b3c183d5845b36c456f710af0e2d15abdc443ac35d8c31b1b0debf5b31012a3d4cc7155efec90c357bb17bd031ec0c8a3cf6807b3ff393d19b10d0eed5a2ce36",
         "Username":  "admin"
     },
-    "Accept\_Eula":  true,
+    "Accept_Eula":  true,
     "Isolation":  "Process",
     "UpdateHosts":  true,
     "Auth":  "UserPassword"
 }
+```
 
 As you can see the Password is encrypted and can only be un-encrypted on my machine and you would even be able to use Windows Authentication and store your Windows Password relatively secure here.
 

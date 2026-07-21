@@ -71,7 +71,9 @@ In order to develop the extension, we need to create a development environment f
 
 Run _C:\\DEMO\\Install Extensions Development Shell.ps1_ and specify your developer license. After this, open the Extension Development Shell and use this command:
 
-new-devinstance -devinstance dev -appfolder "C:\\DEMO\\BingMaps"
+```
+new-devinstance -devinstance dev -appfolder "C:\DEMO\BingMaps"
+```
 
 [![bingmapsnewdev](/assets/images/2017/the-bingmaps-extension-and-some-tips-and-tricks/7653f-bingmapsnewdev-1.png)](/assets/images/2017/the-bingmaps-extension-and-some-tips-and-tricks/7653f-bingmapsnewdev.png)
 
@@ -131,13 +133,15 @@ In the _BingMaps Events_ codeunit, you will find two methods hooked up to events
 
 One is hooked up to the _OnBeforeInsertEvent_ and one to the _OnBeforeModifyEvent_.
 
-**LOCAL \[EventSubscriber\] InsertCustomer(VAR Rec : Record Customer;RunTrigger : Boolean)**
+```
+LOCAL [EventSubscriber] InsertCustomer(VAR Rec : Record Customer;RunTrigger : Boolean)
 Rec.Geocoded := 0;
 Geocode.GeocodeCustomer(Rec);
 
-**LOCAL \[EventSubscriber\] ModifyCustomer(VAR Rec : Record Customer;VAR xRec : Record Customer;RunTrigger : Boolean)**
+LOCAL [EventSubscriber] ModifyCustomer(VAR Rec : Record Customer;VAR xRec : Record Customer;RunTrigger : Boolean)
 Rec.Geocoded := 0;
 Geocode.GeocodeCustomer(Rec);
+```
 
 In both cases clear the flag that indicates that the Customer has been geocoded and then call the GeocodeCustomer function.
 
@@ -161,7 +165,8 @@ This is done by hooking up to the _OnRegisterServiceConnection_ on the _Service 
 
 and the code for adding the BingMaps setup to the Service Connection looks like this:
 
-**LOCAL \[EventSubscriber\] RegisterServiceConnection(VAR ServiceConnection : Record "Service Connection")**
+```
+LOCAL [EventSubscriber] RegisterServiceConnection(VAR ServiceConnection : Record "Service Connection")
 IF NOT BingMapsSetup.GET THEN
 BEGIN
   IF NOT BingMapsSetup.WRITEPERMISSION THEN
@@ -174,6 +179,7 @@ ServiceConnection.Status := ServiceConnection.Status::Disabled;
 IF BingMapsSetup."BingMaps Key OK" THEN
   ServiceConnection.Status := ServiceConnection.Status::Enabled;
 ServiceConnection.InsertServiceConnection(ServiceConnection, RecRef.RECORDID, txtBingMapsIntegrationSetup, '', PAGE::"BingMaps Integration Setup");
+```
 
 At first we check permissions and then we add the line with status set to Disabled or enabled depending on whether or not the BingMaps Key is OK.
 
@@ -189,9 +195,11 @@ This is done by hooking up to the _OnAfterActionEvent_ on the _Extension Details
 
 The code for your event subscriber should check whether the extension was installed and if this is the case, it should invoke your dialog:
 
-**LOCAL \[EventSubscriber\] Installed(VAR Rec : Record "NAV App")**
+```
+LOCAL [EventSubscriber] Installed(VAR Rec : Record "NAV App")
 IF (Rec.Name = 'BingMaps Integration') THEN
   BingMapsSetup.RUNMODAL;
+```
 
 Remember to check for the name of the extension installed, else your dialog will popup whenever you install any extension.
 
@@ -205,7 +213,8 @@ This is handled in _Codeunit::BingMaps Notifications._
 
 This method:
 
-**LOCAL ShowBingMapsSetupWarning()**
+```
+LOCAL ShowBingMapsSetupWarning()
 BingMapsSetupOk := BingMapsSetup.FINDFIRST;
 IF BingMapsSetupOk THEN BEGIN
   BingMapsSetupOk := BingMapsSetup."BingMaps Key OK";
@@ -217,19 +226,22 @@ IF NOT BingMapsSetupOk THEN BEGIN
   Notification.ADDACTION(txtSetupBingMaps, CODEUNIT::"BingMaps Notifications", 'SetupBingMapsIntegration');
   Notification.SEND;
 END;
+```
 
 Will check whether the BingMaps Key is OK and if not, create a notification, which will be displayed in the current window.
 
 In order for this notification to get displayed in the Role Center, we need to hook up events on all RoleCenters. Unfortunately there are no OnGlobalOpenPage yet, meaning that you will find a number of event subscriptions:
 
-**LOCAL \[EventSubscriber\] O365ActivitiesOnOpenPage(VAR Rec : Record "Activities Cue")**
+```
+LOCAL [EventSubscriber] O365ActivitiesOnOpenPage(VAR Rec : Record "Activities Cue")
 ShowBingMapsSetupWarning;
 
-**LOCAL \[EventSubscriber\] AccountManagerActivitiesOnOpenPage(VAR Rec : Record "Finance Cue")**
+LOCAL [EventSubscriber] AccountManagerActivitiesOnOpenPage(VAR Rec : Record "Finance Cue")
 ShowBingMapsSetupWarning;
 
-**LOCAL \[EventSubscriber\] AccPayablesActivitiesOnOpenPage(VAR Rec : Record "Finance Cue")**
+LOCAL [EventSubscriber] AccPayablesActivitiesOnOpenPage(VAR Rec : Record "Finance Cue")
 ShowBingMapsSetupWarning;
+```
 
 The reason for hooking up the event to the Activities part is, that you cannot hook up _OnOpenPage_ events to the Role Center itself because it doesn’t have a _SourceTable_ defined.
 
@@ -239,7 +251,9 @@ Sample subscription properties:
 
 The SetupBingMapsIntegration method, which is called when the user clicks the action in the notification will simply run the BingMaps Integration Setup dialog:
 
-**SetupBingMapsIntegration(Notification : Notification)**PAGE.RUNMODAL(PAGE::"BingMaps Integration Setup");
+```
+SetupBingMapsIntegration(Notification : Notification)PAGE.RUNMODAL(PAGE::"BingMaps Integration Setup");
+```
 
 ### Display a map with all customers
 
@@ -253,13 +267,16 @@ The CustomerLocation page includes all information needed for displaying custome
 
 The URL is a calculated field, which is calculated in the _OnAfterGetRecord_ trigger.
 
-**OnAfterGetRecord()**
+```
+OnAfterGetRecord()
 URL := GETURL(CLIENTTYPE::Web, COMPANYNAME, OBJECTTYPE::Page, PAGE::"Customer Card", Rec);
+```
 
 When using the Azure Image, the BingMaps script will place a website called _map.aspx_ in your WebClient folder in order to give you this functionality. When this app is published to AppSource, I cannot place an .aspx file on the server, meaning that I would have to create a publicly hosted web site, which can get data from the NAV version it is attached to.
 
 The map.aspx uses C# as server side scripting and the code for getting all customers is:
 
+```
 public string GetCustomers()
 {
   try
@@ -271,6 +288,7 @@ public string GetCustomers()
     return "";
   }
 }
+```
 
 Which basically creates a _Javascript_ function call to _dataloaded_ with all customers in a json string (called JSONP). This means that all data retrieval is done server side and only the needed data will be transferred over the wire. You could set filters on the Latitude and Longitude fields if you want to only retrieve the customers visible right now, but then you would have to use several calls to the NAV server to get customers when ever you zoom in/out or move the viewport.
 

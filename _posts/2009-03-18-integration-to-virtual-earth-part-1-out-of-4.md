@@ -111,22 +111,26 @@ First of all – fire up your Visual Studio 2008 SP1 and create a new Class Libr
 
 Add the CLSCompliant(true) to the AssemblyInfo.cs file (I usually to this after the ComVisible(false) line).
 
-// Setting ComVisible to false makes the types in this assembly not visible  
-// to COM components.  If you need to access a type in this assembly from  
-// COM, set the ComVisible attribute to true on that type.  
-\[assembly: ComVisible(false)\]  
-**\[assembly: CLSCompliant(true)\]**
+```
+// Setting ComVisible to false makes the types in this assembly not visible
+// to COM components.  If you need to access a type in this assembly from
+// COM, set the ComVisible attribute to true on that type.
+[assembly: ComVisible(false)]
+[assembly: CLSCompliant(true)]
+```
 
 After this you need to sign the assembly. Do this by opening properties of project, go to the Signing TAB,  check the “Sign the assembly” checkbox and select new – type in a filename and password protect the key file if you want to (I usually don’t).
 
 Next thing is to create the COM interface and Class – the interface we want is:
 
-\[ComVisible(true)\]  
-\[Guid(“B1F26FE7-0EA0-4883-BD6A-0398F8D2B139”), InterfaceType(ComInterfaceType.InterfaceIsDual)\]  
-public interface INAVGeoCode  
-{  
-string GetLocation(string query, int confidence, ref double latitude, ref double longitude);  
+```
+[ComVisible(true)]
+[Guid("B1F26FE7-0EA0-4883-BD6A-0398F8D2B139"), InterfaceType(ComInterfaceType.InterfaceIsDual)]
+public interface INAVGeoCode
+{
+string GetLocation(string query, int confidence, ref double latitude, ref double longitude);
 }
+```
 
 For the implementation we need a Service Reference to:
 
@@ -140,88 +144,116 @@ Note that the configuration of this Service Reference will be written in app.con
 
 The implementation could be:
 
-\[ComVisible(true)\]  
-\[Guid(“9090DF4C-FB24-4a4b-9E49-3924353A6040”), ClassInterface(ClassInterfaceType.None)\]  
-public class NAVGeoCode : INAVGeoCode  
-{  
-private string token = null;  
+```
+[ComVisible(true)]
+[Guid("9090DF4C-FB24-4a4b-9E49-3924353A6040"), ClassInterface(ClassInterfaceType.None)]
+public class NAVGeoCode : INAVGeoCode
+{
+private string token = null;
 private DateTime tokenExpires = DateTime.Now;
+```
 
-    /// <summary>  
-/// Geocode an address and return latitude and longitude  
-/// Low confidence is used for geocoding demo data – where the addresses really doesn’t exist:-)  
-/// </summary>  
-/// <param name=”query”>Address in the format: Address, City, Country</param>  
-/// <param name=”confidence”>0 is low, 1 is medium and 2 is high confidence</param>  
-/// <param name=”latitude”>returns the latitude of the address</param>  
-/// <param name=”longitude”>returns the longitude of the address</param>  
-/// <returns>Error message if something went wrong</returns>  
-public string GetLocation(string query, int confidence, ref double latitude, ref double longitude)  
-{  
-try  
-{  
-// Get a Virtual Earth token before making a request  
-string err = GetToken(ref this.token, ref this.tokenExpires);  
-if (!string.IsNullOrEmpty(err))  
+    
+
+```
+/// <summary>
+/// Geocode an address and return latitude and longitude
+/// Low confidence is used for geocoding demo data – where the addresses really doesn't exist:-)
+/// </summary>
+/// <param name="query">Address in the format: Address, City, Country</param>
+/// <param name="confidence">0 is low, 1 is medium and 2 is high confidence</param>
+/// <param name="latitude">returns the latitude of the address</param>
+/// <param name="longitude">returns the longitude of the address</param>
+/// <returns>Error message if something went wrong</returns>
+public string GetLocation(string query, int confidence, ref double latitude, ref double longitude)
+{
+try
+{
+// Get a Virtual Earth token before making a request
+string err = GetToken(ref this.token, ref this.tokenExpires);
+if (!string.IsNullOrEmpty(err))
 return err;
+```
 
-            GeocodeService.GeocodeRequest geocodeRequest = new GeocodeService.GeocodeRequest();
+            `GeocodeService.GeocodeRequest geocodeRequest = new GeocodeService.GeocodeRequest();`
 
-            // Set the credentials using a valid Virtual Earth token  
-geocodeRequest.Credentials = new GeocodeService.Credentials();  
+            
+
+```
+// Set the credentials using a valid Virtual Earth token
+geocodeRequest.Credentials = new GeocodeService.Credentials();
 geocodeRequest.Credentials.Token = token;
+```
 
-            // Set the full address query  
-geocodeRequest.Query = query;  
-// Set the options to only return high confidence results  
-GeocodeService.ConfidenceFilter\[\] filters = new GeocodeService.ConfidenceFilter\[1\];  
-filters\[0\] = new GeocodeService.ConfidenceFilter();  
-switch (confidence)  
-{  
-case 0:  
-filters\[0\].MinimumConfidence = GeocodeService.Confidence.Low;  
-break;  
-case 1:  
-filters\[0\].MinimumConfidence = GeocodeService.Confidence.Medium;  
-break;  
-case 2:  
-filters\[0\].MinimumConfidence = GeocodeService.Confidence.High;  
-break;  
-default:  
-return “Wrong value for confidence parameter”;  
+            
+
+```
+// Set the full address query
+geocodeRequest.Query = query;
+// Set the options to only return high confidence results
+GeocodeService.ConfidenceFilter[] filters = new GeocodeService.ConfidenceFilter[1];
+filters[0] = new GeocodeService.ConfidenceFilter();
+switch (confidence)
+{
+case 0:
+filters[0].MinimumConfidence = GeocodeService.Confidence.Low;
+break;
+case 1:
+filters[0].MinimumConfidence = GeocodeService.Confidence.Medium;
+break;
+case 2:
+filters[0].MinimumConfidence = GeocodeService.Confidence.High;
+break;
+default:
+return "Wrong value for confidence parameter";
 }
+```
 
-            GeocodeService.GeocodeOptions geocodeOptions = new GeocodeService.GeocodeOptions();  
+            
+
+```
+GeocodeService.GeocodeOptions geocodeOptions = new GeocodeService.GeocodeOptions();
 geocodeOptions.Filters = filters;
+```
 
-            geocodeRequest.Options = geocodeOptions;
+            `geocodeRequest.Options = geocodeOptions;`
 
-            // Make the geocode request  
-GeocodeService.IGeocodeService geocodeService = new ChannelFactory<GeocodeService.IGeocodeService>(new BasicHttpBinding(), new EndpointAddress(“[http://staging.dev.virtualearth.net/webservices/v1/geocodeservice/GeocodeService.svc&#8221](http://staging.dev.virtualearth.net/webservices/v1/geocodeservice/GeocodeService.svc&#8221);)).CreateChannel();GeocodeService.GeocodeResponse geocodeResponse = geocodeService.Geocode(geocodeRequest);
+            ```
+// Make the geocode request
+GeocodeService.IGeocodeService geocodeService = new ChannelFactory<GeocodeService.IGeocodeService>(new BasicHttpBinding(), new EndpointAddress("http://staging.dev.virtualearth.net/webservices/v1/geocodeservice/GeocodeService.svc")).CreateChannel();
+````GeocodeService.GeocodeResponse geocodeResponse = geocodeService.Geocode(geocodeRequest);`
 
-            if (geocodeResponse.Results.Length == 0 || geocodeResponse.Results\[0\].Locations.Length == 0)  
-{  
-return “No locations found”;  
-}  
-latitude = geocodeResponse.Results\[0\].Locations\[0\].Latitude;  
-longitude = geocodeResponse.Results\[0\].Locations\[0\].Longitude;
+            
 
-            return “”;  
-}  
-catch (Exception ex)  
-{  
-return ex.Message;  
-}  
-}  
+```
+if (geocodeResponse.Results.Length == 0 || geocodeResponse.Results[0].Locations.Length == 0)
+{
+return "No locations found";
 }
+latitude = geocodeResponse.Results[0].Locations[0].Latitude;
+longitude = geocodeResponse.Results[0].Locations[0].Longitude;
+```
+
+            
+
+```
+return "";
+}
+catch (Exception ex)
+{
+return ex.Message;
+}
+}
+}
+```
 
 Before we add the last function – **GetToken** – I would like to draw attention to the line:
 
-GeocodeService.IGeocodeService geocodeService = new ChannelFactory<GeocodeService.IGeocodeService>(new BasicHttpBinding(), new EndpointAddress(“[http://staging.dev.virtualearth.net/webservices/v1/geocodeservice/GeocodeService.svc&#8221](http://staging.dev.virtualearth.net/webservices/v1/geocodeservice/GeocodeService.svc&#8221);)).CreateChannel();
+`GeocodeService.IGeocodeService geocodeService = new ChannelFactory<GeocodeService.IGeocodeService>(new BasicHttpBinding(), new EndpointAddress("http://staging.dev.virtualearth.net/webservices/v1/geocodeservice/GeocodeService.svc&#8221;)).CreateChannel();`
 
 This isn’t normally the way you would instantiate the service class. In fact normally you would see:
 
-GeocodeService.GeocodeServiceClient geocodeService = new GeocodeService.GeocodeServiceClient();
+`GeocodeService.GeocodeServiceClient geocodeService = new GeocodeService.GeocodeServiceClient();`
 
 which is simpler, looks nicer and does the same thing – so why bother?
 
@@ -245,50 +277,63 @@ called
 
 The code for the GetToken could look like this:
 
-/// <summary>  
-/// Check validity of existing security token and request a new  
-/// Security Token for Microsoft Virtual Earth Web Services if necessary  
-/// </summary>  
-/// <param name=”token”>Security token</param>  
-/// <param name=”tokenExpires”>Timestamp for when the token expires</param>  
-/// <returns>null if we have a valid token or an error string if not</returns>  
-private string GetToken(ref string token, ref DateTime tokenExpires)  
-{  
-if (string.IsNullOrEmpty(token) || DateTime.Now.CompareTo(tokenExpires) >= 0)  
-{  
-// Set Virtual Earth Platform Developer Account credentials to access the Token Service  
-TokenWebReference.CommonService commonService = new TokenWebReference.CommonService();  
-commonService.Credentials = new System.Net.NetworkCredential(“<your account ID>”, “<your password>”);
+```
+/// <summary>
+/// Check validity of existing security token and request a new
+/// Security Token for Microsoft Virtual Earth Web Services if necessary
+/// </summary>
+/// <param name="token">Security token</param>
+/// <param name="tokenExpires">Timestamp for when the token expires</param>
+/// <returns>null if we have a valid token or an error string if not</returns>
+```
 
-        // Set the token specification properties  
-TokenWebReference.TokenSpecification tokenSpec = new TokenWebReference.TokenSpecification();  
-IPAddress\[\] localIPs = Dns.GetHostAddresses(Dns.GetHostName());  
-foreach (IPAddress IP in localIPs)  
-{  
-if (IP.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)  
-{  
-tokenSpec.ClientIPAddress = IP.ToString();  
-break;  
-}  
-}  
-// Token is valid an hour and 10 minutes  
-tokenSpec.TokenValidityDurationMinutes = 70;
+```
+private string GetToken(ref string token, ref DateTime tokenExpires)
+{
+if (string.IsNullOrEmpty(token) || DateTime.Now.CompareTo(tokenExpires) >= 0)
+{
+// Set Virtual Earth Platform Developer Account credentials to access the Token Service
+TokenWebReference.CommonService commonService = new TokenWebReference.CommonService();
+commonService.Credentials = new System.Net.NetworkCredential("<your account ID>", "<your password>");
+```
 
-        // Get a token  
-try  
-{  
-// Get token  
-token = commonService.GetClientToken(tokenSpec);  
-// Renew token in 1 hour  
-tokenExpires = DateTime.Now.AddHours(1);  
-}  
-catch (Exception ex)  
-{  
-return ex.Message;  
-}  
-}  
-return null;  
+        
+
+```
+// Set the token specification properties
+TokenWebReference.TokenSpecification tokenSpec = new TokenWebReference.TokenSpecification();
+IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
+foreach (IPAddress IP in localIPs)
+{
+if (IP.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+{
+tokenSpec.ClientIPAddress = IP.ToString();
+break;
 }
+}
+// Token is valid an hour and 10 minutes
+tokenSpec.TokenValidityDurationMinutes = 70;
+```
+
+        
+
+```
+// Get a token
+try
+{
+// Get token
+token = commonService.GetClientToken(tokenSpec);
+// Renew token in 1 hour
+tokenExpires = DateTime.Now.AddHours(1);
+}
+catch (Exception ex)
+{
+return ex.Message;
+}
+}
+return null;
+}
+```
 
 Note that I am giving the token a TTL for 70 minutes – but renew after 60 – that way I shouldn’t have to deal with tokens being expired.
 
@@ -315,7 +360,7 @@ Your situation might be different and you might select a different option.
 
 After copying the DLL to the Common folder, we need to register the DLL and make it available as a COM automation object.
 
-C:\\Windows\\Microsoft.NET\\Framework\\v2.0.50727\\regasm NAVMaps.dll /codebase /tlb
+`C:\Windows\Microsoft.NET\Framework\v2.0.50727\regasm NAVMaps.dll /codebase /tlb`
 
 Is the command to launch.
 
@@ -325,39 +370,46 @@ What I normally do in situations like this is, to create a codeunit, which initi
 
 In this case Running the codeunit should run through all customers and geocode them.
 
-**OnRun()**  
-IF cust.FIND(‘-‘) THEN  
-BEGIN  
-REPEAT  
-err := UpdateLatitudeAndLongitude(cust);  
-IF (err <> ”) THEN  
-BEGIN  
-IF NOT CONFIRM(‘Customer ‘+cust.”No.”+ ‘ – Error: ‘+err + ‘ – Continue?’) THEN EXIT;  
-END;  
-UNTIL cust.NEXT = 0;  
+```
+OnRun()
+IF cust.FIND('-') THEN
+BEGIN
+REPEAT
+err := UpdateLatitudeAndLongitude(cust);
+IF (err <> ") THEN
+BEGIN
+IF NOT CONFIRM('Customer '+cust."No."+ ' – Error: '+err + ' – Continue?') THEN EXIT;
 END;
+UNTIL cust.NEXT = 0;
+END;
+```
 
 Whether or not you want an error here or not is kind of your own decision.
 
 The function, that does the job looks like:
 
-**UpdateLatitudeAndLongitude(VAR cust : Record Customer) error : Text\[1024\]  
-**CREATE(NavMaps, TRUE, FALSE);  
-country.GET(cust.”Country/Region Code”);  
-query := cust.Address+’, ‘+cust.”Address 2″+’, ‘+cust.City+’, ‘+’, ‘+cust.”Post Code”+’, ‘+country.Name;  
-error := NavMaps.GetLocation(query, 2, cust.Latitude, cust.Longitude);  
-IF (error = ”) THEN  
-BEGIN  
-cust.MODIFY();  
-END ELSE  
-BEGIN  
-query := cust.City + ‘, ‘ + country.Name;  
-error := NavMaps.GetLocation(query, 0, cust.Latitude, cust.Longitude);  
-IF (error = ”) THEN  
-BEGIN  
-cust.MODIFY();  
-END;  
+```
+UpdateLatitudeAndLongitude(VAR cust : Record Customer) error : Text[1024]
+```
+
+```
+CREATE(NavMaps, TRUE, FALSE);
+country.GET(cust."Country/Region Code");
+query := cust.Address+', '+cust."Address 2″+', '+cust.City+', '+', '+cust."Post Code"+', '+country.Name;
+error := NavMaps.GetLocation(query, 2, cust.Latitude, cust.Longitude);
+IF (error = ") THEN
+BEGIN
+cust.MODIFY();
+END ELSE
+BEGIN
+query := cust.City + ', ' + country.Name;
+error := NavMaps.GetLocation(query, 0, cust.Latitude, cust.Longitude);
+IF (error = ") THEN
+BEGIN
+cust.MODIFY();
 END;
+END;
+```
 
 Local variables looks like this
 

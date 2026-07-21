@@ -14,7 +14,9 @@ As an example, achim-t have run test scripts at least 20 times [here](https://gi
 
 As a result, a new generic image (**currently version 1.0.2.4**), which should resolve most of these issues (for **NAV/BC versions 15 and up**) is available in preview at this time – add **\-dev** to the generic image name and you will get the preview.
 
-\-useGenericImage "$(Get-BestGenericImageName)-dev"
+```
+-useGenericImage "$(Get-BestGenericImageName)-dev"
+```
 
 Also, the latest BcContainerHelper preview will automatically select the preview image when creating containers, there you don’t have to do anything. The next BcContainerHelper will even present you with a **warning if you are running an OS, isolation mode and/or NAV/BC version** which might require you to **use Hyper-V or switch off Windows Defender** while creating the container.
 

@@ -19,8 +19,10 @@ The only data type (supported by Web Services) that can hold a picture is the Bi
 
 We need to create the following two functions:
 
-GetItemPicture(No : Code\[20\];VAR Picture : BigText)  
-SetItemPicture(No : Code\[20\]; Picture : BigText);
+```
+GetItemPicture(No : Code[20];VAR Picture : BigText)
+SetItemPicture(No : Code[20]; Picture : BigText);
+```
 
 BigText is capable if holding binary data (including null terminals) up to any size. On the WSDL side these functions will have the following signature:
 
@@ -38,47 +40,76 @@ So we need to base64 (or something like that) encode our picture when returning 
 
 Lets assume for a second that we have a base64 COM object – then this would be our functions in AL:
 
-**GetItemPicture(No : Code\[20\];VAR Picture : BigText)  
-**CLEAR(Picture);  
-Item.SETRANGE(Item.”No.”, No, No);  
-IF (Item.FINDFIRST()) THEN  
-BEGIN  
-  Item.CALCFIELDS(Item.Picture);  
-// Get Temp FileName  
-TempFile.CREATETEMPFILE;  
-FileName := TempFile.NAME;  
-TempFile.CLOSE;
+```
+GetItemPicture(No : Code[20];VAR Picture : BigText)
+CLEAR(Picture);
+Item.SETRANGE(Item."No.", No, No);
+IF (Item.FINDFIRST()) THEN
+BEGIN
+```
 
-  // Export picture to Temp File  
+  
+
+```
+Item.CALCFIELDS(Item.Picture);
+// Get Temp FileName
+TempFile.CREATETEMPFILE;
+FileName := TempFile.NAME;
+TempFile.CLOSE;
+```
+
+  
+
+```
+// Export picture to Temp File
 Item.Picture.EXPORT(FileName);
+```
 
-  // Get a base64 encoded picture into a string  
-CREATE(base64);  
+  
+
+```
+// Get a base64 encoded picture into a string
+CREATE(base64);
 Picture.ADDTEXT(base64.encodeFromFile(FileName));
+```
 
-  // Erase Temp File  
-FILE.ERASE(FileName);  
+  
+
+```
+// Erase Temp File
+FILE.ERASE(FileName);
 END;
+```
 
-**SetItemPicture(No : Code\[20\];Picture : BigText)  
-**Item.SETRANGE(Item.”No.”, No, No);  
-IF (Item.FINDFIRST()) THEN  
-BEGIN  
-// Get Temp FileName  
-TempFile.CREATETEMPFILE;  
-FileName := TempFile.NAME;  
+```
+SetItemPicture(No : Code[20];Picture : BigText)
+Item.SETRANGE(Item."No.", No, No);
+IF (Item.FINDFIRST()) THEN
+BEGIN
+// Get Temp FileName
+TempFile.CREATETEMPFILE;
+FileName := TempFile.NAME;
 TempFile.CLOSE;
+```
 
-  // Decode the bas64 encoded image into the Temp File  
-CREATE(base64);  
+  
+
+```
+// Decode the bas64 encoded image into the Temp File
+CREATE(base64);
 base64.decodeToFile(Picture, FileName);
+```
 
-  // Import picture from Temp File  
-Item.Picture.IMPORT(FileName);  
-Item.Modify();  
-// Erase Temp File  
-FILE.ERASE(FileName);  
+  
+
+```
+// Import picture from Temp File
+Item.Picture.IMPORT(FileName);
+Item.Modify();
+// Erase Temp File
+FILE.ERASE(FileName);
 END;
+```
 
 A couple of comments to the source:
 
@@ -94,8 +125,10 @@ As you probably know, the ADDTEXT takes a TEXT and a position as parameter – a
 
 The two lines in question in C# looks like:
 
-base64.Create(DataError.ThrowError);  
-picture.Value = NavBigText.ALAddText(picture.Value, base64.InvokeMethod(@”encodeFromFile”, fileName));
+```
+base64.Create(DataError.ThrowError);
+picture.Value = NavBigText.ALAddText(picture.Value, base64.InvokeMethod(@"encodeFromFile", fileName));
+```
 
 Note also that the base64.decodeToFile function gets a BigText directly as parameter. As you will see, that function just takes an object as a parameter – and you can transfer whatever to that function (BigText, Text, Code etc.). You actually also could give the function a decimal variable in which case the function would throw an exception (str as string would return NULL).
 
@@ -107,41 +140,54 @@ So now you also know how to transfer large strings to and from COM objects:
 
 In my WebService consumer project I use the following code to test my WebService:
 
-// Initialize Service  
-CodeUnitPicture service = new CodeUnitPicture();  
+```
+// Initialize Service
+```
+
+```
+CodeUnitPicture service = new CodeUnitPicture();
 service.UseDefaultCredentials = true;
+```
 
-// Set the Image for Item 1100  
-service.SetItemPicture(“1100″, encodeFromFile(@”c:\\MandalayBay.jpg”));
+```
+// Set the Image for Item 1100
+service.SetItemPicture("1100″, encodeFromFile(@"c:\MandalayBay.jpg"));
+```
 
-// Get and show the Image for Item 1001  
-string p = “”;  
-service.GetItemPicture(“1001″, ref p);  
-decodeToFile(p, @”c:\\pic.jpg”);  
-System.Diagnostics.Process.Start(@”c:\\pic.jpg”);
+```
+// Get and show the Image for Item 1001
+string p = "";
+service.GetItemPicture("1001″, ref p);
+decodeToFile(p, @"c:\pic.jpg");
+System.Diagnostics.Process.Start(@"c:\pic.jpg");
+```
 
 and BTW – the source code for the two functions in the base64 COM object are here:
 
-public string encodeFromFile(string filename)  
-{  
-FileStream fs = File.OpenRead(filename);  
-BinaryReader br = new BinaryReader(fs);  
-int len = (int)fs.Length;  
-byte\[\] buffer = new byte\[len\];  
-br.Read(buffer, 0, len);  
-br.Close();  
-fs.Close();  
-return System.Convert.ToBase64String(buffer);  
+```
+public string encodeFromFile(string filename)
+{
+FileStream fs = File.OpenRead(filename);
+BinaryReader br = new BinaryReader(fs);
+int len = (int)fs.Length;
+byte[] buffer = new byte[len];
+br.Read(buffer, 0, len);
+br.Close();
+fs.Close();
+return System.Convert.ToBase64String(buffer);
 }
+```
 
-public void decodeToFile(object str, string filename)  
-{  
-FileStream fs = File.Create(filename);  
-BinaryWriter bw = new BinaryWriter(fs);  
-bw.Write(Convert.FromBase64String(str as string));  
-bw.Close();  
-fs.Close();  
+```
+public void decodeToFile(object str, string filename)
+{
+FileStream fs = File.Create(filename);
+BinaryWriter bw = new BinaryWriter(fs);
+bw.Write(Convert.FromBase64String(str as string));
+bw.Close();
+fs.Close();
 }
+```
 
 If you whish to download and try it out for yourself – you can download the sources here:
 

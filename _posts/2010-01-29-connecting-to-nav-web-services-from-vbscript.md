@@ -23,6 +23,7 @@ The primary difference between Javascript and VBcript is actually syntax – mos
 
 I created a file called _TestWS.vbs_ and the code to implement the scenario looks like:
 
+```
 function InvokeNavWS(URL, method, nameSpace, returnTag, parameters) 
     Set xmlhttp = CreateObject("MSXML2.XMLHTTP")
     request = "<Soap:Envelope xmlns:Soap="""+SoapEnvelopeNS+"""><Soap:Body><"+method+" xmlns="""+nameSpace+""">"+parameters+"</"+method+"></Soap:Body></Soap:Envelope>"
@@ -49,18 +50,18 @@ function InvokeNavWS(URL, method, nameSpace, returnTag, parameters)
 end function
 
 ' Get the Company list 
-function SystemService\_Companies() 
-    Set SystemService\_Companies = InvokeNavWS(systemServiceURL, "Companies", systemServiceNS, "return\_value", "") 
+function SystemService_Companies() 
+    Set SystemService_Companies = InvokeNavWS(systemServiceURL, "Companies", systemServiceNS, "return_value", "") 
 end function
 
 ' Read one customer 
-function CustomerPage\_Read(no) 
-    Set CustomerPage\_Read = InvokeNavWS(CustomerPageURL, "Read", CustomerPageNS, "Customer", "<No>"+no+"</No>") 
+function CustomerPage_Read(no) 
+    Set CustomerPage_Read = InvokeNavWS(CustomerPageURL, "Read", CustomerPageNS, "Customer", "<No>"+no+"</No>") 
 end function
 
 ' Read Customers 
-function CustomerPage\_ReadMultiple(filters) 
-    Set CustomerPage\_ReadMultiple = InvokeNavWS(CustomerPageURL, "ReadMultiple", CustomerPageNS, "Customer", filters) 
+function CustomerPage_ReadMultiple(filters) 
+    Set CustomerPage_ReadMultiple = InvokeNavWS(CustomerPageURL, "ReadMultiple", CustomerPageNS, "Customer", filters) 
 end function
 
 sub display(str) 
@@ -74,7 +75,7 @@ soapEnvelopeNS = "http://schemas.xmlsoap.org/soap/envelope/"
 systemServiceNS = "urn:microsoft-dynamics-schemas/nav/system/" 
 customerPageNS = "urn:microsoft-dynamics-schemas/page/customer"
 
-Set Companies = SystemService\_Companies() 
+Set Companies = SystemService_Companies() 
 display "Companies:" 
 for i = 0 to Companies.length-1 
     display Companies(i).text 
@@ -86,11 +87,11 @@ display ""
 display "URL of Customer Page:" 
 display customerPageURL
 
-Set Customer10000 = CustomerPage\_Read("10000") 
+Set Customer10000 = CustomerPage_Read("10000") 
 display "" 
 display "Name of Customer 10000: "+Customer10000(0).childNodes(2).firstChild.nodeValue
 
-Set Customers = CustomerPage\_ReadMultiple("<filter><Field>Country\_Region\_Code</Field><Criteria>GB</Criteria></filter><filter><Field>Location\_Code</Field><Criteria>RED|BLUE</Criteria></filter>") 
+Set Customers = CustomerPage_ReadMultiple("<filter><Field>Country_Region_Code</Field><Criteria>GB</Criteria></filter><filter><Field>Location_Code</Field><Criteria>RED|BLUE</Criteria></filter>") 
 display "" 
 display "Customers in GB served by RED or BLUE warehouse:" 
 for i = 0 to Customers.length-1 
@@ -99,6 +100,7 @@ next
 
 display "" 
 display "THE END"
+```
 
 The similarity to the Javascript sample is huge (since I am using the same object model), the biggest differences are:
 
@@ -109,7 +111,9 @@ The similarity to the Javascript sample is huge (since I am using the same objec
 
 Using the command:
 
-C:\\users\\freddyk>SCript /nologo testws.vbs
+```
+C:\users\freddyk>SCript /nologo testws.vbs
+```
 
 I get the following:
 

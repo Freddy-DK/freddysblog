@@ -11,8 +11,10 @@ If you haven’t already read part 1 you should do so [here](/2010/11/30/connect
 
 In part 1 I showed how a service reference plus two lines of code:
 
-var client = new Proxy1.ProxyClassClient("NetTcpRelayBinding\_IProxyClass");
+```
+var client = new Proxy1.ProxyClassClient("NetTcpRelayBinding_IProxyClass");
 Console.WriteLine(client.GetCustomerName("10000"));
+```
 
 could extract data from my locally installed NAV from anywhere in the world.
 
@@ -22,32 +24,35 @@ The first line instantiates a WCF client class with a parameter pointing to a co
 
 A closer look at the config file reveals 3 endpoints defined by the service:
 
+```
 <client>  
    <endpoint  
      address="sb://navdemo.servicebus.windows.net/Proxy1/"  
      binding="netTcpRelayBinding"  
-     bindingConfiguration="NetTcpRelayBinding\_IProxyClass"   
+     bindingConfiguration="NetTcpRelayBinding_IProxyClass"   
      contract="Proxy1.IProxyClass"  
-     name="NetTcpRelayBinding\_IProxyClass" />  
+     name="NetTcpRelayBinding_IProxyClass" />  
    <endpoint  
      address="https://navdemo.servicebus.windows.net/https/Proxy1/"  
      binding="basicHttpBinding"   
-     bindingConfiguration="BasicHttpRelayBinding\_IProxyClass"   
+     bindingConfiguration="BasicHttpRelayBinding_IProxyClass"   
      contract="Proxy1.IProxyClass"   
-     name="BasicHttpRelayBinding\_IProxyClass" />  
+     name="BasicHttpRelayBinding_IProxyClass" />  
    <endpoint  
      address=http://freddyk-appfabr:7050/Proxy1  
      binding="basicHttpBinding"   
-     bindingConfiguration="BasicHttpBinding\_IProxyClass"  
+     bindingConfiguration="BasicHttpBinding_IProxyClass"  
      contract="Proxy1.IProxyClass"   
-     name="BasicHttpBinding\_IProxyClass" /> 
+     name="BasicHttpBinding_IProxyClass" /> 
 </client>
+```
 
 The endpoint we use in the sample above is the first one, using the binding called netTcpRelayBinding and the binding configuration NetTcpRelayBinding\_IProxyClass, defined in the config file like:
 
+```
 <netTcpRelayBinding>  
   <binding  
-    name="NetTcpRelayBinding\_IProxyClass"  
+    name="NetTcpRelayBinding_IProxyClass"  
     closeTimeout="00:01:00"  
     openTimeout="00:01:00"  
     receiveTimeout="00:10:00"  
@@ -77,13 +82,16 @@ The endpoint we use in the sample above is the first one, using the binding call
     </security>  
   </binding> 
 </netTcpRelayBinding>
+```
 
 If we want to avoid using the config file for creating the client, we can also create the bindings manually. The code would look like:
 
+```
 var binding = new NetTcpRelayBinding(EndToEndSecurityMode.Transport, RelayClientAuthenticationType.None);
 var endpoint = new EndpointAddress("sb://navdemo.servicebus.windows.net/Proxy1/");
 var client = new Proxy1.ProxyClassClient(binding, endpoint);
 Console.WriteLine(client.GetCustomerName("10000"));
+```
 
 In order to do this, you need to have the Windows Azure AppFabric SDK installed (can be found [here](http://www.microsoft.com/downloads/en/details.aspx?FamilyID=39856a03-1490-4283-908f-c8bf0bfad8a5&displaylang=en)), AND you need to set the Target Framework of the Project to .NET Framework 4 (NOT the .NET Framework 4 Client Profile, which is the default). After having done this, you can now add a reference and a using statement to Microsoft.Servicebus.
 
@@ -103,10 +111,12 @@ The last endpoint uses the http protocol ([http://](http://)) and is a local end
 
 Like NetTcpRelayBinding, this binding is also defined in the Microsoft.Servicebus.dll and if we were to write code using this binding to access our Proxy1 – it would look like this:
 
+```
 var binding = new BasicHttpRelayBinding(EndToEndBasicHttpSecurityMode.Transport, RelayClientAuthenticationType.None);
 var endpoint = new EndpointAddress("https://navdemo.servicebus.windows.net/https/Proxy1/");
 var client = new Proxy1.ProxyClassClient(binding, endpoint);
 Console.WriteLine(client.GetCustomerName("10000"));
+```
 
 Again – this sample would require the Windows Azure AppFabric SDK to be installed on the machine connecting.
 
@@ -118,21 +128,27 @@ You still need the SDK on the developer machine if you need to create a referenc
 
 The “secret” is to connect using standard BasicHttpBinding – like this:
 
+```
 var binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
 var endpoint = new EndpointAddress("https://navdemo.servicebus.windows.net/https/Proxy1/");
 var client = new Proxy1.ProxyClassClient(binding, endpoint);
 Console.WriteLine(client.GetCustomerName("10000"));
+```
 
 Or, using the config file:
 
-var client = new Proxy1.ProxyClassClient("BasicHttpRelayBinding\_IProxyClass");
+```
+var client = new Proxy1.ProxyClassClient("BasicHttpRelayBinding_IProxyClass");
 Console.WriteLine(client.GetCustomerName("10000"));
+```
 
 Note that the name refers to BasicHttpRelayBinding, but the section refers to BasicHttpBinding:
 
+```
 <bindings> 
   <basicHttpBinding> 
-    <binding name="BasicHttpRelayBinding\_IProxyClass" …
+    <binding name="BasicHttpRelayBinding_IProxyClass" …
+```
 
 and the section determines what class gets instantiated – in this case a standard BasicHttpBinding which is available in System.ServiceModel of the .net framework.
 
@@ -154,8 +170,10 @@ In NAV R2 we do not have anything called a service reference, but we do have .ne
 
 If you start a Visual Studio command prompt and type in the following commands:
 
+```
 svcutil /out:Proxy1.cs sb://navdemo.servicebus.windows.net/Proxy1/mex 
-c:\\Windows\\Microsoft.NET\\Framework\\v3.5\\csc /t:library Proxy1.cs
+c:\Windows\Microsoft.NET\Framework\v3.5\csc /t:library Proxy1.cs
+```
 
 then, if successful you should now have a Proxy1.dll.
 
@@ -172,20 +190,24 @@ You also need to copy it to the RoleTailored ClientAdd-Ins folder if you are pla
 
 Create a codeunit and add the following variables:
 
+```
 Name          DataType Assembly            Class 
 proxy1client  DotNet   Proxy1              ProxyClassClient 
 securityMode  DotNet   System.ServiceModel System.ServiceModel.BasicHttpSecurityMode 
 binding       DotNet   System.ServiceModel System.ServiceModel.BasicHttpBinding 
 endpoint      DotNet   System.ServiceModel System.ServiceModel.EndpointAddress
+```
 
 all with default properties, meaning that they will run on the Service Tier. Then write the following code:
 
-**OnRun()** 
+```
+OnRun() 
 securityMode := 1; 
 binding := binding.BasicHttpBinding(securityMode); 
 endpoint := endpoint.EndpointAddress('https://navdemo.servicebus.windows.net/https/Proxy1/'); 
 proxy1client := proxy1client.ProxyClassClient(binding, endpoint); 
 MESSAGE(proxy1client.GetCustomerName('20000'));
+```
 
 Now you of course cannot run this codeunit from the Classic Client, but you will have to add an action to some page, running this codeunit.
 
@@ -213,19 +235,21 @@ Add a Service Reference to [sb://navdemo.servicebus.windows.net/Proxy1/mex](//na
 
 Add the following code to the MainPage.xaml.cs:
 
+```
 // Constructor
 public MainPage()
 {
     InitializeComponent();
-    var client = new Proxy1.ProxyClassClient(“BasicHttpRelayBinding\_IProxyClass”);
-    client.GetCustomerNameCompleted += new EventHandler<Proxy1.GetCustomerNameCompletedEventArgs>(client\_GetCustomerNameCompleted);
-    client.GetCustomerNameAsync(“30000”);
+    var client = new Proxy1.ProxyClassClient("BasicHttpRelayBinding_IProxyClass");
+    client.GetCustomerNameCompleted += new EventHandler<Proxy1.GetCustomerNameCompletedEventArgs>(client_GetCustomerNameCompleted);
+    client.GetCustomerNameAsync("30000");
 }
 
-void client\_GetCustomerNameCompleted(object sender, Proxy1.GetCustomerNameCompletedEventArgs e)
+void client_GetCustomerNameCompleted(object sender, Proxy1.GetCustomerNameCompletedEventArgs e)
 {
     this.PageTitle.Text = e.Result;
 }
+```
 
 Running this in the Windows Phone Emulator gives the following:
 

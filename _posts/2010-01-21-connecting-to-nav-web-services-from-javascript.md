@@ -51,25 +51,39 @@ In C# we create a reference to the SystemService, which then creates some proxy 
 
 Underneath that magic, .net will create a XML string that looks much like:
 
-<Soap:Envelope xmlns:Soap=”[http://schemas.xmlsoap.org/soap/envelope/](http://schemas.xmlsoap.org/soap/envelope/)“>  
-<Soap:Body>  
-<Companies xmlns=”urn:microsoft-dynamics-schemas/nav/system/”>  
-</Companies>  
-</Soap:Body>  
+`<Soap:Envelope xmlns:Soap="``http://schemas.xmlsoap.org/soap/envelope/`
+
+```
+">
+<Soap:Body>
+```
+
+```
+<Companies xmlns="urn:microsoft-dynamics-schemas/nav/system/">
+</Companies>
+</Soap:Body>
 </Soap:Envelope>
+```
 
 As you can see, the only thing I actually send is <Companies /> (with a namespace).
 
 The return value from the Companies method is again
 
-<Soap:Envelope xmlns:Soap=”[http://schemas.xmlsoap.org/soap/envelope/&#8221](http://schemas.xmlsoap.org/soap/envelope/&#8221);\>  
-<Soap:Body>  
-<Companies\_Result xmlns=”urn:microsoft-dynamics-schemas/nav/system/”>  
-<return\_value>CRONUS International Ltd.</return\_value>  
-<return\_value>TEST</return\_value>  
-</Companies\_Result>  
-</Soap:Body>  
+`<Soap:Envelope xmlns:Soap="http://schemas.xmlsoap.org/soap/envelope/&#8221;`
+
+```
+>
+<Soap:Body>
+```
+
+```
+<Companies_Result xmlns="urn:microsoft-dynamics-schemas/nav/system/">
+<return_value>CRONUS International Ltd.</return_value>
+<return_value>TEST</return_value>
+</Companies_Result>
+</Soap:Body>
 </Soap:Envelope>
+```
 
 In a later post I will show how you can hook into .net and see what XML actually gets sent and what gets received underneath the nice .net surface.
 
@@ -77,30 +91,38 @@ In a later post I will show how you can hook into .net and see what XML actually
 
 The XML for getting a specific customer looks like:
 
-<Soap:Envelope xmlns:Soap=”[http://schemas.xmlsoap.org/soap/envelope/&#8221](http://schemas.xmlsoap.org/soap/envelope/&#8221);\>  
-<Soap:Body>  
-<Read xmlns=”urn:microsoft-dynamics-schemas/page/customer”>  
-<No>10000</No>  
-</Read>  
-</Soap:Body>  
+`<Soap:Envelope xmlns:Soap="``http://schemas.xmlsoap.org/soap/envelope/&#8221;`
+
+```
+>
+<Soap:Body>
+<Read xmlns="urn:microsoft-dynamics-schemas/page/customer">
+<No>10000</No>
+</Read>
+</Soap:Body>
 </Soap:Envelope>
+```
 
 and the return XML from the NAV Customer Page could be:
 
-<Soap:Envelope xmlns:Soap=”[http://schemas.xmlsoap.org/soap/envelope/&#8221](http://schemas.xmlsoap.org/soap/envelope/&#8221);\>  
-<Soap:Body>  
-<Read\_Result xmlns=”urn:microsoft-dynamics-schemas/page/customer”>  
-<Customer>  
-<Key>… some huge key …</Key>  
-<No>10000</No>  
-<Name>The Cannon Group PLC</Name>  
-<Address>192 Market Square</Address>  
-<Address\_2>Address no. 2</Address\_2>  
-… all the other fields …  
-</Customer>  
-</Read\_Result>  
-</Soap:Body>  
+`<Soap:Envelope xmlns:Soap="``http://schemas.xmlsoap.org/soap/envelope/&#8221;`
+
+```
+>
+<Soap:Body>
+<Read_Result xmlns="urn:microsoft-dynamics-schemas/page/customer">
+<Customer>
+<Key>… some huge key …</Key>
+<No>10000</No>
+<Name>The Cannon Group PLC</Name>
+<Address>192 Market Square</Address>
+<Address_2>Address no. 2</Address_2>
+… all the other fields …
+</Customer>
+</Read_Result>
+</Soap:Body>
 </Soap:Envelope>
+```
 
 I haven’t included all fields – you probably get the picture.
 
@@ -108,151 +130,231 @@ I haven’t included all fields – you probably get the picture.
 
 The XML for getting all customers matching a specific filter could be:
 
-<Soap:Envelope xmlns:Soap=”[http://schemas.xmlsoap.org/soap/envelope/&#8221](http://schemas.xmlsoap.org/soap/envelope/&#8221);\>  
-<Soap:Body>  
-<ReadMultiple xmlns=”urn:microsoft-dynamics-schemas/page/customer”>  
-<filter><Field>Country\_Region\_Code</Field><Criteria>GB</Criteria></filter>  
-<filter><Field>Location\_Code</Field><Criteria>RED|BLUE</Criteria></filter>  
-</ReadMultiple>  
-</Soap:Body>  
+`<Soap:Envelope xmlns:Soap="``http://schemas.xmlsoap.org/soap/envelope/&#8221;`
+
+```
+>
+<Soap:Body>
+<ReadMultiple xmlns="urn:microsoft-dynamics-schemas/page/customer">
+<filter><Field>Country_Region_Code</Field><Criteria>GB</Criteria></filter>
+<filter><Field>Location_Code</Field><Criteria>RED|BLUE</Criteria></filter>
+</ReadMultiple>
+</Soap:Body>
 </Soap:Envelope>
+```
 
 and the returned XML something like
 
-<Soap:Envelope xmlns:Soap=”[http://schemas.xmlsoap.org/soap/envelope/&#8221](http://schemas.xmlsoap.org/soap/envelope/&#8221);\>  
-<Soap:Body>  
-<ReadMultiple\_Result xmlns=”urn:microsoft-dynamics-schemas/page/customer”>  
-<ReadMultiple\_Result>  
-<Customer>  
-… one customer …  
-</Customer>  
-<Customer>  
-… another customer …  
-</Customer>  
-<Customer>  
-… a third customer …  
-</Customer>  
-</ReadMultiple\_Result>  
-</ReadMultiple\_Result>  
-</Soap:Body>  
+`<Soap:Envelope xmlns:Soap="``http://schemas.xmlsoap.org/soap/envelope/&#8221;`
+
+```
+>
+<Soap:Body>
+<ReadMultiple_Result xmlns="urn:microsoft-dynamics-schemas/page/customer">
+<ReadMultiple_Result>
+<Customer>
+… one customer …
+</Customer>
+<Customer>
+… another customer …
+</Customer>
+<Customer>
+… a third customer …
+</Customer>
+</ReadMultiple_Result>
+</ReadMultiple_Result>
+</Soap:Body>
 </Soap:Envelope>
+```
 
 ### Enough about the XML – lets see some code
 
 Instead of splitting up the script – I will specify the entire script here and do some explanation beneath.
 
-<!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “[http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd”](http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")\>  
-<html>  
-<head>  
-<title></title>  
-<meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″ />
+`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "`[`http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"`](http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")
 
-var baseURL = ‘[http://localhost:7047/DynamicsNAV/WS/’;](http://localhost:7047/DynamicsNAV/WS/';)  
-    var cur;  
-var SystemServiceURL = baseURL + ‘SystemService’;  
+```
+>
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8″ />
+```
+
+var baseURL = ‘[`http://localhost:7047/DynamicsNAV/WS/';`](http://localhost:7047/DynamicsNAV/WS/';)  
+    
+
+```
+var cur;
+var SystemServiceURL = baseURL + 'SystemService';
 var CustomerPageURL;
+```
 
-    var SoapEnvelopeNS = ‘[http://schemas.xmlsoap.org/soap/envelope/’;](http://schemas.xmlsoap.org/soap/envelope/';)  
-    var SystemServiceNS = ‘urn:microsoft-dynamics-schemas/nav/system/’;  
-var CustomerPageNS = ‘urn:microsoft-dynamics-schemas/page/customer’;
+    `var SoapEnvelopeNS = '`[`http://schemas.xmlsoap.org/soap/envelope/';`](http://schemas.xmlsoap.org/soap/envelope/';)  
+    
 
-    // Function to Invoke a NAV WebService and return data from a specific Tag in the responseXML  
-function InvokeNavWS(URL, method, nameSpace, returnTag, parameters) {  
-var result = null;  
-try {  
-var xmlhttp;  
-if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
-xmlhttp = new XMLHttpRequest();  
-}  
-else {// code for IE6, IE5  
-xmlhttp = new ActiveXObject(“Microsoft.XMLHTTP”);  
+```
+var SystemServiceNS = 'urn:microsoft-dynamics-schemas/nav/system/';
+var CustomerPageNS = 'urn:microsoft-dynamics-schemas/page/customer';
+```
+
+    
+
+```
+// Function to Invoke a NAV WebService and return data from a specific Tag in the responseXML
+function InvokeNavWS(URL, method, nameSpace, returnTag, parameters) {
+var result = null;
+try {
+var xmlhttp;
+if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+xmlhttp = new XMLHttpRequest();
 }
-
-            var request = ” +  
-” +  
-” +  
-parameters +  
-” +  
-” +  
-”;
-
-            // Use Post and non-async  
-xmlhttp.open(‘POST’, URL, false);  
-xmlhttp.setRequestHeader(‘Content-type’, ‘text/xml; charset=utf-8’);  
-xmlhttp.setRequestHeader(‘Content-length’, request.length);  
-xmlhttp.setRequestHeader(‘SOAPAction’, method);
-
-            // Setup event handler when readystate changes  
-xmlhttp.onreadystatechange = function() {  
-if (xmlhttp.readyState == 4) {  
-if (xmlhttp.status == 200) {  
-xmldoc = xmlhttp.responseXML;  
-xmldoc.setProperty(‘SelectionLanguage’, ‘XPath’);  
-xmldoc.setProperty(‘SelectionNamespaces’, ‘xmlns:tns=”‘ + nameSpace + ‘”‘);  
-result = xmldoc.selectNodes(‘//tns:’ + returnTag);  
-}  
-}  
+else {// code for IE6, IE5
+xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 }
+```
 
-            // Send request will return when event has fired with readyState 4  
-xmlhttp.send(request);  
-}  
-catch (e) {  
-}  
-return result;  
+            
+
+```
+var request = " +
+" +
+" +
+parameters +
+" +
+" +
+";
+```
+
+            
+
+```
+// Use Post and non-async
+xmlhttp.open('POST', URL, false);
+xmlhttp.setRequestHeader('Content-type', 'text/xml; charset=utf-8');
+xmlhttp.setRequestHeader('Content-length', request.length);
+xmlhttp.setRequestHeader('SOAPAction', method);
+```
+
+            
+
+```
+// Setup event handler when readystate changes
+xmlhttp.onreadystatechange = function() {
+if (xmlhttp.readyState == 4) {
+if (xmlhttp.status == 200) {
+xmldoc = xmlhttp.responseXML;
+xmldoc.setProperty('SelectionLanguage', 'XPath');
+xmldoc.setProperty('SelectionNamespaces', 'xmlns:tns="' + nameSpace + '"');
+result = xmldoc.selectNodes('//tns:' + returnTag);
 }
-
-    // Get the Company list  
-function SystemService\_Companies() {  
-return InvokeNavWS(SystemServiceURL, ‘Companies’, SystemServiceNS, ‘return\_value’, ”);  
 }
-
-    function CustomerPage\_Read(no) {  
-return InvokeNavWS(CustomerPageURL, ‘Read’, CustomerPageNS, ‘Customer’,  
-” + no + ”);  
 }
+```
 
-    function CustomerPage\_ReadMultiple(filters) {  
-return InvokeNavWS(CustomerPageURL, ‘ReadMultiple’, CustomerPageNS, ‘Customer’, filters);  
+            
+
+```
+// Send request will return when event has fired with readyState 4
+xmlhttp.send(request);
 }
+catch (e) {
+}
+return result;
+}
+```
 
-  
-</head>  
-<body>  
+    
 
-    var companies = SystemService\_Companies();  
-document.writeln(‘Companies:  
-‘);  
-for (var i = 0; i         document.writeln(companies\[i\].text + ‘  
-‘);  
-}  
-cur = companies\[0\].text;
+```
+// Get the Company list
+function SystemService_Companies() {
+return InvokeNavWS(SystemServiceURL, 'Companies', SystemServiceNS, 'return_value', ");
+}
+```
 
-    CustomerPageURL = baseURL + encodeURIComponent(cur) + ‘/Page/Customer’;  
-document.writeln(‘  
-URL of Customer Page: ‘ + CustomerPageURL + ‘  
-‘);
+    
 
-    var Customer10000 = CustomerPage\_Read(‘10000’);  
-document.writeln(‘  
-Name of Customer 10000: ‘ +  
-Customer10000\[0\].childNodes\[2\].firstChild.nodeValue + ‘  
-‘);
+```
+function CustomerPage_Read(no) {
+return InvokeNavWS(CustomerPageURL, 'Read', CustomerPageNS, 'Customer',
+" + no + ");
+}
+```
 
-    document.writeln(‘  
-Customers in GB served by RED or BLUE warehouse:  
-‘);  
-var Customers = CustomerPage\_ReadMultiple(  
-‘Country\_Region\_CodeGB’+                    ‘Location\_CodeRED|BLUE’);  
-for (i = 0; i         document.writeln(Customers\[i\].childNodes\[2\].firstChild.nodeValue + ‘  
-‘);
+    
 
-    document.writeln(‘  
-THE END’);
+```
+function CustomerPage_ReadMultiple(filters) {
+return InvokeNavWS(CustomerPageURL, 'ReadMultiple', CustomerPageNS, 'Customer', filters);
+}
+```
 
-  
-</body>  
+```
+</head>
+<body>
+```
+
+    
+
+```
+var companies = SystemService_Companies();
+document.writeln('Companies:
+');
+for (var i = 0; i         document.writeln(companies[i].text + '
+');
+}
+cur = companies[0].text;
+```
+
+    
+
+```
+CustomerPageURL = baseURL + encodeURIComponent(cur) + '/Page/Customer';
+document.writeln('
+URL of Customer Page: ' + CustomerPageURL + '
+');
+```
+
+    
+
+```
+var Customer10000 = CustomerPage_Read('10000');
+document.writeln('
+Name of Customer 10000: ' +
+Customer10000[0].childNodes[2].firstChild.nodeValue + '
+');
+```
+
+    
+
+```
+document.writeln('
+Customers in GB served by RED or BLUE warehouse:
+');
+var Customers = CustomerPage_ReadMultiple(
+'Country_Region_CodeGB'+
+```
+
+                    `'`
+
+```
+Location_CodeRED|BLUE');
+for (i = 0; i         document.writeln(Customers[i].childNodes[2].firstChild.nodeValue + '
+');
+```
+
+    
+
+```
+document.writeln('
+THE END');
+```
+
+```
+</body>
 </html>
+```
 
 This is the entire Default.htm file.
 

@@ -144,15 +144,17 @@ and paste them into your folder.
 
 Modify the .gitignore file in VS Code and ensure that it contains these lines:
 
-\*.app
-\*.flf
+```
+*.app
+*.flf
 TestResults.xml
 BuildOutput.txt
 rad.json
 .output
 .alcache/
 .altemplates/
-cache\_\*
+cache_*
+```
 
 ![](/assets/images/2022/migrating-to-al-go-for-github/screenshot-2022-04-27-06.32.24.png)
 

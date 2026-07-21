@@ -50,7 +50,9 @@ I don’t think the right solution would be to ask everybody to remove all sessi
 
 This was a fairly easy fix. Add
 
+```
 "UsePsSession":  false
+```
 
 To c:\\ProgramData\\BcContainerHelper\\BcContainerHelper.config.json and you should be good. This causes Invoke-ScriptInBcContainer to use docker exec instead of a PsSession.
 
@@ -60,7 +62,9 @@ I was pleased to see that most bugs were in error handling. If something went wr
 
 In the next pre-release of BcContainerHelper, these issues are fixed, and you should now get the correct error surfaced from the function. This new functionality could potentially break behavior, so I have added a setting, which you can set to false to get the “old and faulty” behavior back (if this worked for you):
 
+```
 $bcContainerHelperConfig.addTryCatchToScriptBlock = $false
+```
 
 If you discover an example where the new behavior doesn’t work, please don’t just set this setting to false and live with it. Please open an issue on [https://github.com/microsoft/navcontainerhelper/issues](https://github.com/microsoft/navcontainerhelper/issues) and explain which scriptblock the new mechanism doesn’t work with.
 
@@ -78,7 +82,9 @@ This should help the troubleshooting in some cases.
 
 So, if you have had this problem in your pipelines, please install the next pre-release (preview605 or newer) of BcContainerHelper on your agents and add this setting to bcContainerHelper.settings.json on your agents:
 
+```
 "UsePsSession":  false
+```
 
 Then this should fix the issue. Let me know whether it works. I was considering adding the setting as default for GitHub Actions and Azure Pipelines, but it does have a performance impact, so I decided not to.
 

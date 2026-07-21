@@ -29,7 +29,9 @@ All NAV 2016, NAV 2017 and Devpreviews images on the Docker hub are specific ima
 
 Yes, you read it right. Run the Generic image and share a folder containing the NAV DVD to C:\\NAVDVD in the container and the Generic image will install NAV and run it. The simplest docker run command became a little more complex. If you have a complete NAV 2015 CU37 W1 DVD placed in c:\\temp\\nav2015, you can try this command:
 
-docker run -e accept\_eula=Y -v c:\\temp\\nav2015:c:\\navdvd microsoft/dynamics-nav:generic
+```
+docker run -e accept_eula=Y -v c:\temp\nav2015:c:\navdvd microsoft/dynamics-nav:generic
+```
 
 and you should see this output:  
 [![](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/fc4f0-dockerrunnavdvd-1.png)](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/fc4f0-dockerrunnavdvd.png)
@@ -44,17 +46,21 @@ As I have said earlier – docker run is the “raw” way of running NAV on Doc
 
 If you already have the navcontainerhelper installed, you need to update your navcontainerhelper from the PowerShell Gallery to version 0.2.1.1 (see the release notes [here](https://www.powershellgallery.com/packages/navcontainerhelper)), using:
 
+```
 Update-Module navcontainerhelper -force
+```
 
 and if you have the NAV 2015 CU37 W1 NAV DVD in c:\\temp\\nav2015, you should be able to run this PowerShell command:
 
-New-NavContainer -accept\_eula \`
-                 -containerName test \`
-                 -navDvdPath "c:\\temp\\nav2015" \`
-                 -navDvdCountry w1 \`
-                 -updateHosts \`
-                 -doNotExportObjectsToText \`
+```
+New-NavContainer -accept_eula `
+                 -containerName test `
+                 -navDvdPath "c:\temp\nav2015" `
+                 -navDvdCountry w1 `
+                 -updateHosts `
+                 -doNotExportObjectsToText `
                  -includeCSide
+```
 
 Enter the Windows Credentials for the host machine and you should get an output like this:  
 [![](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/f37a5-newnavcontaineroutput-1.png)](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/f37a5-newnavcontaineroutput.png)
@@ -70,10 +76,12 @@ You can use all other parameters for new-navcontainer, and those that makes sens
 
 The further you go back in time, the more challenges you will have. NAV 2015 CU7, NAV 2013R2 and NAV 2013 all uses .NET 3 and that is not installed on WindowsServerCore, so trying to run NAV 2013R2 on Docker will give you this error:
 
+```
 Installing NAV
 This NAV version requires .NET 3 which is not on WindowsServerCore.
 If you download microsoft-windows-netfx3-ondemand-package.cab from a Windows Server 2016 media and place it in the Prerequisite Components folder on the NAV DVD, then it wi
 ll be installed automatically.
+```
 
 I did not want to pre-install .NET 3 on the NAV on Docker generic image, I am sure you can understand that, so if you follow the instruction in the error message, you should be good to run earlier versions as well:  
 [![](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/7f5a3-prereqs-1.png)](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/7f5a3-prereqs.png)
@@ -106,25 +114,31 @@ You can post issues on [http://www.github.com/Microsoft/nav-docker/issues](http:
 
 In the following, I modified the first line in the script to (let’s say this was a fix to my problem):
 
+```
 Write-Host "Installing NAV MY WAY"
+```
 
 If you are using the navcontainerhelper, add the new navinstall.ps1 (or the folder in which it is) to the -myscripts parameter. This causes your navinstall.ps1 (or all files in the folder) to be placed in the my folder and overrides the base navinstall.ps1. This looks like this:
 
-New-NavContainer -accept\_eula \`
-                 -containerName test \`
-                 -navDvdPath "c:\\temp\\nav2013R2" \`
-                 -navDvdCountry w1 \`
-                 -updateHosts \`
-                 -doNotExportObjectsToText \`
-                 -includeCSide \`
-                 -myScripts @("C:\\Users\\freddyk\\Documents\\GitHub\\Microsoft\\nav-docker\\Run\\71")
+```
+New-NavContainer -accept_eula `
+                 -containerName test `
+                 -navDvdPath "c:\temp\nav2013R2" `
+                 -navDvdCountry w1 `
+                 -updateHosts `
+                 -doNotExportObjectsToText `
+                 -includeCSide `
+                 -myScripts @("C:\Users\freddyk\Documents\GitHub\Microsoft\nav-docker\Run\71")
+```
 
 The output now shows (captured before it was done):  
 [![](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/df9af-myway-1.png)](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/df9af-myway.png)
 
 If you are using docker run, you have to create a my folder yourself, place the navinstall.ps1 there and share this folder to c:\\run\\my in the container. Here, I just share the folder in which my navinstall is as my my folder:
 
-docker run -e accept\_eula=Y -v c:\\temp\\nav2013r2:c:\\navdvd -v C:\\Users\\freddyk\\Documents\\GitHub\\Microsoft\\nav-docker\\Run\\71:c:\\run\\my microsoft/dynamics-nav:generic
+```
+docker run -e accept_eula=Y -v c:\temp\nav2013r2:c:\navdvd -v C:\Users\freddyk\Documents\GitHub\Microsoft\nav-docker\Run\71:c:\run\my microsoft/dynamics-nav:generic
+```
 
 and the output is:  
 [![](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/18182-myway21-1.png)](/assets/images/2017/can-i-run-nav-2015-and-earlier-on-docker/18182-myway21.png)

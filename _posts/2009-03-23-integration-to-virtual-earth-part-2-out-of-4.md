@@ -27,12 +27,14 @@ Try looking at the different tabs and you can see the source code for getting a 
 
 Try clicking at the menu item for “Show a specific map”. The map now shows the space needle in Seattle and if you click the source code tab you will see the code for creating that map:
 
-<!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “[http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd”&gt](http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd”&gt);  
-<html>  
-<head>  
-<title></title>  
-<meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″>  
-[http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2](http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2)
+```
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8″>
+http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2
+```
 
 var map = null;  
 function GetMap()  
@@ -49,16 +51,20 @@ map.LoadMap(new VELatLong(47.6, -122.33), 10 ,’h’ ,false);
 
 So – HTML and Javascript again. A few things which are important to know is that this line:
 
-[http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2](http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2)
+`http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2`
 
 Imports the mapcontrol library from the Virtual Earth Web Site and allows you to use all the controls and functions exposed by this library (like a C# reference and using statement).
 
-var map = null;  
-function GetMap()  
-{  
-map = new VEMap(‘myMap’);  
-map.LoadMap(new VELatLong(47.6, -122.33), 10 ,’h’ ,false);  
-}  
+```
+var map = null;
+function GetMap()
+{
+map = new VEMap('myMap');
+map.LoadMap(new VELatLong(47.6, -122.33), 10 ,'h' ,false);
+}
+```
+
+  
 
 Is the actual code – for manipulating the map. 47.6, –122.33 should be latitude and longitude for the Space Needle, 10 is the Zoom level, ‘h’ is the style (h==hybrid) if you click the reference tab on the dev sdk window you can find the documentation to [LoadMap](http://msdn.microsoft.com/en-us/library/bb412546.aspx) and other stuff.
 
@@ -92,7 +98,7 @@ C# / Visual Basic choice really didn’t matter as I wasn’t going to make any 
 
 In this default.htm I replaced the content with the following HTML
 
-[http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&#8221](http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&#8221);\>
+`http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&#8221;``>`
 
 </body>  
 </html>
@@ -119,18 +125,22 @@ We need a function in NAV, exposed as a Web Service, which we can call and ask f
 
 and the two lines of Code behind this
 
-**Customer – Export::OnAfterGetRecord()  
-**ref.GETTABLE(“<Customer>”);  
-\_Bookmark := FORMAT(ref.RECORDID,0,10);
+```
+Customer – Export::OnAfterGetRecord()
+ref.GETTABLE("<Customer>");
+_Bookmark := FORMAT(ref.RECORDID,0,10);
+```
 
 for making sure that the bookmark is correctly formatted.
 
 The function that we want to expose as a webservice looks like this:
 
-**GetCustomersWithin(latitude1 : Decimal;latitude2 : Decimal;longitude1 : Decimal;longitude2 : Decimal;VAR result : XMLport CustomerLocation)  
-**customers.SETRANGE(Latitude, latitude1, latitude2);  
-customers.SETRANGE(Longitude, longitude1, longitude2);  
+```
+GetCustomersWithin(latitude1 : Decimal;latitude2 : Decimal;longitude1 : Decimal;longitude2 : Decimal;VAR result : XMLport CustomerLocation)
+customers.SETRANGE(Latitude, latitude1, latitude2);
+customers.SETRANGE(Longitude, longitude1, longitude2);
 result.SETTABLEVIEW(customers);
+```
 
 So this is the reason why it is good to remember to have a key on the latitude and longitude fields in the customer table.
 
@@ -144,61 +154,99 @@ I called it Maps – and this is used in the code below.
 
 In the menu you can find code for how to add shapes (pushpins and other things). You can also find code for how to subscribe to events and we are going to do this for two of the events from the mapcontrol (onendzoom and onendpan) as they change the current viewing rectangle of the control.
 
-<!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “[http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd”](http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")\>  
-<html>  
-<head>  
-<title></title>  
-<meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″ />  
-[http://localhost:7047/DynamicsNAV/WS/CRONUS\_International\_Ltd/&#8221;;](http://localhost:7047/DynamicsNAV/WS/CRONUS_International_Ltd/&#8221)  
-    var XMLPortResultNS = ‘urn:microsoft-dynamics-nav/xmlports/customerlocation’;  
-var XMLPortResultNode = ‘Customer’;  
+`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "`[`http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"`](http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")
+
+```
+>
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8″ />
+http://localhost:7047/DynamicsNAV/WS/CRONUS_International_Ltd/";
+```
+
+  
+    
+
+```
+var XMLPortResultNS = 'urn:microsoft-dynamics-nav/xmlports/customerlocation';
+var XMLPortResultNode = 'Customer';
 var resultSet;
+```
 
-    // Event handler for endzoom event  
-function EndZoomHandler(e) {  
-UpdatePushPins();  
+    
+
+```
+// Event handler for endzoom event
+function EndZoomHandler(e) {
+UpdatePushPins();
 }
+```
 
-    // Event handler for endpan event  
-function EndPanHandler(e) {  
-UpdatePushPins();  
+    
+
+```
+// Event handler for endpan event
+function EndPanHandler(e) {
+UpdatePushPins();
 }
+```
 
-    // Initialize the map  
-function GetMap() {  
-map = new VEMap(‘myMap’);
+    
 
-        // center and zoom are passable as parameters  
-var latitude = parseFloat(queryString(“latitude”, “0”));  
-var longitude = parseFloat(queryString(“longitude”, “0”));  
-var zoom = parseInt(queryString(“zoom”, “2”));
+```
+// Initialize the map
+function GetMap() {
+map = new VEMap('myMap');
+```
 
-        // use normal dashboard  
-map.SetDashboardSize(VEDashboardSize.Normal);  
-// load the map  
-var position = new VELatLong(latitude, longitude);  
-map.LoadMap(position, zoom, ‘r’, false);  
-// hook events  
-map.AttachEvent(“onendzoom”, EndZoomHandler);  
-map.AttachEvent(“onendpan”, EndPanHandler);  
-// Place pushpins  
-UpdatePushPins();  
+        
+
+```
+// center and zoom are passable as parameters
+var latitude = parseFloat(queryString("latitude", "0"));
+var longitude = parseFloat(queryString("longitude", "0"));
+var zoom = parseInt(queryString("zoom", "2"));
+```
+
+        
+
+```
+// use normal dashboard
+map.SetDashboardSize(VEDashboardSize.Normal);
+// load the map
+var position = new VELatLong(latitude, longitude);
+map.LoadMap(position, zoom, 'r', false);
+// hook events
+map.AttachEvent("onendzoom", EndZoomHandler);
+map.AttachEvent("onendpan", EndPanHandler);
+// Place pushpins
+UpdatePushPins();
 }
+```
 
-    // Update all pushpins on the map  
-function UpdatePushPins() {  
-map.DeleteAllShapes();  
-// Get the view rectangle  
-var botlft = map.PixelToLatLong(new VEPixel(1, myMap.offsetHeight-1));  
+    
+
+```
+// Update all pushpins on the map
+function UpdatePushPins() {
+map.DeleteAllShapes();
+// Get the view rectangle
+var botlft = map.PixelToLatLong(new VEPixel(1, myMap.offsetHeight-1));
 var toprgt = map.PixelToLatLong(new VEPixel(myMap.offsetWidth-1, 1));
+```
 
-        // Get customers within rectangle  
-GetCustomersWithin(botlft.Latitude, toprgt.Latitude, botlft.Longitude, toprgt.Longitude);  
-if (resultSet != null) {  
-i = 0;  
-while (i                 var shape = new VEShape(VEShapeType.Pushpin, new VELatLong(resultSet\[i\].childNodes\[2\].text, resultSet\[i\].childNodes\[3\].text));  
-shape.SetTitle(resultSet\[i\].childNodes\[0\].text + ” ” + resultSet\[i\].childNodes\[1\].text);  
-shape.SetDescription(”
+        
+
+```
+// Get customers within rectangle
+GetCustomersWithin(botlft.Latitude, toprgt.Latitude, botlft.Longitude, toprgt.Longitude);
+if (resultSet != null) {
+i = 0;
+while (i                 var shape = new VEShape(VEShapeType.Pushpin, new VELatLong(resultSet[i].childNodes[2].text, resultSet[i].childNodes[3].text));
+shape.SetTitle(resultSet[i].childNodes[0].text + " " + resultSet[i].childNodes[1].text);
+shape.SetDescription("
+```
 
 ” +  
 ”  
@@ -235,42 +283,59 @@ return defaultvalue;
 }  
 }
 
-    // Get Base URL  
-function GetBaseURL() {  
-return defaultURL;  
+    
+
+```
+// Get Base URL
+function GetBaseURL() {
+return defaultURL;
 }
+```
 
-    // Get Customers within specified rectangle by connecting to NAV WebService  
-function GetCustomersWithin(latitude1, latitude2, longitude1, longitude2) {  
-resultSet = null;  
-try {  
-// Instantiate XMLHTTP object  
-xmlhttp = new ActiveXObject(“Msxml2.XMLHTTP.6.0”);  
-xmlhttp.open(“POST”, GetBaseURL() + “Codeunit/Maps”, false, null, null);  
-xmlhttp.setRequestHeader(“Content-Type”, “text/xml; charset=utf-8”);  
-xmlhttp.setRequestHeader(“SOAPAction”, “GetCustomersWithin”);
+    
 
-            // Setup event handler when readystate changes  
-xmlhttp.onreadystatechange = function() {  
-// Inline function for handling response  
-if ((xmlhttp.readyState == 4) && (xmlhttp.Status == 200)) {  
-var xmldoc = xmlhttp.ResponseXML;  
-xmldoc.setProperty(‘SelectionLanguage’, ‘XPath’);  
-xmldoc.setProperty(‘SelectionNamespaces’, ‘xmlns:tns=”‘ + XMLPortResultNS + ‘”‘);  
-resultSet = xmldoc.selectNodes(‘//tns:’ + XMLPortResultNode);  
-}  
-}  
-// Send request  
-xmlhttp.Send(‘[http://schemas.xmlsoap.org/soap/envelope/&#8221](http://schemas.xmlsoap.org/soap/envelope/&#8221);\>’ + latitude1 + ” + latitude2 + ” + longitude1 + ” + longitude2 + ”);  
-}  
-catch (e) {  
-alert(e.message);  
-}  
+```
+// Get Customers within specified rectangle by connecting to NAV WebService
+function GetCustomersWithin(latitude1, latitude2, longitude1, longitude2) {
+resultSet = null;
+try {
+// Instantiate XMLHTTP object
+xmlhttp = new ActiveXObject("Msxml2.XMLHTTP.6.0");
+xmlhttp.open("POST", GetBaseURL() + "Codeunit/Maps", false, null, null);
+xmlhttp.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
+xmlhttp.setRequestHeader("SOAPAction", "GetCustomersWithin");
+```
+
+            
+
+```
+// Setup event handler when readystate changes
+xmlhttp.onreadystatechange = function() {
+// Inline function for handling response
+if ((xmlhttp.readyState == 4) && (xmlhttp.Status == 200)) {
+var xmldoc = xmlhttp.ResponseXML;
+xmldoc.setProperty('SelectionLanguage', 'XPath');
+xmldoc.setProperty('SelectionNamespaces', 'xmlns:tns="' + XMLPortResultNS + '"');
+resultSet = xmldoc.selectNodes('//tns:' + XMLPortResultNode);
 }
+}
+// Send request
+xmlhttp.Send('http://schemas.xmlsoap.org/soap/envelope/"
+```
 
-  
-</head>  
-<body onload=”GetMap();” style=”margin:0; width:100%; height:100%; overflow: hidden”>
+```
+>' + latitude1 + " + latitude2 + " + longitude1 + " + longitude2 + ");
+}
+catch (e) {
+alert(e.message);
+}
+}
+```
+
+```
+</head>
+<body onload="GetMap();" style="margin:0; width:100%; height:100%; overflow: hidden">
+```
 
 </body>  
 </html>

@@ -49,6 +49,7 @@ I have created a small project called the NAV Policy Server. It is a Windows Ser
 
 You can read [here](http://msdn.microsoft.com/en-us/library/9k985bc9\(VS.80\).aspx) about how to create a Windows Service (including how to create Setup functionality in the Service). The main program of the Windows Service is here:
 
+```
 using System; 
 using System.ComponentModel; 
 using System.ServiceProcess; 
@@ -74,10 +75,10 @@ namespace NAVPolicyServer
             // Read configuration file 
             XmlDocument doc = new XmlDocument(); 
             doc.Load(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase), "CustomSettings.config")); 
-            XmlNode webServicePortNode = doc.SelectSingleNode("/appSettings/add\[@key='WebServicePort'\]"); 
-            WebServicePort = webServicePortNode.Attributes\["value"\].Value; 
-            XmlNode webServiceSSLEnabledNode = doc.SelectSingleNode("/appSettings/add\[@key='WebServiceSSLEnabled'\]"); 
-            WebServiceSSLEnabled = webServiceSSLEnabledNode.Attributes\["value"\].Value.Equals("true", StringComparison.InvariantCultureIgnoreCase);
+            XmlNode webServicePortNode = doc.SelectSingleNode("/appSettings/add[@key='WebServicePort']"); 
+            WebServicePort = webServicePortNode.Attributes["value"].Value; 
+            XmlNode webServiceSSLEnabledNode = doc.SelectSingleNode("/appSettings/add[@key='WebServiceSSLEnabled']"); 
+            WebServiceSSLEnabled = webServiceSSLEnabledNode.Attributes["value"].Value.Equals("true", StringComparison.InvariantCultureIgnoreCase);
 
             // Base listening address 
             string BaseURL = (WebServiceSSLEnabled ? Uri.UriSchemeHttps : Uri.UriSchemeHttp) + Uri.SchemeDelimiter + System.Environment.MachineName + ":" + WebServicePort;
@@ -87,7 +88,7 @@ namespace NAVPolicyServer
             this.host.AddServiceEndpoint(typeof(IPolicyRetriever), new WebHttpBinding(false ? WebHttpSecurityMode.Transport : WebHttpSecurityMode.None), "").Behaviors.Add(new WebHttpBehavior()); 
         }
 
-        protected override void OnStart(string\[\] args) 
+        protected override void OnStart(string[] args) 
         { 
             if (host.State != CommunicationState.Opened && host.State != CommunicationState.Opening) 
             { 
@@ -104,6 +105,7 @@ namespace NAVPolicyServer
         } 
     } 
 }
+```
 
 As you can see, the Service needs to be installed in the Service Tier directory of the Web Service listener you want to enable for Silverlight as it reads the CustomSettings.config file to find the port number and whether or not it uses SSL.
 
@@ -113,20 +115,23 @@ The actual code is something I found on Carlos’ blog – [http://blogs.msdn.co
 
 The _IPolicyRetriever_ interface is the contract and it looks like:
 
-\[ServiceContract\] 
+```
+[ServiceContract] 
 public interface IPolicyRetriever 
 { 
-    \[OperationContract, WebGet(UriTemplate = "/clientaccesspolicy.xml")\] 
+    [OperationContract, WebGet(UriTemplate = "/clientaccesspolicy.xml")] 
     Stream GetSilverlightPolicy(); 
-    \[OperationContract, WebGet(UriTemplate = "/crossdomain.xml")\] 
+    [OperationContract, WebGet(UriTemplate = "/crossdomain.xml")] 
     Stream GetFlashPolicy(); 
 }
+```
 
 As you can see we host two files – _clientaccesspolicy.xml_ for Silverlight and _crossdomain.xml_ for flash.
 
 The PolicyRetriever class (the Service) itself is implemented as a singleton and looks like:
 
-\[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)\] 
+```
+[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
 public class PolicyRetriever : IPolicyRetriever 
 { 
     public PolicyRetriever() 
@@ -154,8 +159,8 @@ public class PolicyRetriever : IPolicyRetriever
 <access-policy> 
     <cross-domain-access> 
         <policy> 
-            <allow-from http-request-headers=""\*""> 
-                <domain uri=""\*""/> 
+            <allow-from http-request-headers=""*""> 
+                <domain uri=""*""/> 
             </allow-from> 
             <grant-to> 
                 <resource path=""/"" include-subpaths=""true""/> 
@@ -175,11 +180,12 @@ public class PolicyRetriever : IPolicyRetriever
         string result = @"<?xml version=""1.0""?> 
 <!DOCTYPE cross-domain-policy SYSTEM ""http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd""> 
 <cross-domain-policy> 
-    <allow-access-from domain=""\*"" /> 
+    <allow-access-from domain=""*"" /> 
 </cross-domain-policy>"; 
         return StringToStream(result); 
     } 
 }
+```
 
 The way you make a WCF service a singleton is by specifying an instance of the class to the ServiceHost and set InstanceContextMode to single in the ServiceBehavior Attribute.
 
@@ -201,12 +207,16 @@ Another thing that has changed significantly is what you need to do in order to 
 
 In Silverlight you just add the Service Reference and start partying like:
 
-SystemService\_PortClient systemService = new SystemService\_PortClient(); 
+```
+SystemService_PortClient systemService = new SystemService_PortClient(); 
 systemService.CompaniesAsync();
+```
 
 works right away, no changes needed – THAT’s nice. In my sample I do however build the URL up dynamically, meaning that my construction of the systemService looks like:
 
-SystemService\_PortClient systemService = new SystemService\_PortClient("SystemService\_Port", new EndpointAddress(baseURL + "SystemService"));
+```
+SystemService_PortClient systemService = new SystemService_PortClient("SystemService_Port", new EndpointAddress(baseURL + "SystemService"));
+```
 
 Which basically just tells it to read the configuration section and overwrite the endpoint address – still pretty simple.
 
@@ -216,6 +226,7 @@ Whenever you call CompaniesAsync – it returns immediately and after a while th
 
 My scenario should first list the companies, calculate a customer page URL, read customer 10000 and then read customers with location code BLUE or RED in GB.
 
+```
 public partial class MainPage : UserControl 
 { 
     private string baseURL = "http://localhost:7047/DynamicsNAV/WS/"; 
@@ -225,13 +236,13 @@ public partial class MainPage : UserControl
     { 
         InitializeComponent();
 
-        SystemService\_PortClient systemService = new SystemService\_PortClient("SystemService\_Port", new EndpointAddress(baseURL + "SystemService")); 
+        SystemService_PortClient systemService = new SystemService_PortClient("SystemService_Port", new EndpointAddress(baseURL + "SystemService")); 
         systemService.CompaniesCompleted += delegate(object sender, CompaniesCompletedEventArgs e) 
         { 
             display("Companies:"); 
             for (int i = 0; i < e.Result.Length; i++) 
-                display(e.Result\[i\]); 
-            string cur = e.Result\[0\];
+                display(e.Result[i]); 
+            string cur = e.Result[0];
 
             this.customerPageURL = baseURL + Uri.EscapeDataString(cur) + "/Page/Customer"; 
             display(" "); 
@@ -248,6 +259,7 @@ public partial class MainPage : UserControl
         this.output.Items.Add(s); 
     }
 }
+```
 
 As you can see, I do not call the _FindCustomer10000_ before I am done with step 1.
 
@@ -255,9 +267,10 @@ I could have inserted that call after the call to CompaniesAsync – but then th
 
 _FindCustomer10000_ looks like:
 
+```
 private void FindCustomer10000() 
 { 
-    Customer\_PortClient readCustomerService = new Customer\_PortClient("Customer\_Port", new EndpointAddress(customerPageURL)); 
+    Customer_PortClient readCustomerService = new Customer_PortClient("Customer_Port", new EndpointAddress(customerPageURL)); 
     readCustomerService.ReadCompleted += delegate(object sender, ReadCompletedEventArgs e) 
     { 
         display(" "); 
@@ -267,12 +280,14 @@ private void FindCustomer10000()
     };
     readCustomerService.ReadAsync("10000"); 
 }
+```
 
 Again – when we have data and we are done – call _FindCustomers_, which looks like:
 
+```
 private void FindCustomers() 
 { 
-    Customer\_PortClient readMultipleCustomerService = new Customer\_PortClient("Customer\_Port", new EndpointAddress(customerPageURL)); 
+    Customer_PortClient readMultipleCustomerService = new Customer_PortClient("Customer_Port", new EndpointAddress(customerPageURL)); 
     readMultipleCustomerService.ReadMultipleCompleted += delegate(object sender, ReadMultipleCompletedEventArgs e) 
     { 
         display(" "); 
@@ -282,15 +297,16 @@ private void FindCustomers()
         display(" "); 
         display("THE END");
     }; 
-    Customer\_Filter filter1 = new Customer\_Filter(); 
-    filter1.Field = Customer\_Fields.Country\_Region\_Code; 
+    Customer_Filter filter1 = new Customer_Filter(); 
+    filter1.Field = Customer_Fields.Country_Region_Code; 
     filter1.Criteria = "GB"; 
-    Customer\_Filter filter2 = new Customer\_Filter(); 
-    filter2.Field = Customer\_Fields.Location\_Code; 
+    Customer_Filter filter2 = new Customer_Filter(); 
+    filter2.Field = Customer_Fields.Location_Code; 
     filter2.Criteria = "RED|BLUE"; 
-    Customer\_Filter\[\] filters = new Customer\_Filter\[\] { filter1, filter2 }; 
+    Customer_Filter[] filters = new Customer_Filter[] { filter1, filter2 }; 
     readMultipleCustomerService.ReadMultipleAsync(filters, null, 0); 
 }
+```
 
 If you try to move the call to _FindCustomers_ up after the call to _FindCustomer10000_ then you will see that it isn’t always determined which of the two methods complete first, meaning that the order of things in the listbox will be “random”.
 

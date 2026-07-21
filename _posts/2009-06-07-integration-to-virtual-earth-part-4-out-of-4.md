@@ -33,7 +33,7 @@ The Control inside the Customer Map Factbox is basically just a browser control,
 
 Although the internal implementation is a browser control, we don’t do html in NAV and we don’t give the control any URL’s or other fancy stuff. The way we make this work is to have the control databind to a Text variable (CustomerLocation), which gets set in OnAfterGetRecord:
 
-CustomerLocation := ‘latitude=’+FORMAT(Latitude,0,9)+’&longitude=’+FORMAT(Longitude,0,9)+’&zoom=15’;
+`CustomerLocation := 'latitude='+FORMAT(Latitude,0,9)+'&longitude='+FORMAT(Longitude,0,9)+'&zoom=15';`
 
 The factbox isn’t able to return any value and there isn’t any reason right now to trigger any events from the control.
 
@@ -53,7 +53,7 @@ Let’s just go through the creation of the VEControl step by step.
 
 4\. In the Build Events Tab add the following command to the Post-Build Event window:
 
-copy VEControl.dll “C:\\Program Files\\Microsoft Dynamics NAV\\60\\RoleTailored Client\\Add-ins”
+`copy VEControl.dll "C:\Program Files\Microsoft Dynamics NAV\60\RoleTailored Client\Add-ins"`
 
 this ensures that the Control gets installed in the right directory.
 
@@ -61,85 +61,109 @@ this ensures that the Control gets installed in the right directory.
 
 6\. Add the following class to the file:
 
-/// <summary>  
-/// Native WinForms Control for Virtual Earth Integration  
-/// </summary>  
-public class VEControl : WebBrowser  
-{  
-private string template;  
-private string text;  
-private string html = “<html><body></body></html>”;
+```
+/// <summary>
+/// Native WinForms Control for Virtual Earth Integration
+/// </summary>
+public class VEControl : WebBrowser
+{
+private string template;
+private string text;
+private string html = "<html><body></body></html>";
+```
 
-    /// <summary>  
-/// Constructor for Virtual Earth Integration Control  
-/// </summary>  
-/// <param name=”template”>HTML template for Map content</param>  
-public VEControl(string template)  
-{  
-this.template = template;  
-this.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(VEControl\_DocumentCompleted);  
-}
+    
 
-    /// <summary>  
-///  
-/// </summary>  
-/// <param name=”sender”></param>  
-/// <param name=”e”></param>  
-void VEControl\_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)  
-{  
-if (this.DocumentText != this.html)  
-{  
-this.DocumentText = this.html;  
-}  
+```
+/// <summary>
+/// Constructor for Virtual Earth Integration Control
+/// </summary>
+/// <param name="template">HTML template for Map content</param>
+public VEControl(string template)
+{
+this.template = template;
+this.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(VEControl_DocumentCompleted);
 }
+```
 
-    /// <summary>  
-/// Property for Data Binding  
-/// </summary>  
-public override string Text  
-{  
-get  
-{  
-return text;  
-}  
-set  
-{  
-if (text != value)  
-{  
-text = value;  
-if (string.IsNullOrEmpty(value))  
-{  
-html = “<html><body></body></html>”;  
-}  
-else  
-{  
-html = this.template;  
-html = html.Replace(“%latitude%”, GetParameter(“latitude”, “0”));  
-html = html.Replace(“%longitude%”, GetParameter(“longitude”, “0”));  
-html = html.Replace(“%zoom%”, GetParameter(“zoom”, “1”));  
-}  
-this.DocumentText = html;  
-}  
-}  
-}
+    
 
-    /// <summary>  
-/// Get Parameter from databinding    /// </summary>  
-/// <param name=”parm”>Parameter name</param>  
-/// <param name=”defaultvalue”>Default Value if the parameter isn’t specified</param>  
-/// <returns>The value of the parameter (or default)</returns>  
-private string GetParameter(string parm, string defaultvalue)  
-{  
-foreach (string parameter in text.Split(‘&’))  
-{  
-if (parameter.StartsWith(parm + “=”))  
-{  
-return parameter.Substring(parm.Length + 1);  
-}  
-}  
-return defaultvalue;  
-}  
+```
+/// <summary>
+///
+/// </summary>
+/// <param name="sender"></param>
+/// <param name="e"></param>
+void VEControl_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+{
+if (this.DocumentText != this.html)
+{
+this.DocumentText = this.html;
 }
+}
+```
+
+    
+
+```
+/// <summary>
+/// Property for Data Binding
+/// </summary>
+public override string Text
+{
+get
+{
+return text;
+}
+set
+{
+if (text != value)
+{
+text = value;
+if (string.IsNullOrEmpty(value))
+{
+html = "<html><body></body></html>";
+}
+else
+{
+html = this.template;
+html = html.Replace("%latitude%", GetParameter("latitude", "0"));
+html = html.Replace("%longitude%", GetParameter("longitude", "0"));
+html = html.Replace("%zoom%", GetParameter("zoom", "1"));
+}
+this.DocumentText = html;
+}
+}
+}
+```
+
+    
+
+```
+/// <summary>
+/// Get Parameter from databinding
+```
+
+    
+
+```
+/// </summary>
+/// <param name="parm">Parameter name</param>
+/// <param name="defaultvalue">Default Value if the parameter isn't specified</param>
+/// <returns>The value of the parameter (or default)</returns>
+private string GetParameter(string parm, string defaultvalue)
+{
+foreach (string parameter in text.Split('&'))
+{
+if (parameter.StartsWith(parm + "="))
+{
+return parameter.Substring(parm.Length + 1);
+}
+}
+return defaultvalue;
+}
+}
+```
 
 Note, that you will need a using statement to System.Windows.Forms.
 
@@ -153,20 +177,28 @@ The way we chose to implement this is by creating a wrapper, which is the one we
 
 7\. Add a html page called SmallVEMap.htm and add the following content
 
-<html>  
-<head>  
-<title></title>  
-<meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″ />  
-        var latitude = parseFloat(“%latitude%”);  
-var longitude = parseFloat(“%longitude%”);  
-var zoom = parseInt(“%zoom%”);  
+```
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8″ />
+        var latitude = parseFloat("%latitude%");
+var longitude = parseFloat("%longitude%");
+var zoom = parseInt("%zoom%");
 map.SetDashboardSize(VEDashboardSize.Tiny);
+```
 
-        var position = new VELatLong(latitude, longitude);  
-map.LoadMap(position, zoom, ‘r’, false);  
-shape = new VEShape(VEShapeType.Pushpin, position);  
-map.AddShape(shape);  
-}   
+        
+
+```
+var position = new VELatLong(latitude, longitude);
+map.LoadMap(position, zoom, 'r', false);
+shape = new VEShape(VEShapeType.Pushpin, position);
+map.AddShape(shape);
+}
+```
+
+   
 
 </head>  
 <body onload=”GetMap();” style=”margin:0; position:absolute; width:100%; height:100%; overflow: hidden”>
@@ -178,28 +210,34 @@ map.AddShape(shape);
 
 9\. Add a class called SmallVEControl.cs and add the following classes
 
-\[ControlAddInExport(“SmallVEControl”)\]  
-public class SmallVEControl : StringControlAddInBase, IStringControlAddInDefinition  
-{  
-protected override Control CreateControl()  
-{  
-var control = new VEControl(Resources.SmallVEMap);  
-control.MinimumSize = new Size(200, 200);  
-control.MaximumSize = new Size(500, 500);  
-control.ScrollBarsEnabled = false;  
-control.ScriptErrorsSuppressed = true;  
-control.WebBrowserShortcutsEnabled = false;  
-return control;  
+```
+[ControlAddInExport("SmallVEControl")]
+public class SmallVEControl : StringControlAddInBase, IStringControlAddInDefinition
+{
+protected override Control CreateControl()
+{
+var control = new VEControl(Resources.SmallVEMap);
+control.MinimumSize = new Size(200, 200);
+control.MaximumSize = new Size(500, 500);
+control.ScrollBarsEnabled = false;
+control.ScriptErrorsSuppressed = true;
+control.WebBrowserShortcutsEnabled = false;
+return control;
 }
+```
 
-    public override bool AllowCaptionControl  
-{  
-get  
-{  
-return false;  
-}  
-}  
+    
+
+```
+public override bool AllowCaptionControl
+{
+get
+{
+return false;
 }
+}
+}
+```
 
 You need to add using statements to **System.Drawing**, **Microsoft.Dynamics.Framework.UI.Extensibility**, **Microsoft.Dynamics.Framework.UI.Extensibility.WinForms** and **System.Windows.Forms**.
 
@@ -221,7 +259,7 @@ But what is the public key token?
 
 Its is the public part of the key-file used to sign the assembly and as you remember, we just asked Visual Studio to create a new key-file so we need to query the key file for it’s public key and we do that by running
 
-sn –T VEControl.snk
+`sn –T VEControl.snk`
 
 in a Visual Studio command prompt.
 
@@ -241,7 +279,7 @@ Having the Control Registered for usage we need to create a new page and call it
 
 The code in OnAfterGetRecord is
 
-CustomerLocation := ‘latitude=’+FORMAT(Latitude,0,9)+’&longitude=’+FORMAT(Longitude,0,9)+’&zoom=15’;
+`CustomerLocation := 'latitude='+FORMAT(Latitude,0,9)+'&longitude='+FORMAT(Longitude,0,9)+'&zoom=15';`
 
 The Customer Map Factbox is added as a part to the Customer Card and the Customer List and the SubFormLink is set to **No.=FIELD(No.)**
 

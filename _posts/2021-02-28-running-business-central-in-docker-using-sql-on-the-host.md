@@ -28,6 +28,7 @@ When ReplaceExternalDatabases is included, the New-BcContainer will do 4 things,
 
 The following script should setup a container using SQL Server on the host:
 
+```
 $password = $passwordSecret.SecretValue
 $licenseFile = $licenseFileSecret.SecretValueText
 $auth = "UserPassword"
@@ -45,14 +46,15 @@ $databaseParams = @{
     "multitenant" = $true
 }
 
-New-BcContainer @databaseParams -replaceExternalDatabases \`
-    -accept\_eula \`
-    -containerName $containerName \`
-    -credential $credential \`
-    -auth $auth \`
-    -artifactUrl $artifactUrl \`
-    -licenseFile $licenseFile \`
+New-BcContainer @databaseParams -replaceExternalDatabases `
+    -accept_eula `
+    -containerName $containerName `
+    -credential $credential `
+    -auth $auth `
+    -artifactUrl $artifactUrl `
+    -licenseFile $licenseFile `
     -updateHosts
+```
 
 **Note:** It uses $containerName followed by a minus as database prefix, meaning that all databases on the SQL Server on the host with a name starting with **bcserver-** will be deleted according to the #1 in the description above.
 
@@ -72,13 +74,15 @@ and after some initialization, a running Business Central Container:
 
 If you want to create a second container, using the same database, you can use this script:
 
-New-BcContainer @databaseParams \`
-    -accept\_eula \`
-    -containerName "$($containerName)2" \`
-    -credential $credential \`
-    -auth $auth \`
-    -artifactUrl $artifactUrl \`
+```
+New-BcContainer @databaseParams `
+    -accept_eula `
+    -containerName "$($containerName)2" `
+    -credential $credential `
+    -auth $auth `
+    -artifactUrl $artifactUrl `
     -updateHosts
+```
 
 Only difference is really that the **licenseFile** and the **replaceExternalDatabases** parameters are NOT included.
 
@@ -96,14 +100,16 @@ The replaceExternalDatabases functionality uses the _**Remove-BcDatabase**_ func
 
 The replaceExternalDatabases functionality uses the **_Restore-BcDatabasesFromArtifacts_** function to restore the database backup file from a set of artifacts to a database server specified by **databaseServer**, **databaseInstance** (or blank) and **databaseName**, like:
 
+```
 $artifactUrl = Get-BCArtifactUrl -country dk
-Restore-BcDatabaseFromArtifacts \`
-    -artifactUrl $artifactUrl \`
-    -databaseServer localhost \`
-    -databasePrefix prefix \`
-    -databaseName CRONUS \`
-    -multitenant:$false \`
+Restore-BcDatabaseFromArtifacts `
+    -artifactUrl $artifactUrl `
+    -databaseServer localhost `
+    -databasePrefix prefix `
+    -databaseName CRONUS `
+    -multitenant:$false `
     -async
+```
 
 Specifying -async means that the function won’t wait for the restore to complete. A file with the databasePrefix followed by databasescreated.txt will be created in the containerhelper folder when the restore is complete. Without async, the function will wait for the restore to complete.
 

@@ -38,7 +38,8 @@ Docker Enterprise doesn’t require Hyper-V and can run containers in process is
 
 If you want to check that Docker is installed and accessible, open PowerShell as administrator and run the command **Docker Version** (you might need to restart PowerShell after the installation). This should display the Client and Server version of Docker, like this:
 
-PS C:\\WINDOWS\\system32> docker version
+```
+PS C:\WINDOWS\system32> docker version
 Client: Docker Engine - Community
  Version: 19.03.12
  API version: 1.40
@@ -56,6 +57,7 @@ Server: Docker Engine - Community
   Built: Mon Jun 22 15:57:30 2020
   OS/Arch: windows/amd64
   Experimental: false
+```
 
 If the Server section is giving an error that it cannot connect, then you are either not running as administrator or your service is not running.
 
@@ -113,7 +115,9 @@ When BcContainerHelper is successfully installed, the next thing is to create co
 
 As described here: [https://freddysblog.com/2020/06/25/changing-the-way-you-run-business-central-in-docker/](/2020/06/25/changing-the-way-you-run-business-central-in-docker/) we no longer update the specific images on mcr.microsoft.com. When creating a container you will see a warning:
 
+```
 WARNING: You are running specific Docker images from mcr.microsoft.com. These images will no longer be updated, you should switch to user Docker artifacts. See https://freddysblog.com/2020/07/05/july-updates-are-out-they-are-the-last-on-premises-docker-images/
+```
 
 The solution is to change your scripts to use artifacts. Artifacts exists for ALL versions of NAV or Business Central images.
 
@@ -139,15 +143,13 @@ I get it, New-BcContainer has a LOT of parameters and a LOT of options and some 
 
 It seldom works and is very hard for anybody to help troubleshoot. My recommendation is to use New-BcContainerWizard to create a script and run that un-modified. If this fails, then it is likely your setup.
 
-New-BcContainer \`  
-    -accept\_eula \`  
-    -artifactUrl (Get-BCArtifactUrl) \`  
-    -auth UserPassword \`  
-    -Credential (Get-Credential) \`  
-    -updateHosts
+```
+New-BcContainer `    -accept_eula `    -artifactUrl (Get-BCArtifactUrl) `    -auth UserPassword `    -Credential (Get-Credential) `    -updateHosts
+```
 
 The output on this command on my machine is:
 
+```
 BcContainerHelper is version 1.0.8
 BcContainerHelper is running as administrator
 Host is Microsoft Windows 10 Enterprise - Unknown/Insider build
@@ -155,8 +157,8 @@ Docker Client Version is 19.03.13
 Docker Server Version is 19.03.13
 Removing container bcserver
 Removing bcserver from host hosts file
-Removing bcserver-\* from host hosts file
-Removing C:\\ProgramData\\BcContainerHelper\\Extensions\\bcserver
+Removing bcserver-* from host hosts file
+Removing C:\ProgramData\BcContainerHelper\Extensions\bcserver
 Fetching all docker images
 Using image mcr.microsoft.com/dynamicsnav:10.0.19041.508-generic
 Creating Container bcserver
@@ -170,7 +172,7 @@ Host OS Version: 10.0.19041.508 (2004)
 Using Process isolation
 Using locale en-US
 Disabling the standard eventlog dump to container log every 2 seconds (use -dumpEventLog to enable)
-Files in C:\\ProgramData\\BcContainerHelper\\Extensions\\bcserver\\my:
+Files in C:\ProgramData\BcContainerHelper\Extensions\bcserver\my:
 AdditionalOutput.ps1
 MainLoop.ps1
 SetupVariables.ps1
@@ -179,7 +181,7 @@ Creating container bcserver from image mcr.microsoft.com/dynamicsnav:10.0.19041.
 20f874a3ff015521a1cefe684f5b984a7bac1a3e64c43b9f7cdc3fe504869df7
 Waiting for container bcserver to be ready
 Using artifactUrl https://bcartifacts.azureedge.net/sandbox/17.0.17126.17549/w1
-Using installer from C:\\Run\\150-new
+Using installer from C:\Run\150-new
 Installing Business Central
 Installing from artifacts
 Starting Local SQL Server
@@ -189,13 +191,13 @@ Copying PowerShell Scripts
 Copying dependencies
 Copying ReportBuilder
 Importing PowerShell Modules
-Determining Database Collation from c:\\dl\\sandbox\\17.0.17126.17549\\w1\\BusinessCentral-W1.bak
+Determining Database Collation from c:\dl\sandbox\17.0.17126.17549\w1\BusinessCentral-W1.bak
 Restoring CRONUS Demo Database
 Exporting Application to CRONUS
 Removing Application from tenant
 Modifying Business Central Service Tier Config File for Docker
 Creating Business Central Service Tier
-Installing SIP crypto provider: 'C:\\Windows\\System32\\NavSip.dll'
+Installing SIP crypto provider: 'C:\Windows\System32\NavSip.dll'
 Copying Web Client Files
 Copying Client Files
 Copying ModernDev Files
@@ -206,13 +208,13 @@ Copying Extensions
 Copying Applications
 Starting Business Central Service Tier
 Importing license file
-Copying Database on localhost\\SQLEXPRESS from tenant to default
+Copying Database on localhost\SQLEXPRESS from tenant to default
 Taking database tenant offline
 Copying database files
 Attaching files as new Database default
 Putting database tenant back online
 Mounting tenant database
-Mounting Database for default on server localhost\\SQLEXPRESS
+Mounting Database for default on server localhost\SQLEXPRESS
 Sync'ing Tenant
 Tenant is Operational
 Stopping Business Central Service Tier
@@ -239,7 +241,7 @@ Enabling rewrite rule: Already have tenant specified
 Enabling rewrite rule: Hostname (without port) to tenant
 Dismounting Tenant
 Mounting Tenant
-Mounting Database for default on server localhost\\SQLEXPRESS
+Mounting Database for default on server localhost\SQLEXPRESS
 Sync'ing Tenant
 Tenant is Operational
 Creating http download site
@@ -274,6 +276,7 @@ Get-BcContainerDebugInfo -containerName bcserver to get debug information about 
 Enter-BcContainer -containerName bcserver to open a PowerShell prompt inside the container
 Remove-BcContainer -containerName bcserver to remove the container again
 docker logs bcserver to retrieve information about URL's again
+```
 
 ## Keep the script, Not the container
 

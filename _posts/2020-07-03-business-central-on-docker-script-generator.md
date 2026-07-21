@@ -21,13 +21,17 @@ Before running any scripts, you will need the latest NavContainerHelper module i
 
 With the latest ContainerHelper you can run
 
+```
 New-BcContainerWizard
+```
 
 Then you will run the version of the script, which is included in your version of NavContainerHelper.
 
 There might however be a newer version of the script online. The way you can run this is, that you start Windows PowerShell (ISE and VSCode also works) and run this script:
 
+```
 Invoke-Expression (New-Object System.Net.WebClient).DownloadString("http://aka.ms/bcdockerscript")
+```
 
 You are of course welcome to download and inspect the script if you like, but the script will be updated in its location regularly. When launching the script you should see:
 

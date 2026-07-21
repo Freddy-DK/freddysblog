@@ -57,80 +57,115 @@ In the following sample I use Windows Authentication. In Web References you just
 
 If you want to connect to a Web Reference using a specific username/password you need to exchange this line:
 
-someService.UseDefaultCredentials = true;
+`someService.UseDefaultCredentials = true;`
 
 with this:
 
-someService.Credentials = new NetworkCredential(“user”, “password”, “domain”);
+`someService.Credentials = new NetworkCredential("user", "password", "domain");`
 
 ### The code
 
-First a couple of using statements (including the two reference namespaces) and the main body of a console app:
+`First a couple of using statements (including the two reference namespaces) and the main body of a console app:`
 
-using System;  
-using System.Net;  
-using testApp.CustomerPageRef;  
+```
+using System;
+using System.Net;
+using testApp.CustomerPageRef;
 using testApp.SystemServiceRef;
+```
 
-namespace testApp  
-{  
-class Program  
-{  
-static void Main(string\[\] args)  
-{  
-// main program code  
-        }    }}
+```
+namespace testApp
+{
+class Program
+{
+static void Main(string[] args)
+{
+// main program code
+```
 
-The main code follows
+        
+
+```
+}
+```
+
+    
+
+```
+}
+```
+
+`}`
+
+`The main code follows`
 
 First, connect to the System Web Service and list all companies:
 
-string baseURL = “[http://localhost:7047/DynamicsNAV/WS/”;](http://localhost:7047/DynamicsNAV/WS/";)
+`string baseURL = "`[`http://localhost:7047/DynamicsNAV/WS/";`](http://localhost:7047/DynamicsNAV/WS/";)
 
-SystemService systemService = new SystemService();  
-systemService.Url = baseURL + “SystemService”;  
+```
+SystemService systemService = new SystemService();
+systemService.Url = baseURL + "SystemService";
 systemService.UseDefaultCredentials = true;
+```
 
-Console.WriteLine(“Companies:”);  
-string\[\] companies = systemService.Companies();  
-foreach (string company in companies)  
-Console.WriteLine(company);  
-string cur = companies\[0\];
+```
+Console.WriteLine("Companies:");
+string[] companies = systemService.Companies();
+foreach (string company in companies)
+Console.WriteLine(company);
+string cur = companies[0];
+```
 
 Now I have the company I want to use in _cur_ and the way I create a URL to the Customer page is by doing:
 
-string customerPageURL = baseURL + Uri.EscapeDataString(cur) + “/Page/Customer”;  
-Console.WriteLine(“nURL of Customer Page: ” + customerPageURL);
+```
+string customerPageURL = baseURL + Uri.EscapeDataString(cur) + "/Page/Customer";
+Console.WriteLine("nURL of Customer Page: " + customerPageURL);
+```
 
 and then I can create a Service Class to the Customer Page:
 
-Customer\_Service customerService = new Customer\_Service();  
-customerService.Url = customerPageURL;  
+```
+Customer_Service customerService = new Customer_Service();
+customerService.Url = customerPageURL;
 customerService.UseDefaultCredentials = true;
+```
 
 and using this, I read customer 10000 and output the name:
 
-Customer cust10000 = customerService.Read(“10000”);  
-Console.WriteLine(“nName of Customer 10000: ” + cust10000.Name);
+```
+Customer cust10000 = customerService.Read("10000");
+Console.WriteLine("nName of Customer 10000: " + cust10000.Name);
+```
 
 Last, but not least – lets create a filter and read all customers in GB that has Location Code set to RED or BLUE:
 
-Customer\_Filter filter1 = new Customer\_Filter();  
-filter1.Field = Customer\_Fields.Country\_Region\_Code;  
-filter1.Criteria = “GB”;
+```
+Customer_Filter filter1 = new Customer_Filter();
+filter1.Field = Customer_Fields.Country_Region_Code;
+filter1.Criteria = "GB";
+```
 
-Customer\_Filter filter2 = new Customer\_Filter();  
-filter2.Field = Customer\_Fields.Location\_Code;  
-filter2.Criteria = “RED|BLUE”;
+```
+Customer_Filter filter2 = new Customer_Filter();
+filter2.Field = Customer_Fields.Location_Code;
+filter2.Criteria = "RED|BLUE";
+```
 
-Console.WriteLine(“nCustomers in GB served by RED or BLUE warehouse:”);  
-Customer\_Filter\[\] filters = new Customer\_Filter\[\] { filter1, filter2 };  
-Customer\[\] customers = customerService.ReadMultiple(filters, null, 0);  
-foreach (Customer customer in customers)  
+```
+Console.WriteLine("nCustomers in GB served by RED or BLUE warehouse:");
+Customer_Filter[] filters = new Customer_Filter[] { filter1, filter2 };
+Customer[] customers = customerService.ReadMultiple(filters, null, 0);
+foreach (Customer customer in customers)
 Console.WriteLine(customer.Name);
+```
 
-Console.WriteLine(“nTHE END”);  
+```
+Console.WriteLine("nTHE END");
 Console.ReadLine();
+```
 
 All of the above will output the following to a console prompt (on my machine running NAV 2009SP1 W1)
 

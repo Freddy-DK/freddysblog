@@ -35,10 +35,13 @@ The image is built and you are ready to use it.
 
 You can specify your generic image to New-BcContainer using the -useGenericImage parameter:
 
-New-BcContainer -accept\_eula -containerName mytest -artifactUrl (get-bcartifacturl -type onprem -country w1) -useGenericImage mygeneric:latest
+```
+New-BcContainer -accept_eula -containerName mytest -artifactUrl (get-bcartifacturl -type onprem -country w1) -useGenericImage mygeneric:latest
+```
 
 This should start a container called mytest, running on top of your newly created generic image, but since you didn’t change anything, it will still be the same version of SQL Server inside:
 
+```
 Invoke-ScriptInBCContainer -containerName mytest -scriptblock { sqlcmd -Q "SELECT Convert(varchar(20),ServerProperty('ProductVersion')) as version,Convert(Varchar(40),Serverproperty('edition')) as edition" }
 
 version              edition
@@ -46,30 +49,33 @@ version              edition
 14.0.1000.169        Express Edition (64-bit)
 
 (1 rows affected)
+```
 
 # Modify the DOCKERFILE
 
 In Visual Studio Code, open the DOCKERFILE and locate the first RUN section. You can replace that with this section:
 
-RUN Add-WindowsFeature Web-Server,web-AppInit,web-Asp-Net45,web-Windows-Auth,web-Dyn-Compression,web-WebSockets; \\
-    Stop-Service 'W3SVC' ; \\
-    Set-Service 'W3SVC' -startuptype manual ; \\
-    Set-ItemProperty -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters' -Name ServerPriorityTimeLimit -Value 0 -Type DWord; \\
-    Set-ItemProperty -Path "HKLM:\\system\\CurrentControlSet\\control" -name ServicesPipeTimeout -Value 300000 -Type DWORD -Force; \\
-    Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/?linkid=840945' -OutFile sql.exe ; \\
-    Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/?linkid=840944' -OutFile sql.box ; \\
-    Start-Process -Wait -FilePath .\\sql.exe -ArgumentList /qs, /x:setup ; \\
-    .\\setup\\setup.exe /q /ACTION=Install /INSTANCENAME=SQLEXPRESS /FEATURES=SQLEngine /UPDATEENABLED=0 /SQLSVCACCOUNT='NT AUTHORITY\\System' /SQLSYSADMINACCOUNTS='BUILTIN\\ADMINISTRATORS' /TCPENABLED=1 /NPENABLED=0 /IACCEPTSQLSERVERLICENSETERMS ; \\
-    While (!(get-service 'MSSQL$SQLEXPRESS' -ErrorAction SilentlyContinue)) { Start-Sleep -Seconds 5 } ; \\
-    Stop-Service 'MSSQL$SQLEXPRESS' ; \\
-    Set-itemproperty -path 'HKLM:\\software\\microsoft\\microsoft sql server\\mssql14.SQLEXPRESS\\mssqlserver\\supersocketnetlib\\tcp\\ipall' -name tcpdynamicports -value '' ; \\
-    Set-itemproperty -path 'HKLM:\\software\\microsoft\\microsoft sql server\\mssql14.SQLEXPRESS\\mssqlserver\\supersocketnetlib\\tcp\\ipall' -name tcpport -value 1433 ; \\
-    Set-itemproperty -path 'HKLM:\\software\\microsoft\\microsoft sql server\\mssql14.SQLEXPRESS\\mssqlserver\\' -name LoginMode -value 2 ; \\
-    Set-Service 'MSSQL$SQLEXPRESS' -startuptype manual ; \\
-    Set-Service 'SQLTELEMETRY$SQLEXPRESS' -startuptype manual ; \\
-    Set-Service 'SQLWriter' -startuptype manual ; \\
-    Set-Service 'SQLBrowser' -startuptype manual ; \\
+```
+RUN Add-WindowsFeature Web-Server,web-AppInit,web-Asp-Net45,web-Windows-Auth,web-Dyn-Compression,web-WebSockets; \
+    Stop-Service 'W3SVC' ; \
+    Set-Service 'W3SVC' -startuptype manual ; \
+    Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters' -Name ServerPriorityTimeLimit -Value 0 -Type DWord; \
+    Set-ItemProperty -Path "HKLM:\system\CurrentControlSet\control" -name ServicesPipeTimeout -Value 300000 -Type DWORD -Force; \
+    Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/?linkid=840945' -OutFile sql.exe ; \
+    Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/?linkid=840944' -OutFile sql.box ; \
+    Start-Process -Wait -FilePath .\sql.exe -ArgumentList /qs, /x:setup ; \
+    .\setup\setup.exe /q /ACTION=Install /INSTANCENAME=SQLEXPRESS /FEATURES=SQLEngine /UPDATEENABLED=0 /SQLSVCACCOUNT='NT AUTHORITY\System' /SQLSYSADMINACCOUNTS='BUILTIN\ADMINISTRATORS' /TCPENABLED=1 /NPENABLED=0 /IACCEPTSQLSERVERLICENSETERMS ; \
+    While (!(get-service 'MSSQL$SQLEXPRESS' -ErrorAction SilentlyContinue)) { Start-Sleep -Seconds 5 } ; \
+    Stop-Service 'MSSQL$SQLEXPRESS' ; \
+    Set-itemproperty -path 'HKLM:\software\microsoft\microsoft sql server\mssql14.SQLEXPRESS\mssqlserver\supersocketnetlib\tcp\ipall' -name tcpdynamicports -value '' ; \
+    Set-itemproperty -path 'HKLM:\software\microsoft\microsoft sql server\mssql14.SQLEXPRESS\mssqlserver\supersocketnetlib\tcp\ipall' -name tcpport -value 1433 ; \
+    Set-itemproperty -path 'HKLM:\software\microsoft\microsoft sql server\mssql14.SQLEXPRESS\mssqlserver\' -name LoginMode -value 2 ; \
+    Set-Service 'MSSQL$SQLEXPRESS' -startuptype manual ; \
+    Set-Service 'SQLTELEMETRY$SQLEXPRESS' -startuptype manual ; \
+    Set-Service 'SQLWriter' -startuptype manual ; \
+    Set-Service 'SQLBrowser' -startuptype manual ; \
     Remove-Item -Recurse -Force sql.exe, sql.box, setup
+```
 
 Save and investigate the differences using the source control feature in Visual Studio Code:
 
@@ -83,10 +89,13 @@ Re-run the build.ps1 script and you should again get a new generic image.
 
 Again, specify your generic image to New-BcContainer using the -useGenericImage parameter:
 
-New-BcContainer -accept\_eula -containerName mytest -artifactUrl (get-bcartifacturl -type onprem -country w1) -useGenericImage mygeneric:latest
+```
+New-BcContainer -accept_eula -containerName mytest -artifactUrl (get-bcartifacturl -type onprem -country w1) -useGenericImage mygeneric:latest
+```
 
 The new container should now be using SQL Server Developer Edition instead. You cannot really see the difference as the instance is still called SQLEXPRESS, but if you query the ServerProperty again:
 
+```
 Invoke-ScriptInBCContainer -containerName mytest -scriptblock { sqlcmd -Q "SELECT Convert(varchar(20),ServerProperty('ProductVersion')) as version,Convert(Varchar(40),Serverproperty('edition')) as edition" }
 
 version              edition
@@ -94,6 +103,7 @@ version              edition
 14.0.1000.169        Developer Edition (64-bit)
 
 (1 rows affected)
+```
 
 # Other changes
 

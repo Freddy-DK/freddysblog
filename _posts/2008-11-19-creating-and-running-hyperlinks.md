@@ -59,7 +59,7 @@ Very little as the matter of fact – if you launch a RunPage url with a list pl
 
 So you should think that the following URL
 
-“DynamicsNAV:////CRONUS International Ltd./RunPage?Page=9305&personalization=0000232E-0000-0007-0008-0000836BD2D2”
+`"DynamicsNAV:////CRONUS International Ltd./RunPage?Page=9305&personalization=0000232E-0000-0007-0008-0000836BD2D2"`
 
 would open the Shipped Not Invoiced List Place in a Task Page.
 
@@ -69,7 +69,7 @@ So now told what the personalization ID is and how to use it, but I am afraid it
 
 If you want to launch a listplace you need to do like:
 
-“DynamicsNAV:////CRONUS International Ltd./navigate?node=Home/Sales Orders/Ready to Ship”
+`"DynamicsNAV:////CRONUS International Ltd./navigate?node=Home/Sales Orders/Ready to Ship"`
 
 Only problem with this URL is, that it always opens a new Client (eating one extra license).
 

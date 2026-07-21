@@ -25,7 +25,9 @@ By far, the most common error people face when running the NAV on Docker image i
 
 The solution to this problem is to insert a memory allocation (-m 4G or –memory 4G) in the docker run command. 4GB is more than enough and depending on what you are going to use NAV for, less could do. The full docker run command could look like:
 
-docker run --env accept\_eula=Y --memory 4G microsoft/dynamics-nav
+```
+docker run --env accept_eula=Y --memory 4G microsoft/dynamics-nav
+```
 
 A caveat here is of course to make sure that you have enough memory left on the host computer. You could also try with 3G or 2500M instead of 4G.
 
@@ -35,11 +37,15 @@ Also note [this bug](https://github.com/docker/for-win/issues/767) in Docker for
 
 The NAV image on Docker is a fairly complicated image and you can specify a lot of different parameters to configure NAV to suit your needs. Before filing an issue with a dump from the output on [http://www.github.com/microsoft/nav-docker/issues](http://www.github.com/microsoft/nav-docker/issues) please try the following:
 
+```
 docker run -it --name myserver --memory 4G microsoft/windowsservercore cmd
+```
 
 This should start a windowsservercore image and place you in a Cmd prompt inside the Container. Press Exit to exit the container. If this fails, then Docker is not properly installed on the machine. Use
 
+```
 docker rm myserver -f
+```
 
 to delete the container again.
 
@@ -47,31 +53,39 @@ to delete the container again.
 
 Docker is doing an amazing job on the network side, typically it just works. I have however seen a number of people (including one of my machine) having one problem on the name resolution. Try to create a container with a specified hostname:
 
+```
 docker run -itd --name myserver --hostname myserver microsoft/windowsservercore cmd
+```
 
 Now, you should be able to ping myserver:
 
+```
 ping /4 myserver
-Pinging myserver \[172.19.152.52\] with 32 bytes of data:
+Pinging myserver [172.19.152.52] with 32 bytes of data:
 Reply from 172.19.152.52: bytes=32 time<1ms TTL=128
 Reply from 172.19.152.52: bytes=32 time<1ms TTL=128
 Reply from 172.19.152.52: bytes=32 time<1ms TTL=128
 Reply from 172.19.152.52: bytes=32 time<1ms TTL=128
+```
 
 The problem I have on my machine is, when I connect to the Microsoft Corporate network, then Docker name resolution will stop working:
 
+```
 ping /4 myserver
-Pinging myserver.redmond.corp.microsoft.com \[10.137.86.122\] with 32 bytes of data:
+Pinging myserver.redmond.corp.microsoft.com [10.137.86.122] with 32 bytes of data:
 Request timed out.
 Request timed out.
 Request timed out.
 Request timed out.
+```
 
 The only solution I have found to this problem is to add an entry to the hosts file in c:\\windows\\system32\\drivers\\etc to specify that 172.19.152.52 is myserver. The new-navcontainer function in the navcontainerhelper PowerShell module has a parameter called -updateHosts, which will do just that – update the hosts file.
 
 Use
 
+```
 docker rm myserver -f
+```
 
 to delete the container again.
 
@@ -79,7 +93,9 @@ to delete the container again.
 
 The docker syntax is:
 
+```
 docker
+```
 
 Note that the command is first and the image name last.
 
@@ -91,7 +107,9 @@ If you are using a secure Url to specify the license file, does it really yield 
 
 If you are specifying a file path to the License file, then you need to make sure, that the license file is accessible from inside the container given that file path. If f.eks. you have placed the file in **c:\\temp\\license.flf** on the docker host – and you specify that the licensefile is in c:\\hosttemp\\license.flf, then you need to insert the -v c:\\temp:c:\\hosttemp as a parameter to your docker run command, for the temp folder to be accessible from inside the container as c:\\hosttemp.
 
-docker run -e accept\_eula=Y -e licensefile=c:\\hosttemp\\license.flf -v c:\\temp:c:\\hosttemp -m 4G microsoft/dynamics-nav
+```
+docker run -e accept_eula=Y -e licensefile=c:\hosttemp\license.flf -v c:\temp:c:\hosttemp -m 4G microsoft/dynamics-nav
+```
 
 ## 7\. Are you running an Anti-Virus program, which prevents Docker from working?
 
@@ -107,7 +125,9 @@ Best mitigation for this issue is really to contact your Anti-Virus program prov
 
 If you are running Windows Server 1709 you need to run the normal NAV on Docker images using Hyper-V isolation.
 
-docker run -e accept\_eula=Y --isolation hyperv --memory 4G microsoft/dynamics-nav:devpreview
+```
+docker run -e accept_eula=Y --isolation hyperv --memory 4G microsoft/dynamics-nav:devpreview
+```
 
 When we start shipping 1709 images, you will be able to use those with process isolation. For NAV on Docker images, there is no benefit of running Windows Server 1709 at this time.
 

@@ -78,7 +78,9 @@ This generates a piece of HTML, which can be embedded in a web site:
 
 Now you have a Url, which works like a Direct Download link to your file in OneDrive. Example:
 
+```
 https://onedrive.live.com/download?cid=5112EB13170E468D&resid=5112EB13170E468D%21215538&authkey=
+```
 
 A fairly cumbersome process and based on the number of articles found on the internet on how to do this (that doesn’t work) I have little confidence that this will continue working.
 
@@ -98,7 +100,9 @@ Right-Click the file and select **Copy Dropbox Link**
 
 and now you have a link, which looks like this:
 
+```
 https://www.dropbox.com/s/9mpeg6dqyjsghcz/navdemo.net.pfx?dl=0
+```
 
 Much like the OneDrive link, this link will take you to a portal, where you can download, comment, copy, subscribe, link and d a lot of other good things with this file:
 
@@ -108,11 +112,15 @@ Which clearly is not what we wanted.
 
 It is however fairly easy to modify the link to become a **Direct Download link**. Easiest way is to replace the **dl=0** with **dl=1**.
 
+```
 https://www.dropbox.com/s/9mpeg6dqyjsghcz/navdemo.net.pfx?dl=1
+```
 
 The way most blog posts on the internet describes is to **replace the host name** with **dl.dropboxusercontent.com** (and remove the parameters):
 
+```
 https://dl.dropboxusercontent.com/s/9mpeg6dqyjsghcz/navdemo.net.pfx
+```
 
 Obviously none of these links works as I have deleted the link.
 
@@ -144,7 +152,9 @@ a Dialog will popup in which you specify what permissions you want to give the h
 
 Press Create and Copy the Url from the next window. Your SAS Url has this format:
 
+```
 https://freddynav20166655.blob.core.windows.net/blog/navdemo.net.pfx?st=2017-02-26T05%3A19%3A00Z&se=2017-02-26T07%3A19%3A00Z&sp=r&sv=2015-12-11&sr=b&sig=EehTUQeVKpo8HS0R%2F7EvIy5ok%2BcVjQPqKhNtOQvuLQ4%3D
+```
 
 and no, you cannot modify the TimeStamp to extend the validity of the token:-)
 
@@ -152,6 +162,7 @@ Azure Storage is clearly the most professional tool to use and has full support 
 
 Azure Storage even supports to do this from PowerShell (of course):
 
+```
 $VerbosePreference = "Continue"
 $ErrorActionPreference = "stop"
 
@@ -166,7 +177,7 @@ $storageAccountName = ""
 $storageContainer = ""
 
 # Settings for SAS Url
-$MyCertificateBlobName = \[System.IO.Path\]::GetFileName($MyCertificate)
+$MyCertificateBlobName = [System.IO.Path]::GetFileName($MyCertificate)
 $StartTime = Get-Date
 $ExpiryTime = $StartTime.AddMonths(1)
 
@@ -190,6 +201,7 @@ $MyCertificateSasUrl = New-AzureStorageBlobSASToken -Context $storageContext -Co
 
 # Show
 $MyCertificateSasUrl
+```
 
 Note that you need Azure PowerShell CmdLets (which the script installs from PowerShellGet). If you are running older versions of Windows/PowerShell you might need to install this manually.
 
@@ -197,12 +209,14 @@ Note that you need Azure PowerShell CmdLets (which the script installs from Powe
 
 If you want to know whether your Direct Download Url will work with the NAV Azure Deployment system, you can try it with this PowerShell snippet:
 
-function DownloadFile(\[string\]$sourceUrl, \[string\]$destinationFile)
+```
+function DownloadFile([string]$sourceUrl, [string]$destinationFile)
 {
   Remove-Item -Path $destinationFile -Force -ErrorAction Ignore
   Invoke-WebRequest $sourceUrl -OutFile $destinationFile
 }
 DownloadFile -sourceUrl "" -destinationFile ""
+```
 
 This PowerShell function will download the file and place it in the destinationfile (overwriting if this exists) and it is similar to the PowerShell which will be running on your machine during deployment when you write [http://aka.ms/navdemodeploy](http://aka.ms/navdemodeploy). Remember to test that the content of the downloaded file indeed is as expected. If you use the wrong Url from OneDrive, the downloaded file will just be the HTML document which links to the file.
 

@@ -68,35 +68,37 @@ In order to try this, you need to install/configure a few things. Here’s what 
 
 Much like in the first blog post, you can extract the .mdf and .ldf files from a container image and attach these to the SQL Server on the host (if you do not have a database you need to use).
 
+```
 $containerName = "test"
-$DatabaseFolder = "c:\\databases"
+$DatabaseFolder = "c:\databases"
 $DatabaseName = "MyCronus"
 
 if (!(Test-Path $DatabaseFolder)) {
     New-Item $DatabaseFolder -ItemType Directory | Out-Null
 }
 
-if (Test-Path (Join-Path $DatabaseFolder "$($DatabaseName).\*")) {
+if (Test-Path (Join-Path $DatabaseFolder "$($DatabaseName).*")) {
     throw "Database $DatabaseName already exists in $databaseFolder"
 }
 
 $imageName = Get-BestBCContainerImageName -imageName "mcr.microsoft.com/businesscentral/onprem"
 docker pull $imageName
 
-$dbPath = Join-Path $env:TEMP (\[Guid\]::NewGuid().ToString())
+$dbPath = Join-Path $env:TEMP ([Guid]::NewGuid().ToString())
 Extract-FilesFromBCContainerImage -imageName $imageName -extract database -path $dbPath -force
 
 $files = @()
 Get-ChildItem -Path (Join-Path $dbPath "databases") | % {
-    $DestinationFile = "{0}\\{1}{2}" -f $databaseFolder, $DatabaseName, $\_.Extension
-    Copy-Item -Path $\_.FullName -Destination $DestinationFile -Force
+    $DestinationFile = "{0}\{1}{2}" -f $databaseFolder, $DatabaseName, $_.Extension
+    Copy-Item -Path $_.FullName -Destination $DestinationFile -Force
     $files += @("(FILENAME = N'$DestinationFile')")
 }
 
 Remove-Item -Path $dbpath -Recurse -Force
 
 Write-Host "Attaching files as new Database $DatabaseName"
-Invoke-SqlCmd -Query "CREATE DATABASE \[$DatabaseName\] ON $(\[string\]::Join(", ",$Files)) FOR ATTACH"
+Invoke-SqlCmd -Query "CREATE DATABASE [$DatabaseName] ON $([string]::Join(", ",$Files)) FOR ATTACH"
+```
 
 After running this, you should be able to see your newly created database in SSMS.
 
@@ -104,20 +106,22 @@ After running this, you should be able to see your newly created database in SSM
 
 Now you can run a container and connect to that database:
 
+```
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $dbcredentials = New-Object PSCredential -ArgumentList 'sa', $credential.Password
-New-BCContainer \`
-    -accept\_eula \`
-    -containerName $containerName \`
-    -imageName $imageName \`
-    -updateHosts \`
-    -auth UserPassword \`
-    -Credential $credential \`
-    -databaseServer 'host.containerhelper.internal' \`
-    -databaseInstance '' \`
-    -databaseName $DatabaseName \`
+New-BCContainer `
+    -accept_eula `
+    -containerName $containerName `
+    -imageName $imageName `
+    -updateHosts `
+    -auth UserPassword `
+    -Credential $credential `
+    -databaseServer 'host.containerhelper.internal' `
+    -databaseInstance '' `
+    -databaseName $DatabaseName `
     -databaseCredential $dbcredentials
 New-NavContainerNavUser -containerName $containerName -Credential $credential -ChangePasswordAtNextLogOn:$false -PermissionSetId SUPER
+```
 
 **Note:** Docker won’t create the user in the database if you specify a foreign database connection like here, which is why the script adds the user at the end.
 
@@ -125,12 +129,14 @@ New-NavContainerNavUser -containerName $containerName -Credential $credential -C
 
 When all is done, you can remove the container, the database and the database files using this script:
 
+```
 Remove-BCContainer $containerName
 Write-Host "Dropping database $DatabaseName"
-Invoke-SqlCmd -Query "ALTER DATABASE \[$DatabaseName\] SET OFFLINE WITH ROLLBACK IMMEDIATE" 
-Invoke-Sqlcmd -Query "DROP DATABASE \[$DatabaseName\]"
-Write-Host "Removing Database files $($databaseFolder)\\$($DatabaseName).\*"
-Remove-Item -Path (Join-Path $DatabaseFolder "$($DatabaseName).\*") -Force
+Invoke-SqlCmd -Query "ALTER DATABASE [$DatabaseName] SET OFFLINE WITH ROLLBACK IMMEDIATE" 
+Invoke-Sqlcmd -Query "DROP DATABASE [$DatabaseName]"
+Write-Host "Removing Database files $($databaseFolder)\$($DatabaseName).*"
+Remove-Item -Path (Join-Path $DatabaseFolder "$($DatabaseName).*") -Force
+```
 
 # What if it doesn’t work?
 

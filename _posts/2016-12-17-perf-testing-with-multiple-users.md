@@ -47,6 +47,7 @@ As your tests are running you will see in the overview that all tests are failin
 
 Running the tests just once worked just fine (app.config specifies your ADMIN user and password) and in single runs, Visual Studio will use this user. To be honest, it isn’t Visual Studio, it is of course our own code. Locate the _GetUserName_ method in the _NAVUserContextManager.cs_ file in the _TestUtilities_ project.
 
+```
 protected override string GetUserName(TestContext testContext)
 {
     LoadTestUserContext loadTestUserContext = testContext.GetLoadTestUserContext();
@@ -58,6 +59,7 @@ protected override string GetUserName(TestContext testContext)
     // empty user name will use the default user name, this is the case when running as unit tests
     return DefaultNAVUserName;
 }
+```
 
 Try to out-comment all lines except for the return DefaultNAVUserName and re-run the Load Test.
 
@@ -91,11 +93,13 @@ You need to consider which “mode” is the right for your solution. The perf. 
 
 Adding users to NAV is easily done in PowerShell
 
-. ("c:\\program files\\Microsoft Dynamics NAV\\100\\Service\\NavAdminTool.ps1") | Out-Null
+```
+. ("c:\program files\Microsoft Dynamics NAV\100\Service\NavAdminTool.ps1") | Out-Null
 0..9 | % {
-    New-NAVServerUser -ServerInstance $serverInstance -UserName "$navAdminUser$\_" -Password (ConvertTo-SecureString -String $NavAdminPassword -AsPlainText -Force) -LicenseType Full
-    New-NAVServerUserPermissionSet -ServerInstance $serverInstance -UserName "$navAdminUser$\_" -PermissionSetId SUPER
+    New-NAVServerUser -ServerInstance $serverInstance -UserName "$navAdminUser$_" -Password (ConvertTo-SecureString -String $NavAdminPassword -AsPlainText -Force) -LicenseType Full
+    New-NAVServerUserPermissionSet -ServerInstance $serverInstance -UserName "$navAdminUser$_" -PermissionSetId SUPER
 }
+```
 
 Having done this, you can remove the comments in the _GetUserName_ method and run your tests using all users.
 
@@ -107,6 +111,7 @@ When using NAV based on the Gallery Image on Azure, it is fairly easy to change 
 
 Running this will automagically switch your setup to multi-tenancy and create a Multitenancy Demo Admin Shell on the desktop. The script will display what it is doing:
 
+```
 Welcome to the Multitenancy Installation script.
 
 This script will help you turn your NAV DEMO Environment into a multi-tenant server.
@@ -119,32 +124,32 @@ The landing page will automatically be updated with a list of all tenants and th
 
 Read Settings
 NAV Version: 100
-Database Name: \[Demo Database NAV (10-0)\]
+Database Name: [Demo Database NAV (10-0)]
 Import Modules
 Server Instance: NAV
 Switch to Multi-tenancy
 Stop NAV Service Tier
-Copy Database \[Demo Database NAV (10-0)\] to \[Tenant Template\]
+Copy Database [Demo Database NAV (10-0)] to [Tenant Template]
 Copy NAV Database from Demo Database NAV (10-0) to Tenant Template
 Using SQL Express
-Take database \[Demo Database NAV (10-0)\] offline
+Take database [Demo Database NAV (10-0)] offline
 copy database files
-Attach files as new Database \[Tenant Template\]
-Put database \[Demo Database NAV (10-0)\] back online
-Remove Database \[Demo Database NAV (10-0)\]
-Remove Database \[Demo Database NAV (10-0)\]
-Export NAV Application from \[Tenant Template\] to \[Demo Database NAV (10-0)\]
+Attach files as new Database [Tenant Template]
+Put database [Demo Database NAV (10-0)] back online
+Remove Database [Demo Database NAV (10-0)]
+Remove Database [Demo Database NAV (10-0)]
+Export NAV Application from [Tenant Template] to [Demo Database NAV (10-0)]
 Start NAV Service Tier with DatabaseName empty
 Mount NAV Application Database
-Remove Application part in \[Tenant Template\]
+Remove Application part in [Tenant Template]
 Import MTDemoAdminShell module
 Create default tenant
 Copy NAV Database from Tenant Template to default
 Using SQL Express
-Take database \[Tenant Template\] offline
+Take database [Tenant Template] offline
 copy database files
-Attach files as new Database \[default\]
-Put database \[Tenant Template\] back online
+Attach files as new Database [default]
+Put database [Tenant Template] back online
 Mount NAV Database for default on server localhostNAVDEMO
 Synchronize tenant default
 Creating Click-Once manifest for default
@@ -155,6 +160,7 @@ Remove old Desktop Shortcuts
 Setup Desktop Shortcuts with Tenant specification
 Multitenancy successfully installted.
 Please open Multitenancy Demo Admin Shell on the desktop to add or remove tenants
+```
 
 After this, you can open the Multitenancy Demo Admin Shell and add 3 tenants (Test1, Test2 and Test3):  
 [![createtenant](/assets/images/2016/perf-testing-with-multiple-users/b3542-createtenant-1.png)](/assets/images/2016/perf-testing-with-multiple-users/b3542-createtenant.png)
@@ -167,34 +173,39 @@ If the load is evenly distributed, we will have to distribute the users over the
 
 First, we will change the GetUserName to return the username in a specific tenant based on the Load test id. We do this by adding a % 10 (modulo 10) so that we always use ADMIN0 to ADMIN9.
 
+```
 protected override string GetUserName(TestContext testContext)
 {
     LoadTestUserContext loadTestUserContext = testContext.GetLoadTestUserContext();
     if (loadTestUserContext != null)
     {
         // add the load test user id as a suffix to the default user name 
-        return String.Format("{0}{1}", DefaultNAVUserName, loadTestUserContext.UserId **% 10**);
+        return String.Format("{0}{1}", DefaultNAVUserName, loadTestUserContext.UserId % 10);
     }
     // empty user name will use the default user name, this is the case when running as unit tests
     return DefaultNAVUserName;
 }
+```
 
 Beside this, we also need to select the right tenant. Create a new method underneath the _GetUserName_ method in _NAVUserContextManager_:
 
+```
 protected string GetTenantName(TestContext testContext)
 {
     LoadTestUserContext loadTestUserContext = testContext.GetLoadTestUserContext();
     if (loadTestUserContext != null)
     {
-        return "TEST" + (loadTestUserContext.UserId **% 3** + 1).ToString();
+        return "TEST" + (loadTestUserContext.UserId % 3 + 1).ToString();
     }
     return "default";
 }
+```
 
 Note the % 3 for having 3 tenants. This works because we have TEST1, TEST2 and TEST3 as tenants. If your tenants are named differently, you can create an array of tenant names, have them in a database or whatever – and… – you would of course never hardcode the number of users in each tenant and the number of tenants like this, but this only serves as an example on how to get the tenant name.
 
 Last but not least you need to modify the _CreateUserContext_ method right above the _GetUserName_ method.
 
+```
 protected override UserContext CreateUserContext(TestContext testContext)
 {
     var userName = GetUserName(testContext);
@@ -202,6 +213,7 @@ protected override UserContext CreateUserContext(TestContext testContext)
     var userContext = new UserContext(tenantName, Company, AuthenticationScheme.UserNamePassword, userName, DefaultNAVPassword);
     return userContext;
 }
+```
 
 Now change the Step Load Pattern to a maximum of 30 users (3 tenants \* 10 users) and Run the Test.
 

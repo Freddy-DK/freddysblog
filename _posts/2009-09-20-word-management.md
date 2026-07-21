@@ -42,19 +42,32 @@ Knowing that the behavior was connected to the merge format, I decided to try an
 
 So I started to look at WordManagement and immediately found a couple of things I didn’t like
 
-MergeFileName := RBAutoMgt.ClientTempFileName(Text029,’.HTM’);  
-IF ISCLEAR(wrdMergefile) THEN  
-CREATE(wrdMergefile,FALSE,TRUE);  
-// Create the header of the merge file  
-CreateHeader(wrdMergefile,FALSE,MergeFileName);  
-<find the first record>  
-REPEAT  
-// Add Values to mergefile – one AddField for each field for each record  
-  wrdMergefile.AddField(<field value>);  // Terminate the line  
-wrdMergefile.WriteLine;  
-UNTIL <No more records>  
-// Close the file  
+```
+MergeFileName := RBAutoMgt.ClientTempFileName(Text029,'.HTM');
+IF ISCLEAR(wrdMergefile) THEN
+CREATE(wrdMergefile,FALSE,TRUE);
+// Create the header of the merge file
+CreateHeader(wrdMergefile,FALSE,MergeFileName);
+<find the first record>
+REPEAT
+// Add Values to mergefile – one AddField for each field for each record
+```
+
+  
+
+```
+wrdMergefile.AddField(<field value>);
+```
+
+  
+
+```
+// Terminate the line
+wrdMergefile.WriteLine;
+UNTIL <No more records>
+// Close the file
 wrdMergefile.CloseFile;
+```
 
 now wrdMergefile is a COM component of type ‘Navision Attain ApplicationHandler’.MergeHandler and as you can see, it is created Client side, meaning that for every field in every record we make a roundtrip to the Client (and one extra roundtrip for every record to terminate the line) – now we might not have a lot of records nor a lot of fields, but I think we can do better (said from a guy who used to think about clock cycles when doing assembly instructions on z80 processors back in the start 80’s – WOW I am getting old:-))
 
@@ -66,86 +79,113 @@ I decided to go with a model, where I create a server side temporary file for ea
 
 The above code would change into something like
 
-MergeFileName := CreateMergeFile(wrdMergefile);  
-wrdMergefile.CREATEOUTSTREAM(OutStream);  
-CreateHeader(OutStream,FALSE); // Header without data  
-<find the first record>  
-REPEAT  
-CLEAR(mrgLine);  
-// Add Values to mergefile – one AddField for each field for each record  
-AddField(mrgCount, mrgLine, <field value>);  
-  // Terminate the line  
-mrgLine.ADDTEXT(CRLF);  mrgLine.WRITE(OutStream);  
-CLEAR(mrgLine);  
-UNTIL <No more records>  
-// Close the file  
-wrdMergeFile.Close();  
+```
+MergeFileName := CreateMergeFile(wrdMergefile);
+wrdMergefile.CREATEOUTSTREAM(OutStream);
+CreateHeader(OutStream,FALSE); // Header without data
+<find the first record>
+REPEAT
+CLEAR(mrgLine);
+// Add Values to mergefile – one AddField for each field for each record
+AddField(mrgCount, mrgLine, <field value>);
+```
+
+  
+
+```
+// Terminate the line
+mrgLine.ADDTEXT(CRLF);
+```
+
+  
+
+```
+mrgLine.WRITE(OutStream);
+CLEAR(mrgLine);
+UNTIL <No more records>
+// Close the file
+wrdMergeFile.Close();
 MergeFileName := WordManagement.DownloadAndDeleteTempFile(MergeFileName);
+```
 
 As you can see – no COM components, all server side. A couple of helper functions are used here, but no rocket science and not too different from the code that was.
 
 CreateMergeFile creates a server side temporary file.
 
-**CreateMergeFile(VAR wrdMergefile : File) MergeFileName : Text\[260\]  
-**wrdMergefile.CREATETEMPFILE;  
-MergeFileName := wrdMergefile.NAME + ‘.csv’;  
-wrdMergefile.CLOSE;  
-wrdMergefile.TEXTMODE := TRUE;  
-wrdMergefile.WRITEMODE := TRUE;  
+```
+CreateMergeFile(VAR wrdMergefile : File) MergeFileName : Text[260]
+wrdMergefile.CREATETEMPFILE;
+MergeFileName := wrdMergefile.NAME + '.csv';
+wrdMergefile.CLOSE;
+wrdMergefile.TEXTMODE := TRUE;
+wrdMergefile.WRITEMODE := TRUE;
 wrdMergefile.CREATE(MergeFileName);
+```
 
 AddField adds a field to the BigText. Using AddString, which again uses DupQuotes to ensure that “ inside of the merge field are doubled.
 
-**AddField(VAR count : Integer;VAR mrgLine : BigText;value : Text\[1024\])  
-**IF mrgLine.LENGTH = 0 THEN  
-BEGIN  
-count := 1;  
-END ELSE  
-BEGIN  
-count := count + 1;  
-mrgLine.ADDTEXT(‘,’);  
-END;  
-mrgLine.ADDTEXT(‘”‘);  
-AddString(mrgLine, value);  
-mrgLine.ADDTEXT(‘”‘);
+```
+AddField(VAR count : Integer;VAR mrgLine : BigText;value : Text[1024])
+IF mrgLine.LENGTH = 0 THEN
+BEGIN
+count := 1;
+END ELSE
+BEGIN
+count := count + 1;
+mrgLine.ADDTEXT(',');
+END;
+mrgLine.ADDTEXT('"');
+AddString(mrgLine, value);
+mrgLine.ADDTEXT('"');
+```
 
-**AddString(VAR mrgLine : BigText;str : Text\[1024\])  
-**IF STRLEN(str) > 512 THEN  
-BEGIN  
-mrgLine.ADDTEXT(DupQuotes(COPYSTR(str,1,512)));  
-str := DELSTR(str,1,512);  
-END;  
+```
+AddString(VAR mrgLine : BigText;str : Text[1024])
+IF STRLEN(str) > 512 THEN
+BEGIN
+mrgLine.ADDTEXT(DupQuotes(COPYSTR(str,1,512)));
+str := DELSTR(str,1,512);
+END;
 mrgLine.ADDTEXT(DupQuotes(str));
+```
 
-**DupQuotes(str : Text\[512\]) result : Text\[1024\]  
-**result := ”;  
-REPEAT  
-i := STRPOS(str, ‘”‘);  
-IF i <> 0 THEN  
-BEGIN  
-result := result + COPYSTR(str,1,i) + ‘”‘;  
-str := DELSTR(str,1,i);  
-END;  
-UNTIL i = 0;  
+```
+DupQuotes(str : Text[512]) result : Text[1024]
+result := ";
+REPEAT
+i := STRPOS(str, '"');
+IF i <> 0 THEN
+BEGIN
+result := result + COPYSTR(str,1,i) + '"';
+str := DELSTR(str,1,i);
+END;
+UNTIL i = 0;
 result := result + str;
+```
 
 and a small function to return CRLF (line termination for a merge line)
 
-**CRLF() result : Text\[2\]  
-**result\[1\] := 13;  
-result\[2\] := 10;
+```
+CRLF() result : Text[2]
+result[1] := 13;
+result[2] := 10;
+```
 
 When doing this I did run into some strange errors when writing both BigTexts and normal Text variables to a stream – that is the reason for building everything into a BigText and writing once pr. line.
 
 and last, but not least – a function to Download a file to the Client Tier and delete it from the Service Tier:
 
-**DownloadAndDeleteTempFile(ServerFileName : Text\[1024\]) : Text\[1024\]  
-**IF NOT ISSERVICETIER THEN  
+```
+DownloadAndDeleteTempFile(ServerFileName : Text[1024]) : Text[1024]
+IF NOT ISSERVICETIER THEN
 EXIT(ServerFileName);
+```
 
-FileName := RBAutoMgt.DownloadTempFile(ServerFileName);  
-FILE.ERASE(ServerFileName);  
+```
+FileName := RBAutoMgt.DownloadTempFile(ServerFileName);
+FILE.ERASE(ServerFileName);
 EXIT(FileName);
+```
 
 It doesn’t take much more than that… (beside of course integrating this new method in the various functions in WordManagement). The fix doesn’t require anything else than just replacing codeunit 5054 and the new WordManagement can be downloaded [here](http://www.freddy.dk/NewWordManagement.zip).
 
@@ -157,7 +197,7 @@ So what if you install this codeunit into a system, where some of these merge fi
 
 Well – for that case, I created a function that was able to convert them – called
 
-ConvertContentFromHTML(VAR MergeContent : BigText) : Boolean
+`ConvertContentFromHTML(VAR MergeContent : BigText) : Boolean`
 
 It isn’t pretty – but it seems to work.
 

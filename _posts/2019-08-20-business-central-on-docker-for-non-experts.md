@@ -57,7 +57,7 @@ If you cannot change these things, you might have to either run Docker centrall
 
 All public Business Central containers are hosted at
 
-mcr.microsoft.com/businesscentral/<sandbox|onprem>:<tag>
+mcr.microsoft.com/businesscentral/<sandbox\|onprem>:<tag>
 
 and all public Dynamics NAV containers are hosted at
 
@@ -69,7 +69,9 @@ More information about the tag can be found by reading this blog post: [https://
 
 Maybe not one million, but yes, there are a lot. You shouldn’t see them as parameters though – you should see them as options and almost all options have very good defaults. In fact, if you want to spin up a Business Central container you can write:
 
-New-BCContainer -accept\_eula -containerName 'test'
+```
+New-BCContainer -accept_eula -containerName 'test'
+```
 
 in PowerShell and you will get a container called “test”, running the latest public version of Business Central On Premises.
 
@@ -79,7 +81,9 @@ It will use Windows Authentication and ask for your Windows Credential when star
 
 In order to run that statement, you of course need to have Docker installed and you also need to have the latest NavContainerHelper module installed in PowerShell. This is done by running:
 
+```
 install-module navcontainerhelper -force
+```
 
 The containerhelper provides a number of functions and features to help you run NAV or Business Central containers. The containerhelper will automatically determine which container OS to use based on the host OS. It will also determine whether or not it can run process isolation or it needs hyperv isolation. It will also automatically specify memorylimit if hyperv isolation is selected etc. etc.
 
@@ -107,9 +111,11 @@ Another parameter you might need to add is **\-accept\_outdated**. When using a 
 
 A third parameter, that you always will add is **\-imageName** – which version of NAV or Business Central do you need. More information about the images available can be found here: [https://freddysblog.com/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/](/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/). With that, we have
 
-New-BCContainer -accept\_eula -accept\_outdated -updatehosts \`
-                -imageName 'mcr.microsoft.com/businesscentral/onprem:dk' \`
+```
+New-BCContainer -accept_eula -accept_outdated -updatehosts `
+                -imageName 'mcr.microsoft.com/businesscentral/onprem:dk' `
                 -containerName 'test'
+```
 
 ## \-dns
 
@@ -123,9 +129,11 @@ This means that the container (for some reason) cannot use the DNS settings prov
 
 or you can add a parameter called **\-dns** followed by the DNS server you want the container to use. In some cases you can grab the IP number of the DNS used by the host, in other cases you can use a well known public DNS: **8.8.8.8**
 
-New-BCContainer -accept\_eula -accept\_outdated -updatehosts -dns '8.8.8.8' \`
-                -imageName 'mcr.microsoft.com/businesscentral/onprem:dk' \`
+```
+New-BCContainer -accept_eula -accept_outdated -updatehosts -dns '8.8.8.8' `
+                -imageName 'mcr.microsoft.com/businesscentral/onprem:dk' `
                 -containerName 'test'
+```
 
 ## \-auth
 
@@ -141,12 +149,14 @@ If you do not specify credentials, you will be prompted to enter the credentials
 
 If you want to specify credentials programmatically, it is done by creating a PSCredential object, which consists of a username and a password in a securestring:
 
+```
 $password = ConvertTo-SecureString -String "P@ssword1" -AsPlainText -Force
 $credential = New-Object PSCredential 'admin', $password
-New-BCContainer -accept\_eula -accept\_outdated -updatehosts -dns '8.8.8.8' \`
-                -imageName 'mcr.microsoft.com/businesscentral/onprem:dk' \`
-                -containerName 'test' \`
+New-BCContainer -accept_eula -accept_outdated -updatehosts -dns '8.8.8.8' `
+                -imageName 'mcr.microsoft.com/businesscentral/onprem:dk' `
+                -containerName 'test' `
                 -auth UserPassword -Credential $credential
+```
 
 Note that you should not have passwords in clear text in source code, but if you are creating containers, which are only accessible from your machine as your user, then it doesn’t really matter what the password is for the container.
 
@@ -154,13 +164,15 @@ Note that you should not have passwords in clear text in source code, but if you
 
 If you do not specify a license file for the container, you will be using the CRONUS Demo license, which traditionally ships on the DVD. License file is specified either as a filename on the host computer or as a secure URL to a license file. Read [this blog post](/2017/02/26/create-a-secure-url-to-a-file/) to learn how to create a secure URL.
 
+```
 $password = ConvertTo-SecureString -String "P@ssword1" -AsPlainText -Force
 $credential = New-Object PSCredential 'admin', $password
-New-BCContainer -accept\_eula -accept\_outdated -updatehosts -dns '8.8.8.8' \`
-                -imageName 'mcr.microsoft.com/businesscentral/onprem:dk' \`
-                -containerName 'test' \`
-                -auth UserPassword -Credential $credential \`
-                -licenseFile 'c:\\temp\\license.flf'
+New-BCContainer -accept_eula -accept_outdated -updatehosts -dns '8.8.8.8' `
+                -imageName 'mcr.microsoft.com/businesscentral/onprem:dk' `
+                -containerName 'test' `
+                -auth UserPassword -Credential $credential `
+                -licenseFile 'c:\temp\license.flf'
+```
 
 ## \-includeCSIDE
 
@@ -237,9 +249,11 @@ Specifying **\-alwaysPull** causes the containerhelper to check whether a new im
 
 **Invoke-ScriptInBCContainer** will invoke a PowerShell script inside a container. When running the script, you will have all NAV/Business Central PowerShell modules pre-loaded and ready for use and the instance name of the service tier is in the $serverInstance variable (NAV for 14.x and earlier containers and BC for 15.x and later)
 
+```
 Invoke-ScriptInBCContainer -containerName $containerName -scriptblock {
     Get-NAVServerUser $serverInstance
 }
+```
 
 **Remove-BCContainer** will remove a container. Please note that creating a new container with the same name as another container will implicitly remove the old container as well.
 

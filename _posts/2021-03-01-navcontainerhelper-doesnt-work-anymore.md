@@ -17,7 +17,7 @@ RIP NavContainerHelper, Long Live BcContainerHelper.
 
 The recipe for changing from NavContainerHelper to BcContainerHelper goes here:
 
-1.  Remove all containers (Get-NavContainers | Remove-NavContainer)
+1.  Remove all containers (Get-NavContainers \| Remove-NavContainer)
 2.  Uninstall all versions of NavContainerHelper (UnInstall-Module NavContainerHelper -allversions)
 3.  Restart PowerShell and check that NavContainerHelper is gone (else repeat step 2)
 4.  Reset Docker to factory settings (to remove all images)

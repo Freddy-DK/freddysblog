@@ -99,6 +99,7 @@ The next step is to use your private generic image when spinning up containers. 
 
 In the script below, I will create a parameter set in a variable called $imageParam, which is the replacement of the -imageName parameter to New-NavContainer. This parameter set determines whether to start the container as hyperv container or to replatform and use the private generic image.
 
+```
 $hyperv = $false
 
 # Settings
@@ -116,22 +117,23 @@ if ($hyperv) {
 else {
     docker pull $imageName
     $navVersion = Get-NavContainerNavVersion -containerOrImageName $imageName
-    $navDvdPath = "c:\\ProgramData\\NavContainerHelper\\$($NavVersion)-Files"
+    $navDvdPath = "c:\ProgramData\NavContainerHelper\$($NavVersion)-Files"
     if (!(Test-Path $navDvdPath)) {
         Extract-FilesFromNavContainerImage -imageName $imageName -path $navDvdPath
     }
     $imageParam = @{
         "imageName" = "mygeneric"
         "navdvdPath" = $navDvdPath
-        "navDvdCountry" = ($navVersion.Split('-')\[1\])
+        "navDvdCountry" = ($navVersion.Split('-')[1])
     }
 }
 
-New-NavContainer -accept\_eula @imageParam \`
-                 -containerName "bc" \`
-                 -auth $auth \`
-                 -Credential $Credential \`
+New-NavContainer -accept_eula @imageParam `
+                 -containerName "bc" `
+                 -auth $auth `
+                 -Credential $Credential `
                  -updateHosts
+```
 
 On my machine, the difference on New-NavContainer when running process isolation and hyperv isolation is only 23 seconds. Process isolation is 23 seconds slower to start, but might run faster than hyperv isolation.
 

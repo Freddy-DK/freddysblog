@@ -35,13 +35,17 @@ The environment variables are:
 
 So, when using Docker Run, you will have to use:
 
-\--env ClientServicesPort=7146
+```
+--env ClientServicesPort=7146
+```
 
 to make the container listen for Client Services on another port.
 
 If you are using New-NavContainer in NavContainerHelper, you can use
 
-\-ClientServicesPort 7146
+```
+-ClientServicesPort 7146
+```
 
 You do not need to add this to the additionalParameters array.
 

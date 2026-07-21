@@ -15,9 +15,11 @@ permalink: /2009/10/14/running-code-on-the-client-without-deploying-com-objects/
 
 It started out as me being a little too fast when stating that you could easily download a file to the Client and attach it to Outlook without any user interaction – and as you might know that is true, but you might also know that if you go the recommended route:
 
-FILE.DOWNLOAD(FileName, ”, ‘<TEMP>’,”, ToFile);  
-Mail.NewMessage(”,”,Name,”,ToFile,TRUE);  
+```
+FILE.DOWNLOAD(FileName, ", '<TEMP>',", ToFile);
+Mail.NewMessage(",",Name,",ToFile,TRUE);
 FILE.ERASE(FileName);
+```
 
 Then you will get an e-mail that looks like this:
 
@@ -55,21 +57,25 @@ You also need to specify what language you use, the control supports JScript and
 
 A VBScript function which returns **Hello <name>** could look like this:
 
-function Hello(who)  
-Hello = “Hello “&who  
+```
+function Hello(who)
+Hello = "Hello "&who
 end function
+```
 
 Creating this function in a Client side COM component could look like:
 
-IF CREATE(objScript,TRUE,TRUE) THEN  
-BEGIN  
-CR := ‘ ‘; CR\[1\] := 13;  
-objScript.Language := ‘VBScript’;  
-objScript.AddCode(  
-‘function Hello(who)’+CR+  
-‘  Hello = “Hello “&who’+CR+  
-‘end function’);  
+```
+IF CREATE(objScript,TRUE,TRUE) THEN
+BEGIN
+CR := ' '; CR[1] := 13;
+objScript.Language := 'VBScript';
+objScript.AddCode(
+'function Hello(who)'+CR+
+'  Hello = "Hello "&who'+CR+
+'end function');
 END;
+```
 
 The way I write this is, that I try to maintain the structure of the VBScript even though it is inside a string in NAV, maybe I am fooling myself, but I think it is more readable.
 
@@ -81,7 +87,7 @@ There are two ways of invoking a script method:
 
 The above function could be called using
 
-MESSAGE(FORMAT(objScript.Eval(‘Hello(“Freddy”)’)));
+`MESSAGE(FORMAT(objScript.Eval('Hello("Freddy")')));`
 
 Note – when calling functions, VBScript wants your parameters embraced by parentheses.
 
@@ -91,22 +97,29 @@ Let’s rewrite the above function to a method and have the method show a Messag
 
 The VBScript could look like:
 
-sub Hello(who)  
-MsgBox “Hello “&who, 0, “Title”  
+```
+sub Hello(who)
+MsgBox "Hello "&who, 0, "Title"
 end sub
+```
 
 and creating this function in a COM object and calling the method could look like:
 
-IF CREATE(objScript,TRUE,TRUE) THEN  
-BEGIN  
-CR := ‘ ‘; CR\[1\] := 13;  
-objScript.Language := ‘VBScript’;  
-objScript.AddCode(  
-‘sub Hello(who)’+CR+  
-‘  MsgBox “Hello “&who, 0, “Test”‘+CR+  
-‘end sub’);  
-objScript.ExecuteStatement(‘Hello “Freddy”‘);  
+```
+IF CREATE(objScript,TRUE,TRUE) THEN
+BEGIN
+CR := ' '; CR[1] := 13;
+objScript.Language := 'VBScript';
+```
+
+```
+objScript.AddCode(
+'sub Hello(who)'+CR+
+'  MsgBox "Hello "&who, 0, "Test"'+CR+
+'end sub');
+objScript.ExecuteStatement('Hello "Freddy"');
 END;
+```
 
 Note – when calling methods (or sub’s) VBScript does NOT want the parameters embraced by parentheses.
 
@@ -114,15 +127,17 @@ Note – when calling methods (or sub’s) VBScript does NOT want the parameters
 
 **Rename a temporary file**
 
-function RenameTempFile(fromFile, toFile)  
-set fso = createobject(“Scripting.FileSystemObject”)  
-set x = createobject(“Scriptlet.TypeLib”)  
-path = fso.getparentfoldername(fromFile)  
-toPath = path+””+left(x.GUID,38)  
-fso.CreateFolder toPath  
-fso.MoveFile fromFile, toPath+””+toFile  
-RenameTempFile = toPath  
+```
+function RenameTempFile(fromFile, toFile)
+set fso = createobject("Scripting.FileSystemObject")
+set x = createobject("Scriptlet.TypeLib")
+path = fso.getparentfoldername(fromFile)
+toPath = path+""+left(x.GUID,38)
+fso.CreateFolder toPath
+fso.MoveFile fromFile, toPath+""+toFile
+RenameTempFile = toPath
 end function
+```
 
 As you can see, I am doing exactly what I responded on the mibuso thread [here](http://www.mibuso.com/forum/viewtopic.php?f=32&t=29806) – just in VBScript instead – which then requires no client side install.
 
@@ -130,50 +145,68 @@ BTW this function is actually used in ClausL’s post about [sending e-mail with
 
 **Get Machine name**
 
-function GetComputerName()  
-set net = createobject(“wscript.network”)  
-GetComputerName = net.ComputerName  
+```
+function GetComputerName()
+set net = createobject("wscript.network")
+GetComputerName = net.ComputerName
 end function
+```
 
 I know, that you also can read an environment variable – but this way you can actually get all kind of information on the network though this.
 
 **Launch an application**
 
-sub Notepad()  
-set shell = createobject(“WScript.Shell”)  
-shell.Run “notepad.exe”  
+```
+sub Notepad()
+set shell = createobject("WScript.Shell")
+shell.Run "notepad.exe"
 end sub
+```
 
 Yes, you can do this by using the Shell object directly in NAV, like:
 
 _Shell       Automation       ‘Microsoft Shell Controls And Automation’.Shell_
 
-CREATE(objShell,True,true);  
-objShell.Open(‘c:\\windows\\system32\\notepad.exe’);
+```
+CREATE(objShell,True,true);
+objShell.Open('c:\windows\system32\notepad.exe');
+```
 
 I just wanted to show that you that stuff like this can be done in VBScript too, and note, that the Shell object in VBScript and in NAV is not the same.
 
 **Asking a simple question**
 
-function Input(question, title, default\_answer)  
-Input = InputBox(question, title, default\_answer)  
+```
+function Input(question, title, default_answer)
+Input = InputBox(question, title, default_answer)
 end function
+```
 
 A couple of partners have told me, that they are unhappy with the discontinuation of INPUT from NAV and having to create pages for even the simplest questions. Running the following code:
 
-IF CREATE(objScript,TRUE,TRUE) THEN  
-BEGIN  
-CR := ‘ ‘; CR\[1\] := 13;  
-objScript.Language := ‘VBScript’;
+```
+IF CREATE(objScript,TRUE,TRUE) THEN
+BEGIN
+CR := ' '; CR[1] := 13;
+objScript.Language := 'VBScript';
+```
 
-  objScript.AddCode(  
-‘function Input(question, title, default\_answer)’+CR+  
-‘  Input = InputBox(question, title, default\_answer)’+CR+  
-‘end function’);
+  
 
-  s := objScript.Eval(‘Input(“How old are you?”, “A simple question”, “”)’);  
-MESSAGE(s);  
+```
+objScript.AddCode(
+'function Input(question, title, default_answer)'+CR+
+'  Input = InputBox(question, title, default_answer)'+CR+
+'end function');
+```
+
+  
+
+```
+s := objScript.Eval('Input("How old are you?", "A simple question", "")');
+MESSAGE(s);
 END;
+```
 
 Brings up this dialog on my machine:
 
@@ -183,19 +216,30 @@ Who knows, maybe somebody can use this as an alternative to INPUT.
 
 **Read the RoleTailored Client configuration file**
 
-function ReadConfigFile()  
-set shell = CreateObject(“WScript.Shell”)  
-folder = shell.ExpandEnvironmentStrings(“%LOCALAPPDATA%”)  
-if folder = “” then folder = shell.ExpandEnvironmentStrings(“%USERPROFILE%”)&”Local SettingsApplication Data”  
-  filename = folder&”MicrosoftMicrosoft Dynamics NAVClientUserSettings.config”  
-set fso = createobject(“Scripting.FileSystemObject”)  
-set file = fso.OpenTextFile(filename, 1)  
-ReadConfigFile = file.ReadAll()  
+```
+function ReadConfigFile()
+set shell = CreateObject("WScript.Shell")
+folder = shell.ExpandEnvironmentStrings("%LOCALAPPDATA%")
+if folder = "" then folder = shell.ExpandEnvironmentStrings("%USERPROFILE%")&"Local SettingsApplication Data"
+```
+
+  
+
+```
+filename = folder&"MicrosoftMicrosoft Dynamics NAVClientUserSettings.config"
+set fso = createobject("Scripting.FileSystemObject")
+set file = fso.OpenTextFile(filename, 1)
+ReadConfigFile = file.ReadAll()
 end function
+```
 
 Note that I have NOT tested this function under Windows XP – I know that LOCALAPPDATA is not defined on Windows XP and I think the line:
 
-  if folder = “” then folder = shell.ExpandEnvironmentStrings(“%USERPROFILE%”)&”Local SettingsApplication Data”
+  
+
+```
+if folder = "" then folder = shell.ExpandEnvironmentStrings("%USERPROFILE%")&"Local SettingsApplication Data"
+```
 
 should take care of finding the right folder – if anybody can confirm that, then add that as a comment to this post.
 

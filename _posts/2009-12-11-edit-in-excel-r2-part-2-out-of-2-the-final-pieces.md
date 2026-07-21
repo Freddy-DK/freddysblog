@@ -47,65 +47,91 @@ One more thing needed in the Client Setup program is to register the COM object.
 
 and the code for the class, which is called by the installer looks like:
 
-\[RunInstaller(true)\]  
-public partial class RegasmInstaller : Installer  
-{  
-public RegasmInstaller()  
-: base()  
-{  
+```
+[RunInstaller(true)]
+public partial class RegasmInstaller : Installer
+{
+public RegasmInstaller()
+: base()
+{
 }
+```
 
-    public override void Commit(IDictionary savedState)  
-{  
-base.Commit(savedState);  
-Regasm(false);  
+    
+
+```
+public override void Commit(IDictionary savedState)
+{
+base.Commit(savedState);
+Regasm(false);
 }
+```
 
-    public override void Rollback(IDictionary savedState)  
-{  
-base.Rollback(savedState);  
+    
+
+```
+public override void Rollback(IDictionary savedState)
+{
+base.Rollback(savedState);
 }
+```
 
-    public override void Uninstall(IDictionary savedState)  
-{  
-base.Rollback(savedState);  
-Regasm(true);  
+    
+
+```
+public override void Uninstall(IDictionary savedState)
+{
+base.Rollback(savedState);
+Regasm(true);
 }
+```
 
-    private void Regasm(bool unregister)  
-{  
-string parameters = “/tlb /codebase”;  
-if (unregister)  
-parameters += ” /unregister”;  
-string regasmPath = RuntimeEnvironment.GetRuntimeDirectory() + @”regasm.exe”;  
-string dllPath = this.GetType().Assembly.Location;  
-if (!File.Exists(regasmPath))  
-throw new InstallException(“Registering assembly failed”);  
-if (!File.Exists(dllPath))  
+    
+
+```
+private void Regasm(bool unregister)
+{
+string parameters = "/tlb /codebase";
+if (unregister)
+parameters += " /unregister";
+string regasmPath = RuntimeEnvironment.GetRuntimeDirectory() + @"regasm.exe";
+string dllPath = this.GetType().Assembly.Location;
+if (!File.Exists(regasmPath))
+throw new InstallException("Registering assembly failed");
+if (!File.Exists(dllPath))
 return;
+```
 
-        Process process = new Process();  
-process.StartInfo.CreateNoWindow = true;  
-process.StartInfo.UseShellExecute = false; // Hides console window  
-process.StartInfo.FileName = regasmPath;  
-process.StartInfo.Arguments = string.Format(“”{0}” {1}”, dllPath, parameters);  
+        
+
+```
+Process process = new Process();
+process.StartInfo.CreateNoWindow = true;
+process.StartInfo.UseShellExecute = false; // Hides console window
+process.StartInfo.FileName = regasmPath;
+process.StartInfo.Arguments = string.Format(""{0}" {1}", dllPath, parameters);
 process.Start();
+```
 
-        // When uninstalling we need to wait for the regasm to finish,  
-// before continuing and deleting the file we are unregistering  
-if (unregister)  
-{  
-process.WaitForExit(10000);  
-try  
-{  
-System.IO.File.Delete(System.IO.Path.ChangeExtension(dllPath, “tlb”));  
-}  
-catch  
-{  
-}  
-}  
-}  
+        
+
+```
+// When uninstalling we need to wait for the regasm to finish,
+// before continuing and deleting the file we are unregistering
+if (unregister)
+{
+process.WaitForExit(10000);
+try
+{
+System.IO.File.Delete(System.IO.Path.ChangeExtension(dllPath, "tlb"));
 }
+catch
+{
+}
+}
+}
+}
+```
 
 All of the above is captured in the NAVEditInExcelR2.msi – which is the output from the Edit In Excel Setup project. Running this .msi on a client will check pre-requisites, install the right DLL’s, register the COM and you should be good to go.
 

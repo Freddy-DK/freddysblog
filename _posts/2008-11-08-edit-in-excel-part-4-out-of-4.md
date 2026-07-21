@@ -31,39 +31,47 @@ But we need to start in a different area – we need a COM object, which our act
 
 First of all we will create a COM object, which contains one function.
 
-public void EditInExcel(string page, string view)
+`public void EditInExcel(string page, string view)`
 
 I do think there are a number of tutorials that explains how to do this, so I will run over the steps very quickly.
 
 1.  In the same solution as the NAVTemplate, create a new project – type Class Library and name the project NAVEditInExcel
 2.  Rename class1.cs to NAVEditInExcel.cs – and say Yes to the question whether you want to rename the class as well.
 3.  Select Properties on the project (not the solution)
-    1.  On the Build tab, set the output path to ..NAVTemplatebinDebug in order to share the output path the the Excel Spreadsheet
-    2.  On the Build events tab, we need to register the COM object to make it visible to NAV. Add the following Post Build Event: C:\\Windows\\Microsoft.NET\\Framework\\v2.0.50727\\regasm NAVEditInExcel.dll /codebase /tlb
+    1.  On the Build tab, set the output path to `..NAVTemplatebinDebug` in order to share the output path the the Excel Spreadsheet
+    2.  On the Build events tab, we need to register the COM object to make it visible to NAV. Add the following Post Build Event: `C:\Windows\Microsoft.NET\Framework\v2.0.50727\regasm NAVEditInExcel.dll /codebase /tlb`
     3.  On the Signing tab, check the Sign the Assembly checkbox and select New key in the combo box, name the key and protect it with a password if you fancy.
 4.  Open the AssemblyInfo.cs (under Properties in the Solution Explorer)
-    1.  Add using system; to the using statements
-    2.  Add \[assembly: CLSCompliant(true)\] under the line with \[assembly: ComVisible(false)\].
+    1.  Add `using system;` to the using statements
+    2.  Add `[assembly: CLSCompliant(true)]` under the line with `[assembly: ComVisible(false)]`.
 5.  Open the source for the NavEditInExcel.cs
-    1.  Add using System.Runtime.InteropServices; to the using statements
+    1.  Add `using System.Runtime.InteropServices;` to the using statements
     2.  Create an Interface and change the class to be:
 
-\[ComVisible(true)\]  
-\[Guid(“A2C51FC8-671E-4135-AD27-48EDC491E76E”), InterfaceType(ComInterfaceType.InterfaceIsDual)\]  
-public interface INAVEditInExcel  
-{  
-void EditInExcel(string page, string view);  
-}
-
-\[ComVisible(true)\]  
-\[Guid(“233E0C7F-2276-4142-929C-D6BA8725D7B4”), ClassInterface(ClassInterfaceType.None)\]  
-public class NAVEditInExcel : INAVEditInExcel  
-{  
-public void EditInExcel(string page, string view)  
+```
+[ComVisible(true)]
+[Guid("A2C51FC8-671E-4135-AD27-48EDC491E76E"), InterfaceType(ComInterfaceType.InterfaceIsDual)]
+public interface INAVEditInExcel
 {
-
-        // Code goes here…    }  
+void EditInExcel(string page, string view);
 }
+```
+
+```
+[ComVisible(true)]
+[Guid("233E0C7F-2276-4142-929C-D6BA8725D7B4"), ClassInterface(ClassInterfaceType.None)]
+public class NAVEditInExcel : INAVEditInExcel
+{
+public void EditInExcel(string page, string view)
+{
+```
+
+        `// Code goes here…`    
+
+```
+}
+}
+```
 
 Now you should be able to build the COM object and see it inside NAV when adding a variable of type automation.
 
@@ -75,8 +83,10 @@ Insert an Action on the Customer List Place called Edit In Excel and edit the co
 
 In the code for that Action – create a local variable called NAVEditInExcel of type Automation and select the NAVEditInExcel.NAVEditInExcel COM object to use and add the following code:
 
-CREATE(NAVEditInExcel, TRUE, TRUE);  
+```
+CREATE(NAVEditInExcel, TRUE, TRUE);
 NAVEditInExcel.EditInExcel(TABLENAME, GETVIEW(TRUE));
+```
 
 That’s it on the NAV side, but of course we didn’t make all the code necessary in the COM object yet.
 
@@ -94,67 +104,83 @@ Having that hooked up we really just need to launch that damn spreadsheet with t
 
 We need to add 3 .NET references to the COM object:
 
--   System.Windows.Forms
--   Microsoft.Office.Interop.Excel
--   Microsoft.VisualStudio.Tools.Applications.ServerDocument.v9.0
+-   `System.Windows.Forms`
+-   `Microsoft.Office.Interop.Excel`
+-   `Microsoft.VisualStudio.Tools.Applications.ServerDocument.v9.0`
 
 and the following 3 using statements:
 
-using Microsoft.VisualStudio.Tools.Applications;  
-using System.Windows.Forms;  
+```
+using Microsoft.VisualStudio.Tools.Applications;
+using System.Windows.Forms;
 using System.Reflection;
+```
 
 and last but not least, add the following EditInExcel method:
 
-public void EditInExcel(string page, string view)  
-{  
-try  
-{  
-// Copy the original template to a new template using the page name as name!  
-string originalTemplate = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), “NAVTemplate.xltx”);  
-if (!System.IO.File.Exists(originalTemplate))  
-{  
-MessageBox.Show(string.Format(“The template: ‘{0}’ cannot be found!”, originalTemplate), “Error”, MessageBoxButtons.OK, MessageBoxIcon.Error);  
-return;  
-}  
-string template = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), page + “.xltx”);  
-while (System.IO.File.Exists(template))  
-{  
-try  
-{  
-System.IO.File.Delete(template);  
-}  
-catch (System.IO.IOException)  
-{  
-if (MessageBox.Show(string.Format(“The template: ‘{0}’ is locked, cannot open spreadsheet”, template), “Error”, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) != DialogResult.Retry)  
-{  
-return;  
-}  
-}  
-}  
-System.IO.File.Copy(originalTemplate, template);
-
-        // Open the new template and set parameters  
-ServerDocument serverDoc = new ServerDocument(template);  
-CachedDataHostItem host = serverDoc.CachedData.HostItems\[0\];  
-host.CachedData\[“page”\].SerializeDataInstance(page);  
-host.CachedData\[“view”\].SerializeDataInstance(view);  
-serverDoc.Save();  
-serverDoc.Close();
-
-        // Create a new spreadsheet based on the new template  
-Microsoft.Office.Interop.Excel.ApplicationClass excelApp = new Microsoft.Office.Interop.Excel.ApplicationClass();  
-excelApp.Visible = true;  
-excelApp.Workbooks.Add(template);
-
-        // Erase template  
-System.IO.File.Delete(template);  
-}  
-catch (Exception e)  
-{  
-System.Windows.Forms.MessageBox.Show(e.Message, “Critical error”, MessageBoxButtons.OK, MessageBoxIcon.Error);  
-}  
+```
+public void EditInExcel(string page, string view)
+{
+try
+{
+// Copy the original template to a new template using the page name as name!
+string originalTemplate = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "NAVTemplate.xltx");
+if (!System.IO.File.Exists(originalTemplate))
+{
+MessageBox.Show(string.Format("The template: '{0}' cannot be found!", originalTemplate), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+return;
 }
+string template = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), page + ".xltx");
+while (System.IO.File.Exists(template))
+{
+try
+{
+System.IO.File.Delete(template);
+}
+catch (System.IO.IOException)
+{
+if (MessageBox.Show(string.Format("The template: '{0}' is locked, cannot open spreadsheet", template), "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) != DialogResult.Retry)
+{
+return;
+}
+}
+}
+System.IO.File.Copy(originalTemplate, template);
+```
+
+        
+
+```
+// Open the new template and set parameters
+ServerDocument serverDoc = new ServerDocument(template);
+CachedDataHostItem host = serverDoc.CachedData.HostItems[0];
+host.CachedData["page"].SerializeDataInstance(page);
+host.CachedData["view"].SerializeDataInstance(view);
+serverDoc.Save();
+serverDoc.Close();
+```
+
+        
+
+```
+// Create a new spreadsheet based on the new template
+Microsoft.Office.Interop.Excel.ApplicationClass excelApp = new Microsoft.Office.Interop.Excel.ApplicationClass();
+excelApp.Visible = true;
+excelApp.Workbooks.Add(template);
+```
+
+        
+
+```
+// Erase template
+System.IO.File.Delete(template);
+}
+catch (Exception e)
+{
+System.Windows.Forms.MessageBox.Show(e.Message, "Critical error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+}
+}
+```
 
 This method really does 4 things:
 
@@ -167,11 +193,15 @@ That was easy!
 
 Oh – there is one things I forgot to say, you need to specify in the Excel Spreadsheet that the page and view variables are cached data (meaning their value are saved with Excel) – this is done by adding an attribute to the variables:
 
-\[Cached\]  
+```
+[Cached]
 public string page;
+```
 
-\[Cached\]  
+```
+[Cached]
 public string view;
+```
 
 Having done this, you can open the spreadsheet as a Serverdocument, get and set the value of these parameters and save the document again, pretty sweet way of communicating parameters to Excel or Word – and this will definitely come in handy later.
 

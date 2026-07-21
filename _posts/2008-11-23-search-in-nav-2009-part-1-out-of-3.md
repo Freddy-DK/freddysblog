@@ -90,43 +90,45 @@ First of all we create a Codeunit called Search and add the following code. The 
 
 The function loops through all Search Tables and for each Search Table, it loops through the Search Fields – and perform a search. For every match we create a record in the results temporary table (if it isn’t already inserted).
 
-**DoSearch(searchstring : Text\[40\];VAR result : BigText)  
-**CLEAR(result);  
-results.DELETEALL;  
-IF searchtable.FIND(‘-‘) THEN  
-BEGIN  
-REPEAT  
-rec.OPEN(searchtable.”Table No”);  
-searchfield.SETRANGE(searchfield.”Table No”, searchtable.”Table No”);  
-IF searchfield.FIND(‘-‘) THEN  
-BEGIN  
-REPEAT  
-rec.RESET();  
-field := rec.FIELD(searchfield.”Field No”);  
-field.SETFILTER(‘\*’ + searchstring + ‘\*’);  
-IF rec.FIND(‘-‘) THEN  
-BEGIN  
-REPEAT  
-results.SETRANGE(results.Bookmark, FORMAT(rec.RECORDID,0,10));  
-IF NOT results.FIND(‘-‘) THEN  
-BEGIN  
-results.INIT();  
-results.Bookmark := FORMAT(rec.RECORDID,0,10);  
-results.Id := rec.FIELD(searchtable.”Id Field No”).VALUE;  
-results.Name := rec.FIELD(searchtable.”Name Field No”).VALUE;  
-results.Page := searchtable.”Page No”;  
-results.Table := rec.NAME;  
-results.INSERT();  
-END;  
-UNTIL rec.NEXT = 0;  
-END;  
-field.SETFILTER(”);  
-UNTIL searchfield.NEXT =0;  
-END;  
-rec.CLOSE;  
-searchfield.SETRANGE(searchfield.”Table No”);  
-UNTIL searchtable.NEXT = 0;  
+```
+DoSearch(searchstring : Text[40];VAR result : BigText)
+CLEAR(result);
+results.DELETEALL;
+IF searchtable.FIND('-') THEN
+BEGIN
+REPEAT
+rec.OPEN(searchtable."Table No");
+searchfield.SETRANGE(searchfield."Table No", searchtable."Table No");
+IF searchfield.FIND('-') THEN
+BEGIN
+REPEAT
+rec.RESET();
+field := rec.FIELD(searchfield."Field No");
+field.SETFILTER('*' + searchstring + '*');
+IF rec.FIND('-') THEN
+BEGIN
+REPEAT
+results.SETRANGE(results.Bookmark, FORMAT(rec.RECORDID,0,10));
+IF NOT results.FIND('-') THEN
+BEGIN
+results.INIT();
+results.Bookmark := FORMAT(rec.RECORDID,0,10);
+results.Id := rec.FIELD(searchtable."Id Field No").VALUE;
+results.Name := rec.FIELD(searchtable."Name Field No").VALUE;
+results.Page := searchtable."Page No";
+results.Table := rec.NAME;
+results.INSERT();
 END;
+UNTIL rec.NEXT = 0;
+END;
+field.SETFILTER(");
+UNTIL searchfield.NEXT =0;
+END;
+rec.CLOSE;
+searchfield.SETRANGE(searchfield."Table No");
+UNTIL searchtable.NEXT = 0;
+END;
+```
 
 Note, the FORMAT(recid, 0, 10) – which is the way to get a bookmark, which can be used for linking back into NAV 2009.
 
@@ -134,45 +136,47 @@ You probably noticed that the result is defined as a BigText and not as a XMLPor
 
 That does however mean, that we manually have to build the XML document based on the temporary results table. The following code is also in the DoSearch function:
 
-results.RESET;  
-results.SETCURRENTKEY(results.Table, results.Id);  
-IF results.FIND(‘-‘) THEN  
-BEGIN  
-CREATE(XMLDoc, false, false);  
-XMLDoc.async(FALSE);  
-TopNode := XMLDoc.createNode(1,’SEARCHRESULT’,”);  
-XMLDoc.appendChild(TopNode);  
-currentTable := ”;  
-REPEAT  
-IF results.Table <> currentTable THEN  
-BEGIN  
-currentTable := results.Table;  
-TableNode := XMLDoc.createNode(1,’TABLE’,”);  
-TableAttribute := XMLDoc.createAttribute(‘NAME’);  
-TableAttribute.value := currentTable;  
-TableNode.attributes.setNamedItem(TableAttribute);  
-TopNode.appendChild(TableNode);  
-END;  
-MatchNode := XMLDoc.createNode(1,’MATCH’,”);  
-MatchAttribute := XMLDoc.createAttribute(‘PAGE’);  
-MatchAttribute.value := results.Page;  
-MatchNode.attributes.setNamedItem(MatchAttribute);  
-ValueNode := XMLDoc.createNode(1,’BOOKMARK’,”);  
-ValueTextNode := XMLDoc.createTextNode(results.Bookmark);  
-ValueNode.appendChild(ValueTextNode);  
-MatchNode.appendChild(ValueNode);  
-ValueNode := XMLDoc.createNode(1,’ID’,”);  
-ValueTextNode := XMLDoc.createTextNode(results.Id);  
-ValueNode.appendChild(ValueTextNode);  
-MatchNode.appendChild(ValueNode);  
-ValueNode := XMLDoc.createNode(1,’NAME’,”);  
-ValueTextNode := XMLDoc.createTextNode(results.Name);  
-ValueNode.appendChild(ValueTextNode);  
-MatchNode.appendChild(ValueNode);  
-TableNode.appendChild(MatchNode);  
-UNTIL results.NEXT = 0;  
-result.ADDTEXT(XMLDoc.xml);  
+```
+results.RESET;
+results.SETCURRENTKEY(results.Table, results.Id);
+IF results.FIND('-') THEN
+BEGIN
+CREATE(XMLDoc, false, false);
+XMLDoc.async(FALSE);
+TopNode := XMLDoc.createNode(1,'SEARCHRESULT',");
+XMLDoc.appendChild(TopNode);
+currentTable := ";
+REPEAT
+IF results.Table <> currentTable THEN
+BEGIN
+currentTable := results.Table;
+TableNode := XMLDoc.createNode(1,'TABLE',");
+TableAttribute := XMLDoc.createAttribute('NAME');
+TableAttribute.value := currentTable;
+TableNode.attributes.setNamedItem(TableAttribute);
+TopNode.appendChild(TableNode);
 END;
+MatchNode := XMLDoc.createNode(1,'MATCH',");
+MatchAttribute := XMLDoc.createAttribute('PAGE');
+MatchAttribute.value := results.Page;
+MatchNode.attributes.setNamedItem(MatchAttribute);
+ValueNode := XMLDoc.createNode(1,'BOOKMARK',");
+ValueTextNode := XMLDoc.createTextNode(results.Bookmark);
+ValueNode.appendChild(ValueTextNode);
+MatchNode.appendChild(ValueNode);
+ValueNode := XMLDoc.createNode(1,'ID',");
+ValueTextNode := XMLDoc.createTextNode(results.Id);
+ValueNode.appendChild(ValueTextNode);
+MatchNode.appendChild(ValueNode);
+ValueNode := XMLDoc.createNode(1,'NAME',");
+ValueTextNode := XMLDoc.createTextNode(results.Name);
+ValueNode.appendChild(ValueTextNode);
+MatchNode.appendChild(ValueNode);
+TableNode.appendChild(MatchNode);
+UNTIL results.NEXT = 0;
+result.ADDTEXT(XMLDoc.xml);
+END;
+```
 
 Note that we build the XML in a server side COM object (XMLDoc) and after building the XML Document, I insert that in a BigText in one go.
 
@@ -194,7 +198,7 @@ Now having populated the Search Tables we are ready to expose the code unit as a
 
 having done this – you should be able to start an Internet Explorer and type in the following URL
 
-[http://localhost:7047/DynamicsNAV/WS/CRONUS\_International\_Ltd/Codeunit/Search](http://localhost:7047/DynamicsNAV/WS/CRONUS_International_Ltd/Codeunit/Search)
+[`http://localhost:7047/DynamicsNAV/WS/CRONUS_International_Ltd/Codeunit/Search`](http://localhost:7047/DynamicsNAV/WS/CRONUS_International_Ltd/Codeunit/Search)
 
 giving you the WSDL of the Web Service (given of course that your Service Tier is on localhost, DynamicsNAV is your instance name and you are using the default W1 database.
 

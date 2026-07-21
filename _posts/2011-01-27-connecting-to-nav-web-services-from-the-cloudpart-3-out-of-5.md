@@ -25,16 +25,19 @@ The Proxy1 Windows Service or Console Application will be running on the local n
 
 First of all – we need to define our Service Contract:
 
-\[ServiceContract\] 
+```
+[ServiceContract] 
 public interface IProxyClass 
 { 
-    \[OperationContract\] 
+    [OperationContract] 
     string GetCustomerName(string No); 
 }
+```
 
 and secondly the implementation of this Proxy:
 
-\[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)\] 
+```
+[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)] 
 public class ProxyClass : IProxyClass 
 { 
     public ProxyClass() 
@@ -44,7 +47,7 @@ public class ProxyClass : IProxyClass
     public string GetCustomerName(string No) 
     { 
         Debug.Write(string.Format("GetCustomerName(No = {0}) = ", No)); 
-        CustomerCard\_Service service = new CustomerCard\_Service(); 
+        CustomerCard_Service service = new CustomerCard_Service(); 
         service.UseDefaultCredentials = true; 
         CustomerCard customer = service.Read(No); 
         if (customer == null) 
@@ -56,6 +59,7 @@ public class ProxyClass : IProxyClass
         return customer.Name; 
     } 
 }
+```
 
 as you can see, the implementation has a reference to the Customer Card in my NAV – and I am using default authentication (current user) and just calling into NAV to read a Customer and then return the name – almost as simple as a Hello World sample.
 
@@ -65,17 +69,20 @@ This part is more or less exactly the same proxy as described in this post [http
 
 In my prior post about creating an internal proxy, we would use the following lines to create a ServiceHost:
 
+```
 host = new ServiceHost(new MyInternalProxy(), new Uri(URL)); 
 host.AddServiceEndpoint(typeof(IMyInternalProxy), new BasicHttpBinding(), ""); 
 ServiceMetadataBehavior smb = new ServiceMetadataBehavior(); 
 smb.HttpGetEnabled = true; 
 smb.HttpGetUrl = new Uri(URL); 
 host.Description.Behaviors.Add(smb);
+```
 
 This would of course create a host and listen on the URL. One could think that you could replace the URL with a magic URL on the service bus and then everything would work. Well – it is not THAT simple.
 
 In my samples I have created a ServiceClass, which then is used from my Console App and from my Windows Service.
 
+```
 public class ServiceClass 
 { 
     ServiceHost serviceHost = null; 
@@ -154,13 +161,16 @@ public class ServiceClass
         this.serviceHost = null; 
     } 
 }
+```
 
 and yes – it is slightly more complicated, but if you look twice it isn’t that different. For each endpoint you will host, you will need a Type of the Service Contract, a binding (describing the communication protocol – BasicHttpBinding in the “old” sample), and a URL where the Service is hosted.
 
+```
 // sb:// binding 
 Uri sbUri = ServiceBusEnvironment.CreateServiceUri("sb", "navdemo", instanceId); 
 var sbBinding = new NetTcpRelayBinding(EndToEndSecurityMode.Transport, RelayClientAuthenticationType.None); 
 serviceHost.AddServiceEndpoint(typeof(IProxyClass), sbBinding, sbUri);
+```
 
 The bindings for the Servicebus are Relay bindings and you will find these when referencing the Microsoft.Servicebus DLL.
 
@@ -172,8 +182,10 @@ After setting up the endpoints, we add SharedSecretServicebusCredential behavior
 
 The value of these variables:
 
+```
 string issuerName = "name";
 string issuerSecret = "secret";
+```
 
 is given from the Windows Azure AppFabric account when you sign up.
 
@@ -183,12 +195,13 @@ Furthermore – the name “navdemo” (when creating the ServiceUri is register
 
 is very simple, just an app. hosting the ServiceClass. The only thing complicating this is, that I want to restart the servicehost for every hour or so if we are hosting a metadata endpoint – in order to avoid the Servicebus bug.
 
+```
 class Program 
 { 
      static Proxy1.ServiceClass proxy1; 
      static bool includeMex = true;
 
-     static void Main(string\[\] args) 
+     static void Main(string[] args) 
      { 
          Console.WindowWidth = 120; 
          Console.WindowHeight = 50; 
@@ -197,7 +210,7 @@ class Program
          if (includeMex) 
          { 
              Timer timer = new Timer(3600000); // 1 hour in milliseconds 
-             timer.Elapsed += new ElapsedEventHandler(timer\_Elapsed); 
+             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed); 
              timer.Start(); 
              Console.WriteLine("Timer started - listening for 1 hour"); 
          }
@@ -208,13 +221,14 @@ class Program
          proxy1.StopHosts(); 
      }
 
-     static void timer\_Elapsed(object sender, ElapsedEventArgs e) 
+     static void timer_Elapsed(object sender, ElapsedEventArgs e) 
      { 
          Console.WriteLine("Timer elapsed - restart listener"); 
          proxy1.StopHosts(); 
          proxy1.StartHosts(); 
      } 
 }
+```
 
 When running in production, includeMex should be false.
 

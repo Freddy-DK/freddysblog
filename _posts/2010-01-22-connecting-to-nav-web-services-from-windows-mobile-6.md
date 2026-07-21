@@ -51,6 +51,7 @@ These Web References are pretty similar to .net 2.0 Web References from the norm
 
 The project type is a Device Application and the code on the form is:
 
+```
 using System; 
 using System.Windows.Forms; 
 using SmartDeviceProject4.SystemServiceRef; 
@@ -74,17 +75,17 @@ namespace SmartDeviceProject4
             systemService.PreAuthenticate = true;
 
             display("Companies:"); 
-            string\[\] companies = systemService.Companies(); 
+            string[] companies = systemService.Companies(); 
             foreach (string company in companies) 
                 display(company); 
-            string cur = companies\[0\];
+            string cur = companies[0];
 
             string customerPageURL = baseURL + Uri.EscapeDataString(cur) + "/Page/Customer"; 
             display(""); 
             display("URL of Customer Page:"); 
             display(customerPageURL);
 
-            Customer\_Service customerService = new Customer\_Service(); 
+            Customer_Service customerService = new Customer_Service(); 
             customerService.Credentials = credentials; 
             customerService.Url = customerPageURL; 
             customerService.PreAuthenticate = true;
@@ -94,18 +95,18 @@ namespace SmartDeviceProject4
             display("Name of customer 10000:"); 
             display(customer10000.Name);
 
-            Customer\_Filter filter1 = new Customer\_Filter(); 
-            filter1.Field = Customer\_Fields.Country\_Region\_Code; 
+            Customer_Filter filter1 = new Customer_Filter(); 
+            filter1.Field = Customer_Fields.Country_Region_Code; 
             filter1.Criteria = "GB";
 
-            Customer\_Filter filter2 = new Customer\_Filter(); 
-            filter2.Field = Customer\_Fields.Location\_Code; 
+            Customer_Filter filter2 = new Customer_Filter(); 
+            filter2.Field = Customer_Fields.Location_Code; 
             filter2.Criteria = "RED|BLUE";
 
             display(""); 
             display("Customers in GB served by RED or BLUE warehouse:"); 
-            Customer\_Filter\[\] filters = new Customer\_Filter\[\] { filter1, filter2 }; 
-            Customer\[\] customers = customerService.ReadMultiple(filters, null, 0); 
+            Customer_Filter[] filters = new Customer_Filter[] { filter1, filter2 }; 
+            Customer[] customers = customerService.ReadMultiple(filters, null, 0); 
             foreach (Customer customer in customers) 
                 display(customer.Name);
 
@@ -115,10 +116,11 @@ namespace SmartDeviceProject4
 
         private void display(string s) 
         { 
-            this.textBox1.Text += s + "\\r\\n"; 
+            this.textBox1.Text += s + "\r\n"; 
         } 
     } 
 }
+```
 
 As you can see 99% of the code is similar to the post about C# and Web References (found [here](http://blogs.msdn.com/freddyk/archive/2010/01/20/connecting-to-nav-web-services-from-c-using-web-reference.aspx)). Major differences are that the baseURL of course isn’t localhost (since localhost would be the mobile device itself) and I have to setup credentials in the beginning.
 

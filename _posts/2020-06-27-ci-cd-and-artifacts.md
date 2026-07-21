@@ -35,11 +35,13 @@ You can use the same – or use other mechanisms, but the goal is to have one st
 
 My code to get the artifactUrl based on this is then:
 
+```
 $segments = "$artifact////".Split('/')
-$artifactUrl = Get-BCArtifactUrl -storageAccount $segments\[0\] -type $segments\[1\] -version $segments\[2\] -country $segments\[3\] -select $segments\[4\] -sasToken $env:InsiderSasToken | Select-Object -First 1
+$artifactUrl = Get-BCArtifactUrl -storageAccount $segments[0] -type $segments[1] -version $segments[2] -country $segments[3] -select $segments[4] -sasToken $env:InsiderSasToken | Select-Object -First 1
 if (-not ($artifactUrl)) {
     throw "Unable to locate artifactUrl from $artifact"
 }
+```
 
 This totally allows me to “call” Get-BcArtifactUrl in my pipeline and I can now specify my artifacts to match my needs.
 

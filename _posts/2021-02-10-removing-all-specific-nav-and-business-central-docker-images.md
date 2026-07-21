@@ -32,9 +32,9 @@ and the only registry we will have left is the registry, which holds the generic
 
 If you are using BcContainerHelper and you have shifted to artifacts, you don’t need to do anything.
 
-If you are still using NavContainerHelper you really need to switch, read more about BcContainerHelper here: [BcContainerHelper | Freddys blog](/2020/08/11/bccontainerhelper/)
+If you are still using NavContainerHelper you really need to switch, read more about BcContainerHelper here: [BcContainerHelper \| Freddys blog](/2020/08/11/bccontainerhelper/)
 
-If you are still using the Specific Docker Images, you need to learn about artifacts and make the change asap, this blog post might be a good place to start: [Changing the way you run Business Central in docker… | Freddys blog](/2020/06/25/changing-the-way-you-run-business-central-in-docker/).
+If you are still using the Specific Docker Images, you need to learn about artifacts and make the change asap, this blog post might be a good place to start: [Changing the way you run Business Central in docker… \| Freddys blog](/2020/06/25/changing-the-way-you-run-business-central-in-docker/).
 
 The Specific Docker Images can be gone any day now.
 

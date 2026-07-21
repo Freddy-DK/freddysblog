@@ -29,22 +29,25 @@ Please make sure you are using the latest version of the NavContainerHelper Powe
 
 When using the image for extension development you basically start the container exactly like we have done since we shipped the first preview containers. Note that includeCSIDE and all functions working with C/AL objects are no longer supported and will return an error. Example:
 
+```
 $imageName = "bcinsider.azurecr.io/bcsandbox-master:w1"
 $containerName = "test"
 $auth = "UserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $licenseFile = "<licensefile>"
 
-New-BCContainer -accept\_eula \`
-                -imageName $imageName \`
-                -containerName $containerName \`
-                -auth $auth \`
-                -credential $credential \`
-                -licenseFile $licenseFile \`
+New-BCContainer -accept_eula `
+                -imageName $imageName `
+                -containerName $containerName `
+                -auth $auth `
+                -credential $credential `
+                -licenseFile $licenseFile `
                 -updateHosts
+```
 
 The output after starting the container should be something like:
 
+```
 ...
 Creating SUPER user
 Container IP Address: 172.25.15.205
@@ -61,7 +64,8 @@ Initialization took 121 seconds
 Ready for connections!
 Reading CustomSettings.config from test
 Creating Desktop Shortcuts for test
-**Container test successfully created**
+Container test successfully created
+```
 
 Download the .vsix file (in this case from **[http://test:8080/AL-15.0.34329.0.vsix](http://test:8080/AL-15.0.34329.0.vsix)**) and install it in VS Code using **Install from VSIX** in the … menu.
 
@@ -73,8 +77,10 @@ Download the .vsix file (in this case from **[http://test:8080/AL-15.0.34329.0.v
 
 Modify the server and serverinstance in launch.json:
 
+```
 "server": "http://<containername>",
 "serverInstance": "BC",
+```
 
 Use the container name you used.
 
@@ -88,47 +94,55 @@ Please note the changes in app.json if you want to compile and publish your own 
 
 The process for creating a container, which should be used for code customizations is very much like described here: [https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/](/2019/04/15/c-al-to-al-code-customizations/)
 
+```
 $imageName = "bcinsider.azurecr.io/bcsandbox-master:base-ltsc2019"
 $containerName = "test"
 $auth = "UserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $licenseFile = "<licensefile>"
 
-New-BCContainer -accept\_eula \`
-                -imageName $imageName \`
-                -containerName $containerName \`
-                -auth $auth \`
-                -credential $credential \`
-                -licenseFile $licenseFile \`
-                -updateHosts \`
-                -includeAL \`
+New-BCContainer -accept_eula `
+                -imageName $imageName `
+                -containerName $containerName `
+                -auth $auth `
+                -credential $credential `
+                -licenseFile $licenseFile `
+                -updateHosts `
+                -includeAL `
                 -memoryLimit 10G
+```
 
 Note that the only extra parameters are **\-includeAL** and an increased memory limit (**\-memoryLimit 10G**). If you are using process isolation, you don’t need the memoryLimit flag.
 
 After this you will need to create a folder with the source from the container, which you can work with in VS Code. This also follows the process from the former blog post. First extract the source:
 
-$alProjectFolder = "C:\\ProgramData\\NavContainerHelper\\AL\\BaseApp"
-Create-AlProjectFolderFromNavContainer -containerName $containerName \`
-                                       -alProjectFolder $alProjectFolder \`
-                                       -useBaseLine \`
-                                       -addGIT \`
+```
+$alProjectFolder = "C:\ProgramData\NavContainerHelper\AL\BaseApp"
+Create-AlProjectFolderFromNavContainer -containerName $containerName `
+                                       -alProjectFolder $alProjectFolder `
+                                       -useBaseLine `
+                                       -addGIT `
                                        -useBaseAppProperties
+```
 
 Then compile the app:
 
-$app = Compile-AppInNavContainer -containerName $containerName \`
-                                 -credential $credential \`
-                                 -appProjectFolder $alProjectFolder \`
+```
+$app = Compile-AppInNavContainer -containerName $containerName `
+                                 -credential $credential `
+                                 -appProjectFolder $alProjectFolder `
                                  -appOutputFolder $alProjectFolder
+```
 
 Then publish the new BaseApp to the container:
 
-Publish-NewApplicationToNavContainer -containerName $containerName \`
-                                     -appDotNetPackagesFolder (Join-Path $alProjectFolder ".netpackages") \`
-                                     -appFile $app \`
-                                     -credential $credential \`
+```
+Publish-NewApplicationToNavContainer -containerName $containerName `
+                                     -appDotNetPackagesFolder (Join-Path $alProjectFolder ".netpackages") `
+                                     -appFile $app `
+                                     -credential $credential `
                                      -useCleanDatabase
+```
 
 You only have to extract the source once of course – containers created on othrer computers do still need **\-includeAL**, but then you can add **\-doNotExportObjectsToText**  and **\-useCleanDatabase** to start a container, which is ready for publishing a new BaseApp.
 
@@ -157,7 +171,9 @@ We will also ship preview DVD images (approx. biweekly) on collaborate, probably
 
 If you need a specific image, you can add the version to the image tag, example:
 
+```
 bcinsider.azurecr.io/bcsandbox-master:15.0.34648.0-dk-ltsc2019
+```
 
 You will see blog posts describing what’s new and how to do things both on Freddys blog [https://freddysblog.com/category/al-development/](/category/al-development/) and on the team blog [https://cloudblogs.microsoft.com/dynamics365/it/product/business-central/](https://cloudblogs.microsoft.com/dynamics365/it/product/business-central/).
 

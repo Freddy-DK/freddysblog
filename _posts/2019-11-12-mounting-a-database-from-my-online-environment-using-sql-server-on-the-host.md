@@ -25,45 +25,47 @@ Like described in this blog post, we need to extract the database from the conta
 
 Note that the database name is the **containername****\-app**. This serves the purpose that I can remove the container and all databases starting with **containername-** in order to start from scratch. Without this, I would only be able to have one multitenant container using the same SQL Server.
 
+```
 $containerName = "test"
-$DatabaseFolder = "c:\\databases"
+$DatabaseFolder = "c:\databases"
 $DatabaseName = "$containerName-app"
 
 if (!(Test-Path $DatabaseFolder)) {
     New-Item $DatabaseFolder -ItemType Directory | Out-Null
 }
 
-if (Test-Path (Join-Path $DatabaseFolder "$($DatabaseName).\*")) {
+if (Test-Path (Join-Path $DatabaseFolder "$($DatabaseName).*")) {
     Remove-BCContainer $containerName
-    $databases = Invoke-Sqlcmd "SELECT name FROM master.sys.databases" | Where-Object { $\_.name.StartsWith("$ContainerName-") }
+    $databases = Invoke-Sqlcmd "SELECT name FROM master.sys.databases" | Where-Object { $_.name.StartsWith("$ContainerName-") }
     $databases | ForEach-Object {
-        $dbname = $\_.name
+        $dbname = $_.name
         Write-Host "Dropping database $dbname"
-        Invoke-SqlCmd -Query "ALTER DATABASE \[$dbname\] SET OFFLINE WITH ROLLBACK IMMEDIATE" 
-        Invoke-Sqlcmd -Query "DROP DATABASE \[$dbname\]"
-        Write-Host "Removing Database files $($databaseFolder)\\$($dbname).\*"
-        Remove-Item -Path (Join-Path $DatabaseFolder "$($dbname).\*") -Force
+        Invoke-SqlCmd -Query "ALTER DATABASE [$dbname] SET OFFLINE WITH ROLLBACK IMMEDIATE" 
+        Invoke-Sqlcmd -Query "DROP DATABASE [$dbname]"
+        Write-Host "Removing Database files $($databaseFolder)\$($dbname).*"
+        Remove-Item -Path (Join-Path $DatabaseFolder "$($dbname).*") -Force
     }
 }
 
 $imageName = Get-BestBCContainerImageName -imageName "mcr.microsoft.com/businesscentral/sandbox:us"
 docker pull $imageName
 
-$dbPath = Join-Path $env:TEMP (\[Guid\]::NewGuid().ToString())
+$dbPath = Join-Path $env:TEMP ([Guid]::NewGuid().ToString())
 Extract-FilesFromBCContainerImage -imageName $imageName -extract database -path $dbPath -force
 
 $files = @()
 Get-ChildItem -Path (Join-Path $dbPath "databases") | ForEach-Object {
-    $DestinationFile = "{0}\\{1}{2}" -f $databaseFolder, $DatabaseName, $\_.Extension
-    Copy-Item -Path $\_.FullName -Destination $DestinationFile -Force
+    $DestinationFile = "{0}\{1}{2}" -f $databaseFolder, $DatabaseName, $_.Extension
+    Copy-Item -Path $_.FullName -Destination $DestinationFile -Force
     $files += @("(FILENAME = N'$DestinationFile')")
 }
 
 Remove-Item -Path $dbpath -Recurse -Force
 
 Write-Host "Attaching files as new Database $DatabaseName"
-Write-Host "CREATE DATABASE \[$DatabaseName\] ON $(\[string\]::Join(", ",$Files)) FOR ATTACH"
-Invoke-SqlCmd -Query "CREATE DATABASE \[$DatabaseName\] ON $(\[string\]::Join(", ",$Files)) FOR ATTACH"
+Write-Host "CREATE DATABASE [$DatabaseName] ON $([string]::Join(", ",$Files)) FOR ATTACH"
+Invoke-SqlCmd -Query "CREATE DATABASE [$DatabaseName] ON $([string]::Join(", ",$Files)) FOR ATTACH"
+```
 
 After restoring the database to the host, we can create the container and much like in the previous blog post, we will create a container and specify database connection.
 
@@ -75,8 +77,9 @@ The last file we need to override is **HelperFunctions.ps1**. Here we will just 
 
 With the next version of the generic image, we don’t need to override HelperFunctions, but then again, it doesn’t hurt.
 
+```
 $setupDatabaseScript = @'
-. 'C:\\Run\\SetupDatabase.ps1'
+. 'C:\Run\SetupDatabase.ps1'
 if (!$restartingInstance) {
     Copy-NavDatabase -databaseserver $DatabaseServer -databaseInstance $databaseInstance -databaseCredentials $databaseCredentials -sourcedatabaseName $databaseName -destinationDatabaseName "$(hostname)-$tenantId"
     Copy-NavDatabase -databaseserver $DatabaseServer -databaseInstance $databaseInstance -databaseCredentials $databaseCredentials -sourcedatabaseName $databaseName -destinationDatabaseName "$(hostname)-tenant"
@@ -84,7 +87,7 @@ if (!$restartingInstance) {
 '@
 
 $setupTenantScript = @'
-. 'c:\\Run\\SetupTenant.ps1'
+. 'c:\Run\SetupTenant.ps1'
 if (!$restartingInstance) {
     Mount-NavDatabase -databaseserver $DatabaseServer -databaseInstance $databaseInstance -databaseCredentials $databaseCredentials -ServerInstance $ServerInstance -TenantId $TenantId -DatabaseName "$(hostname)-$tenantId"
 }
@@ -92,30 +95,31 @@ if (!$restartingInstance) {
 
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $dbcredentials = New-Object PSCredential -ArgumentList 'sa', $credential.Password
-New-BCContainer \`
-    -accept\_eula \`
-    -containerName $containerName \`
-    -imageName $imageName \`
-    -updateHosts \`
-    -auth UserPassword \`
-    -Credential $credential \`
-    -licensefile C:\\temp\\license.flf \`
-    -databaseServer 'host.containerhelper.internal' \`
-    -databaseInstance '' \`
-    -databaseName $DatabaseName \`
-    -databaseCredential $dbcredentials \`
-    -multitenant \`
+New-BCContainer `
+    -accept_eula `
+    -containerName $containerName `
+    -imageName $imageName `
+    -updateHosts `
+    -auth UserPassword `
+    -Credential $credential `
+    -licensefile C:\temp\license.flf `
+    -databaseServer 'host.containerhelper.internal' `
+    -databaseInstance '' `
+    -databaseName $DatabaseName `
+    -databaseCredential $dbcredentials `
+    -multitenant `
     -myScripts @(
         "https://raw.githubusercontent.com/microsoft/nav-docker/master/generic/Run/HelperFunctions.ps1"
         @{ "SetupDatabase.ps1" = $setupDatabaseScript }
         @{ "SetupTenant.ps1" = $setupTenantScript }
     )
-New-NavContainerNavUser \`
-    -containerName $containerName \`
-    -Credential $credential \`
-    -ChangePasswordAtNextLogOn:$false \`
-    -PermissionSetId SUPER \`
+New-NavContainerNavUser `
+    -containerName $containerName `
+    -Credential $credential `
+    -ChangePasswordAtNextLogOn:$false `
+    -PermissionSetId SUPER `
     -tenant 'Default'
+```
 
 **With this, we will have a multitenant container using SQL Server on the host.**
 
@@ -131,11 +135,12 @@ we also need to make sure that the imported database is placed in the same folde
 
 The following script will restore the .bacpac and place the files in $databaseFolder:
 
-$dacdll = Get-Item "C:\\Program Files\\Microsoft SQL Server\\\*\\DAC\\bin\\Microsoft.SqlServer.Dac.dll"
+```
+$dacdll = Get-Item "C:\Program Files\Microsoft SQL Server\*\DAC\bin\Microsoft.SqlServer.Dac.dll"
 if (!($dacdll)) {
     throw "Dac Framework is not installed, download and install from here: https://go.microsoft.com/fwlink/?linkid=2108813"
 }
-$smodll = Get-Item -Path "C:\\Program Files\\Microsoft SQL Server\\\*\\SDK\\Assemblies\\Microsoft.SqlServer.Smo.dll"
+$smodll = Get-Item -Path "C:\Program Files\Microsoft SQL Server\*\SDK\Assemblies\Microsoft.SqlServer.Smo.dll"
 if (!($smodll)) {
     throw "Unable to locate Microsoft.SqlServer.smo.dll. Is SQL Server installed on this machine?"
 }
@@ -143,75 +148,82 @@ if (!($smodll)) {
 Add-Type -path $dacdll.FullName
 Add-Type -Path $smodll.FullName
 
-$tenantBacpac = "C:\\ProgramData\\NavContainerHelper\\Production\_20191110\_02.bacpac"
+$tenantBacpac = "C:\ProgramData\NavContainerHelper\Production_20191110_02.bacpac"
 $tenantId = "mydata"
 $databaseName = "$containerName-$tenantId"
 $server = New-Object Microsoft.SqlServer.Management.Smo.Server($env:ComputerName)
-$defaultFile = $server.Properties\["DefaultFile"\].Value
-$defaultLog = $server.Properties\["DefaultLog"\].Value
-$server.Properties\["DefaultFile"\].Value = $DatabaseFolder
-$server.Properties\["DefaultLog"\].Value = $DatabaseFolder
+$defaultFile = $server.Properties["DefaultFile"].Value
+$defaultLog = $server.Properties["DefaultLog"].Value
+$server.Properties["DefaultFile"].Value = $DatabaseFolder
+$server.Properties["DefaultLog"].Value = $DatabaseFolder
 $server.Alter()
 try {
     $conn = "Data Source=localhost;Initial Catalog=master;Connection Timeout=0;Integrated Security=True;"
     Write-Host "Restoring Database from $tenantBacpac as $databaseName"
     $AppimportBac = New-Object Microsoft.SqlServer.Dac.DacServices $conn
-    $ApploadBac = \[Microsoft.SqlServer.Dac.BacPackage\]::Load($tenantBacpac)
+    $ApploadBac = [Microsoft.SqlServer.Dac.BacPackage]::Load($tenantBacpac)
     $AppimportBac.ImportBacpac($ApploadBac, $DatabaseName)
 }
 finally {
-    $server.Properties\["DefaultFile"\].Value = $defaultFile
-    $server.Properties\["DefaultLog"\].Value = $defaultLog
+    $server.Properties["DefaultFile"].Value = $defaultFile
+    $server.Properties["DefaultLog"].Value = $defaultLog
     $server.Alter()
 }
+```
 
 # Publish/Remove extensions
 
 Like with the other blog post, we need to install extensions in the container (if we have the source) or remove them from the database:
 
-Publish-BCContainerApp -containerName $containerName -appFile "C:\\Users\\freddyk\\Downloads\\Freddy Kristiansen\_BingMaps\_15.0.56.0.app" -skipVerification -sync -install
+```
+Publish-BCContainerApp -containerName $containerName -appFile "C:\Users\freddyk\Downloads\Freddy Kristiansen_BingMaps_15.0.56.0.app" -skipVerification -sync -install
 $removeApps = @("MyApp")
 $removeApps | ForEach-Object {
-Invoke-Sqlcmd -Query "USE \[$databaseName\]
+Invoke-Sqlcmd -Query "USE [$databaseName]
 GO
-DELETE FROM \[dbo\].\[NAV App Published App\]
-WHERE Name = '$\_'
-DELETE FROM \[dbo\].\[NAV App Installed App\]
-WHERE Name = '$\_'
+DELETE FROM [dbo].[NAV App Published App]
+WHERE Name = '$_'
+DELETE FROM [dbo].[NAV App Installed App]
+WHERE Name = '$_'
 GO"
 }
+```
 
 # Mount and sync the database
 
 Now, the database should be ready for mounting and sync’ing and the method to do this is similar to doing it in the container (just specifying database server, instance and credentials)
 
+```
 Invoke-ScriptInBCContainer -containerName $containerName -scriptblock { Param($tenantId, $databaseServer, $databaseInstance, $DatabaseName, $databaseCredential)
-    Mount-NavTenant \`
-        -ServerInstance $ServerInstance \`
-        -id $tenantId \`
-        -databaseserver $databaseServer \`
-        -databaseinstance $databaseInstance \`
-        -databasename $databaseName \`
-    ​    -databaseCredential $databaseCredential \`
-        -EnvironmentType Sandbox \`
-        -OverwriteTenantIdInDatabase \`
+    Mount-NavTenant `
+        -ServerInstance $ServerInstance `
+        -id $tenantId `
+        -databaseserver $databaseServer `
+        -databaseinstance $databaseInstance `
+        -databasename $databaseName `
+    ​    -databaseCredential $databaseCredential `
+        -EnvironmentType Sandbox `
+        -OverwriteTenantIdInDatabase `
         -Force
-    Sync-NavTenant \`
-        -ServerInstance $ServerInstance \`
-        -Tenant $tenantId \`
+    Sync-NavTenant `
+        -ServerInstance $ServerInstance `
+        -Tenant $tenantId `
         -Force
 } -argumentList $tenantId, 'host.containerhelper.internal', '', $DatabaseName, $dbcredentials
+```
 
 # Create the super user
 
 Last but not least, create the super user with which you can login to the tenant:
 
-New-NavContainerNavUser \`
-    -containerName $containerName \`
-    -credential $credential \`
-    -changePasswordAtNextLogOn:$false \`
-    -permissionSetId SUPER \`
+```
+New-NavContainerNavUser `
+    -containerName $containerName `
+    -credential $credential `
+    -changePasswordAtNextLogOn:$false `
+    -permissionSetId SUPER `
     -tenant $tenantId
+```
 
 and there you are:
 

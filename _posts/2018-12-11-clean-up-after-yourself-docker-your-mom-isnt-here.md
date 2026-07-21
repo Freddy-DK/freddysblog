@@ -74,16 +74,17 @@ It is likely because you need a restart of your computer and a re-run of the scr
 
 The Script can be copied from below or downloaded from this URL: [https://raw.githubusercontent.com/Microsoft/nav-arm-templates/master/CleanupAfterDocker.ps1](https://raw.githubusercontent.com/Microsoft/nav-arm-templates/master/CleanupAfterDocker.ps1)
 
+```
 $ErrorActionPreference = "Stop"
 $WarningActionPreference = "Stop"
 
 # Specify which images to download
 $ImagesToDownload = @()
 
-$bcContainerHelperFolder = "C:\\ProgramData\\BcContainerHelper"
+$bcContainerHelperFolder = "C:\ProgramData\BcContainerHelper"
 
-$currentPrincipal = New-Object Security.Principal.WindowsPrincipal(\[Security.Principal.WindowsIdentity\]::GetCurrent())
-if (!($currentPrincipal.IsInRole(\[Security.Principal.WindowsBuiltInRole\]::Administrator))) {
+$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+if (!($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) {
     throw "This script must run with administrator privileges"
 }
 
@@ -98,12 +99,12 @@ if ($dockerService.Status -ne "Running") {
 }
 
 $dockerInfo = (docker info)
-$dockerOsMode = ($dockerInfo | Where-Object { $\_.Trim().StartsWith('OSType: ') }).Trim().SubString(8)
+$dockerOsMode = ($dockerInfo | Where-Object { $_.Trim().StartsWith('OSType: ') }).Trim().SubString(8)
 if ($dockerOsMode -ne "Windows") {
     throw "Docker is not running Windows Containers"
 }
 
-$dockerRootDir = ($dockerInfo | Where-Object { $\_.Trim().StartsWith('Docker Root Dir: ') }).Trim().SubString(17)
+$dockerRootDir = ($dockerInfo | Where-Object { $_.Trim().StartsWith('Docker Root Dir: ') }).Trim().SubString(17)
 if (!(Test-Path $dockerRootDir -PathType Container)) {
     throw "Folder $dockerRootDir does not exist"
 }
@@ -120,7 +121,7 @@ Write-Host "Running Docker System Prune"
 docker system prune -f
 
 Write-Host "Removing all containers (forced)"
-docker ps -a -q | % { docker rm $\_ -f 2> NULL }
+docker ps -a -q | % { docker rm $_ -f 2> NULL }
 
 Write-Host "Stopping Docker Service"
 stop-service docker
@@ -144,7 +145,7 @@ Start-Service docker
 if (Test-Path $bcContainerHelperFolder -PathType Container) {
     Write-Host "Cleaning up $bcContainerHelperFolder"
     Get-ChildItem $bcContainerHelperFolder -Force | ForEach-Object { 
-        Remove-Item $\_.FullName -Recurse -force
+        Remove-Item $_.FullName -Recurse -force
     }
 }
 
@@ -152,22 +153,23 @@ if ($ImagesToDownload) {
     Write-Host -ForegroundColor Green "Done cleaning up, pulling images for $os"
 
     $os = "ltsc2016"
-    if ((Get-CimInstance win32\_operatingsystem).BuildNumber -ge 17763) { $os = "ltsc2019" }
+    if ((Get-CimInstance win32_operatingsystem).BuildNumber -ge 17763) { $os = "ltsc2019" }
     
     # Download images needed
     $imagesToDownload | ForEach-Object {
-        if ($\_.EndsWith('-ltsc2016') -or $\_.EndsWith('-1709') -or $\_.EndsWith('-1803') -or $\_.EndsWith('-ltsc2019') -or
-            $\_.EndsWith(':ltsc2016') -or $\_.EndsWith(':1709') -or $\_.EndsWith(':1803') -or $\_.EndsWith(':ltsc2019')) {
-            $imageName = $\_
-        } elseif ($\_.Contains(':')) {
-            $imageName = "$($\_)-$os"
+        if ($_.EndsWith('-ltsc2016') -or $_.EndsWith('-1709') -or $_.EndsWith('-1803') -or $_.EndsWith('-ltsc2019') -or
+            $_.EndsWith(':ltsc2016') -or $_.EndsWith(':1709') -or $_.EndsWith(':1803') -or $_.EndsWith(':ltsc2019')) {
+            $imageName = $_
+        } elseif ($_.Contains(':')) {
+            $imageName = "$($_)-$os"
         } else {
-            $imageName = "$($\_):$os"
+            $imageName = "$($_):$os"
         }
         Write-Host "Pulling $imageName"
         docker pull $imageName
     }
 }
+```
 
 I hope you find the explanation and the script helpful.
 

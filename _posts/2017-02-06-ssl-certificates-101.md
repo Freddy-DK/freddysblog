@@ -91,7 +91,9 @@ Instead you need to buy your own domain name and a certificate for this. In my s
 
 So, what I need to do is, to create a CNAME record in the DNS under my domain name. Example:
 
+```
 fksaas10.navdemo.net CNAME fksaas10.westeurope.cloudapp.azure.com
+```
 
 This basically means that whenever people try to connect to _fksaas10.navdemo.net_, the browser will resolve the CNAME and then resolve the _fksaas10.westeurope.cloudapp.azure.com_ in order to get the IP address to communicate with.
 

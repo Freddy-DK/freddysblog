@@ -34,9 +34,9 @@ It is very simple to create a non-visual control which instantiates a timer and 
 
 For this purpose our control needs to subscribe to two application level events.
 
-[Application.EnterThreadModal](http://msdn.microsoft.com/en-us/library/system.windows.forms.application.enterthreadmodal.aspx)
+`Application.EnterThreadModal`
 
-[Application.LeaveThreadModal](http://msdn.microsoft.com/en-us/library/system.windows.forms.application.leavethreadmodal.aspx)
+`Application.LeaveThreadModal`
 
 What is my Application? Well, that is of course the RoleTailored Client. Your WinForms Control gets created as a first class citizen in the RoleTailored Client and of course you have access to the Application events as well. In fact there are all kinds of things you can do and all kinds of things you shouldn’t do.
 
@@ -60,142 +60,182 @@ Instead of going further into detail – the curious read can read much more abo
 
 The way I have implemented the Timer control is like this
 
-\[ControlAddInExport(“FreddyK.TimerControl”)\]  
-public class TimerControl : StringControlAddInBase, IStringControlAddInDefinition  
-{  
-EventHandler EnterThreadModal;  
-EventHandler LeaveThreadModal;  
-Timer timer = null;  
-int interval = 0;  
+```
+[ControlAddInExport("FreddyK.TimerControl")]
+public class TimerControl : StringControlAddInBase, IStringControlAddInDefinition
+{
+EventHandler EnterThreadModal;
+EventHandler LeaveThreadModal;
+Timer timer = null;
+int interval = 0;
 int count = 0;
+```
 
-    /// <summary>  
-/// Constructor – Setup timer and Application event subscriptions  
-/// </summary>  
-public TimerControl()  
-{  
-EnterThreadModal = new EventHandler(Application\_EnterThreadModal);  
-LeaveThreadModal = new EventHandler(Application\_LeaveThreadModal);  
-Application.EnterThreadModal += EnterThreadModal;  
-Application.LeaveThreadModal += LeaveThreadModal;  
-timer = new Timer();  
-timer.Tick += new EventHandler(timer\_Tick);  
-}
+    
 
-    /// <summary>  
-/// Dispose method – cleanup timer and Application event subscriptions  
-/// </summary>  
-protected override void Dispose(bool disposing)  
-{  
-base.Dispose(disposing);  
-if (disposing)  
-{  
-Application.EnterThreadModal -= EnterThreadModal;  
-Application.LeaveThreadModal -= LeaveThreadModal;  
-if (timer != null)  
-{  
-timer.Stop();  
-timer.Dispose();  
-timer = null;  
-}  
-}  
+```
+/// <summary>
+/// Constructor – Setup timer and Application event subscriptions
+/// </summary>
+public TimerControl()
+{
+EnterThreadModal = new EventHandler(Application_EnterThreadModal);
+LeaveThreadModal = new EventHandler(Application_LeaveThreadModal);
+Application.EnterThreadModal += EnterThreadModal;
+Application.LeaveThreadModal += LeaveThreadModal;
+timer = new Timer();
+timer.Tick += new EventHandler(timer_Tick);
 }
+```
 
-    /// <summary>  
-/// Event handler for Application.EnterThreadModal  
-/// </summary>  
-void Application\_EnterThreadModal(object sender, EventArgs e)  
-{  
-timer.Stop();  
-}
+    
 
-    /// <summary>  
-/// Event handler for Application.LeaveThreadModal  
-/// </summary>  
-void Application\_LeaveThreadModal(object sender, EventArgs e)  
-{  
-if (timer.Interval != 0)  
-timer.Start();  
+```
+/// <summary>
+/// Dispose method – cleanup timer and Application event subscriptions
+/// </summary>
+protected override void Dispose(bool disposing)
+{
+base.Dispose(disposing);
+if (disposing)
+{
+Application.EnterThreadModal -= EnterThreadModal;
+Application.LeaveThreadModal -= LeaveThreadModal;
+if (timer != null)
+{
+timer.Stop();
+timer.Dispose();
+timer = null;
 }
+}
+}
+```
 
-    /// <summary>  
-/// Create the native Add-In Control  
-/// </summary>  
-protected override Control CreateControl()  
-{  
-// Create a panel with the size 0,0  
-Panel panel = new Panel();  
-panel.BorderStyle = BorderStyle.None;  
-panel.MinimumSize = new Size(0, 0);  
-panel.MaximumSize = new Size(0, 0);  
-panel.Size = new Size(0, 0);  
-return panel;  
-}  
-/// <summary>  
-/// Timer tick handler – raise the Service Tier Add-In Event  
-/// </summary>  
-void timer\_Tick(object sender, EventArgs e)  
-{  
-// Stop the timer while running the add-in Event  
-timer.Stop();  
-// Invoke event  
-this.RaiseControlAddInEvent(this.count++, “”);  
-// Restart the timer  
-timer.Start();  
-}
+    
 
-    /// <summary>  
-/// Override to specify that Caption should be omitted  
-/// </summary>  
-public override bool AllowCaptionControl  
-{  
-get  
-{  
-return false;  
-}  
+```
+/// <summary>
+/// Event handler for Application.EnterThreadModal
+/// </summary>
+void Application_EnterThreadModal(object sender, EventArgs e)
+{
+timer.Stop();
 }
+```
 
-    /// <summary>  
-/// Override to specify that value has not changed  
-/// </summary>  
-public override bool HasValueChanged  
-{  
-get  
-{  
-return false;  
-}  
-}
+    
 
-    /// <summary>  
-/// Value for the Timer Control – the value is the number of 1/10’s of a second between Tick events  
-/// NOTE: every event is sent from the Client to the Service Tier – meaning that this is not intended  
-///       for events executing more frequently than 1/10’s of a second  
-/// </summary>  
-public override string Value  
-{  
-get  
-{  
-return base.Value;  
-}  
-set  
-{  
-base.Value = value;  
-if (!int.TryParse(value, out interval))  
-{  
-interval = 0;  
-}  
-interval = interval \* 100;  
-if (timer != null && timer.Interval != interval)  
-{  
-timer.Interval = interval;  
-count = 0;  
-if (interval == 0)  
-timer.Stop();  
-else  
-timer.Start();            }  
-}  
-}  
+```
+/// <summary>
+/// Event handler for Application.LeaveThreadModal
+/// </summary>
+void Application_LeaveThreadModal(object sender, EventArgs e)
+{
+if (timer.Interval != 0)
+timer.Start();
 }
+```
+
+    
+
+```
+/// <summary>
+/// Create the native Add-In Control
+/// </summary>
+protected override Control CreateControl()
+{
+// Create a panel with the size 0,0
+Panel panel = new Panel();
+panel.BorderStyle = BorderStyle.None;
+panel.MinimumSize = new Size(0, 0);
+panel.MaximumSize = new Size(0, 0);
+panel.Size = new Size(0, 0);
+return panel;
+}
+/// <summary>
+/// Timer tick handler – raise the Service Tier Add-In Event
+/// </summary>
+void timer_Tick(object sender, EventArgs e)
+{
+// Stop the timer while running the add-in Event
+timer.Stop();
+// Invoke event
+this.RaiseControlAddInEvent(this.count++, "");
+// Restart the timer
+timer.Start();
+}
+```
+
+    
+
+```
+/// <summary>
+/// Override to specify that Caption should be omitted
+/// </summary>
+public override bool AllowCaptionControl
+{
+get
+{
+return false;
+}
+}
+```
+
+    
+
+```
+/// <summary>
+/// Override to specify that value has not changed
+/// </summary>
+public override bool HasValueChanged
+{
+get
+{
+return false;
+}
+}
+```
+
+    
+
+```
+/// <summary>
+/// Value for the Timer Control – the value is the number of 1/10's of a second between Tick events
+/// NOTE: every event is sent from the Client to the Service Tier – meaning that this is not intended
+///       for events executing more frequently than 1/10's of a second
+/// </summary>
+public override string Value
+{
+get
+{
+return base.Value;
+}
+set
+{
+base.Value = value;
+if (!int.TryParse(value, out interval))
+{
+interval = 0;
+}
+interval = interval * 100;
+if (timer != null && timer.Interval != interval)
+{
+timer.Interval = interval;
+count = 0;
+if (interval == 0)
+timer.Stop();
+else
+timer.Start();
+```
+
+            
+
+```
+}
+}
+}
+}
+```
 
 A couple of things to note
 
@@ -216,11 +256,15 @@ with the following global variables:
 
 and the following triggers:
 
-**OnOpenPage()  
-**timer := ’10’;
+```
+OnOpenPage()
+timer := '10';
+```
 
-**timer – OnControlAddIn(Index : Integer;Data : Text\[1024\])  
-**count := Index;
+```
+timer – OnControlAddIn(Index : Integer;Data : Text[1024])
+count := Index;
+```
 
 As you can see, the timer is set to trigger once a second and the Index in the AddIn event actually counts the number of times the trigger has been fired, so the count will be counting.
 

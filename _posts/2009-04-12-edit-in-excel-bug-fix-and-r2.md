@@ -21,19 +21,25 @@ The easiest fix I found to this problem (and now somebody might say that I am a 
 
 So, change this line:
 
-excelApp.Workbooks.Add(template);
+`excelApp.Workbooks.Add(template);`
 
 to
 
-// Set the current culture to en-US when adding the template to avoid an exception if running on a non-US computer  
-System.Globalization.CultureInfo orgCulture = System.Threading.Thread.CurrentThread.CurrentCulture;  
-System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(“en-US”);
+```
+// Set the current culture to en-US when adding the template to avoid an exception if running on a non-US computer
+System.Globalization.CultureInfo orgCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+```
 
-// Create a new spreadsheet based on the new template  
+```
+// Create a new spreadsheet based on the new template
 excelApp.Workbooks.Add(template);
+```
 
-// Restore culture in current thread  
+```
+// Restore culture in current thread
 System.Threading.Thread.CurrentThread.CurrentCulture = orgCulture;
+```
 
 I have updated the original binaries with this fix and they can be downloaded from [http://www.freddy.dk/NAVTemplate\_Final.zip](http://www.freddy.dk/NAVTemplate_Final.zip)
 

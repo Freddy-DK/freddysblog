@@ -17,22 +17,26 @@ In NAV you would never have the full Service URL on all services in a config fil
 
 If we have a look at the config file once more, you will see that there is a Binding configuration, specifying a BasicHttpBinding with a couple of settings. If we want to create this binding in code, it would look like:
 
-// Create a NAV comatible binding  
-BasicHttpBinding navWSBinding = new BasicHttpBinding();  
-navWSBinding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;  
+```
+// Create a NAV comatible binding
+BasicHttpBinding navWSBinding = new BasicHttpBinding();
+navWSBinding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
 navWSBinding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Windows;
+```
 
 Having this binding class, we can now create a systemService Service Client simply by:
 
-SystemService\_PortClient systemService = new SystemService\_PortClient(navWSBinding, new EndpointAddress(baseURL + “SystemService”));
+`SystemService_PortClient systemService = new SystemService_PortClient(navWSBinding, new EndpointAddress(baseURL + "SystemService"));`
 
 Specifying the endpoint address to the constructor.
 
 The only other thing we need to specify is the endpoint behavior to allow delegation. This is done in code by:
 
-systemService.ClientCredentials.Windows.AllowedImpersonationLevel =  
-System.Security.Principal.TokenImpersonationLevel.Delegation;  
+```
+systemService.ClientCredentials.Windows.AllowedImpersonationLevel =
+System.Security.Principal.TokenImpersonationLevel.Delegation;
 systemService.ClientCredentials.Windows.AllowNtlm = true;
+```
 
 Using code like this actually makes the app.config obsolete and you can delete the config file totally when running the below application.
 
@@ -40,66 +44,112 @@ Using code like this actually makes the app.config obsolete and you can delete t
 
 The following is a listing of the full console application using code to set all properties and no app.config is necessary (nor used at all):
 
-using System;  
-using System.Net;  
-using testAppWCF.SystemServiceRef;  
-using testAppWCF.CustomerPageRef;  
+```
+using System;
+using System.Net;
+using testAppWCF.SystemServiceRef;
+using testAppWCF.CustomerPageRef;
 using System.ServiceModel;
+```
 
-namespace testAppWCF  
-{  
-class Program  
-{  
-static void Main(string\[\] args)  
-{  
-string baseURL = “[http://localhost:7047/DynamicsNAV/WS/”;](http://localhost:7047/DynamicsNAV/WS/";)
+```
+namespace testAppWCF
+{
+class Program
+{
+static void Main(string[] args)
+{
+string baseURL = "
+```
 
-            // Create a NAV compatible binding  
-BasicHttpBinding navWSBinding = new BasicHttpBinding();  
-navWSBinding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;  
+[`http://localhost:7047/DynamicsNAV/WS/";`](http://localhost:7047/DynamicsNAV/WS/";)
+
+            
+
+```
+// Create a NAV compatible binding
+BasicHttpBinding navWSBinding = new BasicHttpBinding();
+navWSBinding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
 navWSBinding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Windows;
+```
 
-            // Create the SystemService Client  
-SystemService\_PortClient systemService = new SystemService\_PortClient(navWSBinding, new EndpointAddress(baseURL + “SystemService”));  
-systemService.ClientCredentials.Windows.AllowedImpersonationLevel = System.Security.Principal.TokenImpersonationLevel.Delegation;  
+            
+
+```
+// Create the SystemService Client
+SystemService_PortClient systemService = new SystemService_PortClient(navWSBinding, new EndpointAddress(baseURL + "SystemService"));
+systemService.ClientCredentials.Windows.AllowedImpersonationLevel = System.Security.Principal.TokenImpersonationLevel.Delegation;
 systemService.ClientCredentials.Windows.AllowNtlm = true;
+```
 
-            Console.WriteLine(“Companies:”);  
-string\[\] companies = systemService.Companies();  
-foreach(string company in companies)  
-Console.WriteLine(company);  
-string cur = companies\[0\];
+            
 
-            string customerPageURL = baseURL + Uri.EscapeDataString(cur) + “/Page/Customer”;  
-Console.WriteLine(“nURL of Customer Page: “+customerPageURL);
+```
+Console.WriteLine("Companies:");
+string[] companies = systemService.Companies();
+foreach(string company in companies)
+Console.WriteLine(company);
+string cur = companies[0];
+```
 
-            // Create the Customer Page Service Client  
-Customer\_PortClient customerService = new Customer\_PortClient(navWSBinding, new EndpointAddress(customerPageURL));  
-customerService.ClientCredentials.Windows.AllowedImpersonationLevel = System.Security.Principal.TokenImpersonationLevel.Delegation;  
+            
+
+```
+string customerPageURL = baseURL + Uri.EscapeDataString(cur) + "/Page/Customer";
+Console.WriteLine("nURL of Customer Page: "+customerPageURL);
+```
+
+            
+
+```
+// Create the Customer Page Service Client
+Customer_PortClient customerService = new Customer_PortClient(navWSBinding, new EndpointAddress(customerPageURL));
+customerService.ClientCredentials.Windows.AllowedImpersonationLevel = System.Security.Principal.TokenImpersonationLevel.Delegation;
 customerService.ClientCredentials.Windows.AllowNtlm = true;
+```
 
-            Customer customer10000 = customerService.Read(“10000”);  
-Console.WriteLine(“nName of Customer 10000: “+customer10000.Name);
+            
 
-            Customer\_Filter filter1 = new Customer\_Filter();  
-filter1.Field = Customer\_Fields.Country\_Region\_Code;  
-filter1.Criteria = “GB”;
+```
+Customer customer10000 = customerService.Read("10000");
+Console.WriteLine("nName of Customer 10000: "+customer10000.Name);
+```
 
-            Customer\_Filter filter2 = new Customer\_Filter();  
-filter2.Field = Customer\_Fields.Location\_Code;  
-filter2.Criteria = “RED|BLUE”;
+            
 
-            Console.WriteLine(“nCustomers in GB served by RED or BLUE warehouse:”);  
-Customer\_Filter\[\] filters = new Customer\_Filter\[\] { filter1, filter2 };  
-Customer\[\] customers = customerService.ReadMultiple(filters, null, 0);  
-foreach (Customer customer in customers)  
+```
+Customer_Filter filter1 = new Customer_Filter();
+filter1.Field = Customer_Fields.Country_Region_Code;
+filter1.Criteria = "GB";
+```
+
+            
+
+```
+Customer_Filter filter2 = new Customer_Filter();
+filter2.Field = Customer_Fields.Location_Code;
+filter2.Criteria = "RED|BLUE";
+```
+
+            
+
+```
+Console.WriteLine("nCustomers in GB served by RED or BLUE warehouse:");
+Customer_Filter[] filters = new Customer_Filter[] { filter1, filter2 };
+Customer[] customers = customerService.ReadMultiple(filters, null, 0);
+foreach (Customer customer in customers)
 Console.WriteLine(customer.Name);
+```
 
-            Console.WriteLine(“nTHE END”);  
-Console.ReadLine();  
-}  
-}  
+            
+
+```
+Console.WriteLine("nTHE END");
+Console.ReadLine();
 }
+}
+}
+```
 
 If you need to specify a different username / password it is done in the same way as it was done for Service References using config files.
 

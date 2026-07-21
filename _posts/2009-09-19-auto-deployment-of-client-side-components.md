@@ -31,8 +31,10 @@ We cannot keep a list on the server side, since the computer might get re-instal
 
 I will start with the COM component (since it will take a COM component to check whether an Add-In is installed). The COM component needs a CREATE statement to be initialized and if you check the return value of the CREATE statement – you know whether or not the COM component is executable. If not we launch a FILE.DOWNLOAD
 
-IF NOT CREATE(mycomponent, TRUE, TRUE) THEN  
+```
+IF NOT CREATE(mycomponent, TRUE, TRUE) THEN
 FILE.DOWNLOAD(mycomponentinstaller);
+```
 
 Almost too simple right?
 
@@ -42,10 +44,12 @@ My answer to that would be to change the COM signature, in effect making it a di
 
 You could also create a function for checking the version number of the component like:
 
-IF NOT CREATE(mycomponent, TRUE, TRUE) THEN  
-FILE.DOWNLOAD(mycomponentinstaller)  
-ELSE IF NOT mycomponent.CheckVersion(100) THEN  
+```
+IF NOT CREATE(mycomponent, TRUE, TRUE) THEN
+FILE.DOWNLOAD(mycomponentinstaller)
+ELSE IF NOT mycomponent.CheckVersion(100) THEN
 FILE.DOWNLOAD(mycomponentinstaller);
+```
 
 problem with this approach is, that NAV keeps a lock on the Client side component (event if you CLEAR(mycomponent)) due to performance reasons and your mycomponentinstaller will have to close the NAV client in order to update the component.
 
@@ -65,7 +69,7 @@ But as you might know, we actually didn’t write any code to plugin the control
 
 What we need to do, is to create one line of code in the INIT trigger of all pages, which uses an Add-In:
 
-ComponentHelper.CheckAddInNameKey(‘FreddyK.LargeVEControl’,’1c9f7ad47dba024b’);
+`ComponentHelper.CheckAddInNameKey('FreddyK.LargeVEControl','1c9f7ad47dba024b');`
 
 and then of course create a function that actually checks that the Add-In is there and does a FILE.DOWNLOAD(addininstaller) if it isn’t.
 
@@ -75,7 +79,7 @@ The INIT trigger is executed before anything is sent off to the Client and thus 
 
 BTW as you probably have figured out by now, the above line requires a registration of Add-Ins like:
 
-ComponentHelper.RegisterAddIn(‘FreddyK.LargeVEControl’,’1c9f7ad47dba024b’,’NAV Large Virtual Earth Control’, ‘NavVEControl.msi’);
+`ComponentHelper.RegisterAddIn('FreddyK.LargeVEControl','1c9f7ad47dba024b','NAV Large Virtual Earth Control', 'NavVEControl.msi');`
 
 In order to specify what file to download. Now I could have added this to the Check function to avoid a table – but I actually don’t think it belongs there.
 
@@ -98,36 +102,42 @@ In fact I am hoping that these basic pieces of functionality will find their way
 
 Every time you use a self built COM component (in this case the NAVAddInHelper), which you want to auto-deploy, you should create a function like this:
 
-**LoadAddInHelper(VAR NAVAddInHelper : Automation “‘NAVAddInHelper’.NAVAddInHelper”) Ok : Boolean  
-**Ok := FALSE;  
-WHILE NOT CREATE(NAVAddInHelper,TRUE,TRUE) DO  
-BEGIN  
-IF NOT AskAndInstallCOMComponent(‘NAV AddIn Helper’, ‘NAVAddInHelper.msi’) THEN  
-EXIT;  
-END;  
+```
+LoadAddInHelper(VAR NAVAddInHelper : Automation "'NAVAddInHelper'.NAVAddInHelper") Ok : Boolean
+Ok := FALSE;
+WHILE NOT CREATE(NAVAddInHelper,TRUE,TRUE) DO
+BEGIN
+IF NOT AskAndInstallCOMComponent('NAV AddIn Helper', 'NAVAddInHelper.msi') THEN
+EXIT;
+END;
 Ok := TRUE;
+```
 
 and always invoke this when you want to create an instance of the Component (instead of having CREATE(NAVAddInHelper,TRUE,TRUE) scattered around the code.
 
-**AskAndInstallCOMComponent(Description : Text\[80\];InstallableName : Text\[80\]) Retry : Boolean  
-**Retry := FALSE;  
-IF CONFIRM(STRSUBSTNO(TXT\_InstallCOMComponent, Description)) THEN  
-BEGIN  
-Retry := InstallComponent(InstallableName);  
+```
+AskAndInstallCOMComponent(Description : Text[80];InstallableName : Text[80]) Retry : Boolean
+Retry := FALSE;
+IF CONFIRM(STRSUBSTNO(TXT_InstallCOMComponent, Description)) THEN
+BEGIN
+Retry := InstallComponent(InstallableName);
 END;
+```
 
-**InstallComponent(InstallableName : Text\[80\]) Retry : Boolean  
-**Retry := TRUE;  
-toFile := InstallableName;  
-fromFile := APPLICATIONPATH + ‘ClientSetup’+InstallableName;  
-IF NOT FILE.EXISTS(fromFile) THEN  
-BEGIN  
-fromFile := APPLICATIONPATH + ‘..ClientSetup’+InstallableName;  
-END;  
-IF FILE.DOWNLOAD(fromFile, InstallableName, ”, ”, toFile) THEN  
-BEGIN  
-Retry := CONFIRM(TXT\_PleaseConfirmComplete);  
+```
+InstallComponent(InstallableName : Text[80]) Retry : Boolean
+Retry := TRUE;
+toFile := InstallableName;
+fromFile := APPLICATIONPATH + 'ClientSetup'+InstallableName;
+IF NOT FILE.EXISTS(fromFile) THEN
+BEGIN
+fromFile := APPLICATIONPATH + '..ClientSetup'+InstallableName;
 END;
+IF FILE.DOWNLOAD(fromFile, InstallableName, ", ", toFile) THEN
+BEGIN
+Retry := CONFIRM(TXT_PleaseConfirmComplete);
+END;
+```
 
 as you can see from the code, the function will try to create the component until it succeeds or the user says No, I do not want to install the component. At this time I would like to mention a small bug in NAV 2009 SP1 – when you try to CREATE a COM component client side and it isn’t there, the Client will still ask you whether or not you want to run a client side component, but since the Control isn’t installed – it doesn’t know what to call it, meaning that you will get:
 
@@ -143,68 +153,76 @@ BTW If the user declines running a COM component – our code will see this as t
 
 To check whether an Add-in is installed, we first check whether it is registered in the Client’s add-in table.
 
-**CheckAddInNameKey(AddInName : Text\[220\];PublicKeyToken : Text\[20\]) Found : Boolean  
-**Found := FALSE;  
-IF NOT AddIn.GET(AddInName,PublicKeyToken) THEN  
-BEGIN  
-MESSAGE(STRSUBSTNO(TXT\_AddInNotRegisterd, AddInName, PublicKeyToken));  
-EXIT;  
-END;  
-Found := CheckAddIn(AddIn.”Control Add-in Name”, AddIn.”Public Key Token”, AddIn.Description);
+```
+CheckAddInNameKey(AddInName : Text[220];PublicKeyToken : Text[20]) Found : Boolean
+Found := FALSE;
+IF NOT AddIn.GET(AddInName,PublicKeyToken) THEN
+BEGIN
+MESSAGE(STRSUBSTNO(TXT_AddInNotRegisterd, AddInName, PublicKeyToken));
+EXIT;
+END;
+Found := CheckAddIn(AddIn."Control Add-in Name", AddIn."Public Key Token", AddIn.Description);
+```
 
 Without anything here – nothing works. After this we check our own table (in which we have information about what executable to download to the client)
 
-**CheckAddIn(AddInName : Text\[220\];PublicKeyToken : Text\[20\];Description : Text\[250\]) Found : Boolean  
-**IF Description = ” THEN  
-BEGIN  
-Description := AddInName;  
-END;  
-Found := FALSE;  
-IF LoadAddInHelper(NAVAddInHelper) THEN  
-BEGIN  
-WHILE NOT NAVAddInHelper.CheckAddIn(AddInName, PublicKeyToken) DO  
-BEGIN  
-IF NOT InstallableAddIn.GET(AddInName, PublicKeyToken) THEN  
-BEGIN  
-IF NOT CONFIRM(STRSUBSTNO(TXT\_AddInNotFound, Description)) THEN  
-BEGIN  
-EXIT(FALSE);  
-END;  
-END  
-ELSE  
-EXIT(AskAndInstallAddIn(Description, InstallableAddIn.InstallableName));  
-END;  
-Found := TRUE;  
+```
+CheckAddIn(AddInName : Text[220];PublicKeyToken : Text[20];Description : Text[250]) Found : Boolean
+IF Description = " THEN
+BEGIN
+Description := AddInName;
 END;
+Found := FALSE;
+IF LoadAddInHelper(NAVAddInHelper) THEN
+BEGIN
+WHILE NOT NAVAddInHelper.CheckAddIn(AddInName, PublicKeyToken) DO
+BEGIN
+IF NOT InstallableAddIn.GET(AddInName, PublicKeyToken) THEN
+BEGIN
+IF NOT CONFIRM(STRSUBSTNO(TXT_AddInNotFound, Description)) THEN
+BEGIN
+EXIT(FALSE);
+END;
+END
+ELSE
+EXIT(AskAndInstallAddIn(Description, InstallableAddIn.InstallableName));
+END;
+Found := TRUE;
+END;
+```
 
 and last but not least – the method that installs the Add-In
 
-**AskAndInstallAddIn(Description : Text\[80\];InstallableName : Text\[80\]) Retry : Boolean  
-**Retry := FALSE;  
-IF CONFIRM(STRSUBSTNO(TXT\_InstallAddIn, Description)) THEN  
-BEGIN  
-Retry := InstallComponent(InstallableName);  
+```
+AskAndInstallAddIn(Description : Text[80];InstallableName : Text[80]) Retry : Boolean
+Retry := FALSE;
+IF CONFIRM(STRSUBSTNO(TXT_InstallAddIn, Description)) THEN
+BEGIN
+Retry := InstallComponent(InstallableName);
 END;
+```
 
 BTW, the method to register Add-Ins to this subsystem is
 
-**RegisterAddIn(“Control Name” : Text\[220\];”Public Key Token” : Text\[20\];Description : Text\[128\];InstallableName : Text\[80\])  
-**IF NOT AddIn.GET(“Control Name”, “Public Key Token”) THEN  
-BEGIN  
-AddIn.INIT();  
-AddIn.”Control Add-in Name” := “Control Name”;  
-AddIn.”Public Key Token” := “Public Key Token”;  
-AddIn.Description := Description;  
-AddIn.INSERT(TRUE);  
-END;  
-IF NOT InstallableAddIn.GET(“Control Name”, “Public Key Token”) THEN  
-BEGIN  
-InstallableAddIn.INIT();  
-InstallableAddIn.”Control Add-in Name” := “Control Name”;  
-InstallableAddIn.”Public Key Token” := “Public Key Token”;  
-InstallableAddIn.InstallableName := InstallableName;  
-InstallableAddIn.INSERT(TRUE);  
+```
+RegisterAddIn("Control Name" : Text[220];"Public Key Token" : Text[20];Description : Text[128];InstallableName : Text[80])
+IF NOT AddIn.GET("Control Name", "Public Key Token") THEN
+BEGIN
+AddIn.INIT();
+AddIn."Control Add-in Name" := "Control Name";
+AddIn."Public Key Token" := "Public Key Token";
+AddIn.Description := Description;
+AddIn.INSERT(TRUE);
 END;
+IF NOT InstallableAddIn.GET("Control Name", "Public Key Token") THEN
+BEGIN
+InstallableAddIn.INIT();
+InstallableAddIn."Control Add-in Name" := "Control Name";
+InstallableAddIn."Public Key Token" := "Public Key Token";
+InstallableAddIn.InstallableName := InstallableName;
+InstallableAddIn.INSERT(TRUE);
+END;
+```
 
 As you can see I could have extended the AddIn table – but I decided to go for adding a table instead, it doesn’t really matter.
 
@@ -216,34 +234,38 @@ In the Virtual Earth sample, I need to construct a URL, which contains the compa
 
 Instead of having to ask partners and/or users to register web services in the Web Service table or form, I have created this small function in the ComponentHelper to do this.
 
-**RegisterWebService(isPage : Boolean;”Object ID” : Integer;”Service Name” : Text\[80\];Published : Boolean)  
-**IF isPage THEN  
-BEGIN  
-ObjType := WebService.”Object Type”::Page;  
-END ELSE  
-BEGIN  
-ObjType := WebService.”Object Type”::Codeunit;  
+```
+RegisterWebService(isPage : Boolean;"Object ID" : Integer;"Service Name" : Text[80];Published : Boolean)
+IF isPage THEN
+BEGIN
+ObjType := WebService."Object Type"::Page;
+END ELSE
+BEGIN
+ObjType := WebService."Object Type"::Codeunit;
 END;
+```
 
-IF NOT WebService.GET(ObjType, “Service Name”) THEN  
-BEGIN  
-WebService.INIT();  
-WebService.”Object Type” := ObjType;  
-WebService.”Object ID” := “Object ID”;  
-WebService.”Service Name” := “Service Name”;  
-WebService.Published := Published;  
-WebService.INSERT();  
-COMMIT;  
-END ELSE  
-BEGIN  
-IF (WebService.”Object ID” <> “Object ID”) OR (WebService.Published<>Published)  THEN  
-BEGIN  
-WebService.”Object ID” := “Object ID”;  
-WebService.Published := Published;  
-WebService.MODIFY();  
-COMMIT;  
-END;  
+```
+IF NOT WebService.GET(ObjType, "Service Name") THEN
+BEGIN
+WebService.INIT();
+WebService."Object Type" := ObjType;
+WebService."Object ID" := "Object ID";
+WebService."Service Name" := "Service Name";
+WebService.Published := Published;
+WebService.INSERT();
+COMMIT;
+END ELSE
+BEGIN
+IF (WebService."Object ID" <> "Object ID") OR (WebService.Published<>Published)  THEN
+BEGIN
+WebService."Object ID" := "Object ID";
+WebService.Published := Published;
+WebService.MODIFY();
+COMMIT;
 END;
+END;
+```
 
 ### Global information about the URL to my IIS and Web Service tier
 
@@ -257,35 +279,43 @@ I found that all my samples worked fine in the W1 version of NAV 2009 SP1, but a
 
 I have added 4 functions:
 
-GetPageMetadata(Id : Integer;VAR Metadata : BigText)
+`GetPageMetadata(Id : Integer;VAR Metadata : BigText)`
 
-SetPageMetadata(Id : Integer;Metadata : BigText)
+`SetPageMetadata(Id : Integer;Metadata : BigText)`
 
-AddToMetadata(Id : Integer;VAR Metadata : BigText;Before : Text\[80\];Identifier : Text\[80\];Properties : Text\[800\]) result : Boolean
+`AddToMetadata(Id : Integer;VAR Metadata : BigText;Before : Text[80];Identifier : Text[80];Properties : Text[800]) result : Boolean`
 
-AddToPage(Id : Integer;VersionList : Text\[30\];Before : Text\[80\];Identifier : Text\[80\];Properties : Text\[800\]
+`AddToPage(Id : Integer;VersionList : Text[30];Before : Text[80];Identifier : Text[80];Properties : Text[800]`
 
 where the last function just call the three other (Get, Add, Set metadata).
 
 I am not very proud of the way these functions are made – they just search for a line in the exported text file and inserts some metadata but they meet the needs.
 
-As an example on how these functions are used you will find:
+`As an example on how these functions are used you will find:`
 
-// Read Page Metadata  
-ComponentHelper.GetPageMetadata(PAGE::”Customer Card”, Metadata);
+```
+// Read Page Metadata
+ComponentHelper.GetPageMetadata(PAGE::"Customer Card", Metadata);
+```
 
-// Add Map Factbox  
-ComponentHelper.AddToMetadata(PAGE::”Customer Card”, Metadata, ‘    { 1900383207;1;Part   ;’,  
-‘    { 66031;1  ;Part      ;’,  
-‘ SubFormLink=No.=FIELD(No.); PagePartID=Page66030 }’)  
+```
+// Add Map Factbox
+ComponentHelper.AddToMetadata(PAGE::"Customer Card", Metadata, '    { 1900383207;1;Part   ;',
+'    { 66031;1  ;Part      ;',
+' SubFormLink=No.=FIELD(No.); PagePartID=Page66030 }')
 OR
+```
 
-// Add View Area Map Action  
-ComponentHelper.AddToMetadata(PAGE::”Customer Card”, Metadata, ‘      { 82      ;1   ;ActionGroup;’, ‘      { 66030   ;2   ;Action    ;’,  
-‘ CaptionML=\[ENU=View Area Map\]; OnAction=VAR MAP : Codeunit 66032; BEGIN MAP.OpenCustomerMAPInBrowser(Rec); END; }’);
+```
+// Add View Area Map Action
+ComponentHelper.AddToMetadata(PAGE::"Customer Card", Metadata, '      { 82      ;1   ;ActionGroup;', '      { 66030   ;2   ;Action    ;',
+' CaptionML=[ENU=View Area Map]; OnAction=VAR MAP : Codeunit 66032; BEGIN MAP.OpenCustomerMAPInBrowser(Rec); END; }');
+```
 
-// Write Page Metadata back  
-ComponentHelper.SetPageMetadata(PAGE::”Customer Card”, Metadata);
+```
+// Write Page Metadata back
+ComponentHelper.SetPageMetadata(PAGE::"Customer Card", Metadata);
+```
 
 So basically – it reads the metadata for the page, checks whether the action already has been added (the string ‘      { 66030   ;2   ;Action    ;’ exists already). If not it searches for the string ‘      { 82      ;1   ;ActionGroup;’ and inserts the action below that. Not pretty – but it works.
 
@@ -295,59 +325,67 @@ As mentioned earlier a couple of functions are needed in a client side COM compo
 
 The Escape and Unescape functions really doesn’t do anything:
 
-public string EscapeDataString(string str)  
-{  
-return Uri.EscapeDataString(str);  
+```
+public string EscapeDataString(string str)
+{
+return Uri.EscapeDataString(str);
 }
+```
 
-public string UnescapeDataString(string str)  
-{  
-return Uri.UnescapeDataString(str);  
+```
+public string UnescapeDataString(string str)
+{
+return Uri.UnescapeDataString(str);
 }
+```
 
 and the essence of the CheckAddIn is the code found in the LoadAddIn function of the AddIn class:
 
-Assembly assembly = Assembly.LoadFrom(dll);
+`Assembly assembly = Assembly.LoadFrom(dll);`
 
-this.publicKey = “”;  
-foreach (byte b in assembly.GetName().GetPublicKeyToken())  
-{  
-this.publicKey += string.Format(“{0:x2}”, b);  
+```
+this.publicKey = "";
+foreach (byte b in assembly.GetName().GetPublicKeyToken())
+{
+this.publicKey += string.Format("{0:x2}", b);
 }
+```
 
-Type\[\] types = assembly.GetTypes();  
-foreach (Type type in types)  
-{  
-foreach (System.Attribute att in System.Attribute.GetCustomAttributes(type))  
-{  
-ControlAddInExportAttribute expAtt = att as ControlAddInExportAttribute;  
-if (expAtt != null && !string.IsNullOrEmpty(expAtt.Name))  
-{  
-if (!isAddIn)  
-{  
-this.controlNames = new List<string>();  
-isAddIn = true;  
-}  
-this.controlNames.Add(expAtt.Name);  
-}  
-}  
+```
+Type[] types = assembly.GetTypes();
+foreach (Type type in types)
+{
+foreach (System.Attribute att in System.Attribute.GetCustomAttributes(type))
+{
+ControlAddInExportAttribute expAtt = att as ControlAddInExportAttribute;
+if (expAtt != null && !string.IsNullOrEmpty(expAtt.Name))
+{
+if (!isAddIn)
+{
+this.controlNames = new List<string>();
+isAddIn = true;
 }
+this.controlNames.Add(expAtt.Name);
+}
+}
+}
+```
 
 Which loads an Add-In, finds the public key token and the registered controls. The rest is really simple – check whether one of the Add-Ins in fact is the one we are looking for – else install it…
 
-The Visual Studio solution also contains a setup project for generating the .msi file which needs to be placed in the ClientSetup folder.
+`The Visual Studio solution also contains a setup project for generating the .msi file which needs to be placed in the ClientSetup folder.`
 
-### Putting it all together
+### `Putting it all together`
 
-So, now we have a .fob file and an .msi file which we need to install on the Service Tier – so why don’t we create a Setup project, which contains this .fob (install that in a ServerSetup folder) and the .msi (install that in the ClientSetup folder).
+`So, now we have a .fob file and an .msi file which we need to install on the Service Tier – so why don't we create a Setup project, which contains this .fob (install that in a ServerSetup folder) and the .msi (install that in the ClientSetup folder).`
 
 Doing this makes installing the ComponentHelper a 3 step process:
 
-1.  Install ComponentHelper.msi on the Service Tier
-2.  Import a .fob from the ServerSetup folder
-3.  Run a codeunit which registers the necessary stuff
+1.  `Install ComponentHelper.msi on the Service Tier`
+2.  `Import a .fob from the ServerSetup folder`
+3.  `Run a codeunit which registers the necessary stuff`
 
-In fact I am trying to make all the demos and samples installable like the ComponentHelper itself – so that anybody can download cool samples and get a sexy Microsoft Dynamics NAV 2009 SP1 – to work with.
+`In fact I am trying to make all the demos and samples installable like the ComponentHelper itself – so that anybody can download cool samples and get a sexy Microsoft Dynamics NAV 2009 SP1 – to work with.`
 
 ComponentHelper1.01.zip (which contains ComponentHelper1.01.msi) can be downloaded [here](http://www.freddy.dk/ComponentHelper1.01.zip).
 

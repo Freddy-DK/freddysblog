@@ -59,6 +59,7 @@ In order to check that PHP was installed and configured correctly, I created a s
 
 My hello world code looks like this:
 
+```
  
  
  
@@ -71,6 +72,7 @@ Hello World
 ";
  ?--> 
  
+```
 
 and connecting to the Web Site reveals that things are up running:
 
@@ -80,6 +82,7 @@ and connecting to the Web Site reveals that things are up running:
 
 Next thing I did was to take the code from the “old” blog post and strip it from all NTLM stuff, using only standard SoapClient available in PHP and it was exactly as easy as I always thought it would be (Well… – sort of:-))
 
+```
  
  
  
@@ -89,32 +92,32 @@ $login = "";
 $password = "";
 $baseUrl = ""; // ex. https://.cloudapp.net:7047/NAV/WS/
 
-$context = stream\_context\_create(\[
- 'ssl' => \[
+$context = stream_context_create([
+ 'ssl' => [
  // set some SSL/TLS specific options
- 'verify\_peer' => false,
- 'verify\_peer\_name' => false,
- 'allow\_self\_signed' => true
- \]
-\]);
+ 'verify_peer' => false,
+ 'verify_peer_name' => false,
+ 'allow_self_signed' => true
+ ]
+]);
 
 $options = array("login" => $login, 
  "password" => $password, 
- "features" => SOAP\_SINGLE\_ELEMENT\_ARRAYS, 
- "stream\_context" => $context);
+ "features" => SOAP_SINGLE_ELEMENT_ARRAYS, 
+ "stream_context" => $context);
 
 $client = new SoapClient($baseUrl."SystemService", $options);
 
 // Find the first Company in the Companies 
 $result = $client->Companies(); 
-$companies = $result->return\_value; 
+$companies = $result->return_value; 
 echo "Companies:
 "; 
 foreach($companies as $company) { 
  echo $company."
 "; 
 }
-$cur = $companies\[0\];
+$cur = $companies[0];
 
 $pageURL = $baseUrl.rawurlencode($cur)."/Page/Customer";
 echo "
@@ -132,15 +135,15 @@ echo "Name of Customer 10000:".$customer->Name."
 ";
 
 $params = array("filter" => array( 
- array("Field" => "Location\_Code", 
+ array("Field" => "Location_Code", 
  "Criteria" => "RED|BLUE"), 
- array("Field" => "Country\_Region\_Code", 
+ array("Field" => "Country_Region_Code", 
  "Criteria" => "GB") 
  ), 
  "setSize" => 0
  ); 
 $result = $page->ReadMultiple($params); 
-$customers = $result->ReadMultiple\_Result->Customer;
+$customers = $result->ReadMultiple_Result->Customer;
 
 echo "Customers in GB served by RED or BLUE warehouse:
 "; 
@@ -150,6 +153,7 @@ foreach($customers as $cust) {
 } 
 ?--> 
  
+```
 
 I did actually change two things compared to the sample from 2010:
 

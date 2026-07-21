@@ -15,7 +15,9 @@ The default tenant is mounted with AllowAppDatabaseWrite. This was done back in 
 
 You can still add an additionalparameter if you want the “old” behavior:
 
-\--env defaultTenantHasAllowAppDatabaseWrite=Y
+```
+--env defaultTenantHasAllowAppDatabaseWrite=Y
+```
 
 and of course nothing changes if you are using single tenancy.
 

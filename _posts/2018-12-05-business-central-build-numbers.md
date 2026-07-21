@@ -44,7 +44,9 @@ Business Central Fall 2018 release is major release **13**, minor release **0**�
 
 Putting these numbers together gives **13.0.24630.0** which indeed is the version number for Business Central Fall 2018. If you want to pull the on-premises Docker image for this release you can use:
 
-docker pull mcr.microsoft.com/businesscentral/onprem:13.0.24630.0\[-country\]\[-os\]
+```
+docker pull mcr.microsoft.com/businesscentral/onprem:13.0.24630.0[-country][-os]
+```
 
 where
 
@@ -55,7 +57,9 @@ The on-premises release is also tagged with **rtm** instead of **13.0.24630.0**.
 
 If you want to pull the sandbox  Docker image for this release you can use:
 
-docker pull mcr.microsoft.com/businesscentral/sandbox:13.0.24630.0\[-country\]\[-os\]
+```
+docker pull mcr.microsoft.com/businesscentral/sandbox:13.0.24630.0[-country][-os]
+```
 
 where
 
@@ -72,11 +76,15 @@ One month after Business Central Fall 2018 release, in November, we shipped the
 
 The build number for update 20 golden build was 25940 giving us this image for the onprem Docker image:
 
-docker pull mcr.microsoft.com/businesscentral/onprem:13.1.25940.0\[-country\]\[-os\]
+```
+docker pull mcr.microsoft.com/businesscentral/onprem:13.1.25940.0[-country][-os]
+```
 
 and this image for the sandbox Docker image:
 
-docker pull mcr.microsoft.com/businesscentral/sandbox:13.1.25940.0\[-country\]\[-os\]
+```
+docker pull mcr.microsoft.com/businesscentral/sandbox:13.1.25940.0[-country][-os]
+```
 
 **country** and **os** have the same meaning as with the fall release, but we are likely to add new countries at minor updates as well.
 
@@ -92,15 +100,21 @@ We do NOT build Docker images of all these revisions as we also don’t roll out
 
 For Fall release, we did create Docker images of 3 revisions: 24844, 25242 and 25789. You probably already guessed that this means that the latest sandbox Docker image you can get from update 19/13.0 is:
 
-docker pull mcr.microsoft.com/businesscentral/sandbox:13.0.24630.25789\[-country\]\[-os\]
+```
+docker pull mcr.microsoft.com/businesscentral/sandbox:13.0.24630.25789[-country][-os]
+```
 
 For update 20, we have created Docker images of 2 revisions: 26108 and 26323, meaning that currently the latest sandbox Docker image available is:
 
-docker pull mcr.microsoft.com/businesscentral/sandbox:13.1.25940.26323\[-country\]\[-os\]
+```
+docker pull mcr.microsoft.com/businesscentral/sandbox:13.1.25940.26323[-country][-os]
+```
 
 which is the same version you get by using:
 
-docker pull mcr.microsoft.com/businesscentral/sandbox:\[country\]\[-\]\[os\]
+```
+docker pull mcr.microsoft.com/businesscentral/sandbox:[country][-][os]
+```
 
 These images are ONLY available for sandbox – we will not release revisions of the on-premises Docker images.
 
@@ -127,11 +141,15 @@ If you are working on an **app for AppSource**, you should consider setting up 
 
 Remember that you will always get the latest bcsandbox image by using:
 
-docker pull bcinsider.azurecr.io/bcsandbox:\[country\]\[-os\]
+```
+docker pull bcinsider.azurecr.io/bcsandbox:[country][-os]
+```
 
 and the latest bcsandbox-master by using:
 
-docker pull bcinsider.azurecr.io/bcsandbox-master:\[country\]\[-os\]
+```
+docker pull bcinsider.azurecr.io/bcsandbox-master:[country][-os]
+```
 
 For the list of countries, available you should check Microsoft Collaborate (until we ship)
 
@@ -139,10 +157,12 @@ For the list of countries, available you should check Microsoft Collaborate (unt
 
 If you run docker inspect on a Docker image, you will under the Labels section under Config find not one, not two, not three, but **four version numbers**. Before getting that question, let me also describe the meaning of these
 
+```
      "osversion": "10.0.17763.134"
      "tag": "0.0.8.0"
      "version": "14.0.26445.0"
      "platform": "13.0.26325.0"
+```
 
 **osversion** is the version of the Operating System. Which Windows Server Core version was used to build this image. Read more [here](https://www.microsoft.com/en-us/itpro/windows-10/release-information).
 

@@ -49,15 +49,17 @@ In both cases, AL-Go will only actually install the apps, which are included in 
 
 In AL-Go for GitHub, you can create dependencies on other AL-Go repositories. The way you do that is by specifying **appDependencyProbingPaths** in the settings file, example:
 
-"appDependencyProbingPaths": \[
+```
+"appDependencyProbingPaths": [
         {
             "repo":  "https://github.com/BusinessCentralApps/Contoso-Common",
-            "release\_status":  "latestBuild",
+            "release_status":  "latestBuild",
             "version":  "latest",
-            "projects":  "\*",
+            "projects":  "*",
             "AuthTokenSecret":  "CommonAppsRepoToken"
         }
-    \]
+    ]
+```
 
 In this example, my repository will (during build) download all apps from the latest successful build from the **Contoso-Common** repository and install the apps, which are in the dependency tree of my main app.
 
@@ -75,15 +77,19 @@ You can see the Contoso-App1 sample [here](https://github.com/BusinessCentralApp
 
 The second way of adding dependencies in AL-Go for GitHub is to create a setting called **InstallApps**. InstallApps is an array and can contain any number of direct download URLs (or relative paths inside the repository) to .app files or .zip files including any number of .app files.
 
-"installApps": \[
+```
+"installApps": [
         "https://my.azureedge.net/myapp/latest/apps.zip"
-    \]
+    ]
+```
 
 or if the app is included in a folder in the repository:
 
-"installApps": \[
+```
+"installApps": [
         "myapp/latest.app"
-    \]
+    ]
+```
 
 Again, only the apps that are actually references by apps in the repository are installed.
 

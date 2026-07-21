@@ -27,15 +27,17 @@ So, even though the function is called Run-AlPipeline, there isn’t a pipeline 
 
 Before going in detail with all parameters of the Run-AlPipeline function, let me show a sample run. I have cloned this repo [https://dev.azure.com/businesscentralapps/BingMaps](https://dev.azure.com/businesscentralapps/BingMaps) to my local box, after which I run this:
 
-Run-AlPipeline \`
-    -pipelineName "BingMaps" \`
-    -licenseFile "c:\\temp\\license.flf" \`
-    -baseFolder "C:\\Users\\freddyk\\Documents\\GitHub\\BusinessCentralApps\\BingMaps" \`
-    -appFolders @("app") \`
-    -testFolders @("test") \`
-    -installTestFramework \`
-    -enablePerTenantExtensionCop \`
+```
+Run-AlPipeline `
+    -pipelineName "BingMaps" `
+    -licenseFile "c:\temp\license.flf" `
+    -baseFolder "C:\Users\freddyk\Documents\GitHub\BusinessCentralApps\BingMaps" `
+    -appFolders @("app") `
+    -testFolders @("test") `
+    -installTestFramework `
+    -enablePerTenantExtensionCop `
     -enableUICop
+```
 
 This function causes an output, which you can watch [here](https://bcdocker.blob.core.windows.net/public/sampleoutput.txt).
 
@@ -247,68 +249,84 @@ This parameter is only relevant when NOT using useDevEndpoint. This is the folde
 
 Override function parameter for docker pull. The default scriptblock for this parameter is:
 
+```
 { Param($imageName)
     docker pull $imageName
 }
+```
 
 ## \-NewBcContainer
 
 Override function parameter for New-BcContainer. The default scriptblock for this parameter is:
 
-{ Param(\[Hashtable\]$parameters)
+```
+{ Param([Hashtable]$parameters)
     New-BcContainer @parameters
     Invoke-ScriptInBcContainer $parameters.ContainerName -scriptblock {
         $progressPreference = 'SilentlyContinue'
     }
 }
+```
 
 ## \-CompileAppInBcContainer
 
 Override function parameter for Compile-AppInBcContainer. The default scriptblock for this parameter is:
 
-{ Param(\[Hashtable\]$parameters)
+```
+{ Param([Hashtable]$parameters)
     Compile-AppInBcContainer @parameters
 }
+```
 
 ## \-PublishBcContainerApp
 
 Override function parameter for Publish-BcContainerApp. The default scriptblock for this parameter is:
 
-{ Param(\[Hashtable\]$parameters)
+```
+{ Param([Hashtable]$parameters)
     Publish-BcContainerApp @parameters
 }
+```
 
 ## \-SignBcContainerApp
 
 Override function parameter for Sign-BcContainerApp. The default scriptblock for this parameter is:
 
-{ Param(\[Hashtable\]$parameters)
+```
+{ Param([Hashtable]$parameters)
     Sign-BcContainerApp @parameters
 }
+```
 
 ## \-RunTestsInBcContainer
 
 Override function parameter for Run-TestsInBcContainer. The default scriptblock for this parameter is:
 
-{ Param(\[Hashtable\]$parameters)
+```
+{ Param([Hashtable]$parameters)
     Run-TestsInBcContainer @parameters
 }
+```
 
 ## \-GetBcContainerAppRuntimePackage
 
 Override function parameter Get-BcContainerAppRuntimePackage. The default scriptblock for this parameter is:
 
-{ Param(\[Hashtable\]$parameters)
+```
+{ Param([Hashtable]$parameters)
     Get-BcContainerAppRuntimePackage @parameters
 }
+```
 
 ## \-RemoveBcContainer
 
 Override function parameter for Remove-BcContainer. The default scriptblock for this parameter is:
 
-{ Param(\[Hashtable\]$parameters)
+```
+{ Param([Hashtable]$parameters)
     Remove-BcContainer @parameters
 }
+```
 
 # That’s it
 

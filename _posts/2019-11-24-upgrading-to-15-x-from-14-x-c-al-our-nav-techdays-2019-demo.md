@@ -51,30 +51,31 @@ Furthermore, I am using [KDiff3](http://kdiff3.sourceforge.net/) for 3 way mergi
 
 These settings and variables should reflect your setup if you want to run the demo script yourself.
 
+```
 $ErrorActionPreference = 'Stop'
-$licenseFile = 'c:\\temp\\license.flf'
+$licenseFile = 'c:\temp\license.flf'
 
 $dbcredentials = New-Object PSCredential -ArgumentList 'sa', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 $dbServer = 'host.containerhelper.internal'
 $dbInstance = ''
-$dbFolder = "c:\\databases"
+$dbFolder = "c:\databases"
 $dbName = "Prod"
 $prodContainerName = "prod"
 if (!(Test-Path $dbFolder)) { New-Item $dbFolder -ItemType Directory | Out-Null }
 
-$rewardsAppCodeFile = 'c:\\ProgramData\\NavContainerHelper\\RewardsAppcode.txt'
+$rewardsAppCodeFile = 'c:\ProgramData\NavContainerHelper\RewardsAppcode.txt'
 Download-File -sourceUrl 'https://bcdocker.blob.core.windows.net/public/RewardsAppcode.txt' -destinationFile $rewardsAppCodeFile -dontOverwrite
 Unblock-File $rewardsAppCodeFile
 
-$bingMaps14appFile = 'c:\\ProgramData\\NavContainerHelper\\BingMaps14.app'
+$bingMaps14appFile = 'c:\ProgramData\NavContainerHelper\BingMaps14.app'
 Download-File -sourceUrl 'http://aka.ms/bingmaps.app' -destinationFile $bingMaps14appFile -dontOverwrite
 Unblock-File $bingMaps14appFile
 
-$bingMaps15appFile = 'c:\\ProgramData\\NavContainerHelper\\BingMaps15.app'
-Download-File -sourceUrl 'http://aka.ms/FreddyKristiansen\_BingMaps\_15.0.app' -destinationFile $bingMaps15appFile -dontOverwrite
+$bingMaps15appFile = 'c:\ProgramData\NavContainerHelper\BingMaps15.app'
+Download-File -sourceUrl 'http://aka.ms/FreddyKristiansen_BingMaps_15.0.app' -destinationFile $bingMaps15appFile -dontOverwrite
 Unblock-File $bingMaps15appFile
 
-$appJsonTemplate = \[System.Net.WebClient\]::new().DownloadString('https://bcdocker.blob.core.windows.net/public/app15.json') | ConvertFrom-Json
+$appJsonTemplate = [System.Net.WebClient]::new().DownloadString('https://bcdocker.blob.core.windows.net/public/app15.json') | ConvertFrom-Json
 
 $imageName14 = 'mcr.microsoft.com/businesscentral/onprem:1904-cu6-w1-ltsc2019'
 $imageName15 = 'mcr.microsoft.com/businesscentral/onprem:1910-cu1-w1-ltsc2019'
@@ -82,11 +83,12 @@ $dev14containerName = 'bc14'
 $dev15containerName = 'bc15'
 $credential = New-Object pscredential -ArgumentList 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
 
-$bc14originalFolder = 'c:\\ProgramData\\NavContainerHelper\\TechDays\\bc14original'
-$bc15originalFolder = 'c:\\ProgramData\\NavContainerHelper\\TechDays\\bc15original'
-$bc14mybaseappFolder = 'c:\\ProgramData\\NavContainerHelper\\TechDays\\bc14mybaseapp'
-$bc15mybaseappFolder = 'c:\\ProgramData\\NavContainerHelper\\TechDays\\bc15mybaseapp'
-$bc15myappFolder = 'c:\\ProgramData\\NavContainerHelper\\TechDays\\bc15myapp'
+$bc14originalFolder = 'c:\ProgramData\NavContainerHelper\TechDays\bc14original'
+$bc15originalFolder = 'c:\ProgramData\NavContainerHelper\TechDays\bc15original'
+$bc14mybaseappFolder = 'c:\ProgramData\NavContainerHelper\TechDays\bc14mybaseapp'
+$bc15mybaseappFolder = 'c:\ProgramData\NavContainerHelper\TechDays\bc15mybaseapp'
+$bc15myappFolder = 'c:\ProgramData\NavContainerHelper\TechDays\bc15myapp'
+```
 
 **dbCredentials**, **dbServer**, **dbInstance** and **dbName** defines the database on your host. Setting **dbServer** to **host.containerhelper.internal** means that the container will assume that the database is on the host and **dbFolder** determines the location of the database files. The remaining scripts will not automatically work if you want to use a SQL server, which is on a foreign machine, as I copy mdf/ldf files and use database attach.
 
@@ -102,60 +104,62 @@ Using the techniques described in this blog post, we will place the database on 
 
 This means that we want to lift both code customizations in C/AL and an AL app to Business Central 15.x. During the Tech Days presentation, we did not include the BingMaps app.
 
-$tempPath = Join-Path $env:TEMP (\[Guid\]::NewGuid().ToString())
+```
+$tempPath = Join-Path $env:TEMP ([Guid]::NewGuid().ToString())
 Extract-FilesFromBCContainerImage -imageName $imageName14 -extract database -path $tempPath -force
 
 $files = @()
 Get-ChildItem -Path (Join-Path $tempPath "databases") | % {
-    $DestinationFile = "{0}\\{1}{2}" -f $dbFolder, $dbName, $\_.Extension
-    Copy-Item -Path $\_.FullName -Destination $DestinationFile -Force
+    $DestinationFile = "{0}\{1}{2}" -f $dbFolder, $dbName, $_.Extension
+    Copy-Item -Path $_.FullName -Destination $DestinationFile -Force
     $files += @("(FILENAME = N'$DestinationFile')")
 }
 
 Remove-Item -Path $tempPath -Recurse -Force
 
 Write-Host "Attaching files as new Database $dbName"
-Invoke-SqlCmd -Query "CREATE DATABASE \[$dbName\] ON $(\[string\]::Join(", ",$Files)) FOR ATTACH"
+Invoke-SqlCmd -Query "CREATE DATABASE [$dbName] ON $([string]::Join(", ",$Files)) FOR ATTACH"
 
-New-BCContainer \`
-    -accept\_eula \`
-    -containerName $prodContainerName \`
-    -imageName $imageName14 \`
-    -updateHosts \`
-    -auth 'UserPassword' \`
-    -Credential $credential \`
-    -databaseServer $dbServer \`
-    -databaseInstance $dbInstance \`
-    -databaseName $dbName \`
+New-BCContainer `
+    -accept_eula `
+    -containerName $prodContainerName `
+    -imageName $imageName14 `
+    -updateHosts `
+    -auth 'UserPassword' `
+    -Credential $credential `
+    -databaseServer $dbServer `
+    -databaseInstance $dbInstance `
+    -databaseName $dbName `
     -databaseCredential $dbcredentials
 
-Import-NavContainerLicense \`
-    -containerName $prodContainerName \`
+Import-NavContainerLicense `
+    -containerName $prodContainerName `
     -licenseFile $licenseFile
 
-New-NavContainerNavUser \`
-    -containerName $prodContainerName \`
-    -Credential $credential \`
-    -ChangePasswordAtNextLogOn:$false \`
+New-NavContainerNavUser `
+    -containerName $prodContainerName `
+    -Credential $credential `
+    -ChangePasswordAtNextLogOn:$false `
     -PermissionSetId 'SUPER'
 
-Import-ObjectsToNavContainer \`
-    -containerName $prodContainerName \`
-    -objectsFile $rewardsAppCodeFile \`
+Import-ObjectsToNavContainer `
+    -containerName $prodContainerName `
+    -objectsFile $rewardsAppCodeFile `
     -sqlCredential $dbcredentials
 
-Compile-ObjectsInNavContainer \`
-    -containerName $prodContainerName \`
+Compile-ObjectsInNavContainer `
+    -containerName $prodContainerName `
     -sqlCredential $dbcredentials
 
-Publish-NavContainerApp \`
-    -containerName $prodContainerName \`
-    -appFile $bingMaps14appFile \`
-    -skipVerification \`
-    -sync \`
+Publish-NavContainerApp `
+    -containerName $prodContainerName `
+    -appFile $bingMaps14appFile `
+    -skipVerification `
+    -sync `
     -install
 
 Start-Process "http://$prodContainerName/NAV"
+```
 
 The last line in the above script will open the Web Client and you can now setup the BingMaps integration (link on the role center) and enter some data into the rewards points field for at least one of the customers.
 
@@ -171,52 +175,56 @@ The 14.x container will also be started using **includeCSIDE** in order to extra
 
 Last but not least, the 14.x container is created with **runTxt2AlInContainer** set to the 15.x container in order to use the same formatting of AL files in both containers.
 
-New-BCContainer \`
-    -accept\_eula \`
-    -accept\_outdated \`
-    -imageName $imageName15 \`
-    -auth UserPassword \`
-    -Credential $credential \`
-    -containerName $dev15containerName \`
-    -licenseFile $licenseFile \`
-    -updateHosts \`
-    -useBestContainerOS \`
+```
+New-BCContainer `
+    -accept_eula `
+    -accept_outdated `
+    -imageName $imageName15 `
+    -auth UserPassword `
+    -Credential $credential `
+    -containerName $dev15containerName `
+    -licenseFile $licenseFile `
+    -updateHosts `
+    -useBestContainerOS `
     -includeAL
 
-New-NavContainer \`
-    -accept\_eula \`
-    -accept\_outdated \`
-    -imageName $imageName14 \`
-    -auth UserPassword \`
-    -Credential $credential \`
-    -containerName $dev14containerName \`
-    -licenseFile $licenseFile \`
-    -updateHosts \`
-    -useBestContainerOS \`
-    -includeAL -runTxt2AlInContainer $dev15containerName \`
+New-NavContainer `
+    -accept_eula `
+    -accept_outdated `
+    -imageName $imageName14 `
+    -auth UserPassword `
+    -Credential $credential `
+    -containerName $dev14containerName `
+    -licenseFile $licenseFile `
+    -updateHosts `
+    -useBestContainerOS `
+    -includeAL -runTxt2AlInContainer $dev15containerName `
     -includeCSide
+```
 
 # Converting my app
 
 Next step is to convert the code customized C/AL solution to an AL Extension and remove the tableextensions.
 
-Import-ObjectsToNavContainer \`
-    -containerName $dev14containerName \`
+```
+Import-ObjectsToNavContainer `
+    -containerName $dev14containerName `
     -objectsFile $rewardsAppCodeFile
 
-Compile-ObjectsInNavContainer \`
+Compile-ObjectsInNavContainer `
     -containerName $dev14containerName
 
 New-Item -Path $bc15myappFolder -ItemType Directory | Out-Null
-Convert-ModifiedObjectsToAl \`
-    -containerName $dev14containerName \`
-    -startId 50100 \`
+Convert-ModifiedObjectsToAl `
+    -containerName $dev14containerName `
+    -startId 50100 `
     -alProjectFolder $bc15myappFolder
 
-$haveModifiedTables = Test-Path -Path (Join-Path $bc15myappFolder "tableextension\*.\*")
+$haveModifiedTables = Test-Path -Path (Join-Path $bc15myappFolder "tableextension*.*")
 if ($haveModifiedTables) {
-    Remove-Item -Path $bc15myappFolder -Filter "tableextension\*.\*" -Recurse -Force
+    Remove-Item -Path $bc15myappFolder -Filter "tableextension*.*" -Recurse -Force
 }
+```
 
 The **haveModifiedTables** variable will in our case be true. If we didn’t have modified tables at this time, we would not have to use hybrid at all – we could upgrade directly to an extension.
 
@@ -226,8 +234,9 @@ Now, we need to create 3 AL Project Folders. One with 14.x baseline, one with 14
 
 The only modified object we want to keep in the BaseApp is **table18**. If you are trying to do this with your own objects, you would have to include the other objects in the **myModifiedObjects** array for the AL file structure as described in [this blog post](/2019/08/02/organizing-your-al-files/).
 
+```
 $myModifiedObjects = @("table18")
-$alFileStructure = { Param (\[string\] $type, \[int\] $id, \[string\] $name)
+$alFileStructure = { Param ([string] $type, [int] $id, [string] $name)
     if ($myModifiedObjects.Contains("$type$id")) {
         $folder = "Modified"
     }
@@ -238,36 +247,37 @@ $alFileStructure = { Param (\[string\] $type, \[int\] $id, \[string\] $name)
         $folder = "BaseApp"
     }
     if ($type.StartsWith('.')) {
-        "$folder\\$($name)$($type)"
+        "$folder\$($name)$($type)"
     }
     else {
-        "$folder\\$($name).$($type).al"
+        "$folder\$($name).$($type).al"
     }
 }
 
 Write-Host "Create 14.x baseline"
-Create-AlProjectFolderFromNavContainer \`
-    -containerName $dev14containerName \`
-    -alFileStructure $alFileStructure \`
-    -useBaseAppProperties \`
-    -useBaseLine \`
+Create-AlProjectFolderFromNavContainer `
+    -containerName $dev14containerName `
+    -alFileStructure $alFileStructure `
+    -useBaseAppProperties `
+    -useBaseLine `
     -alProjectFolder $bc14originalFolder
 
 Write-Host "Create 15.x baseline"
-Create-AlProjectFolderFromNavContainer \`
-    -containerName $dev15containerName \`
-    -alFileStructure $alFileStructure \`
-    -useBaseAppProperties \`
-    -useBaseLine \`
+Create-AlProjectFolderFromNavContainer `
+    -containerName $dev15containerName `
+    -alFileStructure $alFileStructure `
+    -useBaseAppProperties `
+    -useBaseLine `
     -alProjectFolder $bc15originalFolder
 
 Write-Host "Create 14.x mybaseapp"
-Create-AlProjectFolderFromNavContainer \`
-    -containerName $dev14containerName \`
-    -alFileStructure $alFileStructure \`
-    -useBaseAppProperties \`
-    -alProjectFolder $bc14mybaseappFolder \`
+Create-AlProjectFolderFromNavContainer `
+    -containerName $dev14containerName `
+    -alFileStructure $alFileStructure `
+    -useBaseAppProperties `
+    -alProjectFolder $bc14mybaseappFolder `
     -runTxt2AlInContainer $dev15containerName
+```
 
 The structure of these folders is like described in [this blog post](/2019/08/02/organizing-your-al-files/).
 
@@ -279,12 +289,14 @@ Creating the 15.x folder with our solution, requires us to copy the BaseApp fold
 
 The script for doing this is here:
 
+```
 New-Item $bc15mybaseappFolder -ItemType Directory | Out-Null
-Copy-item -Path "$bc15originalFolder\\\*" -Destination $bc15mybaseappFolder -Recurse -Force
-Remove-Item -Path "$bc15mybaseappFolder\\Modified\\\*.\*" -Recurse -Force
-& "C:\\Program Files\\KDiff3\\kdiff3.exe" "$bc14originalFolder\\Modified" "$bc14mybaseappFolder\\Modified" "$bc15originalFolder\\Modified" -o "$bc15mybaseappFolder\\Modified" -m
+Copy-item -Path "$bc15originalFolder\*" -Destination $bc15mybaseappFolder -Recurse -Force
+Remove-Item -Path "$bc15mybaseappFolder\Modified\*.*" -Recurse -Force
+& "C:\Program Files\KDiff3\kdiff3.exe" "$bc14originalFolder\Modified" "$bc14mybaseappFolder\Modified" "$bc15originalFolder\Modified" -o "$bc15mybaseappFolder\Modified" -m
 
 Read-Host "Press Enter When you are done merging"
+```
 
 and the 3 way merge using kdiff3 looks like this:
 
@@ -294,7 +306,9 @@ and the 3 way merge using kdiff3 looks like this:
 
 With our 3 way merge completed, we can now build the baseapp using the Compile-AppInBCContainer function. Note that we are reusing the AppId, Name, Publisher and version from the Microsoft Base Application in order to ensure all references still works.
 
+```
 $baseAppFile = Compile-AppInBCContainer -containerName $dev15containerName -appProjectFolder $bc15mybaseappFolder -credential $credential
+```
 
 the **baseAppFile** variable contains the path of the new .app file, and this will reside in a folder, which is shared with the container.
 
@@ -302,21 +316,23 @@ the **baseAppFile** variable contains the path of the new .app file, and this wi
 
 When building the extension, which contains all the functionality from our code customized solution, we first need to copy the new base app to the .alPackages folder as we have a reference to it. We could also publish it to the 15.x work container, but there are really no reason to do this.
 
+```
 New-Item -Path (Join-Path $bc15myappFolder '.alPackages') -ItemType Directory | Out-Null
 Copy-Item -Path $baseAppFile -Destination (Join-Path $bc15myappFolder '.alPackages')
 
 # Create App.Json
-$appjsonTemplate.id = \[GUID\]::NewGuid().ToString()
+$appjsonTemplate.id = [GUID]::NewGuid().ToString()
 $appjsonTemplate.name = 'MyApp'
 $appjsonTemplate.publisher = 'Freddy'
 $appjsonTemplate.target = 'OnPrem'
 $appjsonTemplate | ConvertTo-Json -Depth 99 | Set-Content (Join-Path $bc15myappFolder 'app.json')
 
-$appFile = Compile-AppInBCContainer \`
-    -containerName $dev15containerName \`
-    -credential $credential \`
-    -appProjectFolder $bc15myappFolder \`
+$appFile = Compile-AppInBCContainer `
+    -containerName $dev15containerName `
+    -credential $credential `
+    -appProjectFolder $bc15myappFolder `
     -appOutputFolder $bc15myappFolder
+```
 
 With this, we now have a new **baseAppFile** and an **appFile**. Now we can start the actual upgrade.
 
@@ -343,12 +359,13 @@ The upgrade process on a very high level looks like:
 
 This seems very easy, but we need to uninstall and unpublish apps in the right order (we cannot uninstall an app on which other apps depend). A script which does this looks like this:
 
+```
 $availableTenants = Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Get-NAVTenant -ServerInstance $ServerInstance }
 $availableTenants | % {
-    $tenantId = $\_.Id
+    $tenantId = $_.Id
     $apps = Get-NavContainerAppInfo -containerName $prodContainerName -tenantSpecificProperties -sort DependenciesLast -tenant $tenantId
     $apps | % {
-        $app = $\_
+        $app = $_
         if ($app.IsInstalled) {
             Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Param($app, $tenantId)
                 Write-Host "Uninstalling $($app.Name)"
@@ -363,20 +380,23 @@ $apps | % {
     Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Param($app)
         Write-Host "Unpublishing $($app.Name)"
         Unpublish-NAVApp -ServerInstance $ServerInstance -Name $app.Name -Version $app.Version
-    } -argumentList $\_
+    } -argumentList $_
 }
 Invoke-ScriptInNavContainer -containerName $prodContainerName -scriptblock {
     Get-NAVAppInfo -ServerInstance $ServerInstance -SymbolsOnly | % {
-        Write-Host "Unpublishing $($\_.Name) symbols"
-        Unpublish-NAVApp -ServerInstance $ServerInstance -Name $\_.Name -Version $\_.Version
+        Write-Host "Unpublishing $($_.Name) symbols"
+        Unpublish-NAVApp -ServerInstance $ServerInstance -Name $_.Name -Version $_.Version
     }
 }
+```
 
 # Remove 14.x production environment
 
 Removing the “old” production environment is very simple as the database is located on the host, this is just removing the container.
 
+```
 Remove-NavContainer -containerName $prodContainerName
+```
 
 # Create a new 15.x production container
 
@@ -388,14 +408,15 @@ During the creation of the new 15.x container, we need to do a few things.
 
 We also need to give the container sufficient memory to perform the upgrade. 16G is probably wildly exaggerated for our very small app.
 
-$SystemSymbolsPath = (Get-Item -path (Join-Path $bc15myappFolder '.alPackages\\Microsoft\_System\_\*.app')).FullName
+```
+$SystemSymbolsPath = (Get-Item -path (Join-Path $bc15myappFolder '.alPackages\Microsoft_System_*.app')).FullName
 
-$DestinationAppsForMigrationPaths = \[string\]::Join(',',@(
-    "C:\\Applications\\System Application\\Source\\Microsoft\_System Application.app"
+$DestinationAppsForMigrationPaths = [string]::Join(',',@(
+    "C:\Applications\System Application\Source\Microsoft_System Application.app"
     $baseAppFile
     $appFile
-    "C:\\Applications\\TestFramework\\TestLibraries\\Assert\\Microsoft\_Library Assert.app"
-    "C:\\Applications\\BaseApp\\Test\\Microsoft\_Tests-Upgrade.app"
+    "C:\Applications\TestFramework\TestLibraries\Assert\Microsoft_Library Assert.app"
+    "C:\Applications\BaseApp\Test\Microsoft_Tests-Upgrade.app"
 ))
 
 $ThirdPartyAppPaths = "$bingMaps15appFile"
@@ -404,10 +425,10 @@ $ThirdPartyAppPaths = "$bingMaps15appFile"
 $destinationAppsForMigrationJson = Invoke-ScriptInBCContainer -containerName $dev15containerName -scriptblock { Param($paths)
     $destinationAppsForMigration = @()
     $paths.Split(',') | % {
-        if ($\_) {
-            Write-Host "Destination App $\_"
-            $info = Get-NavAppInfo -Path "$\_"
-            $destinationAppsForMigration += @(\[ordered\]@{ "appId" = $info.AppId.Value; "name" = $info.Name; "publisher" = $info.Publisher })
+        if ($_) {
+            Write-Host "Destination App $_"
+            $info = Get-NavAppInfo -Path "$_"
+            $destinationAppsForMigration += @([ordered]@{ "appId" = $info.AppId.Value; "name" = $info.Name; "publisher" = $info.Publisher })
         }
     }
     $destinationAppsForMigration | ConvertTo-Json -Depth 99 -Compress
@@ -418,49 +439,51 @@ $setupDatabaseScript = @'
 if (!$restartingInstance) {
     $databaseServerInstance = $databaseServer
     if ("$databaseInstance" -ne "") {
-        $databaseServerInstance += "\\$databaseInstance"
+        $databaseServerInstance += "\$databaseInstance"
     }
     Write-Host "Invoke Database Conversion"
     Invoke-NAVApplicationDatabaseConversion -databaseServer $databaseServerInstance -ApplicationDatabaseCredentials $databaseCredentials -databasename $databaseName -force | Out-Null
 }
-. "c:\\run\\SetupDatabase.ps1"
+. "c:\run\SetupDatabase.ps1"
 '@
 
 # Override SetupConfiguration to set DestinationAppsForMigration. Cannot be done with CustomNavSettings as the value contains commas
 $setupConfigurationScript = @"
-. "c:\\run\\SetupConfiguration.ps1"
-if (!\`$restartingInstance) {
-    Set-NAVServerConfiguration -ServerInstance \`$ServerInstance -KeyName 'DestinationAppsForMigration' -KeyValue '$destinationAppsForMigrationJson' -WarningAction SilentlyContinue | Out-Null
-    Set-NAVServerConfiguration -ServerInstance \`$ServerInstance -KeyName 'IntegrationRecordsTableId' -KeyValue '5151' -WarningAction SilentlyContinue | Out-Null
+. "c:\run\SetupConfiguration.ps1"
+if (!`$restartingInstance) {
+    Set-NAVServerConfiguration -ServerInstance `$ServerInstance -KeyName 'DestinationAppsForMigration' -KeyValue '$destinationAppsForMigrationJson' -WarningAction SilentlyContinue | Out-Null
+    Set-NAVServerConfiguration -ServerInstance `$ServerInstance -KeyName 'IntegrationRecordsTableId' -KeyValue '5151' -WarningAction SilentlyContinue | Out-Null
 }
 "@
 
-New-BCContainer \`
-    -accept\_eula \`
-    -accept\_outdated \`
-    -containerName $prodContainerName \`
-    -imageName $imageName \`
-    -updateHosts \`
-    -auth UserPassword \`
-    -Credential $credential \`
-    -databaseServer $dbServer \`
-    -databaseInstance $dbInstance \`
-    -databaseName $dbName \`
-    -databaseCredential $dbcredentials \`
-    -enableTaskScheduler:$false \`
-    -memoryLimit 16G \`
-    -doNotUseRuntimePackages \`
+New-BCContainer `
+    -accept_eula `
+    -accept_outdated `
+    -containerName $prodContainerName `
+    -imageName $imageName `
+    -updateHosts `
+    -auth UserPassword `
+    -Credential $credential `
+    -databaseServer $dbServer `
+    -databaseInstance $dbInstance `
+    -databaseName $dbName `
+    -databaseCredential $dbcredentials `
+    -enableTaskScheduler:$false `
+    -memoryLimit 16G `
+    -doNotUseRuntimePackages `
     -myscript @( @{ 
         "SetupDatabase.ps1" = $setupDatabaseScript
         "SetupConfiguration.ps1" = $setupConfigurationScript
     })
+```
 
 # The data upgrade
 
 Steps 5 to 13, which performs the actual upgrade, is performed by running a script inside the container.
 
+```
 Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Param($SystemSymbolsPath, $DestinationAppsForMigrationPaths, $ThirdPartyAppPaths)
-    function Invoke-DataUpgrade(\[switch\] $SkipCompanyInitialization, \[string\] $TenantId )
+    function Invoke-DataUpgrade([switch] $SkipCompanyInitialization, [string] $TenantId )
     {
         Write-Host "Running Data upgrade for tenant $tenantId"
         # We will collect information about all errors at once thanks to -ContinueOnError switch
@@ -481,9 +504,9 @@ Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Para
         # Stop the suspended process - we won't resume in here
         Stop-NAVDataUpgrade -ServerInstance $ServerInstance -Tenant $TenantId -Force -ErrorAction Stop
 
-        $errorMessage = "Errors occured during Data Upgrade Process: " + \[System.Environment\]::NewLine
+        $errorMessage = "Errors occured during Data Upgrade Process: " + [System.Environment]::NewLine
         foreach ($nextErrorRecord in $errors) {
-            $errorMessage += ("Codeunit ID: " + $nextErrorRecord.CodeunitId + ", Function: " + $nextErrorRecord.FunctionName + ", Error: " + $nextErrorRecord.Error + \[System.Environment\]::NewLine)
+            $errorMessage += ("Codeunit ID: " + $nextErrorRecord.CodeunitId + ", Function: " + $nextErrorRecord.FunctionName + ", Error: " + $nextErrorRecord.Error + [System.Environment]::NewLine)
         }
         Write-Error $errorMessage
     }
@@ -493,7 +516,7 @@ Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Para
 
     # Publish Migration Apps
     $DestinationAppsForMigrationPaths.Split(',') | % {
-        $appPath = $\_
+        $appPath = $_
         Write-Host "Publishing app - $appPath"
         Publish-NAVApp -Path $appPath -ServerInstance $ServerInstance -PackageType Extension -SkipVerification
     }
@@ -505,7 +528,7 @@ Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Para
     Write-Host "Synchronizing tenants"
     $availableTenants = Get-NAVTenant -ServerInstance $ServerInstance
     $availableTenants | % {
-        $tenantId = $\_.Id
+        $tenantId = $_.Id
         Write-Host "Synchronizing tenant $tenantId"
         Sync-NavTenant -ServerInstance $ServerInstance -Tenant $tenantId -Force
     }
@@ -513,9 +536,9 @@ Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Para
     # Sync Migration apps
     # We move tables and generate SystemIds here
     $DestinationAppsForMigrationPaths.Split(',') | % {
-        $appPath = $\_
+        $appPath = $_
         $availableTenants | % {
-            $tenantId = $\_.Id
+            $tenantId = $_.Id
             $info = Get-NavAppInfo -Path $appPath
             Write-Host "Synchronizing $($info.Name) for tenant $tenantId"
             Sync-NAVApp -Name $info.Name -ServerInstance $ServerInstance -Tenant $tenantId 
@@ -524,7 +547,7 @@ Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Para
 
     # Verify if all extensions were moved and metedata is correct
     $availableTenants | % {
-        $tenantId = $\_.Id
+        $tenantId = $_.Id
         Write-Host "Testing Database Schema for tenant $tenantId"
         Test-NAVTenantDatabaseSchema -ServerInstance $ServerInstance -Tenant $tenantId
     }
@@ -532,23 +555,23 @@ Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Para
     # Invoke Data upgrade
     # This cmdlet will automatically install and upgrade all of the extensions listed in DestinationAppsForMigration
     $availableTenants | % {
-        $tenantId = $\_.Id
+        $tenantId = $_.Id
         # Calling upgrade will install DestinationAppsForMigration during upgrade. OnInstall triggers will not be invoked in this mode.
         Invoke-DataUpgrade -Tenant $tenantId
     }
 
     #Publish and upgrade other extensions
     $ThirdPartyAppPaths.Split(',') | % {
-        $appPath = $\_
+        $appPath = $_
         Write-Host "Publishing app - $appPath"
         Publish-NAVApp -Path $appPath -ServerInstance $ServerInstance -PackageType Extension -SkipVerification
     }
 
     # Sync all third party extensions
     $ThirdPartyAppPaths.Split(',') | % {
-        $appPath = $\_
+        $appPath = $_
         $availableTenants | % {
-            $tenantId = $\_.Id
+            $tenantId = $_.Id
             $info = Get-NavAppInfo -Path $appPath
             Write-Host "Synchronizing $($info.Name) for tenant $tenantId"
             Sync-NAVApp -Name $info.Name -ServerInstance $ServerInstance -Tenant $tenantId 
@@ -557,15 +580,16 @@ Invoke-ScriptInBCContainer -containerName $prodContainerName -scriptblock { Para
 
     # Upgrade all third party extensions
     $ThirdPartyAppPaths.Split(',') | % {
-        $appPath = $\_
+        $appPath = $_
         $availableTenants | % {
-            $tenantId = $\_.Id
+            $tenantId = $_.Id
             $info = Get-NavAppInfo -Path $appPath
             Write-Host "Upgrading $($info.Name) for tenant $($tenantId)"
             Start-NAVAppDataUpgrade -Name $info.Name -ServerInstance $ServerInstance -Tenant $tenantId -Force
         }
     }
 } -argumentList $SystemSymbolsPath, $DestinationAppsForMigrationPaths, $ThirdPartyAppPaths
+```
 
 There you are – opening the Web Client and looking at our data reveals that, customizations, apps and data has been transferred:
 
@@ -575,8 +599,10 @@ There you are – opening the Web Client and looking at our data reveals that, c
 
 Last but not least, lets import the test toolkit and run the upgrade tests.
 
+```
 Import-TestToolkitToBCContainer -containerName $prodContainerName -includeTestLibrariesOnly -doNotUseRuntimePackages
 Run-TestsInBCContainer -containerName $prodContainerName -extensionId "d0e99b97-089b-449f-a0f5-a2ab994dbfd7" -detailed -credential $credential
+```
 
 Looking at the extensions installed reveals my new base app version 15.1 (named the same as Microsofts), the BingMaps app, MyApp and all the Test Apps:
 

@@ -39,12 +39,13 @@ You can download and install the latest version of git here: [https://git-scm.c
 
 or you can run this small piece of PowerShell script:
 
+```
 function Install-Git
 {
-    $gitexe = "C:\\Program Files\\Git\\bin\\git.exe"
+    $gitexe = "C:\Program Files\Git\bin\git.exe"
     if (!(Test-Path -Path $gitexe -PathType Leaf)) {
         $url = "https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.1/Git-2.11.0-64-bit.exe"
-        $downloadFolder = "C:\\DOWNLOAD"
+        $downloadFolder = "C:\DOWNLOAD"
         New-Item -Path $downloadFolder -ItemType Directory -ErrorAction Ignore | Out-Null
         $filename = ("$downloadFolder"+$url.Substring($url.LastIndexOf("/")+1))
         $WebClient = New-Object System.Net.WebClient
@@ -54,6 +55,7 @@ function Install-Git
     $gitexe
 }
 $gitexe = Install-Git
+```
 
 It might seem cumbersome to use PowerShell for this, but in the end, this will become another installation script on the VM in CU2 – so it kind of needs to be there.
 
@@ -61,11 +63,13 @@ It might seem cumbersome to use PowerShell for this, but in the end, this will b
 
 Having installed git, we can now start git and clone the project containing sample code for NAV 2017. We can also just run this small piece of PowerShell script:
 
-$documentsFolder = \[environment\]::getfolderpath(“mydocuments”)
+```
+$documentsFolder = [environment]::getfolderpath("mydocuments")
 $perfFolder = "$documentsFolderNAVPERF"
 New-Item $perfFolder -ItemType Directory -ErrorAction Ignore | Out-Null
 $nav2017sampleUrl = "https://github.com/NAVPERF/NAV2017-Sample"
 Start-Process $gitexe -WorkingDirectory $perfFolder -ArgumentList @("clone", $nav2017sampleUrl) -Wait -PassThru | Out-Null
+```
 
 and you will now have the sample project in the _NAVPERF_ folder under _My Documents_.
 
@@ -77,24 +81,26 @@ Of course, we do that in PowerShell as well.
 
 **Note**: This code will not work unless you are running on an Azure Gallery Image.
 
-\# Find NAV Version
-$DVDfolder = (Get-ChildItem -Path "C:\\NAVDVD" -Directory | where-object { Test-Path -Path (Join-Path $\_.FullName "WindowsPowerShellScripts") -PathType Container } | Select-Object -First 1).FullName
-$NavVersion = (Get-ChildItem -Path "c:\\program files\\Microsoft Dynamics NAV" -Directory | Select-Object -Last 1).Name
+```
+# Find NAV Version
+$DVDfolder = (Get-ChildItem -Path "C:\NAVDVD" -Directory | where-object { Test-Path -Path (Join-Path $_.FullName "WindowsPowerShellScripts") -PathType Container } | Select-Object -First 1).FullName
+$NavVersion = (Get-ChildItem -Path "c:\program files\Microsoft Dynamics NAV" -Directory | Select-Object -Last 1).Name
 # Find Public WebBase Url for Username/Password endpoint
-$CustomSettingsConfigFile = "c:\\program files\\Microsoft Dynamics NAV\\$NavVersion\\Service\\CustomSettings.config"
-$config = \[xml\](Get-Content $CustomSettingsConfigFile)
-$PublicWebBaseUrl = $config.SelectSingleNode("//appSettings/add\[@key='PublicWebBaseUrl'\]").value.Replace('/AAD/','/NAV/')
+$CustomSettingsConfigFile = "c:\program files\Microsoft Dynamics NAV\$NavVersion\Service\CustomSettings.config"
+$config = [xml](Get-Content $CustomSettingsConfigFile)
+$PublicWebBaseUrl = $config.SelectSingleNode("//appSettings/add[@key='PublicWebBaseUrl']").value.Replace('/AAD/','/NAV/')
 if ($PublicWebBaseUrl -ne "") {
-    . "c:\\demo\\multitenancy\\hardcodeinput.ps1"
+    . "c:\demo\multitenancy\hardcodeinput.ps1"
     # Modify app.config
     $appConfigFile = "$perfFolderNAV2017-SampleMicrosoft.Dynamics.Nav.LoadTestapp.config"
-    $appConfig = \[xml\](Get-Content $appConfigFile)
-    $appConfig.SelectSingleNode("//configuration/applicationSettings/Microsoft.Dynamics.Nav.LoadTest.Properties.Settings/setting\[@name='NAVClientService'\]").value = ($PublicWebBaseUrl.Replace('/AAD/','/NAV/')+'cs')
-    $appConfig.SelectSingleNode("//configuration/applicationSettings/Microsoft.Dynamics.Nav.LoadTest.Properties.Settings/setting\[@name='NAVUserName'\]").value = $NavAdminUser
-    $appConfig.SelectSingleNode("//configuration/applicationSettings/Microsoft.Dynamics.Nav.LoadTest.Properties.Settings/setting\[@name='NAVUserPassword'\]").value = $NavAdminPassword
-    $appConfig.SelectSingleNode("//configuration/applicationSettings/Microsoft.Dynamics.Nav.LoadTest.Properties.Settings/setting\[@name='UseWindowsAuthentication'\]").value = "False"
+    $appConfig = [xml](Get-Content $appConfigFile)
+    $appConfig.SelectSingleNode("//configuration/applicationSettings/Microsoft.Dynamics.Nav.LoadTest.Properties.Settings/setting[@name='NAVClientService']").value = ($PublicWebBaseUrl.Replace('/AAD/','/NAV/')+'cs')
+    $appConfig.SelectSingleNode("//configuration/applicationSettings/Microsoft.Dynamics.Nav.LoadTest.Properties.Settings/setting[@name='NAVUserName']").value = $NavAdminUser
+    $appConfig.SelectSingleNode("//configuration/applicationSettings/Microsoft.Dynamics.Nav.LoadTest.Properties.Settings/setting[@name='NAVUserPassword']").value = $NavAdminPassword
+    $appConfig.SelectSingleNode("//configuration/applicationSettings/Microsoft.Dynamics.Nav.LoadTest.Properties.Settings/setting[@name='UseWindowsAuthentication']").value = "False"
     $appConfig.Save($appConfigFile)
 }
+```
 
 Now all should be ready, we just need to start VS.
 
@@ -102,7 +108,9 @@ Now all should be ready, we just need to start VS.
 
 Starting Visual Studio can be done by launching the .sln file.
 
+```
 & "$perfFolderNAV2017-SampleMicrosoft.Dynamics.Nav.LoadTest.sln"
+```
 
 You will need to sign in to Visual Studio (or say not now) and specify your color scheme, but after that you should be good to go.
 

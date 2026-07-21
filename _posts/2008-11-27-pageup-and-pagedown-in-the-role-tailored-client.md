@@ -43,11 +43,13 @@ Close the properties and hit F9 to modify the code for the actions. Unfortunatel
 
 and the following code
 
-**<Action5> – OnAction()  
-**newrec.SETPOSITION(GETPOSITION());  
-newpage.SETRECORD(newrec);  
-//newpage.SetViewFromList(GETVIEW(true));  
+```
+<Action5> – OnAction()
+newrec.SETPOSITION(GETPOSITION());
+newpage.SETRECORD(newrec);
+//newpage.SetViewFromList(GETVIEW(true));
 newpage.RUN();
+```
 
 Note, that the SetViewFromList method call is out commented – we haven’t created this function yet on the Sales Order page, so this function more or less does exactly the same as the normal Edit function – open the Sales Order page with the currently selected record.
 
@@ -65,18 +67,22 @@ Reason for the include in dataset is that it now can be used in the property exp
 
 Also create a function called SetViewFromList like this
 
-**SetViewFromList(ViewFromList : Text\[250\])**  
+```
+SetViewFromList(ViewFromList : Text[250])
 View := ViewFromList;
+```
 
 We could also insert the following lines to our OnOpenPage (as the first lines)
 
-IF View <> ” THEN BEGIN  
-CurrPage.CAPTION := View;  
+```
+IF View <> " THEN BEGIN
+CurrPage.CAPTION := View;
 END;
+```
 
 Having done this, and saved (with compile) the Sales Order page, we can go back to the Edit All action and remove the comment from the line
 
-newpage.SetViewFromList(GETVIEW(true));
+`newpage.SetViewFromList(GETVIEW(true));`
 
 Save and run.
 
@@ -106,16 +112,18 @@ Before adding in the code for these actions we create another global function ca
 
 and the following code
 
-**NextPrev(Ascending : Boolean)  
-**newrec.SETVIEW(View);  
-newrec.SETPOSITION(Rec.GETPOSITION());  
-newrec.ASCENDING(Ascending);  
-newrec.NEXT(1);  
-IF Rec.GETPOSITION() = newrec.GETPOSITION() THEN EXIT;  
-CurrPage.CLOSE();  
-newpage.SetViewFromList(View);  
-newpage.SETRECORD(newrec);  
+```
+NextPrev(Ascending : Boolean)
+newrec.SETVIEW(View);
+newrec.SETPOSITION(Rec.GETPOSITION());
+newrec.ASCENDING(Ascending);
+newrec.NEXT(1);
+IF Rec.GETPOSITION() = newrec.GETPOSITION() THEN EXIT;
+CurrPage.CLOSE();
+newpage.SetViewFromList(View);
+newpage.SETRECORD(newrec);
 newpage.RUN();
+```
 
 Basically what we do is to locate the next record (ascending or descending) that matches the filter – and if this record is different from the current record – it closes the current page and opens a new page with the next or previous record (it is not possible to change the current record on a page).
 
@@ -123,11 +131,15 @@ It also transfers the View to the next page, so that Next and Previous still wor
 
 The code for the actions should be straight forward
 
-**<Action3> – OnAction()**  
+```
+<Action3> – OnAction()
 NextPrev(TRUE);
+```
 
-**<Action5> – OnAction()  
-**NextPrev(FALSE);
+```
+<Action5> – OnAction()
+NextPrev(FALSE);
+```
 
 Save, Compile and run the Role Tailored Client.
 

@@ -15,54 +15,68 @@ Well some times we forget and some times hackers to get access to files on your 
 
 Yes, I have of course done this myself.
 
-How many people are aware that for more than a year, the nugetkey for publishing modules in my name to the PowerShell Gallery was actually part of NavContainerHelper. Just have a look in the settings.ps1 file in version 0.6.0.0 of NavContainerHelper ([PowerShell Gallery | settings.ps1 0.6.0.0](https://www.powershellgallery.com/packages/navcontainerhelper/0.6.0.0/Content/settings.ps1)) – a nice and clear text nugetkey. The settings file was only on my build machine and was never checked into the depot, so I thought I was safe. I just didn’t know that Publishing PowerShell packages took all files in the folder. When I found out, I changed the key and checked whether the key was ever misused – it wasn’t.
+How many people are aware that for more than a year, the nugetkey for publishing modules in my name to the PowerShell Gallery was actually part of NavContainerHelper. Just have a look in the settings.ps1 file in version 0.6.0.0 of NavContainerHelper ([PowerShell Gallery \| settings.ps1 0.6.0.0](https://www.powershellgallery.com/packages/navcontainerhelper/0.6.0.0/Content/settings.ps1)) – a nice and clear text nugetkey. The settings file was only on my build machine and was never checked into the depot, so I thought I was safe. I just didn’t know that Publishing PowerShell packages took all files in the folder. When I found out, I changed the key and checked whether the key was ever misused – it wasn’t.
 
 # My solution
 
 I use a KeyVault for my secrets and it is almost as easy as writing the secret directly in the source code. Using the Az PowerShell module, I have created a KeyVault like this:
 
-New-AzKeyVault \`
-    -ResourceGroupName "freddyk" \`
-    -Name "FreddysSecrets" \`
+```
+New-AzKeyVault `
+    -ResourceGroupName "freddyk" `
+    -Name "FreddysSecrets" `
     -Location "West Europe"
+```
 
 This creates a KeyVault for me to access.
 
 Storing a password in my KeyVault, I can do it like this:
 
-Set-AzKeyVaultSecret \`
-    -VaultName "FreddysSecrets" \`
-    -Name "Password" \`
+```
+Set-AzKeyVaultSecret `
+    -VaultName "FreddysSecrets" `
+    -Name "Password" `
     -SecretValue (ConvertTo-SecureString 'P@ssw0rd' -AsPlainText -Force)
+```
 
 All my scripts then starts with this code:
 
+```
 if (!($PasswordSecret)) {
     Get-AzKeyVaultSecret "FreddysSecrets" | % {
-        Write-Host $\_.Name
-        Set-Variable \`
-            -Name "$($\_.Name)Secret" \`
-            -Value (Get-AzKeyVaultSecret "FreddysSecrets" -Name $\_.Name)
+        Write-Host $_.Name
+        Set-Variable `
+            -Name "$($_.Name)Secret" `
+            -Value (Get-AzKeyVaultSecret "FreddysSecrets" -Name $_.Name)
     }
 }
+```
 
 which ends up giving me a variable called
 
+```
 $passwordSecret
+```
 
 in the current session.
 
 In my script, I can now use the secret value as a secretString by specifying:
 
+```
 $passwordSecret.SecretValue
+```
 
 or if I need it as a string, I can use
 
+```
 $passwordSecret.SecretValueText
+```
 
 I have read that SecretValueText has been deprecated in the latest Az PowerShell module, so I have added a function in the next BcContainerHelper called Get-PlainText, which I can use like this:
 
+```
 ($passwordSecret.SecretValue | Get-PlainText)
+```
 
 Not sure this was what they had in mind, but some of these secrets (like licensefile) are to be transferred in clear text to the functions, and the construct to convert securestring to plain text is just not something I can remember every time I need it.
 

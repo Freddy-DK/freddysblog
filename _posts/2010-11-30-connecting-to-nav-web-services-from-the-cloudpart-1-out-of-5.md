@@ -80,8 +80,10 @@ Add a Service Reference to the URL: [sb://navdemo.servicebus.windows.net/Proxy1/
 
 Write the following two lines of code:
 
-var client = new Proxy1.ProxyClassClient("NetTcpRelayBinding\_IProxyClass"); 
+```
+var client = new Proxy1.ProxyClassClient("NetTcpRelayBinding_IProxyClass"); 
 Console.WriteLine(client.GetCustomerName("10000"));
+```
 
 Run the application and you should get:
 

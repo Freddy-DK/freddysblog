@@ -46,20 +46,21 @@ If you like, you can follow along in the process with this demo solution before 
 
 On a machine with the latest NavContainerHelper installed, I run this script:
 
-\# Settings
+```
+# Settings
 $auth = "NavUserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-$licenseFile = "C:\\temp\\license.flf"
-$demoSolutionPath = "C:\\ProgramData\\NavContainerHelper\\DemoSolution.txt"
+$licenseFile = "C:\temp\license.flf"
+$demoSolutionPath = "C:\ProgramData\NavContainerHelper\DemoSolution.txt"
 
 # Create NAV 2017 CU3 NA
-New-NavContainer -accept\_eula \`
-                 -imageName "mcr.microsoft.com/dynamicsnav:2017-cu3-na" \`
-                 -containerName "nav2017" \`
-                 -licenseFile $licenseFile \`
-                 -auth $auth \`
-                 -Credential $Credential \`
-                 -updateHosts \`
+New-NavContainer -accept_eula `
+                 -imageName "mcr.microsoft.com/dynamicsnav:2017-cu3-na" `
+                 -containerName "nav2017" `
+                 -licenseFile $licenseFile `
+                 -auth $auth `
+                 -Credential $Credential `
+                 -updateHosts `
                  -includeCSide
 #
 # Import and compile objects
@@ -69,6 +70,7 @@ if (!(Test-Path $demoSolutionPath)) {
 }
 Import-ObjectsToNavContainer -containerName "nav2017" -objectsFile $demoSolutionPath
 Compile-ObjectsInNavContainer -containerName "nav2017" -filter "Modified=Yes"
+```
 
 Now, I have a set of shortcuts on my desktop and I can start the Windows Client or the Web Client and see my NAV 2017 solution.
 
@@ -82,7 +84,9 @@ There might even be newer technologies since then, but the essence is clear – 
 
 I will run the following command to generate the deltas for my solution from NAV 2017:
 
+```
 Export-ModifiedObjectsAsDeltas -containerName "nav2017" -openFolder
+```
 
 This will open a folder with the my modifications:![Screenshot 2019-04-13 22.38.37](/assets/images/2019/c-al-to-al-preparations/screenshot-2019-04-13-22.38.37.png)
 
@@ -94,25 +98,27 @@ In NAV 2017, I will remove my changes in Codeunit 1 to an event subscriber on On
 
 After having refactored the necessary deltas, I will run this code to create a Business Central container and import my deltas.
 
-\# Settings
+```
+# Settings
 $imageName = "mcr.microsoft.com/businesscentral/onprem:1904-rtm"
 $auth = "NavUserPassword"
 $credential = New-Object pscredential 'admin', (ConvertTo-SecureString -String 'P@ssword1' -AsPlainText -Force)
-$licenseFile = "C:\\temp\\license.flf"
+$licenseFile = "C:\temp\license.flf"
 
 # Create Business Central container
-New-NavContainer -accept\_eula \`
-                 -imageName $imageName \`
-                 -containerName "bc" \`
-                 -licenseFile "C:\\temp\\license.flf" \`
-                 -auth $auth \`
-                 -Credential $Credential \`
-                 -updateHosts \`
+New-NavContainer -accept_eula `
+                 -imageName $imageName `
+                 -containerName "bc" `
+                 -licenseFile "C:\temp\license.flf" `
+                 -auth $auth `
+                 -Credential $Credential `
+                 -updateHosts `
                  -includeCSide
 
 # Import and compile Deltas
-Import-DeltasToNavContainer -containerName "bc" -deltaFolder "C:\\ProgramData\\NavContainerHelper\\Extensions\\nav2017\\delta"
+Import-DeltasToNavContainer -containerName "bc" -deltaFolder "C:\ProgramData\NavContainerHelper\Extensions\nav2017\delta"
 Compile-ObjectsInNavContainer -containerName "bc" -filter "Modified=Yes"
+```
 
 After the conversion, I will have to change the event publisher on the OnAfterCompanyOpen to codeunit 40 instead of codeunit 1.
 
@@ -120,7 +126,9 @@ As part of this conversion, I need to make sure that everything works, all tests
 
 After this – I remove my NAV 2017 container
 
+```
 Remove-NavContainer -containerName nav2017
+```
 
 and now I am ready for the next step which is the actual move to AL.
 

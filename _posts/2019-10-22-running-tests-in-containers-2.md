@@ -29,14 +29,16 @@ In order to run these scenarios you need **NavContainerHelper 0.6.4.14** or late
 
 If you have all your tests in the DEFAULT test suite, you want to run them all and collect the results, you can do this like:
 
+```
 $containerName = "test"
-$xunitResultsFile = "c:\\programdata\\navcontainerhelper\\results.xml"
-Run-TestsInBCContainer \`
-    -containerName $containerName \`
-    -credential $credential \`
-    -testSuite 'DEFAULT' \`
-    -detailed \`
+$xunitResultsFile = "c:\programdata\navcontainerhelper\results.xml"
+Run-TestsInBCContainer `
+    -containerName $containerName `
+    -credential $credential `
+    -testSuite 'DEFAULT' `
+    -detailed `
     -XUnitResultFileName $xunitResultsFile
+```
 
 The **\-detailed** flag only affects what is written as information on the host and will print information about every test whether they succeeded or failed. Without -detailed, only failing tests will be explicitly printed.
 
@@ -46,21 +48,23 @@ The **\-xunitResultFileName** specifies the filename in which you want to write 
 
 If you want to re-run failing tests, you can do so by reading the xunit results file and re-running the codeunits, which included failing tests:
 
+```
 $containerName = "test"
-$xunitResultsFile = "c:\\programdata\\navcontainerhelper\\results.xml"
-$xunitResults = \[xml\](Get-Content -Path $xunitResultsFile)
-$xunitResults.assemblies.assembly | Where-Object { $\_.Failed -ne "0" } | ForEach-Object {
-    Write-Host "Rerun $($\_.Name)"
-    $codeunitId = $\_.Name.Split(' ')\[0\]
-    Run-TestsInBCContainer \`
-        -containerName $containerName \`
-        -credential $credential \`
-        -testSuite 'DEFAULT' \`
-        ​-detailed \`
-        -xUnitResultFileName $xunitResultsFile \`
-        -ReRun \`
+$xunitResultsFile = "c:\programdata\navcontainerhelper\results.xml"
+$xunitResults = [xml](Get-Content -Path $xunitResultsFile)
+$xunitResults.assemblies.assembly | Where-Object { $_.Failed -ne "0" } | ForEach-Object {
+    Write-Host "Rerun $($_.Name)"
+    $codeunitId = $_.Name.Split(' ')[0]
+    Run-TestsInBCContainer `
+        -containerName $containerName `
+        -credential $credential `
+        -testSuite 'DEFAULT' `
+        ​-detailed `
+        -xUnitResultFileName $xunitResultsFile `
+        -ReRun `
         -testCodeunit $codeunitId
 }
+```
 
 Specifying **\-rerun** means that the xunitResultsfile will not be deleted and instead the result of this test run will replace the result already written in the results file.
 
@@ -70,23 +74,25 @@ Specifying **\-testCodeunit** means that this test run will only execute codeuni
 
 If you want to run your tests one codeunit at a time instead of having one long running Run-Tests function, you can use Get-Tests to get the test codeunits and execute the codeunits one by one:
 
+```
 $containerName = "test"
-$xunitResultsFile = "c:\\programdata\\navcontainerhelper\\results.xml"
-$tests = Get-TestsFromBCContainer \`
-    -containerName $containerName \`
-    -credential $credential \`
-    -testSuite 'DEFAULT' \`
+$xunitResultsFile = "c:\programdata\navcontainerhelper\results.xml"
+$tests = Get-TestsFromBCContainer `
+    -containerName $containerName `
+    -credential $credential `
+    -testSuite 'DEFAULT' `
     -ignoreGroups
 $first = $true
 $tests | ForEach-Object {
-    Run-TestsInBCContainer \`
-        -containerName $containerName \`
-        -credential $credential \`
-        -XUnitResultFileName $xunitResultsFile \`
-        -AppendToXUnitResultFile:(!$first) \`
-        -testCodeunit $\_.Id
+    Run-TestsInBCContainer `
+        -containerName $containerName `
+        -credential $credential `
+        -XUnitResultFileName $xunitResultsFile `
+        -AppendToXUnitResultFile:(!$first) `
+        -testCodeunit $_.Id
     $first = $false
 }
+```
 
 Calling **Get-TestsInBCContainer** will enumerate all test codeunits and return them in an array of HashTables.
 
@@ -98,39 +104,41 @@ The **\-appendToXUnitResultFile** on Run-Tests will signal to the function that 
 
 When running one codeunit at a time, you can re-run test codeunits like earlier by reading the results file and re-running failed codeunits. If you don’t want to do this, you can also do this:
 
+```
 $containerName = "test"
-$xunitResultsFile = "c:\\programdata\\navcontainerhelper\\results.xml"
-$tests = Get-TestsFromBCContainer \`
-    -containerName $containerName \`
-    -credential $credential \`
-    -testSuite 'DEFAULT' \`
+$xunitResultsFile = "c:\programdata\navcontainerhelper\results.xml"
+$tests = Get-TestsFromBCContainer `
+    -containerName $containerName `
+    -credential $credential `
+    -testSuite 'DEFAULT' `
     -ignoreGroups
 $rerunTests = @()
 $failedTests = @()
 $first = $true
 $tests | ForEach-Object {
-    if (-not (Run-TestsInBcContainer \`
-        -containerName $containerName \`
-        -credential $credential \`
-        -XUnitResultFileName $TempTestResultFile \`
-        -AppendToXUnitResultFile:(!$first) \`
-        -testCodeunit $\_.Id \`
-        -returnTrueIfAllPassed)) { $rerunTests += $\_ }
+    if (-not (Run-TestsInBcContainer `
+        -containerName $containerName `
+        -credential $credential `
+        -XUnitResultFileName $TempTestResultFile `
+        -AppendToXUnitResultFile:(!$first) `
+        -testCodeunit $_.Id `
+        -returnTrueIfAllPassed)) { $rerunTests += $_ }
     $first = $false
 }
 if ($rerunTests.Count -gt) {
     Restart-BCContainer -containerName $containerName
     $rerunTests | ForEach-Object {
-        if (-not (Run-TestsInBcContainer \`
-            -containerName $containerName \`
-            -credential $credential \`
-            -XUnitResultFileName $TempTestResultFile \`
-            -AppendToXUnitResultFile:(!$first) \`
-            -testCodeunit $\_.Id \`
-            -returnTrueIfAllPassed { $failedTests += $\_ }
+        if (-not (Run-TestsInBcContainer `
+            -containerName $containerName `
+            -credential $credential `
+            -XUnitResultFileName $TempTestResultFile `
+            -AppendToXUnitResultFile:(!$first) `
+            -testCodeunit $_.Id `
+            -returnTrueIfAllPassed { $failedTests += $_ }
         $first = $false
     }
 }
+```
 
 Normally Run-Tests doesn’t return any value, but if you specify **\-returnTrueIfAllPassed**, then the function will return **$true if all tests in the codeunit passed** or $false if just one test was failing. We can use this to pickup the codeunits we want to re-run.
 
@@ -140,15 +148,17 @@ When running tests in a pipeline, we will typically publish the XUnit test resul
 
 ![pipeline](/assets/images/2019/running-tests-in-containers-2/pipeline.png)
 
+```
 $containerName = "test"
-$xunitResultsFile = "c:\\programdata\\navcontainerhelper\\results.xml"
-Run-TestsInBCContainer \`
-    -containerName $containerName \`
-    -credential $credential \`
-    -testSuite 'DEFAULT' \`
-    -detailed \`
-    -XUnitResultFileName $xunitResultsFile \`
+$xunitResultsFile = "c:\programdata\navcontainerhelper\results.xml"
+Run-TestsInBCContainer `
+    -containerName $containerName `
+    -credential $credential `
+    -testSuite 'DEFAULT' `
+    -detailed `
+    -XUnitResultFileName $xunitResultsFile `
     -AzureDevOps "warning"
+```
 
 You can specify **error**, **warning** or **no** to **\-azureDevOps** which will cause the pipeline to fail, warn or ignore test failures at this point.
 
@@ -164,15 +174,17 @@ If you are running Business Central 15 and beyond we do not recommend that anymo
 
 Instead you can split your tests in separate test apps and run them individually by specifying the app id to Run-Tests:
 
+```
 $containerName = "test"
-$xunitResultsFile = "c:\\programdata\\navcontainerhelper\\Tests-ERM-results.xml"
-$app = Get-NavContainerAppInfo $containerName | Where-Object { $\_.Name -eq "Tests-ERM" }
-Run-TestsInBCContainer \`
-    -containerName $containerName \`
-    -credential $credential \`
-    -detailed \`
-    -XUnitResultFileName $xunitResultsFile \`
+$xunitResultsFile = "c:\programdata\navcontainerhelper\Tests-ERM-results.xml"
+$app = Get-NavContainerAppInfo $containerName | Where-Object { $_.Name -eq "Tests-ERM" }
+Run-TestsInBCContainer `
+    -containerName $containerName `
+    -credential $credential `
+    -detailed `
+    -XUnitResultFileName $xunitResultsFile `
     -extensionId $app.AppId
+```
 
 The **\-extensionId** parameter should be an appId from the extension in which you want to run all tests. This way you don’t have to populate the AL Test Runner tables and it is likely that this is the way we will be running tests even when the AL Test Runner is retired. Note, that the [HelloWorld template for CI/CD](https://dev.azure.com/businesscentralapps/HelloWorld/_git/HelloWorld?path=%2Ftest&version=GBmaster) has adopted this and the test app does no longer have an install codeunit.
 
@@ -184,25 +196,27 @@ If your scope of test runs is an app and you use seperate XUnit Result files, th
 
 Like earlier, where you could run all tests in a test suite one codeunit at a time, you can do the same with test codeunits in an extension:
 
+```
 $containerName = "test"
-$xunitResultsFile = "c:\\programdata\\navcontainerhelper\\Tests-ERM-results.xml"
-$app = Get-NavContainerAppInfo $containerName | Where-Object { $\_.Name -eq "Tests-ERM" }
-$tests = Get-TestsFromBCContainer \`
-    -containerName $containerName \`
-    -credential $credential \`
-    -extensionId $app.AppId \`
+$xunitResultsFile = "c:\programdata\navcontainerhelper\Tests-ERM-results.xml"
+$app = Get-NavContainerAppInfo $containerName | Where-Object { $_.Name -eq "Tests-ERM" }
+$tests = Get-TestsFromBCContainer `
+    -containerName $containerName `
+    -credential $credential `
+    -extensionId $app.AppId `
     -ignoreGroups
 $first = $true
 $tests | ForEach-Object {
-    Run-TestsInBCContainer \`
-        -containerName $containerName \`
-        -credential $credential \`
-        -detailed \`
-        -XUnitResultFileName $xunitResultsFile \`
-        -AppendToXUnitResultFile:(!$first) \`
-        -testCodeunit $\_.Id
+    Run-TestsInBCContainer `
+        -containerName $containerName `
+        -credential $credential `
+        -detailed `
+        -XUnitResultFileName $xunitResultsFile `
+        -AppendToXUnitResultFile:(!$first) `
+        -testCodeunit $_.Id
     $first = $false
 }
+```
 
 Specifying **\-extensionId** on Get-Tests will return the tests in that extension and then you can enumerate the test codeunits and run them one by one.
 
@@ -212,19 +226,21 @@ Remember – Business Central 15.x containers and beyond.
 
 Another functionality, which is new in Business Central 15.x containers is that you can specify an array of hashtables, which describes tests that should be disabled.
 
+```
 $containerName = "test"
-$xunitResultsFile = "c:\\programdata\\navcontainerhelper\\Tests-ERM-results.xml"
-$app = Get-NavContainerAppInfo $containerName | Where-Object { $\_.Name -eq "Tests-ERM" }
-Run-TestsInBCContainer \`
-    -containerName $containerName \`
-    -credential $credential \`
-    -detailed \`
-    -XUnitResultFileName $xunitResultsFile \`
-    -extensionId $app.AppId \`
+$xunitResultsFile = "c:\programdata\navcontainerhelper\Tests-ERM-results.xml"
+$app = Get-NavContainerAppInfo $containerName | Where-Object { $_.Name -eq "Tests-ERM" }
+Run-TestsInBCContainer `
+    -containerName $containerName `
+    -credential $credential `
+    -detailed `
+    -XUnitResultFileName $xunitResultsFile `
+    -extensionId $app.AppId `
     -disabledTests @(
-        @{"CodeunitName" = "Sales Document Posting Errors"; "Method" = "\*" },
-        @{"CodeunitName" = "Purch. Document Posting Errors"; "Method" = "T002\_PostingDateIsInNotAllowedPeriodInUserSetup" }
+        @{"CodeunitName" = "Sales Document Posting Errors"; "Method" = "*" },
+        @{"CodeunitName" = "Purch. Document Posting Errors"; "Method" = "T002_PostingDateIsInNotAllowedPeriodInUserSetup" }
     )
+```
 
 The **\-disabledTests** can be an array of HashTables, which contains a **codeunitName** property and a **Method** property and in the output, you will see that disabled tests are skipped:
 
@@ -232,7 +248,9 @@ The **\-disabledTests** can be an array of HashTables, which contains a **codeun
 
 On the DVD (and in Docker) in the \\Applications\\TestFramework\\TestRunner, there is a file called DisabledTests.json. This is a list of Microsoft Tests, which are currently disabled. When you have tests, which you temporarily want to disable, you should create a file like this yourself. To Use this file as input to Run-Tests, you need to use:
 
+```
 $disabledTests = Get-Content $disabledTestsFile | ConvertFrom-Json
+```
 
 and then use -disabledTests $disabledTests.
 
