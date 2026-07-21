@@ -29,7 +29,7 @@ Functionality wise, there are still places, where Azure DevOps have more functio
 
 ## Maintaining your repository
 
-As you might remember, I wrote a blog post 1½ year ago on [how to setup CI/CD on GitHub](https://freddysblog.com/2020/11/14/using-github-for-devops/) using the HelloWorld template. This was also just 5 minutes to WOW – but then you had a copy of a repository, including a number of scripts and it was a steep learning curve to maintain, update and fix issues in your workflows.
+As you might remember, I wrote a blog post 1½ year ago on [how to setup CI/CD on GitHub](/2020/11/14/using-github-for-devops/) using the HelloWorld template. This was also just 5 minutes to WOW – but then you had a copy of a repository, including a number of scripts and it was a steep learning curve to maintain, update and fix issues in your workflows.
 
 The single biggest advantage of [AL-Go for GitHub](https://github.com/microsoft/AL-Go) is, that upgrading your repository to the latest version of [AL-Go for GitHub](https://github.com/microsoft/AL-Go) is done by running a workflow. Until you run this workflow, your repository will keep running on the version you currently have, using the version of the actions that your repo has been using all the time.
 

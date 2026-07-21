@@ -17,7 +17,7 @@ This blog post will describe how to publish/install the apps, a later blog post 
 
 # Obtaining a BcAuthContext
 
-Please read [this blog post](https://freddysblog.com/2021/01/25/bcauthcontext/) in order to learn how to authenticate to your online Business Central environment and obtain a BcAuthContext.
+Please read [this blog post](/2021/01/25/bcauthcontext/) in order to learn how to authenticate to your online Business Central environment and obtain a BcAuthContext.
 
 In the samples below, I have read the $refreshToken from a keyvault and will use that to create an auth context and run the code to perform the scenario.
 

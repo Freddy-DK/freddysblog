@@ -9,12 +9,12 @@ permalink: /2018/03/20/navcontainerhelper-use-an-external-sql-server-as-database
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you haven’t read the [first post](https://freddysblog.com/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
+If you haven’t read the [first post](/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
 
 If you have a created a SQL Server container using one of the methods described any of the blog posts:
 
--   [Create a SQL Server container with the CRONUS database from a NAV container image](https://freddysblog.com/2018/03/20/navcontainerhelper-create-a-sql-server-container-with-the-cronus-database-from-a-nav-container-image/)
--   [Create a SQL Server container and restore a .bak file](https://freddysblog.com/2018/03/20/navcontainerhelper-create-a-sql-server-container-and-restore-a-bak-file/)
+-   [Create a SQL Server container with the CRONUS database from a NAV container image](/2018/03/20/navcontainerhelper-create-a-sql-server-container-with-the-cronus-database-from-a-nav-container-image/)
+-   [Create a SQL Server container and restore a .bak file](/2018/03/20/navcontainerhelper-create-a-sql-server-container-and-restore-a-bak-file/)
 
 Then you will have the variables $databaseServer, $databaseInstance, $databaseName and $databaseCredential pointing to a database you can use to start up a NAV container. These parameters can be given directly to New-NavContainer.
 

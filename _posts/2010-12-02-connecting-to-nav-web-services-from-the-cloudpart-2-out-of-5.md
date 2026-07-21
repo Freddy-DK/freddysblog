@@ -7,7 +7,7 @@ tags: ["Add-Ins", "Azure", "Service Tier", "Servicebus", "WCF", "Web Services", 
 permalink: /2010/12/02/connecting-to-nav-web-services-from-the-cloudpart-2-out-of-5/
 ---
 
-If you haven’t already read part 1 you should do so [here](https://freddysblog.com/2010/11/30/connecting-to-nav-web-services-from-the-cloudpart-1-out-of-5/), before continuing to read this post.
+If you haven’t already read part 1 you should do so [here](/2010/11/30/connecting-to-nav-web-services-from-the-cloudpart-1-out-of-5/), before continuing to read this post.
 
 In part 1 I showed how a service reference plus two lines of code:
 

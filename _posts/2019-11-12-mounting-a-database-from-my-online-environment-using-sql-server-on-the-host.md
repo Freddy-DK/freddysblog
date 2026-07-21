@@ -9,7 +9,7 @@ permalink: /2019/11/12/mounting-a-database-from-my-online-environment-using-sql-
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-This blog post is really a combination between the last two blog posts, [https://freddysblog.com/2019/11/04/using-sql-server-on-the-host/](https://freddysblog.com/2019/11/04/using-sql-server-on-the-host/) and [https://freddysblog.com/2019/11/12/mounting-a-database-backup-from-my-online-environment-inside-a-container/](https://freddysblog.com/2019/11/12/mounting-a-database-backup-from-my-online-environment-inside-a-container/). As stated in the last blog post, you can only use databases of less than 10Gb in size inside the container due to SQL Express. This blog post will explain how to get past that problem.
+This blog post is really a combination between the last two blog posts, [https://freddysblog.com/2019/11/04/using-sql-server-on-the-host/](/2019/11/04/using-sql-server-on-the-host/) and [https://freddysblog.com/2019/11/12/mounting-a-database-backup-from-my-online-environment-inside-a-container/](/2019/11/12/mounting-a-database-backup-from-my-online-environment-inside-a-container/). As stated in the last blog post, you can only use databases of less than 10Gb in size inside the container due to SQL Express. This blog post will explain how to get past that problem.
 
 # **Please Note:** Not for production
 
@@ -17,7 +17,7 @@ _**Please note** that following this blog post will not give you an environment
 
 # Prepare yourself
 
-Please follow the steps outlined in [this blog post](https://freddysblog.com/2019/11/12/mounting-a-database-backup-from-my-online-environment-inside-a-container/) to download your database backup in .bacpac format. You should also find out what image to use and again, I recommend using the latest sandbox image for the same reasons as described.
+Please follow the steps outlined in [this blog post](/2019/11/12/mounting-a-database-backup-from-my-online-environment-inside-a-container/) to download your database backup in .bacpac format. You should also find out what image to use and again, I recommend using the latest sandbox image for the same reasons as described.
 
 # Create a multitenant container using SQL Server on the host
 

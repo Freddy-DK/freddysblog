@@ -7,7 +7,7 @@ tags: ["Azure", "Azure SQL", "Gallery", "Multitenancy", "NAV", "NAV 2017", "PERF
 permalink: /2016/12/17/perf-testing-with-multiple-users/
 ---
 
-This post is #2 in a series of posts about performance testing, please make sure you have read [this post](https://freddysblog.com/2016/12/16/so-you-want-to-get-started-on-perf-testing-huh/) first.
+This post is #2 in a series of posts about performance testing, please make sure you have read [this post](/2016/12/16/so-you-want-to-get-started-on-perf-testing-huh/) first.
 
 In the previous post, you created a NAV Virtual Machine, installed Visual Studio, install Git, Cloned the NAV 2017-Sample repository from the NAVPERF organization, configured the settings and ran the test scenarios.
 
@@ -238,7 +238,7 @@ For this, under the Run Settings, you can se a warm-up duration, which will ensu
 
 Next thing we want to do is, to either use Visual Studio Online or to move Visual Studio and the test project to a different machine.
 
-What we do is of course to spin up another NAV machine and run the scripts from [this post](https://freddysblog.com/2016/12/16/so-you-want-to-get-started-on-perf-testing-huh/) on that one. After that, we modify the _app.config_ to point to this file and of course make the changes to the project that is describes above and then the perf test with 60 users again.
+What we do is of course to spin up another NAV machine and run the scripts from [this post](/2016/12/16/so-you-want-to-get-started-on-perf-testing-huh/) on that one. After that, we modify the _app.config_ to point to this file and of course make the changes to the project that is describes above and then the perf test with 60 users again.
 
 Now we can monitor the test machine:  
 [![perfresult](/assets/images/2016/perf-testing-with-multiple-users/b555a-perfresult-1.png)](/assets/images/2016/perf-testing-with-multiple-users/b555a-perfresult.png)  [![virtualuserchart2](/assets/images/2016/perf-testing-with-multiple-users/83005-virtualuserchart2-1.png)](/assets/images/2016/perf-testing-with-multiple-users/83005-virtualuserchart2.png)

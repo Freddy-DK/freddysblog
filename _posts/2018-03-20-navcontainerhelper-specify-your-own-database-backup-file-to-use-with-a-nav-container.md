@@ -9,9 +9,9 @@ permalink: /2018/03/20/navcontainerhelper-specify-your-own-database-backup-file-
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you haven’t read the [first post](https://freddysblog.com/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
+If you haven’t read the [first post](/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
 
-If you have a database backup file (.bak), you can specify that as parameter to the container. You can specify the bakfile using a secure URL. Read [this](https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/) for information about how to create a secure url for a file.
+If you have a database backup file (.bak), you can specify that as parameter to the container. You can specify the bakfile using a secure URL. Read [this](/2017/02/26/create-a-secure-url-to-a-file/) for information about how to create a secure url for a file.
 
 ```
 $imageName = "microsoft/dynamics-nav:2018-rtm"

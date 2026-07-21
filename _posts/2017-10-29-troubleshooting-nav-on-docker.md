@@ -87,7 +87,7 @@ You cannot add options after the image name or insert options before the command
 
 ## 6\. Does the LicenseFile parameter really point to a license file?
 
-If you are using a secure Url to specify the license file, does it really yield a license file – or is it the Url to a page in which you can download the license file. If you are using DropBox (Copy DropBox Link) to create a secure Url, you will need to replace dl=0 with dl=1 like explained in [this](https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/) blog post.
+If you are using a secure Url to specify the license file, does it really yield a license file – or is it the Url to a page in which you can download the license file. If you are using DropBox (Copy DropBox Link) to create a secure Url, you will need to replace dl=0 with dl=1 like explained in [this](/2017/02/26/create-a-secure-url-to-a-file/) blog post.
 
 If you are specifying a file path to the License file, then you need to make sure, that the license file is accessible from inside the container given that file path. If f.eks. you have placed the file in **c:\\temp\\license.flf** on the docker host – and you specify that the licensefile is in c:\\hosttemp\\license.flf, then you need to insert the -v c:\\temp:c:\\hosttemp as a parameter to your docker run command, for the temp folder to be accessible from inside the container as c:\\hosttemp.
 

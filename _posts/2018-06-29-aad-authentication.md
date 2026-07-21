@@ -11,7 +11,7 @@ permalink: /2018/06/29/aad-authentication/
 
 I do not have a count of how many time somebody have asked me, e-mailed me, sent messages asking for the “old” NAVDEMODEPLOY with NAV 2018 or Business Central Sandbox Containers.
 
-What people are alluding to is really [this blog post](https://freddysblog.com/2016/11/19/one-nav-2017-on-azure-loaded-please/) – and I am happy to announce that as of today you can now do most of the steps on that list.
+What people are alluding to is really [this blog post](/2016/11/19/one-nav-2017-on-azure-loaded-please/) – and I am happy to announce that as of today you can now do most of the steps on that list.
 
 Only things missing is the SharePoint Portal and the Demo Apps. The idea is to create the SharePoint portal functionality as an App – so stay tuned…:-)
 

@@ -7,7 +7,7 @@ tags: ["AppFabric", "Authentication", "Azure", "Proxy", "Service Reference", "Se
 permalink: /2011/01/27/connecting-to-nav-web-services-from-the-cloudpart-4-out-of-5/
 ---
 
-If you haven’t already read part 3 you should do so [here](https://freddysblog.com/2011/01/27/connecting-to-nav-web-services-from-the-cloudpart-3-out-of-5/), before continuing to read this post.
+If you haven’t already read part 3 you should do so [here](/2011/01/27/connecting-to-nav-web-services-from-the-cloudpart-3-out-of-5/), before continuing to read this post.
 
 By now you have seen how to create a WCF Service Proxy connected to NAV with an endpoint hosted on the Servicebus (Windows Azure AppFabric). By now, I haven’t written anything about security yet and the Proxy1 which is hosted on the Servicebus is available for everybody to connect to anonymously.
 

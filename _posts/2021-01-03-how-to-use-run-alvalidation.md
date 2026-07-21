@@ -7,7 +7,7 @@ tags: ["BcContainerHelper", "PowerShell", "Run-AlValidation"]
 permalink: /2021/01/03/how-to-use-run-alvalidation/
 ---
 
-When releasing the first version of Run-AlValidation in BcContainerHelper, i did a quick blog post about the function [here](https://freddysblog.com/2020/12/03/run-alvalidation-and-run-alcops/). This blog post serves to explain some common scenarios of how to run the function. The blog post will also explain the parameters of Run-AlValidation a bit more in depth, for people to have a good chance of using the function before submitting for AppSource Validation.
+When releasing the first version of Run-AlValidation in BcContainerHelper, i did a quick blog post about the function [here](/2020/12/03/run-alvalidation-and-run-alcops/). This blog post serves to explain some common scenarios of how to run the function. The blog post will also explain the parameters of Run-AlValidation a bit more in depth, for people to have a good chance of using the function before submitting for AppSource Validation.
 
 ![](/assets/images/2021/how-to-use-run-alvalidation/image.png)
 

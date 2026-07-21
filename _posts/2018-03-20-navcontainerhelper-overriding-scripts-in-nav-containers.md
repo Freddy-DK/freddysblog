@@ -9,7 +9,7 @@ permalink: /2018/03/20/navcontainerhelper-overriding-scripts-in-nav-containers/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you haven’t read the [first post](https://freddysblog.com/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
+If you haven’t read the [first post](/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
 
 When building, running or restarting the NAV container, the c:\\run\\start.ps1 script is being run. This script will launch navstart.ps1, which will launch a number of other scripts (listed below in the order in which they are called from navstart.ps1). Each of these scripts exists in the c:\\run folder. If a folder called c:\\run\\my exists and a script with the same name is found in that folder, then **that** script will be executed **instead** of the script in c:\\run (called overriding scripts).
 

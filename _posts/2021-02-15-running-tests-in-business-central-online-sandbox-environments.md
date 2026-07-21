@@ -11,13 +11,13 @@ For quite some time, it has been possible to run automated tests in Docker using
 
 # Obtaining a BcAuthContext
 
-Please read [this blog post](https://freddysblog.com/2021/01/25/bcauthcontext/) in order to learn how to authenticate to your online Business Central environment and obtain a BcAuthContext.
+Please read [this blog post](/2021/01/25/bcauthcontext/) in order to learn how to authenticate to your online Business Central environment and obtain a BcAuthContext.
 
 In the samples below, I have read the $refreshToken from a keyvault and will use that to create an auth context and run the code to perform the scenario.
 
 # Installing the Test Runner app
 
-As already explained, the Test Runner app can be installed from Extension Marketplace to your tenant but this doesn’t really fly if you want to automate this. Using the Install-BcAppFromAppSource function (read more about it [here](https://freddysblog.com/2021/01/27/publishing-apps-to-a-business-central-online-environment/)), you can install the Test Runner from AppSource automated (if you have the AppID):
+As already explained, the Test Runner app can be installed from Extension Marketplace to your tenant but this doesn’t really fly if you want to automate this. Using the Install-BcAppFromAppSource function (read more about it [here](/2021/01/27/publishing-apps-to-a-business-central-online-environment/)), you can install the Test Runner from AppSource automated (if you have the AppID):
 
 Install-BcAppFromAppSource \`
     -containerName $containerName \`
@@ -49,7 +49,7 @@ Publish-BcContainerApp \`
     -environment $environment \`
     -appFile @($testapps)
 
-Which is using the Publish-BcContainerApp with auth context and environment to publish apps to the development scope as described [here](https://freddysblog.com/2021/01/27/publishing-apps-to-a-business-central-online-environment/).
+Which is using the Publish-BcContainerApp with auth context and environment to publish apps to the development scope as described [here](/2021/01/27/publishing-apps-to-a-business-central-online-environment/).
 
 Now we can retrieve the extension id of our test app, by using:
 

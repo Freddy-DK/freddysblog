@@ -13,7 +13,7 @@ Dynamics 365 Business Central and Dynamics NAV is part of a vibrant community wi
 
 ## NAV Team Blog
 
-If you only follow one blog (beside [my blog](https://freddysblog.com) :-)), it should IMO be the NAV Team blog.
+If you only follow one blog (beside [my blog](/) :-)), it should IMO be the NAV Team blog.
 
 [https://community.dynamics.com/business/b/businesscentraldevitpro](https://community.dynamics.com/business/b/businesscentraldevitpro)
 

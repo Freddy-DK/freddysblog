@@ -115,7 +115,7 @@ Tools were used in Kamil’s TechDays 2019 session (also shared below)
 In this section we shared some links to blogs, where you can read more from people who tried this and succeeded. Note, that the posts on my blog are the oldest and some details might have changed since
 
 **Blogs**  
-[https://freddysblog.com/category/ci-cd](https://freddysblog.com/category/ci-cd)  
+[https://freddysblog.com/category/ci-cd](/category/ci-cd)  
 [https://never-stop-learning.de](https://never-stop-learning.de/) (Michael Megel)  
 [http://www.mynavblog.com](http://www.mynavblog.com/) (Krzysztof Bialowas)
 

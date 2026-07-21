@@ -9,7 +9,7 @@ permalink: /2016/11/19/httpaka-msnavdemodeploy-using-powershell/
 
 It is part of my DNA, that no matter how easy things have become, it can always become easier.
 
-In [this](https://freddysblog.com/2016/11/19/one-nav-2017-on-azure-loaded-please/) post, I have stated, that the easiest way to create a NAV 2017 environment on Azure is using [http://aka.ms/navdemodeploy](http://aka.ms/navdemodeploy). But what if you want to create the same environment again and again or you need to create an environment in 5 different languages?
+In [this](/2016/11/19/one-nav-2017-on-azure-loaded-please/) post, I have stated, that the easiest way to create a NAV 2017 environment on Azure is using [http://aka.ms/navdemodeploy](http://aka.ms/navdemodeploy). But what if you want to create the same environment again and again or you need to create an environment in 5 different languages?
 
 Then there is a lot of typing in names, and passwords and a lot of things that can go wrong.
 

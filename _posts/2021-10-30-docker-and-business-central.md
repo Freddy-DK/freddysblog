@@ -58,7 +58,7 @@ Note that this script is NOT supported and I only recommend you to use this scri
 
 **This PowerShell script can be found [here](https://github.com/microsoft/nav-arm-templates/blob/master/InstallOrUpdateDockerEngine.ps1).**
 
-And, BTW – if something fails and you need to reset your docker installation, you can use [this script](https://github.com/microsoft/nav-arm-templates/blob/master/CleanupAfterDocker.ps1), which is explained in [this blog post](https://freddysblog.com/2018/12/11/clean-up-after-yourself-docker-your-mom-isnt-here/) from December 2018 – you cannot just remove the c:\\programdata\\docker folder manually.
+And, BTW – if something fails and you need to reset your docker installation, you can use [this script](https://github.com/microsoft/nav-arm-templates/blob/master/CleanupAfterDocker.ps1), which is explained in [this blog post](/2018/12/11/clean-up-after-yourself-docker-your-mom-isnt-here/) from December 2018 – you cannot just remove the c:\\programdata\\docker folder manually.
 
 Hope this helps
 

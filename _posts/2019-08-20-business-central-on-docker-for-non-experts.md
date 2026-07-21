@@ -13,7 +13,7 @@ With the release of NAV and Business Central images on Docker, a lot of people w
 
 Using Business Central on Docker doesn’t necessarily mean that you have to install Docker on your laptop, you can also use Virtual Machines on Azure for running your Containers.
 
-Spinning up an Azure VM with Business Central can be done using [http://aka.ms/getbc](http://aka.ms/getbc) and you will find detailed description of all properties in the ARM template here: [https://freddysblog.com/2019/07/26/the-arm-templates-for-dynamics-365-business-central-and-microsoft-dynamics-nav/](https://freddysblog.com/2019/07/26/the-arm-templates-for-dynamics-365-business-central-and-microsoft-dynamics-nav/).
+Spinning up an Azure VM with Business Central can be done using [http://aka.ms/getbc](http://aka.ms/getbc) and you will find detailed description of all properties in the ARM template here: [https://freddysblog.com/2019/07/26/the-arm-templates-for-dynamics-365-business-central-and-microsoft-dynamics-nav/](/2019/07/26/the-arm-templates-for-dynamics-365-business-central-and-microsoft-dynamics-nav/).
 
 This blog post will take you through how to spin up containers on your local machine.
 
@@ -35,7 +35,7 @@ There might be a lot of reasons why people think it is hard:
 
 # You need to know PowerShell
 
-You do not need to be a PowerShell expert in order to use Docker, but you do need to know some basic PowerShell. I wrote a blog post a few weeks ago, which contains all the needed PowerShell knowledge in order to use Business Central Containers. You can read the blog post here: [https://freddysblog.com/2019/08/04/powershell-for-non-experts/](https://freddysblog.com/2019/08/04/powershell-for-non-experts/)
+You do not need to be a PowerShell expert in order to use Docker, but you do need to know some basic PowerShell. I wrote a blog post a few weeks ago, which contains all the needed PowerShell knowledge in order to use Business Central Containers. You can read the blog post here: [https://freddysblog.com/2019/08/04/powershell-for-non-experts/](/2019/08/04/powershell-for-non-experts/)
 
 # There is no GUI for Docker
 
@@ -63,7 +63,7 @@ and all public Dynamics NAV containers are hosted at
 
 mcr.microsoft.com/dynamicsnav:<tag>
 
-More information about the tag can be found by reading this blog post: [https://freddysblog.com/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/](https://freddysblog.com/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/)
+More information about the tag can be found by reading this blog post: [https://freddysblog.com/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/](/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/)
 
 # There are a million parameters on New-NAVContainer/New-BCContainer
 
@@ -105,7 +105,7 @@ Another parameter you might need to add is **\-accept\_outdated**. When using a 
 
 ## \-imageName
 
-A third parameter, that you always will add is **\-imageName** – which version of NAV or Business Central do you need. More information about the images available can be found here: [https://freddysblog.com/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/](https://freddysblog.com/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/). With that, we have
+A third parameter, that you always will add is **\-imageName** – which version of NAV or Business Central do you need. More information about the images available can be found here: [https://freddysblog.com/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/](/2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/). With that, we have
 
 New-BCContainer -accept\_eula -accept\_outdated -updatehosts \`
                 -imageName 'mcr.microsoft.com/businesscentral/onprem:dk' \`
@@ -152,7 +152,7 @@ Note that you should not have passwords in clear text in source code, but if you
 
 ## \-licenseFile
 
-If you do not specify a license file for the container, you will be using the CRONUS Demo license, which traditionally ships on the DVD. License file is specified either as a filename on the host computer or as a secure URL to a license file. Read [this blog post](https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/) to learn how to create a secure URL.
+If you do not specify a license file for the container, you will be using the CRONUS Demo license, which traditionally ships on the DVD. License file is specified either as a filename on the host computer or as a secure URL to a license file. Read [this blog post](/2017/02/26/create-a-secure-url-to-a-file/) to learn how to create a secure URL.
 
 $password = ConvertTo-SecureString -String "P@ssword1" -AsPlainText -Force
 $credential = New-Object PSCredential 'admin', $password
@@ -199,7 +199,7 @@ Specifying the **enableSymbolLoading** switch will put the container in hybrid d
 
 If you are working in C/AL or AL only, there is no reason to enable symbol loading.
 
-If you are using hybrid development, please read this blog post to understand symbol loading better: [https://freddysblog.com/2019/03/16/symbols-demystified/](https://freddysblog.com/2019/03/16/symbols-demystified/) – biggest takeaway is probably that your app does NOT need a reference to test symbols if using hybrid development, whereas it does if not using hybrid.
+If you are using hybrid development, please read this blog post to understand symbol loading better: [https://freddysblog.com/2019/03/16/symbols-demystified/](/2019/03/16/symbols-demystified/) – biggest takeaway is probably that your app does NOT need a reference to test symbols if using hybrid development, whereas it does if not using hybrid.
 
 15.x containers obviously doesn’t support symbol loading (as C/AL is no longer present) and the reference to test symbols will change in 15.x to be a dependency to the test apps.
 
@@ -229,9 +229,9 @@ Specifying **\-alwaysPull** causes the containerhelper to check whether a new im
 
 **Run-TestsInBcContainer** will use the container to run a set of tests which have been imported into the test toolkit. This is typically used in CI/CD scenarios, but can also run locally to test your stuff before checking in.
 
-**Convert-ModifiedObjectsToAl** will convert the C/AL modifications you have in a container to an AL extension. There is no magic here, if the C/AL code customizations doesn’t follow the rules of an extension, things will fail. Read more here: [https://freddysblog.com/2019/04/15/c-al-to-al-extension/](https://freddysblog.com/2019/04/15/c-al-to-al-extension/)
+**Convert-ModifiedObjectsToAl** will convert the C/AL modifications you have in a container to an AL extension. There is no magic here, if the C/AL code customizations doesn’t follow the rules of an extension, things will fail. Read more here: [https://freddysblog.com/2019/04/15/c-al-to-al-extension/](/2019/04/15/c-al-to-al-extension/)
 
-**Publish-NewApplicationToBCContainer** will publish a new BaseApp to a container. Might be needed when creating a development container for doing code customizations of the BaseApp in AL. Read more here: [https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/](https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/) or here: [https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/](https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/)
+**Publish-NewApplicationToBCContainer** will publish a new BaseApp to a container. Might be needed when creating a development container for doing code customizations of the BaseApp in AL. Read more here: [https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/](/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/) or here: [https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/](/2019/04/15/c-al-to-al-code-customizations/)
 
 **Check-NavContainerHelperPermissions** can help you assign the right permissions to your user if you are running as non-administrator. If you are running PowerShell with elevated privileges, this function won’t do anything.
 

@@ -9,7 +9,7 @@ permalink: /2018/03/20/navcontainerhelper-start-a-nav-container-and-place-the-da
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you haven’t read the [first post](https://freddysblog.com/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
+If you haven’t read the [first post](/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
 
 The database files are placed inside the container by default. If you want to copy the database to a share on the Docker host, you can override the SetupDatabase.ps1 script by creating a file called SetupDatabase.ps1, specify that in myScripts.ps1 to New-NavContainer and share a folder on the host, which can host the DB files.
 

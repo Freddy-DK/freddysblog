@@ -27,7 +27,7 @@ Now you can install the BcContainerHelper using
 
 Install-Module BcContainerHelper -Force
 
-like also explained here: [https://freddysblog.com/2020/08/11/bccontainerhelper/](https://freddysblog.com/2020/08/11/bccontainerhelper/)
+like also explained here: [https://freddysblog.com/2020/08/11/bccontainerhelper/](/2020/08/11/bccontainerhelper/)
 
 # The $bcContainerHelperConfig variable
 

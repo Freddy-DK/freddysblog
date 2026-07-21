@@ -9,7 +9,7 @@ permalink: /2018/03/20/navcontainerhelper-license/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you haven’t read the [first post](https://freddysblog.com/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
+If you haven’t read the [first post](/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
 
 By default the NAV containers are using the CRONUS demo database and the CRONUS Demo license file is already imported in that. If you want to use you own licensefile, you have a few options on how to do this.
 
@@ -25,7 +25,7 @@ If you have a secure Url from which you can download your license file, you can 
 -licenseFile ""
 ```
 
-The secure license file Url needs to start with http or https, in which case, the script will proceed to download the license file and import it into the NAV Database. Information on how to create a secure url can be found [here](https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/).
+The secure license file Url needs to start with http or https, in which case, the script will proceed to download the license file and import it into the NAV Database. Information on how to create a secure url can be found [here](/2017/02/26/create-a-secure-url-to-a-file/).
 
 Example:
 

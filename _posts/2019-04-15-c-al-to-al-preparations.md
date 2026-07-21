@@ -74,7 +74,7 @@ Now, I have a set of shortcuts on my desktop and I can start the Windows Client 
 
 # Move my demo solution to Business Central Spring 2019 release
 
-On this step, most partners knows more than me, as this is something they do frequently. I won’t try to educate anybody, but I want to re-state what I wrote two years ago in this blog post: [https://freddysblog.com/2017/03/31/what-would-you-do/](https://freddysblog.com/2017/03/31/what-would-you-do/) – get your solution to step 4, where you minimize base app customizations and move your solution to an event based architecture easier to merge and easier to move to Business Central.
+On this step, most partners knows more than me, as this is something they do frequently. I won’t try to educate anybody, but I want to re-state what I wrote two years ago in this blog post: [https://freddysblog.com/2017/03/31/what-would-you-do/](/2017/03/31/what-would-you-do/) – get your solution to step 4, where you minimize base app customizations and move your solution to an event based architecture easier to merge and easier to move to Business Central.
 
 There might even be newer technologies since then, but the essence is clear – the more cleanup work you do before the move, the easier the move.
 
@@ -126,11 +126,11 @@ and now I am ready for the next step which is the actual move to AL.
 
 When moving to AL, you can select
 
--   [C/AL to AL extension](https://freddysblog.com/2019/04/15/c-al-to-al-extension/)
+-   [C/AL to AL extension](/2019/04/15/c-al-to-al-extension/)
 
 or
 
--   [C/AL to AL code customizations](https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/)
+-   [C/AL to AL code customizations](/2019/04/15/c-al-to-al-code-customizations/)
 
 Enjoy
 

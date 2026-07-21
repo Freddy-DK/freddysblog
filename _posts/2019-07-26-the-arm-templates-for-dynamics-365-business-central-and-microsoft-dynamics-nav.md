@@ -99,7 +99,7 @@ This is the extended version of getbc – adding a number of advanced fields. Th
 
 **Storage Account Type** can be set to Standard\_LRS or Premium\_LRS depending on the preformance level of the storage account you wan to use. Premium is the more performant and more expensive selection.
 
-**includeAL** should be set to **Yes** if you are going to be modifying the base app or the system application of Business Central (as explained in [this blog post](https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/)) With this flag, the Business Central container will be prepared for compilation of the base app. This is enabled with Business Central Spring 2019 (14.x) and later.
+**includeAL** should be set to **Yes** if you are going to be modifying the base app or the system application of Business Central (as explained in [this blog post](/2019/04/15/c-al-to-al-code-customizations/)) With this flag, the Business Central container will be prepared for compilation of the base app. This is enabled with Business Central Spring 2019 (14.x) and later.
 
 **SQL Server Type** determines which SQL Server your container will be connecting to. SQLExpress is the built-in SQLExpress in the container. If you select **AzureSQL** you are required to provide **App and Tenant Bacpac Uri**, which will be restored to Azure SQL and your container will be connected to that.
 
@@ -113,7 +113,7 @@ This is the extended version of getbc – adding a number of advanced fields. Th
 
 **Multitenant** should be set to **Yes** if you want to create a multitenant container in your Azure VM. The container will only have one tenant called **default**. You can create more tenants using functions in NavContainerHelper.
 
-**Certificate Pfx Url** must be a **secure Url to a certificate .pfx file** if you want to use a certificate purchased by a trusted certificate authority. Beside this setting, you also need to set the **Certificate Pfx Password** and the **Public Dns Name**. [This blog post](https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/) describes how to create a secure Url.
+**Certificate Pfx Url** must be a **secure Url to a certificate .pfx file** if you want to use a certificate purchased by a trusted certificate authority. Beside this setting, you also need to set the **Certificate Pfx Password** and the **Public Dns Name**. [This blog post](/2017/02/26/create-a-secure-url-to-a-file/) describes how to create a secure Url.
 
 **Certificate Pfx Password** must be the **Password** of the password protected certificate .pfx file.
 
@@ -127,7 +127,7 @@ This is the extended version of getbc – adding a number of advanced fields. Th
 
 # [http://aka.ms/getnav](http://aka.ms/getnav)
 
-**Enable Symbol Loading** should be set to **Yes** if (and only if) you are going to make code customizations to the Base App in C/AL **AND** want to use these code changes in AL extensions afterwords (known as **hybrid development**). In this case, the Service Tier needs to know that it should re-generate symbols for your changes. Read more about symbols in [this blog post](https://freddysblog.com/2019/03/16/symbols-demystified/). This is only supported from NAV 2018 and in Business Central versions up until Spring 2019 (14.x).
+**Enable Symbol Loading** should be set to **Yes** if (and only if) you are going to make code customizations to the Base App in C/AL **AND** want to use these code changes in AL extensions afterwords (known as **hybrid development**). In this case, the Service Tier needs to know that it should re-generate symbols for your changes. Read more about symbols in [this blog post](/2019/03/16/symbols-demystified/). This is only supported from NAV 2018 and in Business Central versions up until Spring 2019 (14.x).
 
 **Include CSIDE** determines whether or not the VM has support for **C/SIDE development**. If this setting is **Yes**, you will have a shortcut for C/SIDE on the desktop and all pre-requisites installed. You will be able to open and connect to the container with this.
 
@@ -145,7 +145,7 @@ This is the extended version of getbc – adding a number of advanced fields. Th
 
 **Storage Account Type** can be set to Standard\_LRS or Premium\_LRS depending on the preformance level of the storage account you wan to use. Premium is the more performant and more expensive selection.
 
-**includeAL** should be set to **Yes** if you are going to be modifying the base app or the system application of Business Central (as explained in [this blog post](https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/)) With this flag, the Business Central container will be prepared for compilation of the base app. This is enabled with Business Central Spring 2019 (14.x) and later.
+**includeAL** should be set to **Yes** if you are going to be modifying the base app or the system application of Business Central (as explained in [this blog post](/2019/04/15/c-al-to-al-code-customizations/)) With this flag, the Business Central container will be prepared for compilation of the base app. This is enabled with Business Central Spring 2019 (14.x) and later.
 
 **SQL Server Type** determines which SQL Server your container will be connecting to. SQLExpress is the built-in SQLExpress in the container. If you select **AzureSQL** you are required to provide **App and Tenant Bacpac Uri**, which will be restored to Azure SQL and your container will be connected to that.
 
@@ -159,7 +159,7 @@ This is the extended version of getbc – adding a number of advanced fields. Th
 
 **Multitenant** should be set to **Yes** if you want to create a multitenant container in your Azure VM. The container will only have one tenant called **default**. You can create more tenants using functions in NavContainerHelper.
 
-**Certificate Pfx Url** must be a **secure Url to a certificate .pfx file** if you want to use a certificate purchased by a trusted certificate authority. Beside this setting, you also need to set the **Certificate Pfx Password** and the **Public Dns Name**. [This blog post](https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/) describes how to create a secure Url.
+**Certificate Pfx Url** must be a **secure Url to a certificate .pfx file** if you want to use a certificate purchased by a trusted certificate authority. Beside this setting, you also need to set the **Certificate Pfx Password** and the **Public Dns Name**. [This blog post](/2017/02/26/create-a-secure-url-to-a-file/) describes how to create a secure Url.
 
 **Certificate Pfx Password** must be the **Password** of the password protected certificate .pfx file.
 
@@ -179,7 +179,7 @@ This template doesn’t have any properties, which are not explained above.
 
 # [http://aka.ms/getnavworkshopvms](http://aka.ms/getnavworkshopvms)
 
-Used for spinning up multiple VMs and is really explained already here: [https://freddysblog.com/2017/11/05/aka-ms-getnavworkshopvms/](https://freddysblog.com/2017/11/05/aka-ms-getnavworkshopvms/)
+Used for spinning up multiple VMs and is really explained already here: [https://freddysblog.com/2017/11/05/aka-ms-getnavworkshopvms/](/2017/11/05/aka-ms-getnavworkshopvms/)
 
 This template is slightly different from the other templates as it can spin up multiple VMs – and it should support both NAV and Business Central containers (including 15.x).
 

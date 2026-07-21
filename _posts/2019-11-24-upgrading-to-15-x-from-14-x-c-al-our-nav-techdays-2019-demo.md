@@ -21,7 +21,7 @@ During the presentation, we discussed 3 different routes from 14.x to 15.x.
 
 ## Code customized C/AL to AL extension
 
-Preparing your solution on C/AL to be converted directly into an AL extension seems like the right approach and brings you directly to the place you want to be. It was also discussed in [this blog post](https://freddysblog.com/2019/04/15/c-al-to-al-extension/) from April 2019. This requires more work up front. Making sure that you have moved all code customizations to event handlers, no breaking SQL changes, no removed fields or controls and all in all you need to have a very clean solution to do this.
+Preparing your solution on C/AL to be converted directly into an AL extension seems like the right approach and brings you directly to the place you want to be. It was also discussed in [this blog post](/2019/04/15/c-al-to-al-extension/) from April 2019. This requires more work up front. Making sure that you have moved all code customizations to event handlers, no breaking SQL changes, no removed fields or controls and all in all you need to have a very clean solution to do this.
 
 At this time however, there is no good way of upgrading if you have added fields to existing tables. You would have to create new fields in your extension, move data manually and obsolete the old fields. A cumbersome process, which we will have functionality to avoid within the next few months (no date given, but I will update this blog post when possible).
 
@@ -29,7 +29,7 @@ In order to move a solution to 15.x and do data upgrade during the presentation,
 
 ## Code customized C/AL to code customized AL
 
-This requires less up front preparations, but the number of preparations you have to do in AL is bigger and some customizations are even harder to do in AL. This was discussed in [this blog post](https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/) from April 2019. Doing this wouldn’t really get you anywhere. If the goal is to move your customizations to an extension, this will even get you into trouble with added tables.
+This requires less up front preparations, but the number of preparations you have to do in AL is bigger and some customizations are even harder to do in AL. This was discussed in [this blog post](/2019/04/15/c-al-to-al-code-customizations/) from April 2019. Doing this wouldn’t really get you anywhere. If the goal is to move your customizations to an extension, this will even get you into trouble with added tables.
 
 At this time, there is no good way of moving a table from one app to another (and this is what you would have to do if moving from code customized AL to an AL extension later)
 
@@ -43,7 +43,7 @@ This is the model we were demoing at Tech Days and this is the following demo.
 
 # Prerequisites
 
-If you want to run this demo, you should have a computer running Windows 10 1809 or later (or Windows Server 2019). It should have 32Gb RAM. Latest Docker and latest [NavContainerHelper from the PowerShell Gallery](https://www.powershellgallery.com/packages/navcontainerhelper). SQL Server 2017 developer edition is installed on the computer, setup with dual authentication mode and listening on TCP as described [here](https://freddysblog.com/2019/11/04/using-sql-server-on-the-host/). I am running all script snippets in PowerShell ISE with elevated permissions (**Run as administrator**).
+If you want to run this demo, you should have a computer running Windows 10 1809 or later (or Windows Server 2019). It should have 32Gb RAM. Latest Docker and latest [NavContainerHelper from the PowerShell Gallery](https://www.powershellgallery.com/packages/navcontainerhelper). SQL Server 2017 developer edition is installed on the computer, setup with dual authentication mode and listening on TCP as described [here](/2019/11/04/using-sql-server-on-the-host/). I am running all script snippets in PowerShell ISE with elevated permissions (**Run as administrator**).
 
 Furthermore, I am using [KDiff3](http://kdiff3.sourceforge.net/) for 3 way merging. There are a lot of other tools out there, that does the same thing.
 
@@ -224,7 +224,7 @@ The **haveModifiedTables** variable will in our case be true. If we didn’t hav
 
 Now, we need to create 3 AL Project Folders. One with 14.x baseline, one with 14.x including our solution and one with 15.x baseline. With these three, we can do a 3 way merge to get a 15.x folder including our solution.
 
-The only modified object we want to keep in the BaseApp is **table18**. If you are trying to do this with your own objects, you would have to include the other objects in the **myModifiedObjects** array for the AL file structure as described in [this blog post](https://freddysblog.com/2019/08/02/organizing-your-al-files/).
+The only modified object we want to keep in the BaseApp is **table18**. If you are trying to do this with your own objects, you would have to include the other objects in the **myModifiedObjects** array for the AL file structure as described in [this blog post](/2019/08/02/organizing-your-al-files/).
 
 $myModifiedObjects = @("table18")
 $alFileStructure = { Param (\[string\] $type, \[int\] $id, \[string\] $name)
@@ -269,7 +269,7 @@ Create-AlProjectFolderFromNavContainer \`
     -alProjectFolder $bc14mybaseappFolder \`
     -runTxt2AlInContainer $dev15containerName
 
-The structure of these folders is like described in [this blog post](https://freddysblog.com/2019/08/02/organizing-your-al-files/).
+The structure of these folders is like described in [this blog post](/2019/08/02/organizing-your-al-files/).
 
 # Merging
 

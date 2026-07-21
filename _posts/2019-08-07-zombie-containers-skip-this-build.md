@@ -7,7 +7,7 @@ tags: ["Docker"]
 permalink: /2019/08/07/zombie-containers-skip-this-build/
 ---
 
-_**Yet Another Update:** A cure is found… [http://freddysblog.com/2019/09/05/a-cure-for-zombie-containers/](http://freddysblog.com/2019/09/05/a-cure-for-zombie-containers/)_
+_**Yet Another Update:** A cure is found… [http://freddysblog.com/2019/09/05/a-cure-for-zombie-containers/](/2019/09/05/a-cure-for-zombie-containers/)_
 
 _**Another Update:** Docker engine 19.03.2 (and docker Desktop 2.1.0.2) should be released first week of September with a cure for Zombie containers._
 

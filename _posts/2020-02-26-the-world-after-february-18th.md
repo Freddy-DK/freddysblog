@@ -9,7 +9,7 @@ permalink: /2020/02/26/the-world-after-february-18th/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-As you probably discovered, the February 2020 security update had a significant impact on NAV/Business Central Docker Containers. Especially if you were running Process isolation. Most visible problem was the fact that you couldn’t launch 32bit executables in containers after applying the security update. My blog post from February 14th ([https://freddysblog.com/2020/02/14/hyperv-isolation-to-the-rescue/](https://freddysblog.com/2020/02/14/hyperv-isolation-to-the-rescue/)) would explain two ways to mitigate the problem:
+As you probably discovered, the February 2020 security update had a significant impact on NAV/Business Central Docker Containers. Especially if you were running Process isolation. Most visible problem was the fact that you couldn’t launch 32bit executables in containers after applying the security update. My blog post from February 14th ([https://freddysblog.com/2020/02/14/hyperv-isolation-to-the-rescue/](/2020/02/14/hyperv-isolation-to-the-rescue/)) would explain two ways to mitigate the problem:
 
 1.  Run hyperv isolation
 2.  Uninstall February update

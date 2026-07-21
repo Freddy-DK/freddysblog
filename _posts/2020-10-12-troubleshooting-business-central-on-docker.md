@@ -111,7 +111,7 @@ When BcContainerHelper is successfully installed, the next thing is to create co
 
 ## Using “outdated” docker images
 
-As described here: [https://freddysblog.com/2020/06/25/changing-the-way-you-run-business-central-in-docker/](https://freddysblog.com/2020/06/25/changing-the-way-you-run-business-central-in-docker/) we no longer update the specific images on mcr.microsoft.com. When creating a container you will see a warning:
+As described here: [https://freddysblog.com/2020/06/25/changing-the-way-you-run-business-central-in-docker/](/2020/06/25/changing-the-way-you-run-business-central-in-docker/) we no longer update the specific images on mcr.microsoft.com. When creating a container you will see a warning:
 
 WARNING: You are running specific Docker images from mcr.microsoft.com. These images will no longer be updated, you should switch to user Docker artifacts. See https://freddysblog.com/2020/07/05/july-updates-are-out-they-are-the-last-on-premises-docker-images/
 
@@ -281,7 +281,7 @@ Windows updates are released every month for Windows computers and it is our rec
 
 New-BcContainer is designed to give partners the ability to create and configure containers easily. It was never the intention that containers should be running for months, so instead of trying to keep a container alive, keep the script used to create and configure the container and re-run monthly when Windows updates have been applied.
 
-If you need the database to live longer than the container you can use _Backup-BcContainerDatabases_ and _Restore-DatabasesInBcContainer_ – or you can use SQL Server on the host ([https://freddysblog.com/2019/11/04/using-sql-server-on-the-host/](https://freddysblog.com/2019/11/04/using-sql-server-on-the-host/))
+If you need the database to live longer than the container you can use _Backup-BcContainerDatabases_ and _Restore-DatabasesInBcContainer_ – or you can use SQL Server on the host ([https://freddysblog.com/2019/11/04/using-sql-server-on-the-host/](/2019/11/04/using-sql-server-on-the-host/))
 
 Also, if you open issues on [https://www.github.com/microsoft/navcontainerhelper/issues](https://www.github.com/microsoft/navcontainerhelper/issues) you will need to provide script and full output of the script and I will in general not help people try to troubleshoot a running container. Be prepared to re-run the script and re-create the container and share the script AND the full output.
 
@@ -291,7 +291,7 @@ Here are some of the common errors given by Docker when trying to run a containe
 
 **docker.exe: Error response from daemon: CreateComputeSystem {ID}: No hypervisor is present on this system.** This issue is self-explanatory – you are trying to run a container in hyperv mode and the hypervisor is not present. Either install Hyper-V and the containers feature – or use process isolation.
 
-**docker.exe: Error response from daemon: container {ID} encountered an error during hcsshim::System::Start: failure in a Windows system call: The virtual machine or container exited unexpectedly. (0xc0370106). ExitCode: 125** This error might be related to a Windows Update happening while containers are running. Best recommendation is to run a Reset to Factory default of Docker Desktop or follow [this blog post](https://freddysblog.com/2018/12/11/clean-up-after-yourself-docker-your-mom-isnt-here/) when running Docker Enterprise.
+**docker.exe: Error response from daemon: container {ID} encountered an error during hcsshim::System::Start: failure in a Windows system call: The virtual machine or container exited unexpectedly. (0xc0370106). ExitCode: 125** This error might be related to a Windows Update happening while containers are running. Best recommendation is to run a Reset to Factory default of Docker Desktop or follow [this blog post](/2018/12/11/clean-up-after-yourself-docker-your-mom-isnt-here/) when running Docker Enterprise.
 
 **docker: Error response from daemon: hcsshim::CreateComputeSystem {ID}: The container operating system does not match the host operating system.** This error is given when you are trying to run an image, which was designed for another version of Windows in process isolation. You would need to use hyperv isolation or find an image, which matches the host OS either by locating another image or updating the host.
 
@@ -307,7 +307,7 @@ Here are some of the common errors given by Docker when trying to run a containe
 
 **docker.exe: Error response from daemon: hcsshim::CreateComputeSystem {ID}: Wrong parameter**. This is a very generic error, but every time I have seen this, it was caused by Hyper-V not being properly installed.
 
-**docker.exe: Error response from daemon: hcsshim::PrepareLayer – failed failed in Win32: The device is not ready. (0x15). ExitCode: 125** This error is seen a few times and have typically been due to exhausted resources. Adding more memory to the host and/or cleaning up docker using Reset to Factory default of Docker Desktop or follow [this blog post](https://freddysblog.com/2018/12/11/clean-up-after-yourself-docker-your-mom-isnt-here/) when running Docker Enterprise.
+**docker.exe: Error response from daemon: hcsshim::PrepareLayer – failed failed in Win32: The device is not ready. (0x15). ExitCode: 125** This error is seen a few times and have typically been due to exhausted resources. Adding more memory to the host and/or cleaning up docker using Reset to Factory default of Docker Desktop or follow [this blog post](/2018/12/11/clean-up-after-yourself-docker-your-mom-isnt-here/) when running Docker Enterprise.
 
 **Failed to register layer: re-exec error: exit status 1: output: ProcessUtilityVMImage \\?{PATH}: The system cannot find the path specified. ExitCode: 1** Seen only a few times, where an attempt was done to run a docker image of a newer Windows Version on an older host. Update the host or locate a corresponding image.
 

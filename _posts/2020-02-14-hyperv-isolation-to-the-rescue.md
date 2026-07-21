@@ -11,7 +11,7 @@ permalink: /2020/02/14/hyperv-isolation-to-the-rescue/
 
 # Update
 
-More information on this topic can be found here: [http://freddysblog.com/2020/02/26/the-world-after-february-18th/](http://freddysblog.com/2020/02/26/the-world-after-february-18th/)
+More information on this topic can be found here: [http://freddysblog.com/2020/02/26/the-world-after-february-18th/](/2020/02/26/the-world-after-february-18th/)
 
 # February 11th 2020
 

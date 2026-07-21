@@ -7,7 +7,7 @@ tags: ["Business Central", "Multitenancy", "restore", "Saas", "SQL on Host"]
 permalink: /2021/03/02/restoring-your-online-business-central-database-locally/
 ---
 
-1½ years ago I wrote a blog post called [Mounting a database from my online environment using SQL Server on the host](https://freddysblog.com/2019/11/12/mounting-a-database-from-my-online-environment-using-sql-server-on-the-host/). This blog post explains exactly the same thing, just end 2 end and much easier to understand (I hope), using artifacts and some new functions in BcContainerHelper.
+1½ years ago I wrote a blog post called [Mounting a database from my online environment using SQL Server on the host](/2019/11/12/mounting-a-database-from-my-online-environment-using-sql-server-on-the-host/). This blog post explains exactly the same thing, just end 2 end and much easier to understand (I hope), using artifacts and some new functions in BcContainerHelper.
 
 The steps involved in restoring your online Business Central database locally are:
 
@@ -32,7 +32,7 @@ If you encounter issues, it might be a good idea to consult issues on [https://g
 
 You need **Docker** installed and you need the **BcContainerHelper PowerShell module** – latest version. That goes for most my blog posts.
 
-Like [this blog post](https://freddysblog.com/2021/02/28/running-business-central-in-docker-using-sql-on-the-host/), in order for the scripts in this blog post to work, you need to install **SQL Server on the Docker Host with mixed mode authentication**. The scripts will connect using Windows Authentication and the container will connect using Username/Password authentication.
+Like [this blog post](/2021/02/28/running-business-central-in-docker-using-sql-on-the-host/), in order for the scripts in this blog post to work, you need to install **SQL Server on the Docker Host with mixed mode authentication**. The scripts will connect using Windows Authentication and the container will connect using Username/Password authentication.
 
 You need an **Azure Subscription** with credits or pay-as-you-go. We are only going to use this for a backup storage account, it doesn’t cost much, but it needs to be there.
 
@@ -42,9 +42,9 @@ The DAC Framework needs to be installed in order to restore bacpacs. The DAC Fra
 
 You need to setup a storage account for the online backup either using **New-AzStorageAccount** or directly in the **Azure Portal**. This storage account will be the destination for the online backup.
 
-You should setup a **Key Vault** for your secrets (like described [here](https://freddysblog.com/2021/03/02/managing-secrets-in-your-scripts/)) and you should store the following secrets in the Key Vault:
+You should setup a **Key Vault** for your secrets (like described [here](/2021/03/02/managing-secrets-in-your-scripts/)) and you should store the following secrets in the Key Vault:
 
--   **BcSaasRefreshToken** holds a refresh token for a delegated admin user, created using New-BcAuthContext as described [here](https://freddysblog.com/2021/01/25/bcauthcontext/).
+-   **BcSaasRefreshToken** holds a refresh token for a delegated admin user, created using New-BcAuthContext as described [here](/2021/01/25/bcauthcontext/).
 -   **storageAccountName** holds the name of the storage account in your subscription, which holds (or will hold) the online backup.
 -   **password** holds the password you want to use for the container.
 -   **licenseFile** holds a URL to the developer license file you will be using.
@@ -141,7 +141,7 @@ Download-File \`
 
 # Create a multitenant container from the artifacts
 
-Much like described [here](https://freddysblog.com/2021/02/28/running-business-central-in-docker-using-sql-on-the-host/), create a multitenant container called saas using the artifacts with the same version of your online tenant.
+Much like described [here](/2021/02/28/running-business-central-in-docker-using-sql-on-the-host/), create a multitenant container called saas using the artifacts with the same version of your online tenant.
 
 $containerName = "saas"
 $auth = "UserPassword"

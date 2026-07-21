@@ -23,7 +23,7 @@ You can use **Configuration Packages**, **XML Ports** or **AL Code** to create t
 
 You can use the **OnInstall** trigger in the demo data app to load the demo data into your app and you can uninstall and unpublish (with **doNotSaveData**) the demo data app when it has done its task.
 
-If your demo data include secrets (like a key), you might want to trigger the actual demo data load using APIs, where you can transfer parameters like shown in [this blog post](https://freddysblog.com/2019/03/27/navcontainerhelper-0-5-0-11/).
+If your demo data include secrets (like a key), you might want to trigger the actual demo data load using APIs, where you can transfer parameters like shown in [this blog post](/2019/03/27/navcontainerhelper-0-5-0-11/).
 
 A script for creating a container, adding your app + demo data, prepared to use VS Code to do subsequent compilation and debugging of your app could look like this:
 
@@ -81,7 +81,7 @@ UnPublish-BCContainerApp \`
 
 # Configuration Packages
 
-Configuration Packages (formerly known as RapidStart) is another good way of adding demo data and these can be applied using AL Code (in a demo data app) or using PowerShell as explained in [this blog post](https://freddysblog.com/2019/09/19/using-apis-on-containers/).
+Configuration Packages (formerly known as RapidStart) is another good way of adding demo data and these can be applied using AL Code (in a demo data app) or using PowerShell as explained in [this blog post](/2019/09/19/using-apis-on-containers/).
 
 # Database
 

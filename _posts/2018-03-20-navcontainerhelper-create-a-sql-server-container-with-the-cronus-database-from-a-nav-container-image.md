@@ -9,7 +9,7 @@ permalink: /2018/03/20/navcontainerhelper-create-a-sql-server-container-with-the
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you haven’t read the [first post](https://freddysblog.com/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
+If you haven’t read the [first post](/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
 
 The NAV container images contains SQL Express with the CRONUS Demo Database. If we want to get a copy of the databases from a NAV container image, we can override the navstart.ps1 script with a script, which basically just starts the SQL Server, takes the database offline and copies the database files to a folder.
 

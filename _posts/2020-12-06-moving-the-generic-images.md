@@ -45,7 +45,7 @@ Easiest thing is probably just to update to BcContainerHelper 1.0.15 or later, t
 
 But… if you want to control which generic image you use for creating containers, you have 3 options:
 
-1.  Specify **genericImage** in **bcContainerHelper.config.json** as described here: [https://freddysblog.com/2020/10/10/bccontainerhelper-configuration/](https://freddysblog.com/2020/10/10/bccontainerhelper-configuration/) this means that all PowerShell Sessions on this computer will use this generic image.
+1.  Specify **genericImage** in **bcContainerHelper.config.json** as described here: [https://freddysblog.com/2020/10/10/bccontainerhelper-configuration/](/2020/10/10/bccontainerhelper-configuration/) this means that all PowerShell Sessions on this computer will use this generic image.
 2.  Set **$bcContainerHelperConfig.genericImageName** (also described in the above blog) means that this PowerShell session will use this generic image.
 3.  Specify **\-useGenericImage** to New-BcContainer (or **\-baseImage** to New-BcImage) means that this container/image will be created using that generic imag. (f.ex. use “$(Get-BestGenericImageName)-dev” to use insider generic images.
 

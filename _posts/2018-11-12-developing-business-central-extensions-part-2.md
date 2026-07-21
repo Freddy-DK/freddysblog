@@ -9,7 +9,7 @@ permalink: /2018/11/12/developing-business-central-extensions-part-2/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you haven’t read [part 1](https://freddysblog.com/2018/11/12/developing-business-central-extensions-part-1/), you should do so before continuing here. [Part 1](https://freddysblog.com/2018/11/12/developing-business-central-extensions-part-1/) contains all the prerequisites you need in order to continue with this post.
+If you haven’t read [part 1](/2018/11/12/developing-business-central-extensions-part-1/), you should do so before continuing here. [Part 1](/2018/11/12/developing-business-central-extensions-part-1/) contains all the prerequisites you need in order to continue with this post.
 
 # Create your organization and your first project
 

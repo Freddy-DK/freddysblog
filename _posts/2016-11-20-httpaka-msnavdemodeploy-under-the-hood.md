@@ -19,7 +19,7 @@ Looking a little closer, this is actually just asking the Azure Portal to create
 
 [https://raw.githubusercontent.com/NAVDEMO/NAV2017/master/deploydemo.json](https://raw.githubusercontent.com/NAVDEMO/NAV2017/master/deploydemo.json)
 
-If you read the blog post about PowerShell from yesterday ([https://freddysblog.com/2016/11/19/httpaka-msnavdemodeploy-using-powershell/](https://freddysblog.com/2016/11/19/httpaka-msnavdemodeploy-using-powershell/)), you will recognize this as the very same URL as we used as the TemplateUri. This means that launching the Azure Portal and fill out the parameters manually will cause exactly the same deployment as we do with PowerShell and everything below still counts.
+If you read the blog post about PowerShell from yesterday ([https://freddysblog.com/2016/11/19/httpaka-msnavdemodeploy-using-powershell/](/2016/11/19/httpaka-msnavdemodeploy-using-powershell/)), you will recognize this as the very same URL as we used as the TemplateUri. This means that launching the Azure Portal and fill out the parameters manually will cause exactly the same deployment as we do with PowerShell and everything below still counts.
 
 Clicking the link, will show you the template definition, which as the extension reveals is just a json file.
 

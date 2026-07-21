@@ -17,7 +17,7 @@ Since the making of the ARM templates, the container name has been navserver. Wi
 
 ## Docker engine instead of Docker EE
 
-As described in [this blog post](https://freddysblog.com/2021/10/30/docker-and-business-central/), the DockerMsftProvider with Docker EE will cease to exist in approx. one year from now. With this update, the Azure VMs created by getbc and the other ARM templates will use Docker Engine (installed by [this installation script](https://github.com/microsoft/nav-arm-templates/blob/master/InstallOrUpdateDockerEngine.ps1)) if docker wasn’t already present on the base image. Note that _Windows Server 2019 with Containers_ already contains docker, and that will not be replaced with Docker Engine. I don’t know what the future of that base image is.
+As described in [this blog post](/2021/10/30/docker-and-business-central/), the DockerMsftProvider with Docker EE will cease to exist in approx. one year from now. With this update, the Azure VMs created by getbc and the other ARM templates will use Docker Engine (installed by [this installation script](https://github.com/microsoft/nav-arm-templates/blob/master/InstallOrUpdateDockerEngine.ps1)) if docker wasn’t already present on the base image. Note that _Windows Server 2019 with Containers_ already contains docker, and that will not be replaced with Docker Engine. I don’t know what the future of that base image is.
 
 ## Windows Server 2022 support
 

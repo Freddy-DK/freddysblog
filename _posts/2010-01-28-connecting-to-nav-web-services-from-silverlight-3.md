@@ -7,7 +7,7 @@ tags: ["Asynchronous", "C#", "Flash", "NAV Policy Server", "Service Reference", 
 permalink: /2010/01/28/connecting-to-nav-web-services-from-silverlight-3/
 ---
 
-Please read [this post](https://freddysblog.com/2010/01/19/connecting-to-nav-web-services-from/) to get a brief explanation of the scenario I will implement in Silverlight. Yes, yes – I know it isn’t a fancy graphical whatever as Silverlight should be, but to be honest – I would rather do something crappy on purpose than trying to do something fancy and everybody would find it crappy anyway:-)
+Please read [this post](/2010/01/19/connecting-to-nav-web-services-from/) to get a brief explanation of the scenario I will implement in Silverlight. Yes, yes – I know it isn’t a fancy graphical whatever as Silverlight should be, but to be honest – I would rather do something crappy on purpose than trying to do something fancy and everybody would find it crappy anyway:-)
 
 # Getting started with Silverlight
 
@@ -197,7 +197,7 @@ You will quickly notice, that there is nothing called Add Web Reference – only
 
 This is because Silverlight only supports Asynchronous Service access – so much for just creating my standard flow of my app.
 
-Another thing that has changed significantly is what you need to do in order to make a Service Reference work. If you look at my earlier posts with [C# and Service References](https://freddysblog.com/2010/01/20/connecting-to-nav-web-services-from-c-using-service-reference-code-version/), you can see that I need to setup the binding manually and add endpoints etc. Even if I wanted to do it in a config file (like [here](https://freddysblog.com/2010/01/19/connecting-to-nav-web-services-from-c-using-service-reference-config-file-version/)), you needed to make a lot of changes to the config file (adding behaviors etc.)
+Another thing that has changed significantly is what you need to do in order to make a Service Reference work. If you look at my earlier posts with [C# and Service References](/2010/01/20/connecting-to-nav-web-services-from-c-using-service-reference-code-version/), you can see that I need to setup the binding manually and add endpoints etc. Even if I wanted to do it in a config file (like [here](/2010/01/19/connecting-to-nav-web-services-from-c-using-service-reference-config-file-version/)), you needed to make a lot of changes to the config file (adding behaviors etc.)
 
 In Silverlight you just add the Service Reference and start partying like:
 

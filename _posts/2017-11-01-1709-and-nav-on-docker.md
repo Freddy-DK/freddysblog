@@ -50,7 +50,7 @@ If you look at the tags on [Docker Hub](https://hub.docker.com/r/microsoft/wind
 -   1709
 -   10.0.14393
 
-As described in [this blog post](https://freddysblog.com/2017/10/31/what-is-docker-what-are-containers/), there are 2 ways of running the NAV on Docker images.
+As described in [this blog post](/2017/10/31/what-is-docker-what-are-containers/), there are 2 ways of running the NAV on Docker images.
 
 -   Hyper-V containers, with kernel level/**hyperv isolation** (meaning the image has its own kernel)
 -   Windows Server containers, with **process isolation** (meaning the image shares the kernel with the host).

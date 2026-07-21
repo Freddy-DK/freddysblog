@@ -78,7 +78,7 @@ and in the details:
 
 If you review the code and decide to merge anyway, the CI/CD workflow will re-run based on the commit and will now have access to the secrets.
 
-For this and other reasons, [the recommendation is to use feature branches](https://freddysblog.com/2022/05/03/branching-strategies-for-your-al-go-for-github-repo/), from which the Pull Request will have access to the necessary secrets and the ability to build, publish and test your app.
+For this and other reasons, [the recommendation is to use feature branches](/2022/05/03/branching-strategies-for-your-al-go-for-github-repo/), from which the Pull Request will have access to the necessary secrets and the ability to build, publish and test your app.
 
 In a future version AL-Go we will modify the CI/CD workflow to still perform the compile during the Pull Request but skip the publish step and the test run step and replace the error with a warning stated that the app has not been published and tested.
 

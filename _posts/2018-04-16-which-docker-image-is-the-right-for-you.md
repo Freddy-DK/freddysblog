@@ -34,7 +34,7 @@ microsoft/dynamics-nav:2018-cu3-de
 microsoft/dynamics-nav:2017
 microsoft/dynamics-nav:2016-dk
 
-You will also be able to run earlier versions of Microsoft Dynamics NAV using the generic image as explained [here](https://freddysblog.com/2017/11/29/can-i-run-nav-2015-and-earlier-on-docker/).
+You will also be able to run earlier versions of Microsoft Dynamics NAV using the generic image as explained [here](/2017/11/29/can-i-run-nav-2015-and-earlier-on-docker/).
 
 # Developing for Dynamics 365 Business Central
 
@@ -116,7 +116,7 @@ If you encounter issues which are specific to the insider builds of Dynamics 365
 
 In the near future, there will be a blog post on the [NAV team blog](https://community.dynamics.com/business/b/businesscentraldevitpro) explaining the above in more detail.
 
-If you have issues running the simplest NAV on Docker container (docker run -e accept\_eula=Y -m 3G microsoft/dynamics-nav) you should troubleshoot your infrastructure. A lot of frequently encountered issues can be solved be reading [this blog post](https://freddysblog.com/2017/10/29/troubleshooting-nav-on-docker/). You can also download a Container Host Debug PowerShell script here: [http://aka.ms/debug-containerhost.ps1](http://aka.ms/debug-containerhost.ps1) to troubleshoot issues with the container host.
+If you have issues running the simplest NAV on Docker container (docker run -e accept\_eula=Y -m 3G microsoft/dynamics-nav) you should troubleshoot your infrastructure. A lot of frequently encountered issues can be solved be reading [this blog post](/2017/10/29/troubleshooting-nav-on-docker/). You can also download a Container Host Debug PowerShell script here: [http://aka.ms/debug-containerhost.ps1](http://aka.ms/debug-containerhost.ps1) to troubleshoot issues with the container host.
 
 If you have issues running NAV on Docker or Business Central Sandbox Containers, which you think might be related to problems in the Container images, please report these on [Github nav-docker issues](https://github.com/Microsoft/nav-docker/issues).
 

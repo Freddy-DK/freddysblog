@@ -11,7 +11,7 @@ permalink: /2020/07/05/july-updates-are-out-they-are-the-last-on-premises-docker
 
 Business Central and NAV July 2020 on-premises updates was published over the weekend and this is going to be the last on-premises version of Business Central and NAV released as a docker image. The existing docker images will stay on mcr.microsoft.com for some time still, but no new on premises images will be added.
 
-If this is news to you, you should read [https://freddysblog.com/2020/06/25/changing-the-way-you-run-business-central-in-docker/](https://freddysblog.com/2020/06/25/changing-the-way-you-run-business-central-in-docker/) and [https://freddysblog.com/2020/06/25/working-with-artifacts/](https://freddysblog.com/2020/06/25/working-with-artifacts/) (+ some more blog posts on how to find out what the changes are)
+If this is news to you, you should read [https://freddysblog.com/2020/06/25/changing-the-way-you-run-business-central-in-docker/](/2020/06/25/changing-the-way-you-run-business-central-in-docker/) and [https://freddysblog.com/2020/06/25/working-with-artifacts/](/2020/06/25/working-with-artifacts/) (+ some more blog posts on how to find out what the changes are)
 
 # July on-premises updates images and artifacts
 

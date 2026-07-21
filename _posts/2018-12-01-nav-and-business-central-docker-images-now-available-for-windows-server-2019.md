@@ -23,7 +23,7 @@ You can read more about the Windows Server Semi Annual Channel [here](https://do
 
 Up until today, **specific** images containing **NAV** or **Business Central** have only been available based on **Windows Server Core 2016**.
 
-**Generic** images (images, which can be used to run **NAV** or **Business Central** if you have an install media or files extracted from another image) are available for most **Semi annual builds** and you can select to use these by using **-useBestContainerOS** on **New-NavContainer**. [This](https://freddysblog.com/2018/10/24/windows-10-and-docker-images-for-business-central-nav/) blog post explains how to do this.
+**Generic** images (images, which can be used to run **NAV** or **Business Central** if you have an install media or files extracted from another image) are available for most **Semi annual builds** and you can select to use these by using **-useBestContainerOS** on **New-NavContainer**. [This](/2018/10/24/windows-10-and-docker-images-for-business-central-nav/) blog post explains how to do this.
 
 As of today, specific images containing **NAV** or **Business Central** are also available based on **Windows Server Core 2019**.
 

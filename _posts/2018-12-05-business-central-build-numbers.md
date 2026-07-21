@@ -11,7 +11,7 @@ permalink: /2018/12/05/business-central-build-numbers/
 
 Now and then, I get questions about the build numbers – what do they all mean? I always try to tell people that they don’t really need to know but for some reason, that just makes people more curious. So instead of answering the same question over and over again – here is what I know…
 
-As you might know, I wrote [this blog post](https://freddysblog.com/2018/04/16/which-docker-image-is-the-right-for-you/) a while back, trying to describe that you shouldn’t really care about the build numbers, you should always go for the latest unless instructed otherwise.
+As you might know, I wrote [this blog post](/2018/04/16/which-docker-image-is-the-right-for-you/) a while back, trying to describe that you shouldn’t really care about the build numbers, you should always go for the latest unless instructed otherwise.
 
 But let me try to shed some light over the version numbering of these Docker Images. In order to do so, I will have to talk about public and insider builds separately, but before I do that, let me shortly describe what they are doing in Windows (as our strategy isn’t that different).
 

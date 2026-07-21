@@ -60,7 +60,7 @@ class MyInternalProxy : IMyInternalProxy
     #endregion 
 }
 
-as you can see I chose to connect to NAV using a Web Reference. I could of course have done this using Service Reference as well as described in [this post](https://freddysblog.com/2010/01/20/connecting-to-nav-web-services-from-c-using-service-reference-code-version/).
+as you can see I chose to connect to NAV using a Web Reference. I could of course have done this using Service Reference as well as described in [this post](/2010/01/20/connecting-to-nav-web-services-from-c-using-service-reference-code-version/).
 
 # That’s not complicated!
 

@@ -9,7 +9,7 @@ permalink: /2017/11/03/multiple-ways-to-run-a-nav-on-docker-image/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you haven’t read [this](https://freddysblog.com/2017/10/29/it-has-never-been-easier-nav-on-docker-2/) blog post, then please do so before continuing here.
+If you haven’t read [this](/2017/10/29/it-has-never-been-easier-nav-on-docker-2/) blog post, then please do so before continuing here.
 
 A lot of examples (like the prior blog post) will use docker run to start a NAV on Docker container, but there are actually a lot of different ways to start these containers. Some of these methods will run the container locally, some will spin up the container on Azure.
 
@@ -103,7 +103,7 @@ You will also find a new-csidedevcontainer function, which is really just new-na
 
 # [http://aka.ms/getnav](http://aka.ms/getnav)
 
-The aka-ms-getnav is described in [this blog post](https://freddysblog.com/2017/11/03/1-800-getnav/) and is probably the easiest way to spin up a NAV on Docker container on an Azure VM.
+The aka-ms-getnav is described in [this blog post](/2017/11/03/1-800-getnav/) and is probably the easiest way to spin up a NAV on Docker container on an Azure VM.
 
 The Azure VM will have the Nav Container Helper installed and a shortcut on the desktop for the Nav Container Helper. The idea is, that the primary container (navserver) is used to v2 extension development and you can create another container for Cside Development and/or for converting objects from v1 extensions to v2 extensions.
 

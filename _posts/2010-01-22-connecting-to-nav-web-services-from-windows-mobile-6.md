@@ -41,13 +41,13 @@ Note: I did struggle quite a bit to get network access up running on the device 
 
 # The scenario
 
-Please read [this post](https://freddysblog.com/2010/01/19/connecting-to-nav-web-services-from/) to get a brief explanation of the scenario I will implement on a Windows Mobile Device.
+Please read [this post](/2010/01/19/connecting-to-nav-web-services-from/) to get a brief explanation of the scenario I will implement on a Windows Mobile Device.
 
 # .net 3.5
 
 We will use 3.5 of the compact .net framework to build our application and whether you select Professional (first picture) or Standard (second picture) really doesn’t matter. First thing I do is to create two Web References from my app to the two Web Services i use in my scenario – SystemService (SystemServiceRef) and Customer Page (CustomerPageRef).
 
-These Web References are pretty similar to .net 2.0 Web References from the normal .net framework (look [this post](https://freddysblog.com/2010/01/19/connecting-to-nav-web-services-from-c-using-web-reference/)). One thing to note is, that you do not have UseDefaultCredentials in the compact framework so you need to specify user and password when connecting to NAV Web Services.
+These Web References are pretty similar to .net 2.0 Web References from the normal .net framework (look [this post](/2010/01/19/connecting-to-nav-web-services-from-c-using-web-reference/)). One thing to note is, that you do not have UseDefaultCredentials in the compact framework so you need to specify user and password when connecting to NAV Web Services.
 
 The project type is a Device Application and the code on the form is:
 

@@ -7,7 +7,7 @@ tags: ["Multiple", "NAV 2009", "Service", "Service Tier", "Web Services"]
 permalink: /2008/10/29/multiple-service-tiers/
 ---
 
-**NOTE – there is an updated post reg. Multiple Service Tiers in NAV 2009 SP1** [here](https://freddysblog.com/2009/08/05/multiple-service-tiers-sp1/)**.**
+**NOTE – there is an updated post reg. Multiple Service Tiers in NAV 2009 SP1** [here](/2009/08/05/multiple-service-tiers-sp1/)**.**
 
 If you haven’t done so, please read the post about the Service Tier before reading this:-)
 

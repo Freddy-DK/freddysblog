@@ -39,7 +39,7 @@ If you are starting a new AL extension, there is no reason that you cannot build
 
 If you want to start a new code customized AL solution on fall release, then you might want to rethink – code customized AL should only be used by partners who cannot create AL extensions – primarily due to legacy code customizations.
 
-If you want to see how the base app looks as AL, follow the blog posts from April 15th here: [https://freddysblog.com/category/al-development/](https://freddysblog.com/category/al-development/)
+If you want to see how the base app looks as AL, follow the blog posts from April 15th here: [https://freddysblog.com/category/al-development/](/category/al-development/)
 
 # Which CU should you actually use for converting your C/AL to AL?
 

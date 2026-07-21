@@ -7,7 +7,7 @@ tags: ["Azure", "Servicebus", "WCF", "Web Services"]
 permalink: /2010/11/30/connecting-to-nav-web-services-from-the-cloudpart-1-out-of-5/
 ---
 
-My last post in January 2010 ([here](https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/)) talked about how to create a Proxy for connecting to NAV Web Services from outside the local intranet, by creating a local proxy and exposing this through the firewall to your DMZ.
+My last post in January 2010 ([here](/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/)) talked about how to create a Proxy for connecting to NAV Web Services from outside the local intranet, by creating a local proxy and exposing this through the firewall to your DMZ.
 
 It still isn’t simple though and there are a lot of tasks to complete in order to make this work:
 

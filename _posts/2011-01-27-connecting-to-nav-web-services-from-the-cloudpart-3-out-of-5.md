@@ -7,7 +7,7 @@ tags: ["Azure", "Proxy", "Service Tier", "Servicebus", "WCF", "Web Services"]
 permalink: /2011/01/27/connecting-to-nav-web-services-from-the-cloudpart-3-out-of-5/
 ---
 
-If you haven’t already read part 2 you should do so [here](https://freddysblog.com/2010/12/02/connecting-to-nav-web-services-from-the-cloudpart-2-out-of-5/), before continuing to read this post.
+If you haven’t already read part 2 you should do so [here](/2010/12/02/connecting-to-nav-web-services-from-the-cloudpart-2-out-of-5/), before continuing to read this post.
 
 In part 2 I talked about how to connect to my locally installed NAV Web Service Proxy from anywhere in the world and towards the end, I promised that I would explain how the proxy was build. Problem was, that while writing this post I ran into a bug in the Servicebus – which was really annoying.
 
@@ -19,7 +19,7 @@ Anyway – knowing that I have a workaround, I will now explain how Proxy1 is cr
 
 # Proxy1
 
-The solution I will create consists of 2 projects. One project compiles to a DLL and contains the ServiceHost and the actual Proxy. The other project is a Console application, which is used as a host application for the DLL. Later on I will add 2 projects more – a Windows Service and an installer – much like explained in this post [https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/](https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/ "https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/")
+The solution I will create consists of 2 projects. One project compiles to a DLL and contains the ServiceHost and the actual Proxy. The other project is a Console application, which is used as a host application for the DLL. Later on I will add 2 projects more – a Windows Service and an installer – much like explained in this post [https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/](/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/ "https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/")
 
 The Proxy1 Windows Service or Console Application will be running on the local network, next to the NAV Service Tier and the application/Service should be running as a user, who has access to NAV. In one of the later posts, I will explain about authentication and security and ways to make this safer.
 
@@ -59,7 +59,7 @@ public class ProxyClass : IProxyClass
 
 as you can see, the implementation has a reference to the Customer Card in my NAV – and I am using default authentication (current user) and just calling into NAV to read a Customer and then return the name – almost as simple as a Hello World sample.
 
-This part is more or less exactly the same proxy as described in this post [https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/](https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/ "https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/") – now the question is, how do we make this proxy accessible from everywhere in the world.
+This part is more or less exactly the same proxy as described in this post [https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/](/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/ "https://freddysblog.com/2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/") – now the question is, how do we make this proxy accessible from everywhere in the world.
 
 # Hosting a WCF Service on the Servicebus
 

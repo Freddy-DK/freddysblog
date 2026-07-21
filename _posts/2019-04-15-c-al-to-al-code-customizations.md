@@ -19,7 +19,7 @@ After this, the blog post will describe how you can add your own C/AL solution. 
 
 # Create a container with the solution you want to convert
 
-I will use Business Central Spring release for the move and my solution was originally created in NAV 2017 CU3. The [first blog post in this series](https://freddysblog.com/2019/04/15/c-al-to-al-preparations/) explains how you can move your solution from NAV 2017 CU3 to Business Central, but I am sure most partners have mechanisms and processes in place to perform this move. If you didn’t go through the process in the first blog post, you can create a container with the result of the first blog post by running this script:
+I will use Business Central Spring release for the move and my solution was originally created in NAV 2017 CU3. The [first blog post in this series](/2019/04/15/c-al-to-al-preparations/) explains how you can move your solution from NAV 2017 CU3 to Business Central, but I am sure most partners have mechanisms and processes in place to perform this move. If you didn’t go through the process in the first blog post, you can create a container with the result of the first blog post by running this script:
 
 \# Settings
 $imageName = "mcr.microsoft.com/businesscentral/onprem:1904-rtm"
@@ -151,7 +151,7 @@ These will compile and deploy only the changes made to the extension and it is r
 
 # Conclusion
 
-Code customized AL should really only be used if you cannot create an AL extension. I would prefer extensions over code customized AL any time. [This blog post](https://freddysblog.com/2019/04/15/c-al-to-al-extension/) describes how to convert your C/AL solution to an AL extension.
+Code customized AL should really only be used if you cannot create an AL extension. I would prefer extensions over code customized AL any time. [This blog post](/2019/04/15/c-al-to-al-extension/) describes how to convert your C/AL solution to an AL extension.
 
 Enjoy
 

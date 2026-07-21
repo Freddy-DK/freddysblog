@@ -9,7 +9,7 @@ permalink: /2018/11/17/developing-business-central-extensions-part-5/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-This is part 5 of a blog post series. [Part 1](https://freddysblog.com/2018/11/12/developing-business-central-extensions-part-1/) contains all the prerequisites, [part 2](https://freddysblog.com/2018/11/12/developing-business-central-extensions-part-2/) is about cloning the project and get your sandbox environment up running, [part 3](https://freddysblog.com/2018/11/12/developing-business-central-extensions-part-3/) is about build agents, and building your project in Azure DevOps and [part 4](https://freddysblog.com/2018/11/13/developing-business-central-extensions-part-4/) is about branch policies and working with VSCode and Git.
+This is part 5 of a blog post series. [Part 1](/2018/11/12/developing-business-central-extensions-part-1/) contains all the prerequisites, [part 2](/2018/11/12/developing-business-central-extensions-part-2/) is about cloning the project and get your sandbox environment up running, [part 3](/2018/11/12/developing-business-central-extensions-part-3/) is about build agents, and building your project in Azure DevOps and [part 4](/2018/11/13/developing-business-central-extensions-part-4/) is about branch policies and working with VSCode and Git.
 
 # YAML, or not YAML, that’s the question!
 

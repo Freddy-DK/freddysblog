@@ -9,7 +9,7 @@ permalink: /2019/08/30/running-tests-in-15-x-insider-containers/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you didn’t read this blog post: [https://freddysblog.com/2019/04/13/running-tests-in-containers/](https://freddysblog.com/2019/04/13/running-tests-in-containers/), then please do so before proceeding. This blog post will only describe what’s new when running tests in 15.x containers, which while writing this blog post still are in preview and only available as insider builds through the Ready To Go program. Read more here: [https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/](https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/)
+If you didn’t read this blog post: [https://freddysblog.com/2019/04/13/running-tests-in-containers/](/2019/04/13/running-tests-in-containers/), then please do so before proceeding. This blog post will only describe what’s new when running tests in 15.x containers, which while writing this blog post still are in preview and only available as insider builds through the Ready To Go program. Read more here: [https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/](/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/)
 
 # Get the latest…
 
@@ -17,7 +17,7 @@ In order to run tests with 15.x containers you will need the latest NavContainer
 
 docker pull bcinsider.azurecr.io/bcsandbox-master:<country>-<platform>
 
-where <country> is the localization and <platform> is ltsc2016 or ltsc2019 based on your version of Windows (see more here: [https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/](https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/)).
+where <country> is the localization and <platform> is ltsc2016 or ltsc2019 based on your version of Windows (see more here: [https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/](/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/)).
 
 docker inspect on your image should return the following labels (or newer):
 
@@ -225,7 +225,7 @@ You will still have to add the tests you want to run programatically or manually
 
 # Creating your own test suite
 
-In the [original running tests blog post](https://freddysblog.com/2019/04/13/running-tests-in-containers/), I described how you could populate the Test Suite from code in the install trigger of your app.
+In the [original running tests blog post](/2019/04/13/running-tests-in-containers/), I described how you could populate the Test Suite from code in the install trigger of your app.
 
 If you want to do this in 15.x, you will need to add a dependency to the **Test Runner** app and populate the tables in that. If you populate the C/AL Test Tool, you won’t be able to find and run them in the AL Test Tool.
 

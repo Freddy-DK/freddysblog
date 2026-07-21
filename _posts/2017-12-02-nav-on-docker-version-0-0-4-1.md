@@ -19,7 +19,7 @@ The biggest visible change is the support for specifying database credentials an
 
 # Ability to run NAV 2013, NAV 2013R2 and NAV 2015
 
-After launching NAV on Docker, one of the requests we got a lot was support for older versions. As described [here](https://freddysblog.com/2017/11/29/can-i-run-nav-2015-and-earlier-on-docker/), we do not support older versions, but with 0.0.4.1 we allow you to run older versions on Docker. The reason for doing this is, to allow people to create an infrastructure which will allow developers to develop and test on newer versions like NAV 2018, even though they might be working on a customer project on NAV 2015. It also becomes much easier to test out a NAV 2015 customers solution on NAV 2017 because you can spin up any version in minutes.
+After launching NAV on Docker, one of the requests we got a lot was support for older versions. As described [here](/2017/11/29/can-i-run-nav-2015-and-earlier-on-docker/), we do not support older versions, but with 0.0.4.1 we allow you to run older versions on Docker. The reason for doing this is, to allow people to create an infrastructure which will allow developers to develop and test on newer versions like NAV 2018, even though they might be working on a customer project on NAV 2015. It also becomes much easier to test out a NAV 2015 customers solution on NAV 2017 because you can spin up any version in minutes.
 
 So, we didn’t add this only to make it easier for you to work on NAV 2015 or earlier versions, we want you to move forward and we think this makes it easier.
 

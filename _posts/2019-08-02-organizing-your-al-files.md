@@ -30,7 +30,7 @@ and some people will be rather locked on their opinion, which I think is totally
 
 # Converting the baseapp to AL
 
-Since the spring 2019 release of Business Central, it has been possible to convert the baseapp to AL, make modifications and publish your own baseapp to a container as described in this blog post: [https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/](https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/)
+Since the spring 2019 release of Business Central, it has been possible to convert the baseapp to AL, make modifications and publish your own baseapp to a container as described in this blog post: [https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/](/2019/04/15/c-al-to-al-code-customizations/)
 
 Running this script:
 

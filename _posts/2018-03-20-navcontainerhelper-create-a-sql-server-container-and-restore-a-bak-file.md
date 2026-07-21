@@ -9,7 +9,7 @@ permalink: /2018/03/20/navcontainerhelper-create-a-sql-server-container-and-rest
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-If you haven’t read the [first post](https://freddysblog.com/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
+If you haven’t read the [first post](/2018/03/20/navcontainerhelper-1/) about the NavContainerHelper, you should do so.
 
 The following script sample, will create a new SQL Server container and restore a NAV 2018 database backup file (Demo Database NAV (11-0).bak) placed on the host in a folder called c:\\temp\\navdbfiles. The folder c:\\temp\\navdbfiles on the host is shared as c:\\temp inside the container.
 

@@ -9,7 +9,7 @@ permalink: /2017/11/03/10-commands-of-docker/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-I recommend that you read [this blog post](https://freddysblog.com/2017/11/03/multiple-ways-to-run-a-nav-on-docker-image/) before reading this.
+I recommend that you read [this blog post](/2017/11/03/multiple-ways-to-run-a-nav-on-docker-image/) before reading this.
 
 In this blog post I will describe the 10 docker commands I use most frequently and what I use them for. The commands can be executed in a Command Prompt, PowerShell or PowerShell ISE on a machine with Docker installed. In any case, you need to be running as administrator.
 
@@ -47,7 +47,7 @@ Note, that Docker only actually deletes the layers that are unused. Like when yo
 
 # docker run
 
-docker run is described in a little more detail in [this blog post](https://freddysblog.com/2017/11/03/multiple-ways-to-run-a-nav-on-docker-image/).
+docker run is described in a little more detail in [this blog post](/2017/11/03/multiple-ways-to-run-a-nav-on-docker-image/).
 
 One important thing to notice is, that docker run automatically pulls the image if the image doesn’t exist. If the image already exists, the image is reused. That means that even if you remove a container and issue a new docker run microsoft/dynamics-nav:devpreview after the next update is available, it will NOT download the new version. You have to issue a docker pull specifically in order to pull a new version of an image.
 

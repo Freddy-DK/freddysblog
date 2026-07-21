@@ -27,9 +27,9 @@ As a special option, you can add the number 2 to all Urls to get an insider vers
 
 # The ArtifactUrl setting
 
-When you launch any of those short Urls, you will be asked to login to the your Azure Subscription (i.e. the subscription which pays the cost of your Azure VM). After this, you will see a template, which you need to fill out. see this blog post for more general information about this: [https://freddysblog.com/2019/07/26/the-arm-templates-for-dynamics-365-business-central-and-microsoft-dynamics-nav/](https://freddysblog.com/2019/07/26/the-arm-templates-for-dynamics-365-business-central-and-microsoft-dynamics-nav/)
+When you launch any of those short Urls, you will be asked to login to the your Azure Subscription (i.e. the subscription which pays the cost of your Azure VM). After this, you will see a template, which you need to fill out. see this blog post for more general information about this: [https://freddysblog.com/2019/07/26/the-arm-templates-for-dynamics-365-business-central-and-microsoft-dynamics-nav/](/2019/07/26/the-arm-templates-for-dynamics-365-business-central-and-microsoft-dynamics-nav/)
 
-The only new field is artifactUrl and it is defaulted as described under Get-BcArtifactUrl in this blog post: [https://freddysblog.com/2020/06/27/ci-cd-and-artifacts/](https://freddysblog.com/2020/06/27/ci-cd-and-artifacts/)
+The only new field is artifactUrl and it is defaulted as described under Get-BcArtifactUrl in this blog post: [https://freddysblog.com/2020/06/27/ci-cd-and-artifacts/](/2020/06/27/ci-cd-and-artifacts/)
 
 ![](/assets/images/2020/the-arm-templates-now-supports-artifacts-and-images/artifacturl.png)
 

@@ -7,7 +7,7 @@ tags: ["Docker", "Invoke-ScriptInBcContainer", "PowerShell Session", "Session"]
 permalink: /2022/05/24/invoke-scriptinbccontainer/
 ---
 
-As mentioned in [this blog post](https://freddysblog.com/2022/05/19/major-improvement-when-invoking-scripts-in-containers/), the Invoke-ScriptInBcContainer has undergone some serious changes in BcContainerHelper 3.0.9, which just shipped.
+As mentioned in [this blog post](/2022/05/19/major-improvement-when-invoking-scripts-in-containers/), the Invoke-ScriptInBcContainer has undergone some serious changes in BcContainerHelper 3.0.9, which just shipped.
 
 This blog post will describe some details about how this function works.
 

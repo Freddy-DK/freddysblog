@@ -7,7 +7,7 @@ tags: ["NAV", "NAV 2016", "NAV 2017", "PHP", "SOAP", "Web Services"]
 permalink: /2016/11/06/connecting-to-nav-web-services-from-php-take-2/
 ---
 
-Back in the days – January 19th 2010 to be exact, I wrote a blog post on how to connect to NAV Web Services from PHP [here](https://freddysblog.com/2010/01/19/connecting-to-nav-web-services-from-php/).
+Back in the days – January 19th 2010 to be exact, I wrote a blog post on how to connect to NAV Web Services from PHP [here](/2010/01/19/connecting-to-nav-web-services-from-php/).
 
 Web Services was fairly new and there wasn’t a lot of info out there on how to do things.
 
@@ -31,7 +31,7 @@ Today I decided to prove myself right:-)
 
 ### Setting up a test NAV server
 
-[This](https://freddysblog.com/2016/11/05/the-microsoft-dynamics-nav-image-in-the-public-azure-gallery/) blog post describes how to setup a demo environment using the NAV Image in the Azure Gallery. This is by far the easiest way to get started and I will use this as our starting point.
+[This](/2016/11/05/the-microsoft-dynamics-nav-image-in-the-public-azure-gallery/) blog post describes how to setup a demo environment using the NAV Image in the Azure Gallery. This is by far the easiest way to get started and I will use this as our starting point.
 
 NAV is setup for NavUserPassword authentication, firewalls is open, endpoints have been added and a self-signed certificate is added to secure the communication.
 

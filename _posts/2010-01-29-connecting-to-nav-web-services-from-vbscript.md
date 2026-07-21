@@ -13,9 +13,9 @@ The Connecting to NAV Web Services series is coming to an end. I think I have co
 
 Including VBScript makes it possible to do Web Services from scripting like login, shutdown and maintenance scripts. I know that VBScript can also be used from certain browsers but the real idea behind including VBScript here is to enable command line scripts.
 
-Please read [this post](https://freddysblog.com/2010/01/19/connecting-to-nav-web-services-from/) to get a brief explanation of the scenario I will implement in VBScript.
+Please read [this post](/2010/01/19/connecting-to-nav-web-services-from/) to get a brief explanation of the scenario I will implement in VBScript.
 
-Please read [this post](https://freddysblog.com/2010/01/21/connecting-to-nav-web-services-from-javascript/) about how to connect to NAV Web Services from Javascript to get an overall explanation about XML Web Services and how to do things without having proxy classes generated etc.
+Please read [this post](/2010/01/21/connecting-to-nav-web-services-from-javascript/) about how to connect to NAV Web Services from Javascript to get an overall explanation about XML Web Services and how to do things without having proxy classes generated etc.
 
 The primary difference between Javascript and VBcript is actually syntax – most of the things are done in a similar way.
 

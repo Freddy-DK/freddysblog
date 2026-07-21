@@ -17,7 +17,7 @@ This blog post is very targeted towards these partners. Partners who are creatin
 
 # The challenges
 
-In [this blog post](https://freddysblog.com/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/) it is described how to create a AL Project folder in which you can start to apply your changes.
+In [this blog post](/2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/) it is described how to create a AL Project folder in which you can start to apply your changes.
 
 The Create-AlProjectFolderFromBCContainer function will extract the AL Source and setup a project folder for you. When doing this you have one choice to make: **_Which Id, Publisher, Name and Version should me app have?_**
 
@@ -83,7 +83,7 @@ If you change the application properties, you might be better off creating a new
 
 and leave the database ready for publishing a new Base Application and other applications.
 
-Obviously this doesn’t allow you to save the data for any applications, so you would have to import and apply a rapid start package in order to make this happen, which I just blogged about here: [http://freddysblog.com/2019/09/19/using-apis-on-containers/](http://freddysblog.com/2019/09/19/using-apis-on-containers/)
+Obviously this doesn’t allow you to save the data for any applications, so you would have to import and apply a rapid start package in order to make this happen, which I just blogged about here: [http://freddysblog.com/2019/09/19/using-apis-on-containers/](/2019/09/19/using-apis-on-containers/)
 
 **Note, that in order to use the v1.0 APIs you need to install the APIV1 app** (which was installed by default). This can be done manually or automated using the parameter called **\-restoreApps** on **Publish-NewApplicationToBCContainer**.
 
@@ -216,7 +216,7 @@ Import-TestToolkitToBCContainer -containerName $containerName \`
                                 -credential $credential \`
                                 -replaceDependencies $replaceDependencies
 
-After this you can use the script here [http://freddysblog.com/2019/09/19/using-apis-on-containers/](http://freddysblog.com/2019/09/19/using-apis-on-containers/) to import and apply a configuration package.
+After this you can use the script here [http://freddysblog.com/2019/09/19/using-apis-on-containers/](/2019/09/19/using-apis-on-containers/) to import and apply a configuration package.
 
 That’s it – you probably cannot use the script unmodified, but the various pieces should tell you how things works – if you really need this…
 

@@ -86,7 +86,7 @@ Please note the changes in app.json if you want to compile and publish your own 
 
 # Use the image for Code Customizations
 
-The process for creating a container, which should be used for code customizations is very much like described here: [https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/](https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/)
+The process for creating a container, which should be used for code customizations is very much like described here: [https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/](/2019/04/15/c-al-to-al-code-customizations/)
 
 $imageName = "bcinsider.azurecr.io/bcsandbox-master:base-ltsc2019"
 $containerName = "test"
@@ -159,7 +159,7 @@ If you need a specific image, you can add the version to the image tag, example:
 
 bcinsider.azurecr.io/bcsandbox-master:15.0.34648.0-dk-ltsc2019
 
-You will see blog posts describing what’s new and how to do things both on Freddys blog [https://freddysblog.com/category/al-development/](https://freddysblog.com/category/al-development/) and on the team blog [https://cloudblogs.microsoft.com/dynamics365/it/product/business-central/](https://cloudblogs.microsoft.com/dynamics365/it/product/business-central/).
+You will see blog posts describing what’s new and how to do things both on Freddys blog [https://freddysblog.com/category/al-development/](/category/al-development/) and on the team blog [https://cloudblogs.microsoft.com/dynamics365/it/product/business-central/](https://cloudblogs.microsoft.com/dynamics365/it/product/business-central/).
 
 You will also see various Business Central PMs to start sending updates and requests for feedback on Yammer ([https://www.yammer.com/dynamicsnavdev](https://www.yammer.com/dynamicsnavdev)). We love your feedback about all the new features and will provide details and platform to talk about those. We are also planning to use Yammer to share more info when some of the features are lighting up in the consecutive builds as not everything may be fully enabled yet.
 

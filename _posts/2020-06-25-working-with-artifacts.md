@@ -9,7 +9,7 @@ permalink: /2020/06/25/working-with-artifacts/
 
 **Update 2021/2/10:** BcContainerHelper has replaced NavContainerHelper. This blog post still reference NavContainerHelper, which is outdated.
 
-As a follow up to [this blog post](https://freddysblog.com/2020/06/25/changing-the-way-you-run-business-central-in-docker/) (make sure you have read this first), this blog post will share some details about working with artifacts. How do you find them, what do they contain and what happens when you try to use them. It is primarily a list of the new functionality in NavContainerHelper for working with artifacts.
+As a follow up to [this blog post](/2020/06/25/changing-the-way-you-run-business-central-in-docker/) (make sure you have read this first), this blog post will share some details about working with artifacts. How do you find them, what do they contain and what happens when you try to use them. It is primarily a list of the new functionality in NavContainerHelper for working with artifacts.
 
 I will also provide a blog post later, which describes how to work with artifacts when using docker run (raw docker commands)
 

@@ -9,7 +9,7 @@ permalink: /2019/10/22/running-tests-in-containers-2/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-Running automated tests is an essential part of any CI/CD strategy. For Business Central, we have been able to use containers and the function Run-TestsInNavContainer in the NavContainerHelper PowerShell module as described in [this blog post](https://freddysblog.com/2019/04/13/running-tests-in-containers) (make sure you have read this before continuing) for 6-12 months and a lot of partners are already taking advantage of this. This blog post shows you how to get the max. out of the functions.
+Running automated tests is an essential part of any CI/CD strategy. For Business Central, we have been able to use containers and the function Run-TestsInNavContainer in the NavContainerHelper PowerShell module as described in [this blog post](/2019/04/13/running-tests-in-containers) (make sure you have read this before continuing) for 6-12 months and a lot of partners are already taking advantage of this. This blog post shows you how to get the max. out of the functions.
 
 # ![this is a test](/assets/images/2019/running-tests-in-containers-2/this-is-a-test.png)
 

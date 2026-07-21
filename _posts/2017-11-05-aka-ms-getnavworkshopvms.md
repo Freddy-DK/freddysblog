@@ -17,7 +17,7 @@ The scripts were using an ARM (Azure Resource Management) template, much like th
 
 # [http://aka.ms/getnavworkshopvms](http://aka.ms/getnavworkshopvms)
 
-If you navigate to [http://aka.ms/getnavworkshopvms](http://aka.ms/getnavworkshopvms) you will be asked to login to your Azure Subscription (much like [http://aka.ms/getnav](http://aka.ms/getnav), explained in [this blog post](https://freddysblog.com/2017/11/03/1-800-getnav/)). You will be met by a template, which looks slightly different from the other templates:  
+If you navigate to [http://aka.ms/getnavworkshopvms](http://aka.ms/getnavworkshopvms) you will be asked to login to your Azure Subscription (much like [http://aka.ms/getnav](http://aka.ms/getnav), explained in [this blog post](/2017/11/03/1-800-getnav/)). You will be met by a template, which looks slightly different from the other templates:  
 [![](/assets/images/2017/aka-ms-getnavworkshopvms/8879d-workshopvms-1.png)](/assets/images/2017/aka-ms-getnavworkshopvms/8879d-workshopvms.png)
 
 Let me explain the fields in this template

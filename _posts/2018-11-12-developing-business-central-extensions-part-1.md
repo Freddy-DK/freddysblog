@@ -128,7 +128,7 @@ Where $Username will be of type string and $Password will be of type SecureStrin
 
 If you need to use a specific license file, you will need to set the **LicenseFile** secret to a secure URL, from which your license file can be downloaded.
 
-See [https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/](https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/) for how to create a secure URL to a file.
+See [https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/](/2017/02/26/create-a-secure-url-to-a-file/) for how to create a secure URL to a file.
 
 If you need to use a code signing certificate, you will need to set the **CodeSignPfxFile** secret to a secure URL, from which your code signing certificate can be downloaded and **CodeSignPfxPassword** secret should be the Pfx Password for this certificate.
 

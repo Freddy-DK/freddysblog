@@ -13,11 +13,11 @@ Most partners have different ways of setting up their CSIDE development environm
 
 I will also cover how easy you can move your solution from one version of NAV to another and even how your C/AL solution can be moved to AL.
 
-I know this blog post uses a very simple solution and my view on everything is fairly simplistic, but if your code is written using an event based architecture (called step 4 in [this blog post](https://freddysblog.com/2017/03/31/what-would-you-do/)), then it actually doesn’t have to be much harder than this…
+I know this blog post uses a very simple solution and my view on everything is fairly simplistic, but if your code is written using an event based architecture (called step 4 in [this blog post](/2017/03/31/what-would-you-do/)), then it actually doesn’t have to be much harder than this…
 
 # Install Docker and NavContainerHelper
 
-In order for this to work, you need to setup a development machine with Docker and NavContainerHelper as described in [this blog post](https://freddysblog.com/2018/03/20/navcontainerhelper-1/).
+In order for this to work, you need to setup a development machine with Docker and NavContainerHelper as described in [this blog post](/2018/03/20/navcontainerhelper-1/).
 
 **Note**, this uses [NavContainerHelper 0.2.7.3](https://www.powershellgallery.com/packages/navcontainerhelper/0.2.7.3).
 

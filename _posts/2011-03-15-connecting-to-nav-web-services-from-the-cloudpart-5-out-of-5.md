@@ -7,9 +7,9 @@ tags: ["AppFabric", "Authentication", "Azure", "C#", "Proxy", "Service Reference
 permalink: /2011/03/15/connecting-to-nav-web-services-from-the-cloudpart-5-out-of-5/
 ---
 
-If you haven’t already read part 4 (and the prior parts) you should do so [here](https://freddysblog.com/2011/01/27/connecting-to-nav-web-services-from-the-cloudpart-4-out-of-5/), before continuing to read this post.
+If you haven’t already read part 4 (and the prior parts) you should do so [here](/2011/01/27/connecting-to-nav-web-services-from-the-cloudpart-4-out-of-5/), before continuing to read this post.
 
-In this post, I am going to create a small Windows Phone 7 application, which basically will be a phone version of the sidebar gadgets from [this post](https://freddysblog.com/archive/2008/12/05/microsoft-windows-vista-gadget-my-stuff.aspx). When we are done, your Windows Phone 7 will look like:
+In this post, I am going to create a small Windows Phone 7 application, which basically will be a phone version of the sidebar gadgets from [this post](/archive/2008/12/05/microsoft-windows-vista-gadget-my-stuff.aspx). When we are done, your Windows Phone 7 will look like:
 
 [![WP7](/assets/images/2011/connecting-to-nav-web-services-from-the-cloudpart-5-out-of-5/3036.wp7_45a150ec.png?w=287&h=538 "WP7")](/assets/images/2011/connecting-to-nav-web-services-from-the-cloudpart-5-out-of-5/3036.wp7_45a150ec.png)
 
@@ -21,7 +21,7 @@ Customer\[\] GetMyCustomers(string username, string password)
 Vendor\[\] GetMyVendors(string username, string password)
 Item\[\] GetMyItems(string username, string password)
 
-You can imagine that these functions are implemented in the Proxy simply by authenticating and calling the corresponding function in the MyStuff codeunit from [this post](https://freddysblog.com/archive/2008/12/05/microsoft-windows-vista-gadget-my-stuff.aspx), I will not go into further detail about how the Proxy is done.
+You can imagine that these functions are implemented in the Proxy simply by authenticating and calling the corresponding function in the MyStuff codeunit from [this post](/archive/2008/12/05/microsoft-windows-vista-gadget-my-stuff.aspx), I will not go into further detail about how the Proxy is done.
 
 ## A small Console Application
 

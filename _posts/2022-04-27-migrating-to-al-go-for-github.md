@@ -7,7 +7,7 @@ tags: ["AL-Go for GitHub", "CI/CD", "Migrating"]
 permalink: /2022/04/27/migrating-to-al-go-for-github/
 ---
 
-As explained in the first blog post about [AL-Go for GitHub](https://freddysblog.com/2022/04/26/al-go-for-github/) the next post would be all about how to migrate your repository to AL-Go for GitHub.
+As explained in the first blog post about [AL-Go for GitHub](/2022/04/26/al-go-for-github/) the next post would be all about how to migrate your repository to AL-Go for GitHub.
 
 Whether you have a setup based on the first CI/CD Hands-On-Lab or you have the latest generation, it should be fairly easy to migrate to AL-Go and get all the benefits with that, but it is a manual process.
 
@@ -178,7 +178,7 @@ Select an organization, a name and the visibility of the project.
 
 ![](/assets/images/2022/migrating-to-al-go-for-github/screenshot-2022-04-26-20.49.24.png)
 
-Download the content of your repo and place the .zip file on Dropbox or somewhere else, where you can get a direct download url to the file (read how-to [here](https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/)).
+Download the content of your repo and place the .zip file on Dropbox or somewhere else, where you can get a direct download url to the file (read how-to [here](/2017/02/26/create-a-secure-url-to-a-file/)).
 
 Under **Actions**, select **Add existing app or test app**, press **Run workflow** and paste the direct download url to your .zip file (you can try [this url](https://dev.azure.com/businesscentralapps/Old.HelloWorld/_apis/git/repositories/Old.HelloWorld/items/items?path=/&resolveLfs=true&$format=zip&api-version=5.0&download=true) is you like). Select N to Direct Commit and click **Run Workflow**.
 
@@ -224,7 +224,7 @@ Select an organization, a name and the visibility of the project.
 
 ![](/assets/images/2022/migrating-to-al-go-for-github/screenshot-2022-04-26-20.28.28.png)
 
-Place your .app files in a .zip file and place it on Dropbox or somewhere else, where you can get a direct download url to the file (read how-to [here](https://freddysblog.com/2017/02/26/create-a-secure-url-to-a-file/)).
+Place your .app files in a .zip file and place it on Dropbox or somewhere else, where you can get a direct download url to the file (read how-to [here](/2017/02/26/create-a-secure-url-to-a-file/)).
 
 Under **Actions**, select **Add existing app or test app**, press **Run workflow** and paste the direct download url to your .zip file (you can try with [this url](https://businesscentralapps.blob.core.windows.net/bingmaps-pte/BingMaps.PTE_3.0.27.0.zip) if you like). Select N to Direct Commit and click **Run Workflow**.
 

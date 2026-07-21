@@ -9,7 +9,7 @@ permalink: /2019/11/04/using-sql-server-on-the-host/
 
 **Update 2021/2/10:** Microsoft stopped creating images for Docker in the summer of 2020. We now publish artifacts, which can be used to spin up containers and BcContainerHelper has replaced NavContainerHelper. This blog post reflects the old way of using NAV/BC on Docker and references NavContainerHelper, which is outdated.
 
-I have had quite a few partners asking me how to connect a NAV / Business Central container to a SQL Server placed on the host. This is the way I started a blog post back in april here: [https://freddysblog.com/2019/04/12/placing-the-database-on-the-host/](https://freddysblog.com/2019/04/12/placing-the-database-on-the-host/) and elegantly, I avoided to answer the question and instead described how to place the database on the host and use the SQL engine in the container. Of course this doesn’t solve the issue if you have a very large database, which SQL Express doesn’t support.
+I have had quite a few partners asking me how to connect a NAV / Business Central container to a SQL Server placed on the host. This is the way I started a blog post back in april here: [https://freddysblog.com/2019/04/12/placing-the-database-on-the-host/](/2019/04/12/placing-the-database-on-the-host/) and elegantly, I avoided to answer the question and instead described how to place the database on the host and use the SQL engine in the container. Of course this doesn’t solve the issue if you have a very large database, which SQL Express doesn’t support.
 
 In this blog post I will try to address the original problem.
 

@@ -15,7 +15,7 @@ This blog post will take you through the steps needed to convert a C/AL solution
 
 # Create a container with the solution you want to convert
 
-I will use Business Central Spring release for the move and my solution was originally created in NAV 2017 CU3. The [first blog post in this series](https://freddysblog.com/2019/04/15/c-al-to-al-preparations/) explains how you can move your solution from NAV 2017 CU3 to Business Central, but I am sure most partners have mechanisms and processes in place to perform this move. If you didn’t go through the process in the first blog post, you can create a container with the result of the first blog post by running this script:
+I will use Business Central Spring release for the move and my solution was originally created in NAV 2017 CU3. The [first blog post in this series](/2019/04/15/c-al-to-al-preparations/) explains how you can move your solution from NAV 2017 CU3 to Business Central, but I am sure most partners have mechanisms and processes in place to perform this move. If you didn’t go through the process in the first blog post, you can create a container with the result of the first blog post by running this script:
 
 \# Settings
 $imageName = "mcr.microsoft.com/businesscentral/onprem:1904-rtm"
@@ -85,7 +85,7 @@ Pressing F5 compiles and publishes the app and starts the Web Client. Searching 
 
 # Conclusion
 
-Extensions is the future and if possible you should move your solution to extensions. If, for some reason it isn’t possible to move your solution to an extension at this time, you can also move your solution to code customized AL as described in [this blog post](https://freddysblog.com/2019/04/15/c-al-to-al-code-customizations/).
+Extensions is the future and if possible you should move your solution to extensions. If, for some reason it isn’t possible to move your solution to an extension at this time, you can also move your solution to code customized AL as described in [this blog post](/2019/04/15/c-al-to-al-code-customizations/).
 
 Enjoy
 

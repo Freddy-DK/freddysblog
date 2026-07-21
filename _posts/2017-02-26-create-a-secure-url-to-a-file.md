@@ -7,7 +7,7 @@ tags: ["Azure", "Azure Storage", "Azure Storage Explorer", "DEMO", "Direct Downl
 permalink: /2017/02/26/create-a-secure-url-to-a-file/
 ---
 
-In the very last paragraph of [this post](https://freddysblog.com/2017/02/06/ssl-certificates-101/), I talk about specifying a certificate pfx file as a Url for [http://aka.ms/navdemodeploy](http://aka.ms/navdemodeploy):
+In the very last paragraph of [this post](/2017/02/06/ssl-certificates-101/), I talk about specifying a certificate pfx file as a Url for [http://aka.ms/navdemodeploy](http://aka.ms/navdemodeploy):
 
 [![certpfxurl](/assets/images/2017/create-a-secure-url-to-a-file/5f2d0-certpfxurl-1.png)](/assets/images/2017/create-a-secure-url-to-a-file/5f2d0-certpfxurl.png)
 

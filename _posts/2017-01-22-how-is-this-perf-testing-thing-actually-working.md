@@ -9,9 +9,9 @@ permalink: /2017/01/22/how-is-this-perf-testing-thing-actually-working/
 
 This post is #3 in a series of posts about performance testing.
 
-[Post #1](https://freddysblog.com/2016/12/16/so-you-want-to-get-started-on-perf-testing-huh/) was all about setting up an instance of NAV on Azure and get perf tests up running.
+[Post #1](/2016/12/16/so-you-want-to-get-started-on-perf-testing-huh/) was all about setting up an instance of NAV on Azure and get perf tests up running.
 
-[Post #2](https://freddysblog.com/2016/12/17/perf-testing-with-multiple-users/) was all about scaling the number of users and running multi-tenancy.
+[Post #2](/2016/12/17/perf-testing-with-multiple-users/) was all about scaling the number of users and running multi-tenancy.
 
 But what actually happens when running perf tests?
 
@@ -98,7 +98,7 @@ Line by line:
 
 The test scenario runner consults the _UserContextManager_ twice. Once for getting a _UserContext_ and once for returning the “used” _UserContext_ to the manager. The Github sample implements two UserContextManagers, one with NAVUserPassword Authentication and one with Windows Authentication. In the sample we then instantiate one of these with proper parameters.
 
-The _UserContextManager_ is also responsible for distributing users between multiple tenants (if running multi-tenancy) and for selecting company. The Github sample doesn’t really implement this, but in [Post #2](https://freddysblog.com/2016/12/17/perf-testing-with-multiple-users/) you will see an example of how you could implement this in the _UserContextManager_. In real life load testing you will probably find yourself create at least one new _UserContextManager_ class deriving from one of the existing classes and implementing other ways of managing _users_, _tenants_ and _companies_, you shouldn’t need to modify the base objects in the UserSession project.
+The _UserContextManager_ is also responsible for distributing users between multiple tenants (if running multi-tenancy) and for selecting company. The Github sample doesn’t really implement this, but in [Post #2](/2016/12/17/perf-testing-with-multiple-users/) you will see an example of how you could implement this in the _UserContextManager_. In real life load testing you will probably find yourself create at least one new _UserContextManager_ class deriving from one of the existing classes and implementing other ways of managing _users_, _tenants_ and _companies_, you shouldn’t need to modify the base objects in the UserSession project.
 
 The two methods you want to override are
 
