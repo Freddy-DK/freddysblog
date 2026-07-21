@@ -2,16 +2,19 @@ title: Freddys blog
 description: Learn something new… – then Teach someone!
 author: Freddy Kristiansen
 
-# Set url to "https://freddysblog.com" when the custom domain is switched over.
-# While testing on *.github.io, leave it empty — the deploy workflow supplies
-# the correct baseurl automatically.
-url: ""
+url: "https://freddysblog.com"
 baseurl: ""
 
 timezone: Europe/Copenhagen
 
 theme: minima
 permalink: /:year/:month/:day/:title/
+
+# Only these pages appear in the header navigation. Without this, minima
+# lists every page with a title — including all generated tag/category
+# archive pages.
+header_pages:
+  - tags.md
 
 plugins:
   - jekyll-feed

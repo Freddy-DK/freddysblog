@@ -33,13 +33,13 @@ Try it out, and report any problems by creating an issue in my fork, and I will 
 
 ## Changes needed in BcContainerHelper
 
-BcContainerHelper is used by AL-Go for GitHub for handling GitHub packages (NuGet), and this functionality needed some changes due to the GitHub packages NuGet feed URL is different – **[https://nuget.<enterprisename&gt](https://nuget.\<enterprisename&gt);.ghe.com/<organizationname>** vs. **[https://nuget.github.com/<organizationname&gt](https://nuget.github.com/\<organizationname&gt);** also the GitHub API URL is different, so this is deducted from the NuGet Server Url.
+BcContainerHelper is used by AL-Go for GitHub for handling GitHub packages (NuGet), and this functionality needed some changes due to the GitHub packages NuGet feed URL is different – **https://nuget.<enterprisename>.ghe.com/<organizationname>** vs. **https://nuget.github.com/<organizationname>** also the GitHub API URL is different, so this is deducted from the NuGet Server Url.
 
 The PR can be found here: [https://github.com/microsoft/navcontainerhelper/pull/4167](https://github.com/microsoft/navcontainerhelper/pull/4167)
 
 ## Changes needed in AL-Go for GitHub
 
-Most changes come from the fact that the URL is different, **[https://<enterprisename&gt](https://\<enterprisename&gt);.ghe.com/<organizationname>** vs. **[https://github.com/<organizationname&gt](https://github.com/\<organizationname&gt);**. This also changes the API URL by adding api in front of the hostname.
+Most changes come from the fact that the URL is different, **https://<enterprisename>.ghe.com/<organizationname>** vs. **https://github.com/<organizationname>**. This also changes the API URL by adding api in front of the hostname.
 
 Inside GitHub workflows, we can use environment variables like GITHUB\_SERVER\_URL and GITHUB\_API\_URL, which takes care of most of these things.
 
