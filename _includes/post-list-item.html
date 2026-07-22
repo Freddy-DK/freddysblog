@@ -1,6 +1,7 @@
 {%- comment -%}
-Renders one post in a listing: thumbnail from the post's first image (if
-any) on the left, date/title/snippet on the right. Expects `post`.
+Renders one post in a listing: date and title always flush left; below the
+headline a thumbnail from the post's first image (if any) sits left of the
+excerpt text. Expects `post`.
 {%- endcomment -%}
 {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 {%- assign thumb = "" -%}
@@ -16,18 +17,16 @@ any) on the left, date/title/snippet on the right. Expects `post`.
   {%- assign snippet = post.content | strip_html | strip -%}
 {%- endif -%}
 <li>
-  <div class="post-list-item">
+  <span class="post-meta">{{ post.date | date: date_format }}</span>
+  <h3>
+    <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+  </h3>
+  {%- if site.show_excerpts %}
+  <div class="post-list-body">
     {%- if thumb != "" %}
     <a class="post-thumb" href="{{ post.url | relative_url }}" aria-hidden="true" tabindex="-1"><img src="{{ thumb }}" alt="" loading="lazy"></a>
     {%- endif %}
-    <div class="post-list-text">
-      <span class="post-meta">{{ post.date | date: date_format }}</span>
-      <h3>
-        <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
-      </h3>
-      {%- if site.show_excerpts %}
-      <p class="post-snippet">{{ snippet | truncatewords: 45 }}</p>
-      {%- endif %}
-    </div>
+    <p class="post-snippet">{{ snippet | truncatewords: 45 }}</p>
   </div>
+  {%- endif %}
 </li>
