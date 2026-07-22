@@ -12,10 +12,9 @@ excerpt text. Expects `post`.
     {%- assign thumb = srcpart[1] | split: '"' | first -%}
   {%- endif -%}
 {%- endif -%}
-{%- assign snippet = post.excerpt | strip_html | strip -%}
-{%- if snippet == "" -%}
-  {%- assign snippet = post.content | strip_html | strip -%}
-{%- endif -%}
+{%- comment -%} Draw from the full content (not just the first paragraph)
+so short opening paragraphs are filled out with following text. {%- endcomment -%}
+{%- assign snippet = post.content | strip_html | normalize_whitespace | strip -%}
 <li>
   <span class="post-meta">{{ post.date | date: date_format }}</span>
   <h3>
@@ -26,7 +25,7 @@ excerpt text. Expects `post`.
     {%- if thumb != "" %}
     <a class="post-thumb" href="{{ post.url | relative_url }}" aria-hidden="true" tabindex="-1"><img src="{{ thumb }}" alt="" loading="lazy"></a>
     {%- endif %}
-    <p class="post-snippet">{{ snippet | truncatewords: 90 }}</p>
+    <p class="post-snippet">{{ snippet | truncatewords: 65 }}</p>
   </div>
   {%- endif %}
 </li>
