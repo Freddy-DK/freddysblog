@@ -1,0 +1,18 @@
+{
+  "New blog post front matter": {
+    "scope": "markdown",
+    "prefix": "blogpost",
+    "description": "Front matter for a new Freddys blog post",
+    "body": [
+      "---",
+      "layout: post",
+      "title: \"${1:Post title}\"",
+      "date: ${2:$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE} ${3:08:30:00}",
+      "categories: [\"${4:Uncategorized}\"]",
+      "tags: [${5:\"AL-Go for GitHub\"}]",
+      "---",
+      "",
+      "$0"
+    ]
+  }
+}

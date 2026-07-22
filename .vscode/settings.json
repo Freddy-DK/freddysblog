@@ -1,0 +1,13 @@
+{
+  // Paste Image (Ctrl+Alt+V): save clipboard screenshots into a folder per
+  // post and insert a root-absolute link that works on the site and in the
+  // VS Code markdown preview.
+  "pasteImage.path": "${projectRoot}/assets/images/${currentFileNameWithoutExt}",
+  "pasteImage.basePath": "${projectRoot}",
+  "pasteImage.prefix": "/",
+  "pasteImage.forceUnixStyleSeparator": true,
+
+  "[markdown]": {
+    "editor.wordWrap": "on"
+  }
+}
