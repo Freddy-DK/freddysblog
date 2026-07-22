@@ -40,6 +40,31 @@
   white-space: nowrap;
 }
 
+// Previous / all posts / next navigation at the bottom of each post
+.post-nav {
+  display: flex;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid $grey-color-light;
+
+  .post-nav-prev {
+    flex: 1;
+    text-align: left;
+  }
+
+  .post-nav-all {
+    flex: 0 0 auto;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .post-nav-next {
+    flex: 1;
+    text-align: right;
+  }
+}
+
 .giscus {
   margin-top: 48px;
 }
