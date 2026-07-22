@@ -1,0 +1,20 @@
+{%- assign slug = page.url | split: "/" | last -%}
+{%- assign archived = site.data.comments[slug] -%}
+{%- if archived and archived.size > 0 -%}
+<section class="archived-comments">
+  <h2>{{ archived.size }} archived comment{%- if archived.size > 1 -%}s{%- endif -%}</h2>
+  <p class="archived-comments-note">
+    These comments were made on the previous (WordPress) version of this blog and are preserved read-only.
+    Use the comment section above to join the conversation.
+  </p>
+  {%- for c in archived %}
+  <div class="archived-comment depth-{{ c.depth }}">
+    <div class="archived-comment-meta">
+      <strong>{{ c.author | escape }}</strong>
+      <span>{{ c.date | date: "%b %-d, %Y" }}</span>
+    </div>
+    <div class="archived-comment-body">{{ c.content }}</div>
+  </div>
+  {%- endfor %}
+</section>
+{%- endif -%}
