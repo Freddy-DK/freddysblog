@@ -2,7 +2,7 @@
 layout: post
 title: "Docker and Business Central"
 date: 2021-10-30 22:57:16
-categories: ["Uncategorized"]
+categories: ["Docker", "BcContainerHelper"]
 permalink: /2021/10/30/docker-and-business-central/
 ---
 

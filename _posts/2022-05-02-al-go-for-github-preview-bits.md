@@ -2,7 +2,7 @@
 layout: post
 title: "Preview of future AL-Go for GitHub functionality"
 date: 2022-05-02 16:58:24
-categories: ["AL Development", "CI/CD"]
+categories: ["AL Development", "CI/CD", "AL-Go for GitHub"]
 tags: ["AL-Go for GitHub", "DevOps", "GitHub"]
 permalink: /2022/05/02/al-go-for-github-preview-bits/
 ---

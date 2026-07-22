@@ -2,7 +2,7 @@
 layout: post
 title: "What is docker? What are Containers? What can I use containers for? (NAV on Docker #3)"
 date: 2017-10-31 15:22:38
-categories: ["Docker", "Not Archived"]
+categories: ["Docker"]
 tags: ["Containers", "Docker", "isolation", "Microsoft Dynamics NAV", "NAV", "NAV on Docker"]
 permalink: /2017/10/31/what-is-docker-what-are-containers/
 ---

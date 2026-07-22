@@ -2,7 +2,7 @@
 layout: post
 title: "Migrating to AL-Go for GitHub"
 date: 2022-04-27 05:57:29
-categories: ["AL Development", "CI/CD"]
+categories: ["AL Development", "CI/CD", "AL-Go for GitHub"]
 tags: ["AL-Go for GitHub", "CI/CD", "Migrating"]
 permalink: /2022/04/27/migrating-to-al-go-for-github/
 ---

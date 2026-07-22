@@ -2,7 +2,7 @@
 layout: post
 title: "What’s new in NavContainerHelper 0.5.0.1"
 date: 2019-01-31 14:05:54
-categories: ["Docker", "Not Archived"]
+categories: ["Docker"]
 tags: ["Docker", "ltsc2016", "ltsc2019", "NAV on Docker", "NavContainerHelper"]
 permalink: /2019/01/31/whats-new-in-navcontainerhelper-0-5-0-1/
 ---

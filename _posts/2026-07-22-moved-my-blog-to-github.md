@@ -2,10 +2,8 @@
 layout: post
 title: Moved my blog to GitHub...
 date: 2026-07-22T06:19:34.667Z
-categories:
-    - Blog
-tags:
-    - Blog
+categories: ["Freddy"]
+permalink: 2026/07/22/moved-my-blog-to-github/
 ---
 
 Yesterday, I saw a post on LinkedIn from one of my connections, talking about moving from Wordpress to GitHub. Unfortunately, I have been unable to figure out who, else I wanted to say thanks!

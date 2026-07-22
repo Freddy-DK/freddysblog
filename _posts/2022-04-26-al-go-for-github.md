@@ -2,7 +2,7 @@
 layout: post
 title: "AL-Go for GitHub"
 date: 2022-04-26 10:12:48
-categories: ["CI/CD"]
+categories: ["CI/CD", "AL-Go for GitHub"]
 tags: ["AL-Go for GitHub", "DevOps", "GitHub"]
 permalink: /2022/04/26/al-go-for-github/
 ---

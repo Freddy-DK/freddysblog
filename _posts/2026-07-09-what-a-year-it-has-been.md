@@ -2,7 +2,7 @@
 layout: post
 title: "What a year it has been!"
 date: 2026-07-09 13:40:29
-categories: ["Uncategorized"]
+categories: ["Freddy"]
 permalink: /2026/07/09/what-a-year-it-has-been/
 ---
 

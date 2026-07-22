@@ -2,7 +2,7 @@
 layout: post
 title: "It has never been easier… (NAV on Docker #2)"
 date: 2017-10-29 09:20:13
-categories: ["Docker", "Not Archived"]
+categories: ["Docker"]
 tags: ["Containers", "Docker", "NAV 2016", "NAV 2017", "NAV on Docker"]
 permalink: /2017/10/29/it-has-never-been-easier-nav-on-docker-2/
 ---

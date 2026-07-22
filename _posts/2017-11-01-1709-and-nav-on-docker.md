@@ -2,7 +2,7 @@
 layout: post
 title: "1709 and NAV on Docker"
 date: 2017-11-01 12:34:47
-categories: ["Docker", "Not Archived"]
+categories: ["Docker"]
 tags: ["1709", "Docker", "NAV", "NAV on Docker", "Windows 10", "Windows Server 1709", "Windows Server 2016", "windowsservercore"]
 permalink: /2017/11/01/1709-and-nav-on-docker/
 ---

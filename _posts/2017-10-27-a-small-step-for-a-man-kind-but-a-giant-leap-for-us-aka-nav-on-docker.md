@@ -2,7 +2,7 @@
 layout: post
 title: "A small step for man kind but a giant leap for us! (aka NAV on Docker)"
 date: 2017-10-27 13:42:39
-categories: ["Docker", "Not Archived"]
+categories: ["Docker"]
 tags: ["Directions", "Docker", "NAV 2016", "NAV 2017", "NAV Tech Days"]
 permalink: /2017/10/27/a-small-step-for-a-man-kind-but-a-giant-leap-for-us-aka-nav-on-docker/
 ---

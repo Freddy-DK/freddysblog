@@ -2,7 +2,7 @@
 layout: post
 title: "Create a secure Url to a file"
 date: 2017-02-26 06:18:38
-categories: ["Not Archived"]
+categories: ["Demo Environments"]
 tags: ["Azure", "Azure Storage", "Azure Storage Explorer", "DEMO", "Direct Download", "DropBox Direct Download", "NAV 2017", "OneDrive Direct Download", "Secure Access Signature", "Secure Url"]
 permalink: /2017/02/26/create-a-secure-url-to-a-file/
 ---

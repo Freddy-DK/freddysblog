@@ -2,7 +2,7 @@
 layout: post
 title: "Symbols demystified"
 date: 2019-03-16 15:12:52
-categories: ["AL Development", "NavContainerHelper", "Not Archived"]
+categories: ["AL Development", "NavContainerHelper"]
 tags: ["AL", "Docker", "NavContainerHelper", "Symbols", "VS Code"]
 permalink: /2019/03/16/symbols-demystified/
 ---

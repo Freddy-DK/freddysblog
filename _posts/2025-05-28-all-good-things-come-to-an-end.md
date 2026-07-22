@@ -2,7 +2,7 @@
 layout: post
 title: "All good things come to an end"
 date: 2025-05-28 14:35:51
-categories: ["Uncategorized"]
+categories: ["Freddy"]
 permalink: /2025/05/28/all-good-things-come-to-an-end/
 ---
 

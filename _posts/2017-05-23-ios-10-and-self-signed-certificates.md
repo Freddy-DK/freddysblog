@@ -2,7 +2,7 @@
 layout: post
 title: "iOS 10 and self signed certificates"
 date: 2017-05-23 09:13:33
-categories: ["Not Archived"]
+categories: ["Demo Environments"]
 tags: ["Apple", "Azure", "Certificates", "DEMO", "iPad", "iPhone", "NAV", "NAV 2017", "Self-Signed"]
 permalink: /2017/05/23/ios-10-and-self-signed-certificates/
 ---

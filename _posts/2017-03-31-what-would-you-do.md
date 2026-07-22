@@ -2,7 +2,7 @@
 layout: post
 title: "What would you do?"
 date: 2017-03-31 07:31:15
-categories: ["Not Archived"]
+categories: ["Freddy"]
 tags: ["Business Model", "Customizations", "Event Based Architecture", "Events", "Extensions", "NAV 2017", "NAV Tenerife", "Visual Studio Code"]
 permalink: /2017/03/31/what-would-you-do/
 ---

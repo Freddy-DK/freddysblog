@@ -2,7 +2,7 @@
 layout: post
 title: "Structuring your AL-Go for GitHub repositories"
 date: 2022-04-28 21:16:53
-categories: ["AL Development", "CI/CD"]
+categories: ["AL Development", "CI/CD", "AL-Go for GitHub"]
 tags: ["AL-Go for GitHub", "App Development", "CI/CD", "GitHub"]
 permalink: /2022/04/28/structuring-your-github-repositories/
 ---

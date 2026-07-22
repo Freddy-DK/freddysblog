@@ -2,7 +2,7 @@
 layout: post
 title: "NAV on Docker version 0.0.4.1"
 date: 2017-12-02 06:28:25
-categories: ["Docker", "Not Archived", "PowerShell"]
+categories: ["Docker", "PowerShell"]
 tags: ["Docker", "Generic Image", "NAV on Docker", "navinstall", "navstart", "Specific image"]
 permalink: /2017/12/02/nav-on-docker-version-0-0-4-1/
 ---

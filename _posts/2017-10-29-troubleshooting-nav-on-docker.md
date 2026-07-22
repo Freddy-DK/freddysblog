@@ -2,7 +2,7 @@
 layout: post
 title: "Troubleshooting NAV on Docker"
 date: 2017-10-29 23:35:48
-categories: ["Docker", "Not Archived"]
+categories: ["Docker"]
 tags: ["Docker", "NAV on Docker", "Troubleshooting"]
 permalink: /2017/10/29/troubleshooting-nav-on-docker/
 ---

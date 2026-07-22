@@ -2,7 +2,7 @@
 layout: post
 title: "Branching strategies for your AL-Go for GitHub repo"
 date: 2022-05-03 08:35:16
-categories: ["AL Development", "CI/CD"]
+categories: ["AL Development", "CI/CD", "AL-Go for GitHub"]
 tags: ["AL-Go for GitHub", "Automated testing", "Branch", "Branching", "Code Review", "Pull Request"]
 permalink: /2022/05/03/branching-strategies-for-your-al-go-for-github-repo/
 ---

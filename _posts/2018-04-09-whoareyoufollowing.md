@@ -2,7 +2,7 @@
 layout: post
 title: "Who are you following?"
 date: 2018-04-09 16:04:07
-categories: ["Not Archived"]
+categories: ["Freddy"]
 tags: ["blogs", "facebook", "instagram", "linkedin", "pinterest", "social media", "twitter"]
 permalink: /2018/04/09/whoareyoufollowing/
 ---

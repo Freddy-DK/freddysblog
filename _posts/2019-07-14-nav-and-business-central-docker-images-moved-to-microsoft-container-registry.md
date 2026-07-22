@@ -2,7 +2,7 @@
 layout: post
 title: "NAV and Business Central Docker images moved to Microsoft Container Registry…"
 date: 2019-07-14 23:07:45
-categories: ["CI/CD", "Docker", "NavContainerHelper", "Uncategorized"]
+categories: ["CI/CD", "Docker", "NavContainerHelper"]
 tags: ["Docker", "NAV on Docker", "NavContainerHelper"]
 permalink: /2019/07/14/nav-and-business-central-docker-images-moved-to-microsoft-container-registry/
 ---

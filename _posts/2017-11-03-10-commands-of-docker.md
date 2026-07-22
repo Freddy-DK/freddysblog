@@ -2,7 +2,7 @@
 layout: post
 title: "The 10 command(ment)s of Docker (NAV on Docker #6)"
 date: 2017-11-03 18:10:59
-categories: ["Docker", "Not Archived"]
+categories: ["Docker"]
 tags: ["Docker", "NAV", "NAV on Docker", "NavContainerHelper"]
 permalink: /2017/11/03/10-commands-of-docker/
 ---

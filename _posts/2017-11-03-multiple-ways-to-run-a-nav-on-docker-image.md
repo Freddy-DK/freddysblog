@@ -2,7 +2,7 @@
 layout: post
 title: "Multiple ways to run a NAV on Docker image (NAV on Docker #5)"
 date: 2017-11-03 08:40:23
-categories: ["Azure", "Demo Environments", "Docker", "NavContainerHelper", "Not Archived"]
+categories: ["Azure", "Demo Environments", "Docker", "NavContainerHelper"]
 tags: ["Azure", "Azure Container Services", "Containers", "Docker", "GETNAV", "NAV", "NAV on Docker", "NavContainerHelper"]
 permalink: /2017/11/03/multiple-ways-to-run-a-nav-on-docker-image/
 ---

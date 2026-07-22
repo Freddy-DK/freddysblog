@@ -2,7 +2,7 @@
 layout: post
 title: "Can I run NAV 2015 (and earlier) on Docker?"
 date: 2017-11-29 12:37:22
-categories: ["Docker", "NavContainerHelper", "Not Archived"]
+categories: ["Docker", "NavContainerHelper"]
 tags: ["Docker", "Generic", "NAV 2013", "NAV 2013R2", "NAV 2015", "NAV on Docker", "navinstall"]
 permalink: /2017/11/29/can-i-run-nav-2015-and-earlier-on-docker/
 ---

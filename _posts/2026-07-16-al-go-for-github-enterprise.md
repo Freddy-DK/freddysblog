@@ -2,7 +2,7 @@
 layout: post
 title: "AL-Go for GitHub Enterprise"
 date: 2026-07-16 06:58:50
-categories: ["Uncategorized"]
+categories: ["AL-Go for GitHub"]
 tags: ["AL-Go for GitHub", "data-residency", "ghe-com", "GitHub", "github-enterprise"]
 permalink: /2026/07/16/al-go-for-github-enterprise/
 ---

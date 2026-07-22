@@ -2,7 +2,7 @@
 layout: post
 title: "Secrets in AL-Go for GitHub"
 date: 2022-05-14 07:24:53
-categories: ["CI/CD"]
+categories: ["CI/CD", "AL-Go for GitHub"]
 tags: ["Azure KeyVault", "Environments", "Forks", "GitHub Secrets", "Organization", "Repository", "Secrets"]
 permalink: /2022/05/14/secrets-in-al-go-for-github/
 ---

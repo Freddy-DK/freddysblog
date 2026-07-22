@@ -2,7 +2,7 @@
 layout: post
 title: "Creating workshop machines on Azure"
 date: 2017-11-05 12:51:06
-categories: ["Azure", "Demo Environments", "Docker", "Not Archived", "PowerShell"]
+categories: ["Azure", "Demo Environments", "Docker", "PowerShell"]
 tags: ["ARM", "Azure", "Azure Resource Manager", "Docker", "NAV", "NAV on Docker", "Template", "VM", "Workshop"]
 permalink: /2017/11/05/aka-ms-getnavworkshopvms/
 ---

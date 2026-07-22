@@ -2,7 +2,7 @@
 layout: post
 title: "devpreview builds now also available on the Docker Hub"
 date: 2017-10-31 12:25:52
-categories: ["Docker", "Not Archived"]
+categories: ["Docker"]
 tags: ["Developer Preview", "devpreview", "Docker", "NAV on Docker"]
 permalink: /2017/10/31/devpreview-builds-now-also-available-on-the-docker-hub/
 ---

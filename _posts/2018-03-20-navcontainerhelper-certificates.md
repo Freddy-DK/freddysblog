@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – Certificates"
 date: 2018-03-20 03:29:51
-categories: ["Docker", "NavContainerHelper", "Not Archived"]
+categories: ["Docker", "NavContainerHelper"]
 tags: ["Certificates", "Docker", "NAV on Docker", "NavContainerHelper"]
 permalink: /2018/03/20/navcontainerhelper-certificates/
 ---
