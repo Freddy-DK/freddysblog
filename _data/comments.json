@@ -114,7 +114,7 @@
    "author": "Peter Sandelin",
    "date": "2026-01-23T09:51:01",
    "depth": 2,
-   "content": "<p>Hi Freddy!</p>\n<p>@databaseParams should be replaced by $databaseParams for this to work!&nbsp;<img alt=\"🙂\" src=\"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/1f642.svg\"/></p>\n<p>Kind regards,</p>\n<p>Peter Sandelin</p>\n<p>Fellowmind Sweden</p>"
+   "content": "<p>Hi Freddy!</p>\n<p>@databaseParams should be replaced by $databaseParams for this to work!&nbsp;🙂</p>\n<p>Kind regards,</p>\n<p>Peter Sandelin</p>\n<p>Fellowmind Sweden</p>"
   },
   {
    "author": "Carsten",
