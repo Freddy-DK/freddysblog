@@ -40,6 +40,42 @@
   white-space: nowrap;
 }
 
+// Post listings: thumbnail from the post's first image next to the excerpt
+.post-list-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.post-thumb {
+  flex: 0 0 auto;
+
+  img {
+    width: 130px;
+    height: 98px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid $grey-color-light;
+    background-color: #fff;
+  }
+}
+
+.post-list-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-snippet {
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 600px) {
+  .post-thumb img {
+    width: 84px;
+    height: 63px;
+  }
+}
+
 // Previous / all posts / next navigation at the bottom of each post
 .post-nav {
   display: flex;
