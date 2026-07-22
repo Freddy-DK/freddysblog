@@ -26,7 +26,7 @@ excerpt text. Expects `post`.
     {%- if thumb != "" %}
     <a class="post-thumb" href="{{ post.url | relative_url }}" aria-hidden="true" tabindex="-1"><img src="{{ thumb }}" alt="" loading="lazy"></a>
     {%- endif %}
-    <p class="post-snippet">{{ snippet | truncatewords: 45 }}</p>
+    <p class="post-snippet">{{ snippet | truncatewords: 90 }}</p>
   </div>
   {%- endif %}
 </li>
