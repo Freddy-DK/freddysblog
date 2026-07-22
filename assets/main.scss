@@ -3,13 +3,18 @@
 ---
 @import "minima";
 
-// Keep the title bar and banner image fixed at the top;
-// only the content below them scrolls.
+// Keep the title bar and banner image fixed at the top on listing pages
+// (home, categories, tags, archives); only the content below them scrolls.
+// On individual posts (body.header-scrolls) the header scrolls away.
 .site-header {
   position: sticky;
   top: 0;
   z-index: 10;
   background-color: $background-color;
+}
+
+.header-scrolls .site-header {
+  position: static;
 }
 
 .site-banner {

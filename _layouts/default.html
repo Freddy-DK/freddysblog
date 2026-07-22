@@ -3,7 +3,7 @@
 
   {%- include head.html -%}
 
-  <body>
+  <body{% if page.layout == "post" %} class="header-scrolls"{% endif %}>
 
     {%- include header.html -%}
 
