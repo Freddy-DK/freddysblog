@@ -16,6 +16,7 @@ permalink: /:year/:month/:day/:title/
 header_pages:
   - categories.md
   - tags.md
+  - subscribe.md
 
 # Show the first paragraph of each post on the home page listing.
 show_excerpts: true
