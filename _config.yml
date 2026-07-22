@@ -50,3 +50,4 @@ exclude:
   - Gemfile.lock
   - README.md
   - LICENSE
+  - frontmatter.json
