@@ -25,7 +25,7 @@ so short opening paragraphs are filled out with following text. {%- endcomment -
     {%- if thumb != "" %}
     <a class="post-thumb" href="{{ post.url | relative_url }}" aria-hidden="true" tabindex="-1"><img src="{{ thumb }}" alt="" loading="lazy"></a>
     {%- endif %}
-    <p class="post-snippet">{{ snippet | truncatewords: 65 }}</p>
+    <p class="post-snippet">{{ snippet | truncatewords: 80 }}</p>
   </div>
   {%- endif %}
 </li>
