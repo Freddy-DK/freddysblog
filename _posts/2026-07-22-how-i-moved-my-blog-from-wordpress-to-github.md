@@ -66,7 +66,7 @@ I even added scheduled posting: give a post a future date, push it, and a daily 
 
 For me, absolutely. The blog is now just text and images in a Git repo I fully control, hosted for free, with no platform lock-in. If I ever want to move again, everything is portable.
 
-My entire communication with Claude is available here [https://github.com/freddysblog/conversation-export/conversation.md](https://github.com/freddysblog/conversation-export/conversation.md), might come in handy some day...
+My entire communication with Claude is available here [https://github.com/Freddy-DK/freddysblog/blob/main/conversation-export/conversation.md](https://github.com/Freddy-DK/freddysblog/blob/main/conversation-export/conversation.md), might come in handy some day...
 
 The repository, if you want to poke around, is here: [https://github.com/Freddy-DK/freddysblog](https://github.com/Freddy-DK/freddysblog).
 
