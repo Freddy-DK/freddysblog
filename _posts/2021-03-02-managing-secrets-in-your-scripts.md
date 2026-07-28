@@ -2,7 +2,7 @@
 layout: post
 title: "Managing secrets in your scripts"
 date: 2021-03-02 10:20:04
-categories: ["BcContainerHelper", "CI/CD", "PowerShell"]
+categories: ["Archive"]
 tags: ["Key Vault", "Plain Text", "SecureString"]
 permalink: /2021/03/02/managing-secrets-in-your-scripts/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper 0.5.0.11"
 date: 2019-03-27 17:52:41
-categories: ["AL Development", "Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["APIs", "Business Central", "Business Central Sandbox", "Docker", "NavContainerHelper", "PowerShell"]
 permalink: /2019/03/27/navcontainerhelper-0-5-0-11/
 ---

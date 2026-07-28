@@ -2,7 +2,7 @@
 layout: post
 title: "Windows 10 1903 (and Business Central Containers)"
 date: 2019-05-01 09:29:26
-categories: ["Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["1903", "Docker", "Generic", "Image", "ltsc", "NavContainerHelper", "new-navcontainer", "sac"]
 permalink: /2019/05/01/windows-10-1903-and-business-central-containers/
 ---

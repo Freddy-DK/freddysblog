@@ -2,7 +2,7 @@
 layout: post
 title: "Running Tests in Containers"
 date: 2019-04-13 10:06:30
-categories: ["AL Development", "Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker", "NavContainerHelper", "Tests"]
 permalink: /2019/04/13/running-tests-in-containers/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "Working with AL-Go for GitHub preview"
 date: 2022-06-27 13:34:18
-categories: ["CI/CD", "AL-Go for GitHub"]
+categories: ["Archive"]
 tags: ["AL-Go for GitHub", "preview"]
 permalink: /2022/06/27/working-with-al-go-for-github-preview/
 ---

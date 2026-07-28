@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper 0.3.1.0 and a new Docker Generic build 0.0.6.6"
 date: 2018-09-03 10:35:02
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["Docker", "Generic Image", "NAV on Docker", "NavContainerHelper"]
 permalink: /2018/09/03/navcontainerhelper-0-3-1-0-and-a-new-docker-generic-build-0-0-6-6/
 ---

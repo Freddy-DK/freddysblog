@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from Silverlight 3"
 date: 2010-01-28 13:10:21
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["Asynchronous", "C#", "Flash", "NAV Policy Server", "Service Reference", "Silverlight", "Web Services"]
 permalink: /2010/01/28/connecting-to-nav-web-services-from-silverlight-3/
 ---

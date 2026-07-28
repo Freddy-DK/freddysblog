@@ -2,7 +2,7 @@
 layout: post
 title: "Changing the way you run Business Central in docker…"
 date: 2020-06-25 11:20:12
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["Artifacts", "Docker", "PowerShell"]
 permalink: /2020/06/25/changing-the-way-you-run-business-central-in-docker/
 ---

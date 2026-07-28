@@ -2,7 +2,7 @@
 layout: post
 title: "The ARM templates for Dynamics 365 Business Central and Microsoft Dynamics NAV"
 date: 2019-07-26 14:35:05
-categories: ["Azure", "Demo Environments", "Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["ARM", "DEMO", "Docker", "NavContainerHelper"]
 permalink: /2019/07/26/the-arm-templates-for-dynamics-365-business-central-and-microsoft-dynamics-nav/
 ---

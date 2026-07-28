@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – Overriding scripts in NAV containers"
 date: 2018-03-20 04:12:51
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["additionaloutput", "additionalsetup", "Docker", "MainLoop", "NAV on Docker", "NavContainerHelper", "navstart", "override", "scripts", "setupaddins", "setupcertificate", "setupclickonce", "setupclickoncedirectory", "setupconfiguration", "setupdatabase", "setupfileshare", "setuplicense", "setupnavusers", "setupsqlusers", "setuptenant", "setupvariables", "setupwebclient", "setupwebconfiguration", "setupwindowsusers"]
 permalink: /2018/03/20/navcontainerhelper-overriding-scripts-in-nav-containers/
 ---

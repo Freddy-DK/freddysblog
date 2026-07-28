@@ -2,7 +2,7 @@
 layout: post
 title: "Windows 10 and Docker Images for Business Central / NAV"
 date: 2018-10-24 07:56:33
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["Docker", "Generic Image", "ltsc", "NAV on Docker", "NavContainerHelper", "new-navcontainer", "Windows 10", "Windows Server 1709", "Windows Server 2016", "Windows Server 2019"]
 permalink: /2018/10/24/windows-10-and-docker-images-for-business-central-nav/
 ---

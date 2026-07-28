@@ -2,7 +2,7 @@
 layout: post
 title: "Developing Business Central Extensions (part 2) – Repository/Environment"
 date: 2018-11-12 15:44:35
-categories: ["AL Development", "CI/CD"]
+categories: ["Archive"]
 tags: ["AL", "Business Central Sandbox", "CD", "CI", "Continuous Delivery", "Continuous Integration", "Extensions"]
 permalink: /2018/11/12/developing-business-central-extensions-part-2/
 ---

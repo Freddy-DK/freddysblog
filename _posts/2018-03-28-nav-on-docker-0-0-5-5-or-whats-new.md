@@ -2,7 +2,7 @@
 layout: post
 title: "NAV on Docker 0.0.5.5 or… – What’s new"
 date: 2018-03-28 23:26:10
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["Docker", "Generic Image", "NAV on Docker", "Specific image"]
 permalink: /2018/03/28/nav-on-docker-0-0-5-5-or-whats-new/
 ---

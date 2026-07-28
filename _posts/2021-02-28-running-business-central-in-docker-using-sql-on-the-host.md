@@ -2,7 +2,7 @@
 layout: post
 title: "Running Business Central in Docker using SQL on the host"
 date: 2021-02-28 11:02:55
-categories: ["BcContainerHelper", "Docker"]
+categories: ["Archive"]
 tags: ["Database", "Remove-BcDatabase", "ReplaceExternalDatabases", "Restore-BcDatabaseFromArtifacts", "SQL on Host"]
 permalink: /2021/02/28/running-business-central-in-docker-using-sql-on-the-host/
 ---

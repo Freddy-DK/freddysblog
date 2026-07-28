@@ -2,7 +2,7 @@
 layout: post
 title: "BcAuthContext"
 date: 2021-01-25 10:52:20
-categories: ["BcContainerHelper", "BcSaaS"]
+categories: ["Archive"]
 tags: ["AAD", "AAD App", "Access Token", "BcAuthContext", "Refresh Token"]
 permalink: /2021/01/25/bcauthcontext/
 ---

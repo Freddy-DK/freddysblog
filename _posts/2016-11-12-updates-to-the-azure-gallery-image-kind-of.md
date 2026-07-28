@@ -2,7 +2,7 @@
 layout: post
 title: "Updates to the Azure Gallery Image… – kind of…"
 date: 2016-11-12 13:37:28
-categories: ["Archive", "Azure"]
+categories: ["Archive"]
 tags: ["Azure", "DEMO scripts", "Gallery", "NAV", "NAV 2017"]
 permalink: /2016/11/12/updates-to-the-azure-gallery-image-kind-of/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "Developing Business Central Extensions (part 5) – YAML"
 date: 2018-11-17 09:17:36
-categories: ["AL Development", "CI/CD"]
+categories: ["Archive"]
 tags: ["AL", "Azure", "Business Central Sandbox", "CD", "CI", "Continuous Delivery", "Continuous Integration", "DevOps", "Extensions", "Git", "Visual Designer", "YAML"]
 permalink: /2018/11/17/developing-business-central-extensions-part-5/
 ---

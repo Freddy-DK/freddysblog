@@ -2,7 +2,7 @@
 layout: post
 title: "A “new” learning opportunity – the Hackathon at NAVUG Focus 18"
 date: 2018-05-16 04:36:22
-categories: ["AL Development"]
+categories: ["Archive"]
 tags: ["AL", "Azure", "Hackathon", "VS Code"]
 permalink: /2018/05/16/a-new-learning-opportunity-the-hackathon-at-navug-focus-18/
 ---

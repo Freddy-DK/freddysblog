@@ -2,7 +2,7 @@
 layout: post
 title: "The hackathon at UG FOCUS 18"
 date: 2018-05-24 17:31:16
-categories: ["AL Development"]
+categories: ["Archive"]
 tags: ["BCUG", "Hackathon", "NAVUG", "UGFOCUS"]
 permalink: /2018/05/24/the-hackathon-at-ug-focus-18/
 ---

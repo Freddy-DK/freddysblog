@@ -2,7 +2,7 @@
 layout: post
 title: "C/AL to AL code customizations"
 date: 2019-04-15 11:46:07
-categories: ["AL Development", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["AL", "C/AL", "C/AL to AL"]
 permalink: /2019/04/15/c-al-to-al-code-customizations/
 ---

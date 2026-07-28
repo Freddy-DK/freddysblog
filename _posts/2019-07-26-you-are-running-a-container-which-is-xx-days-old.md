@@ -2,7 +2,7 @@
 layout: post
 title: "You are running a container which is xx days old…"
 date: 2019-07-26 15:09:24
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["accept_outdated", "Docker", "NAV on Docker", "NavContainerHelper", "new-navcontainer"]
 permalink: /2019/07/26/you-are-running-a-container-which-is-xx-days-old/
 ---

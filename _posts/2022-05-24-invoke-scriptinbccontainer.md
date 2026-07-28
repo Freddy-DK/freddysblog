@@ -2,7 +2,7 @@
 layout: post
 title: "Invoke-ScriptInBcContainer"
 date: 2022-05-24 12:34:06
-categories: ["BcContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker", "Invoke-ScriptInBcContainer", "PowerShell Session", "Session"]
 permalink: /2022/05/24/invoke-scriptinbccontainer/
 ---

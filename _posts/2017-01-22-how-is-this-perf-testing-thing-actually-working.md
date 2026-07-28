@@ -2,7 +2,7 @@
 layout: post
 title: "How is this perf testing thing actually working?"
 date: 2017-01-22 16:04:05
-categories: ["Load Test"]
+categories: ["Archive"]
 tags: ["Azure", "NAV", "NAV 2017", "PERF", "Performance", "Performance test"]
 permalink: /2017/01/22/how-is-this-perf-testing-thing-actually-working/
 ---

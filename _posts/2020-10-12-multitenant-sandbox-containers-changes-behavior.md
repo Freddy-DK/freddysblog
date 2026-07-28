@@ -2,7 +2,7 @@
 layout: post
 title: "Multitenant sandbox containers changes behavior…"
 date: 2020-10-12 10:57:21
-categories: ["BcContainerHelper", "Docker"]
+categories: ["Archive"]
 tags: ["Generic Image", "Multitenancy"]
 permalink: /2020/10/12/multitenant-sandbox-containers-changes-behavior/
 ---

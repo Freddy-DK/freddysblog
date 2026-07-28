@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – License"
 date: 2018-03-20 03:37:36
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker", "License", "NAV on Docker", "NavContainerHelper"]
 permalink: /2018/03/20/navcontainerhelper-license/
 ---

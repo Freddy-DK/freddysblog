@@ -2,7 +2,7 @@
 layout: post
 title: "Preview of Dynamics 365 Business Central 2019 release wave 2"
 date: 2019-07-31 10:54:43
-categories: ["AL Development", "Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker", "insider builds", "NavContainerHelper"]
 permalink: /2019/07/31/preview-of-dynamics-365-business-central-2019-release-wave-2/
 ---

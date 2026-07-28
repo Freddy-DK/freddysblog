@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – Use an external SQL Server as database connection in a NAV container"
 date: 2018-03-20 04:01:15
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Database", "Docker", "External", "NAV on Docker", "NavContainerHelper", "SQL container"]
 permalink: /2018/03/20/navcontainerhelper-use-an-external-sql-server-as-database-connection-in-a-nav-container/
 ---

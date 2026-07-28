@@ -2,7 +2,7 @@
 layout: post
 title: "BcContainerHelper configuration"
 date: 2020-10-10 12:50:39
-categories: ["BcContainerHelper", "Docker"]
+categories: ["Archive"]
 tags: ["BcContainerHelper", "Docker", "PowerShell"]
 permalink: /2020/10/10/bccontainerhelper-configuration/
 ---

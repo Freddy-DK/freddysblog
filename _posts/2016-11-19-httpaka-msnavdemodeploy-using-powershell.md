@@ -2,7 +2,7 @@
 layout: post
 title: "http://aka.ms/navdemodeploy – using PowerShell"
 date: 2016-11-19 21:39:42
-categories: ["Archive", "Azure"]
+categories: ["Archive"]
 tags: ["Azure", "DEMO scripts", "Deployment", "Gallery", "NAV 2017", "That Was Easy"]
 permalink: /2016/11/19/httpaka-msnavdemodeploy-using-powershell/
 ---

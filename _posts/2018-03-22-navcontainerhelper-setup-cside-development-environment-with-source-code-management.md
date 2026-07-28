@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – Setup CSIDE development environment with source code management"
 date: 2018-03-22 14:17:50
-categories: ["AL Development", "Docker"]
+categories: ["Archive"]
 tags: ["AL", "CSIDE", "Development Environment", "NavContainerHelper", "VS Code"]
 permalink: /2018/03/22/navcontainerhelper-setup-cside-development-environment-with-source-code-management/
 ---

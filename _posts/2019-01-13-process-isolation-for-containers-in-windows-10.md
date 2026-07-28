@@ -2,7 +2,7 @@
 layout: post
 title: "Process Isolation for containers in Windows 10"
 date: 2019-01-13 08:02:56
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["Docker", "Hyperv isolation", "NavContainerHelper", "Process Isolation", "Windows 10"]
 permalink: /2019/01/13/process-isolation-for-containers-in-windows-10/
 ---

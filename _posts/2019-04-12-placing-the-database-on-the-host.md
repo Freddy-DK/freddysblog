@@ -2,7 +2,7 @@
 layout: post
 title: "Placing the database on the host…"
 date: 2019-04-12 09:45:02
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Database", "Docker", "NavContainerHelper"]
 permalink: /2019/04/12/placing-the-database-on-the-host/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "Run Business Central in docker using a custom generic image"
 date: 2020-06-29 12:11:35
-categories: ["Docker", "PowerShell"]
+categories: ["Archive"]
 tags: ["Artifacts", "Docker", "Generic", "Generic Image"]
 permalink: /2020/06/29/run-business-central-in-docker-using-a-custom-generic-image/
 ---

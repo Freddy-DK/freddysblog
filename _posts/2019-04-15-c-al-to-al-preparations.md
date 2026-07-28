@@ -2,7 +2,7 @@
 layout: post
 title: "C/AL to AL – preparations…"
 date: 2019-04-15 11:45:09
-categories: ["AL Development", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["AL", "C/AL", "C/AL to AL"]
 permalink: /2019/04/15/c-al-to-al-preparations/
 ---

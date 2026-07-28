@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from VBScript"
 date: 2010-01-29 10:52:43
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["NAV 2009 SP1", "VBScript", "Web Services", "XML"]
 permalink: /2010/01/29/connecting-to-nav-web-services-from-vbscript/
 ---

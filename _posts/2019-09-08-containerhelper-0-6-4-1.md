@@ -2,7 +2,7 @@
 layout: post
 title: "ContainerHelper 0.6.4.1"
 date: 2019-09-08 08:55:45
-categories: ["CI/CD", "Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker", "NAV on Docker", "NavContainerHelper", "new-navcontainer"]
 permalink: /2019/09/08/containerhelper-0-6-4-1/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – Specify your own Database backup file to use with a NAV container"
 date: 2018-03-20 03:44:00
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["backup", "bakfile", "Database", "Docker", "NAV on Docker", "NavContainerHelper"]
 permalink: /2018/03/20/navcontainerhelper-specify-your-own-database-backup-file-to-use-with-a-nav-container/
 ---

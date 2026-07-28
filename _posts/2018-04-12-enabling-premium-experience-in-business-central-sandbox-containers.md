@@ -2,7 +2,7 @@
 layout: post
 title: "Enabling Premium Experience in Business Central Sandbox Containers"
 date: 2018-04-12 14:48:00
-categories: ["Demo Environments"]
+categories: ["Archive"]
 tags: ["Business Central Sandbox", "Docker", "NavContainerHelper", "new-navcontainer", "Premium"]
 permalink: /2018/04/12/enabling-premium-experience-in-business-central-sandbox-containers/
 ---

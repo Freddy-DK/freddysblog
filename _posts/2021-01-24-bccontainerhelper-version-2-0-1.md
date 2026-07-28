@@ -2,7 +2,7 @@
 layout: post
 title: "BcContainerHelper version 2.0.1"
 date: 2021-01-24 08:00:41
-categories: ["BcContainerHelper", "CI/CD"]
+categories: ["Archive"]
 tags: ["AAD", "BcAuthContext", "BcContainerHelper", "CI/CD"]
 permalink: /2021/01/24/bccontainerhelper-version-2-0-1/
 ---

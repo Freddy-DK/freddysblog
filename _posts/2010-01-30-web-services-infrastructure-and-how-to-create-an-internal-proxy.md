@@ -2,7 +2,7 @@
 layout: post
 title: "Web Services Infrastructure and how to Create an Internal Proxy"
 date: 2010-01-30 12:20:40
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["C#", "NAV 2009 SP1", "Proxy", "Service", "Service Reference", "WCF", "Web Reference", "Web Services", "Windows Service"]
 permalink: /2010/01/30/web-services-infrastructure-and-how-to-create-an-internal-proxy/
 ---

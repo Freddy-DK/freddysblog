@@ -2,7 +2,7 @@
 layout: post
 title: "The Hello World CI/CD sample"
 date: 2020-06-28 22:06:46
-categories: ["AL Development", "CI/CD", "Docker"]
+categories: ["Archive"]
 tags: ["Artifacts", "CD", "CI", "Docker", "YAML"]
 permalink: /2020/06/28/the-hello-world-ci-cd-sample/
 ---

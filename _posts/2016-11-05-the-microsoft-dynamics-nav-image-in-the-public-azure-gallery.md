@@ -2,7 +2,7 @@
 layout: post
 title: "The Microsoft Dynamics NAV Image in the Azure Gallery"
 date: 2016-11-05 09:43:22
-categories: ["Archive", "Azure"]
+categories: ["Archive"]
 tags: ["Azure", "Gallery", "Image", "Microsoft Dynamics NAV", "NAV", "NAV 2016", "NAV 2017"]
 permalink: /2016/11/05/the-microsoft-dynamics-nav-image-in-the-public-azure-gallery/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "Using SQL Server on the host"
 date: 2019-11-04 20:29:00
-categories: ["Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["Docker", "NavContainerHelper", "SQL Server 2017", "SSMS"]
 permalink: /2019/11/04/using-sql-server-on-the-host/
 ---

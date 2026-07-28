@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from Visual Basic .net using Service Reference"
 date: 2010-01-20 09:51:28
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["NAV 2009 SP1", "Service Reference", "Visual Basic", "Web Services"]
 permalink: /2010/01/20/connecting-to-nav-web-services-from-visual-basic-net-using-service-reference/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "Using GitHub for DevOps"
 date: 2020-11-14 21:07:43
-categories: ["AL Development", "CI/CD"]
+categories: ["Archive"]
 tags: ["AL", "CD", "CI", "DevOps"]
 permalink: /2020/11/14/using-github-for-devops/
 ---

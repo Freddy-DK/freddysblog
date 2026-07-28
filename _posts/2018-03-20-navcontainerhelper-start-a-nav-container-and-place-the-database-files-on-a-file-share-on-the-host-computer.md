@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – Start a NAV container and place the database files on a file share on the host computer"
 date: 2018-03-20 03:46:11
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Database", "Docker", "NAV on Docker", "NavContainerHelper", "Share"]
 permalink: /2018/03/20/navcontainerhelper-start-a-nav-container-and-place-the-database-files-on-a-file-share-on-the-host-computer/
 ---

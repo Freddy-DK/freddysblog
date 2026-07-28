@@ -2,7 +2,7 @@
 layout: post
 title: "Automatic AppSource Submission of Business Central apps"
 date: 2022-09-22 17:33:15
-categories: ["BcContainerHelper", "CI/CD", "PowerShell"]
+categories: ["Archive"]
 tags: ["AppSource"]
 permalink: /2022/09/22/automatic-appsource-submission-of-business-central-apps/
 ---

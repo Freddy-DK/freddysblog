@@ -2,7 +2,7 @@
 layout: post
 title: "Web Services changes in NAV 2009 SP1"
 date: 2009-05-27 12:52:32
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["NAV 2009", "NAV 2009 SP1", "Web Services", "XML"]
 permalink: /2009/05/27/web-services-changes-in-nav-2009-sp1/
 ---

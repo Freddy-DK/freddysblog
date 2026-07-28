@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – Authentication"
 date: 2018-03-20 03:33:07
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Authentication", "Docker", "NAV on Docker", "NavContainerHelper"]
 permalink: /2018/03/20/navcontainerhelper-authentication/
 ---

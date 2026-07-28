@@ -2,7 +2,7 @@
 layout: post
 title: "PowerShell for non-experts…"
 date: 2019-08-04 05:57:03
-categories: ["Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["Docker", "NavContainerHelper", "PowerShell"]
 permalink: /2019/08/04/powershell-for-non-experts/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "The world after the February update"
 date: 2020-02-26 17:27:04
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker", "Hyperv isolation", "Process Isolation"]
 permalink: /2020/02/26/the-world-after-february-18th/
 ---

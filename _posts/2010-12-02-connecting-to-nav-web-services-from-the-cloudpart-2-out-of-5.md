@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from the Cloud–part 2 out of 5"
 date: 2010-12-02 03:57:13
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["Add-Ins", "Azure", "Service Tier", "Servicebus", "WCF", "Web Services", "Windows Phone 7"]
 permalink: /2010/12/02/connecting-to-nav-web-services-from-the-cloudpart-2-out-of-5/
 ---

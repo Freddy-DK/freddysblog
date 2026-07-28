@@ -2,7 +2,7 @@
 layout: post
 title: "CI/CD and artifacts"
 date: 2020-06-27 08:46:13
-categories: ["AL Development", "CI/CD", "Docker"]
+categories: ["Archive"]
 tags: ["Artifacts", "CD", "CI", "Docker", "Get-BcArtifactUrl"]
 permalink: /2020/06/27/ci-cd-and-artifacts/
 ---

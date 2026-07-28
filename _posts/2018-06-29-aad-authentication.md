@@ -2,7 +2,7 @@
 layout: post
 title: "AAD authentication, Edit In Excel, Embedded PowerBi and http://aka.ms/GETNAV"
 date: 2018-06-29 05:04:34
-categories: ["Demo Environments"]
+categories: ["Archive"]
 tags: ["AAD", "AAD Apps", "Authentication", "Edit In Excel", "Embedded Power BI", "Office 365", "Power BI", "PowerApps"]
 permalink: /2018/06/29/aad-authentication/
 ---

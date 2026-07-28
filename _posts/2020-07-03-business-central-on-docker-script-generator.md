@@ -2,7 +2,7 @@
 layout: post
 title: "New-BcContainerWizard aka Business Central on Docker script generator…"
 date: 2020-07-03 13:43:39
-categories: ["Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["Docker", "New-BcContainer", "PowerShell"]
 permalink: /2020/07/03/business-central-on-docker-script-generator/
 ---

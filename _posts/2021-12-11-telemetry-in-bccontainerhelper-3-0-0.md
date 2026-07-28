@@ -2,7 +2,7 @@
 layout: post
 title: "Telemetry in BcContainerHelper 3.0.0"
 date: 2021-12-11 19:12:46
-categories: ["BcContainerHelper", "Docker"]
+categories: ["Archive"]
 tags: ["BcContainerHelper", "Docker", "Telemetry"]
 permalink: /2021/12/11/telemetry-in-bccontainerhelper-3-0-0/
 ---

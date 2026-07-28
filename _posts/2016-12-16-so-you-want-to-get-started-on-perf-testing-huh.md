@@ -2,7 +2,7 @@
 layout: post
 title: "So you want to get started on perf testing, huh???"
 date: 2016-12-16 00:43:13
-categories: ["Load Test"]
+categories: ["Archive"]
 tags: ["Gallery", "NAV", "NAV 2017", "PERF", "Performance test", "Visual Studio 2015", "VS"]
 permalink: /2016/12/16/so-you-want-to-get-started-on-perf-testing-huh/
 ---

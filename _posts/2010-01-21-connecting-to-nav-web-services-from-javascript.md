@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from Javascript"
 date: 2010-01-21 12:57:33
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["Javascript", "NAV 2009 SP1", "Web Services", "XML"]
 permalink: /2010/01/21/connecting-to-nav-web-services-from-javascript/
 ---

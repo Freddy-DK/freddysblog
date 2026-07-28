@@ -2,7 +2,7 @@
 layout: post
 title: "Run-AlPipeline"
 date: 2020-10-08 22:05:28
-categories: ["AL Development", "BcContainerHelper", "CI/CD"]
+categories: ["Archive"]
 tags: ["BcContainerHelper", "Continuous Integration", "Pipeline"]
 permalink: /2020/10/08/run-alpipeline/
 ---

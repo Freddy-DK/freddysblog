@@ -2,7 +2,7 @@
 layout: post
 title: "Dynamic references to NAV Page Web Services in C#"
 date: 2009-04-27 01:16:00
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["C#", "Dynamic", "Excel", "Web Services"]
 permalink: /2009/04/27/dynamic-references-to-nav-page-web-services-in-c/
 ---

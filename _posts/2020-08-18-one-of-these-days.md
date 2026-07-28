@@ -2,7 +2,7 @@
 layout: post
 title: "One of these days…"
 date: 2020-08-18 08:08:46
-categories: ["BcContainerHelper", "CI/CD", "Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["BcContainerHelper", "Docker", "Generic Image", "NavContainerHelper"]
 permalink: /2020/08/18/one-of-these-days/
 ---

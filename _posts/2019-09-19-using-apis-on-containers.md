@@ -2,7 +2,7 @@
 layout: post
 title: "Using APIs on containers"
 date: 2019-09-19 09:58:48
-categories: ["Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["APIs", "Configuration Packages", "RapidStart"]
 permalink: /2019/09/19/using-apis-on-containers/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – Create a SQL Server container with the CRONUS database from a NAV container image"
 date: 2018-03-20 03:49:50
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["CRONUS", "Database", "Docker", "NAV on Docker", "NavContainerHelper", "SQL container"]
 permalink: /2018/03/20/navcontainerhelper-create-a-sql-server-container-with-the-cronus-database-from-a-nav-container-image/
 ---

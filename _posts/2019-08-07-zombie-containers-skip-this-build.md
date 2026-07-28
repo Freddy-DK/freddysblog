@@ -2,7 +2,7 @@
 layout: post
 title: "Zombie containers -> Skip This Build?"
 date: 2019-08-07 06:51:34
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker"]
 permalink: /2019/08/07/zombie-containers-skip-this-build/
 ---

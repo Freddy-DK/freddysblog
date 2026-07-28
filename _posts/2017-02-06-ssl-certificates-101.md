@@ -2,7 +2,7 @@
 layout: post
 title: "SSL Certificates 101"
 date: 2017-02-06 19:18:57
-categories: ["Demo Environments"]
+categories: ["Archive"]
 tags: ["Certificates", "DEMO", "HTTPS", "NAV"]
 permalink: /2017/02/06/ssl-certificates-101/
 ---

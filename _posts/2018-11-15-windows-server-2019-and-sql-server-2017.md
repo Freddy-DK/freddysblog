@@ -2,7 +2,7 @@
 layout: post
 title: "Windows Server 2019 and SQL Server 2017"
 date: 2018-11-15 11:27:08
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["1709", "1803", "1809", "SQL Server 2016", "SQL Server 2017", "Windows Server 2016", "Windows Server 2019"]
 permalink: /2018/11/15/windows-server-2019-and-sql-server-2017/
 ---

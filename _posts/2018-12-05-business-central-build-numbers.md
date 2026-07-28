@@ -2,7 +2,7 @@
 layout: post
 title: "Business Central Build Numbers"
 date: 2018-12-05 12:00:07
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["bcsandbox", "bcsandbox-master", "Build Numbers", "Docker", "insider builds", "platform version"]
 permalink: /2018/12/05/business-central-build-numbers/
 ---

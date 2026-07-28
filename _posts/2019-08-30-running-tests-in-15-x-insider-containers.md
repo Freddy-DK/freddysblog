@@ -2,7 +2,7 @@
 layout: post
 title: "Running tests in 15.x insider containers"
 date: 2019-08-30 07:19:07
-categories: ["AL Development", "Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["Docker", "NavContainerHelper", "Tests"]
 permalink: /2019/08/30/running-tests-in-15-x-insider-containers/
 ---

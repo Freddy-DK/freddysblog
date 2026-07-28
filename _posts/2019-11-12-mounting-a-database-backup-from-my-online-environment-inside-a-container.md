@@ -2,7 +2,7 @@
 layout: post
 title: "Mounting a database backup from my online environment inside a container"
 date: 2019-11-12 07:35:13
-categories: ["Demo Environments", "Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["Business Central Sandbox", "Docker", "Multitenancy", "NavContainerHelper"]
 permalink: /2019/11/12/mounting-a-database-backup-from-my-online-environment-inside-a-container/
 ---

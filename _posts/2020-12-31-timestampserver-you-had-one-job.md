@@ -2,7 +2,7 @@
 layout: post
 title: "TimeStampServer – you had one job!"
 date: 2020-12-31 06:59:23
-categories: ["BcContainerHelper", "CI/CD"]
+categories: ["Archive"]
 tags: ["BcContainerHelper", "Sign-AppInBcContainer", "Signing", "TimeStampServer"]
 permalink: /2020/12/31/timestampserver-you-had-one-job/
 ---

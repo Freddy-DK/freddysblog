@@ -2,7 +2,7 @@
 layout: post
 title: "A cure for Zombie containers…"
 date: 2019-09-05 17:13:22
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker"]
 permalink: /2019/09/05/a-cure-for-zombie-containers/
 ---

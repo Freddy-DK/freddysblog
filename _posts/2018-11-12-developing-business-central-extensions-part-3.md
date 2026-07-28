@@ -2,7 +2,7 @@
 layout: post
 title: "Developing Business Central Extensions (part 3) – Build Pipeline"
 date: 2018-11-12 15:47:48
-categories: ["AL Development", "CI/CD"]
+categories: ["Archive"]
 tags: ["AL", "Business Central Sandbox", "CD", "CI", "Continuous Delivery", "Continuous Integration", "Extensions"]
 permalink: /2018/11/12/developing-business-central-extensions-part-3/
 ---

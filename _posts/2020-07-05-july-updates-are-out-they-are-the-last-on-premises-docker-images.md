@@ -2,7 +2,7 @@
 layout: post
 title: "July updates are out – they are the last on-premises docker images"
 date: 2020-07-05 11:26:37
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Artifacts", "Docker", "Image", "NavContainerHelper"]
 permalink: /2020/07/05/july-updates-are-out-they-are-the-last-on-premises-docker-images/
 ---

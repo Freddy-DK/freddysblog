@@ -2,7 +2,7 @@
 layout: post
 title: "Perf testing with multiple users"
 date: 2016-12-17 16:54:12
-categories: ["Load Test"]
+categories: ["Archive"]
 tags: ["Azure", "Azure SQL", "Gallery", "Multitenancy", "NAV", "NAV 2017", "PERF", "Performance", "Performance test"]
 permalink: /2016/12/17/perf-testing-with-multiple-users/
 ---

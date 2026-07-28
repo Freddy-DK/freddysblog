@@ -2,7 +2,7 @@
 layout: post
 title: "18 hours of no containerhelper…"
 date: 2020-10-31 19:24:26
-categories: ["Azure", "BcContainerHelper"]
+categories: ["Archive"]
 tags: ["BcContainerHelper"]
 permalink: /2020/10/31/18-hours-of-no-containerhelper/
 ---

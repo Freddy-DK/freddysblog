@@ -2,7 +2,7 @@
 layout: post
 title: "hyperv isolation to the rescue!"
 date: 2020-02-14 12:18:49
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker", "Security Upate"]
 permalink: /2020/02/14/hyperv-isolation-to-the-rescue/
 ---

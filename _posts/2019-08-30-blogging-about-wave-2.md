@@ -2,7 +2,7 @@
 layout: post
 title: "Blogging about Wave 2"
 date: 2019-08-30 01:34:32
-categories: ["Docker", "BcContainerHelper"]
+categories: ["Archive"]
 tags: ["Business Central"]
 permalink: /2019/08/30/blogging-about-wave-2/
 ---

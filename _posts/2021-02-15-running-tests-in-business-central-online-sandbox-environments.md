@@ -2,7 +2,7 @@
 layout: post
 title: "Running tests in Business Central Online Sandbox environments"
 date: 2021-02-15 10:13:54
-categories: ["AL Development", "BcContainerHelper", "CI/CD"]
+categories: ["Archive"]
 tags: ["Run-TestsInBcContainer", "Running Tests", "Tests"]
 permalink: /2021/02/15/running-tests-in-business-central-online-sandbox-environments/
 ---

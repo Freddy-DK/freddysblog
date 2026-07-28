@@ -2,7 +2,7 @@
 layout: post
 title: "An update to the ARM templates"
 date: 2021-11-08 05:05:46
-categories: ["Azure", "BcContainerHelper", "Docker"]
+categories: ["Archive"]
 tags: ["ARM templates", "Docker"]
 permalink: /2021/11/08/an-update-to-the-arm-templates/
 ---

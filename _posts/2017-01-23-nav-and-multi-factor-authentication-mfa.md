@@ -2,7 +2,7 @@
 layout: post
 title: "NAV and Multi Factor Authentication (MFA)"
 date: 2017-01-23 19:35:02
-categories: ["Archive", "Azure", "Demo Environments"]
+categories: ["Archive"]
 tags: ["AAD", "ACS", "ADFS", "Authentication", "Azure", "Azure AD", "MFA", "Multi-factor Authentication", "NAV", "NAV 2016", "NAV 2017"]
 permalink: /2017/01/23/nav-and-multi-factor-authentication-mfa/
 ---

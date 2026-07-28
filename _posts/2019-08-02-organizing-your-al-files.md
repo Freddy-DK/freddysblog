@@ -2,7 +2,7 @@
 layout: post
 title: "Organizing your .al files"
 date: 2019-08-02 07:56:29
-categories: ["AL Development", "Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["AL", "Docker", "Git", "new-navcontainer", "Txt2Al"]
 permalink: /2019/08/02/organizing-your-al-files/
 ---

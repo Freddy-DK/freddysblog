@@ -2,7 +2,7 @@
 layout: post
 title: "Business Central on Docker for non-experts…"
 date: 2019-08-20 06:50:49
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["ARM", "Docker", "NAV on Docker", "NavContainerHelper", "new-navcontainer", "PowerShell"]
 permalink: /2019/08/20/business-central-on-docker-for-non-experts/
 ---

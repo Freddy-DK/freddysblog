@@ -2,7 +2,7 @@
 layout: post
 title: "Trojan Warning when creating Containers…"
 date: 2021-11-11 08:25:51
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["Docker", "Trojan", "Virus"]
 permalink: /2021/11/11/trojan-warning-when-creating-containers/
 ---

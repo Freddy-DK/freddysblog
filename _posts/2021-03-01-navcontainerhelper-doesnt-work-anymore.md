@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper doesn’t work anymore…"
 date: 2021-03-01 19:02:10
-categories: ["BcContainerHelper", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["BcContainerHelper", "NavContainerHelper"]
 permalink: /2021/03/01/navcontainerhelper-doesnt-work-anymore/
 ---

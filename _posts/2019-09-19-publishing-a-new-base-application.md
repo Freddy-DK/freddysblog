@@ -2,7 +2,7 @@
 layout: post
 title: "Publishing a New Base Application"
 date: 2019-09-19 14:02:10
-categories: ["AL Development", "Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["Extension", "Publish"]
 permalink: /2019/09/19/publishing-a-new-base-application/
 ---

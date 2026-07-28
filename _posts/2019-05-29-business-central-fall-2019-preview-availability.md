@@ -2,7 +2,7 @@
 layout: post
 title: "Business Central Fall 2019 Preview Availability"
 date: 2019-05-29 14:06:09
-categories: ["AL Development", "Docker"]
+categories: ["Archive"]
 tags: ["AL", "C/AL", "C/AL to AL", "Docker", "Txt2Al"]
 permalink: /2019/05/29/business-central-fall-2019-preview-availability/
 ---

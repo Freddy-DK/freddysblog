@@ -2,7 +2,7 @@
 layout: post
 title: "Directions EMEA 2019"
 date: 2019-10-06 09:02:23
-categories: ["Freddy"]
+categories: ["Archive"]
 tags: ["Directions"]
 permalink: /2019/10/06/directions-emea-2019/
 ---

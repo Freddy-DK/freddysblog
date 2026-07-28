@@ -2,7 +2,7 @@
 layout: post
 title: "Deployment strategies and AL-Go for GitHub"
 date: 2022-05-06 12:08:07
-categories: ["AL Development", "CI/CD", "AL-Go for GitHub"]
+categories: ["Archive"]
 tags: ["AL-Go for GitHub", "Continuous Deployment", "FAT", "PROD", "Publish", "Publish-BcContainerApp", "Publish-PerTenantExtensionApps", "QA"]
 permalink: /2022/05/06/deployment-strategies-and-al-go-for-github/
 ---

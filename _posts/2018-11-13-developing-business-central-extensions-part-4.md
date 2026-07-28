@@ -2,7 +2,7 @@
 layout: post
 title: "Developing Business Central Extensions (part 4) – Branch Policies"
 date: 2018-11-13 09:30:40
-categories: ["AL Development", "CI/CD"]
+categories: ["Archive"]
 tags: ["AL", "Azure", "Business Central Sandbox", "CD", "CI", "Continuous Delivery", "Continuous Integration", "DevOps", "Extensions", "Git"]
 permalink: /2018/11/13/developing-business-central-extensions-part-4/
 ---

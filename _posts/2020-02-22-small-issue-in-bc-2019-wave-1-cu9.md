@@ -2,7 +2,7 @@
 layout: post
 title: "Small issue in BC 2019 Wave 1 CU9"
 date: 2020-02-22 10:37:18
-categories: ["Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["Compile-NavApplicationObject", "Export-NavApplicationObject", "Import-NavApplicationObject"]
 permalink: /2020/02/22/small-issue-in-bc-2019-wave-1-cu9/
 ---

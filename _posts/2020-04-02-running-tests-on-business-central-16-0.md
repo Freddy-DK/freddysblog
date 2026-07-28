@@ -2,7 +2,7 @@
 layout: post
 title: "Running tests on Business Central 16.0"
 date: 2020-04-02 23:36:24
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker", "Tests"]
 permalink: /2020/04/02/running-tests-on-business-central-16-0/
 ---

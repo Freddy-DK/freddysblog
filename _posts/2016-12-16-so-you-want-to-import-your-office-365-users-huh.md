@@ -2,7 +2,7 @@
 layout: post
 title: "So, you want to import your Office 365 users, huh???"
 date: 2016-12-16 07:10:58
-categories: ["PowerShell"]
+categories: ["Archive"]
 tags: ["Azure", "Azure AD", "Import", "NAV", "NAV 2017", "O365"]
 permalink: /2016/12/16/so-you-want-to-import-your-office-365-users-huh/
 ---

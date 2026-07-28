@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from PHP- take 2"
 date: 2016-11-06 22:22:30
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["NAV", "NAV 2016", "NAV 2017", "PHP", "SOAP", "Web Services"]
 permalink: /2016/11/06/connecting-to-nav-web-services-from-php-take-2/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "Run-AlValidation and Run-AlCops"
 date: 2020-12-03 20:11:38
-categories: ["AL Development", "BcContainerHelper", "CI/CD"]
+categories: ["Archive"]
 tags: ["AppSource", "AppSourceCop", "CI/CD", "CodeCop", "PerTenantExtensionCop", "UICop", "Validation"]
 permalink: /2020/12/03/run-alvalidation-and-run-alcops/
 ---

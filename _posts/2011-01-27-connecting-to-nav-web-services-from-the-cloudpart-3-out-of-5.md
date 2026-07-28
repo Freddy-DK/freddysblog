@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from the Cloud–part 3 out of 5"
 date: 2011-01-27 05:46:55
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["Azure", "Proxy", "Service Tier", "Servicebus", "WCF", "Web Services"]
 permalink: /2011/01/27/connecting-to-nav-web-services-from-the-cloudpart-3-out-of-5/
 ---

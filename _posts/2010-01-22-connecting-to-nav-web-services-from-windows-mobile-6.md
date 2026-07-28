@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from Windows Mobile 6"
 date: 2010-01-22 14:14:30
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["C#", "Compact", "NAV 2009 SP1", "Web Reference", "Web Services", "Windows Mobile 6"]
 permalink: /2010/01/22/connecting-to-nav-web-services-from-windows-mobile-6/
 ---

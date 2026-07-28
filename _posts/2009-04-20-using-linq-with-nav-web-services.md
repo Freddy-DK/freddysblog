@@ -2,7 +2,7 @@
 layout: post
 title: "Using LINQ with NAV Web Services"
 date: 2009-04-20 20:02:30
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["C#", "LINQ", "NAV 2009", "Web Services"]
 permalink: /2009/04/20/using-linq-with-nav-web-services/
 ---

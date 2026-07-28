@@ -2,7 +2,7 @@
 layout: post
 title: "Resilience"
 date: 2022-05-10 11:58:57
-categories: ["BcContainerHelper", "Docker"]
+categories: ["Archive"]
 permalink: /2022/05/10/resilience/
 ---
 

@@ -2,7 +2,7 @@
 layout: post
 title: "Removing all specific NAV and Business Central Docker Images"
 date: 2021-02-10 16:01:39
-categories: ["BcContainerHelper", "Docker"]
+categories: ["Archive"]
 tags: ["Artifacts", "BcContainerHelper", "Generic Image", "Get-BcArtifactUrl", "Get-NavArtifactUrl", "NavContainerHelper", "Specific image"]
 permalink: /2021/02/10/removing-all-specific-nav-and-business-central-docker-images/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "Troubleshooting Business Central on Docker"
 date: 2020-10-12 10:37:48
-categories: ["BcContainerHelper", "Docker"]
+categories: ["Archive"]
 tags: ["Azure VM", "BcContainerHelper", "Docker", "Troubleshooting", "TSG"]
 permalink: /2020/10/12/troubleshooting-business-central-on-docker/
 ---

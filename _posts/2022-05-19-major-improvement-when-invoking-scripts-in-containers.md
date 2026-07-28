@@ -2,7 +2,7 @@
 layout: post
 title: "Major improvement when invoking scripts in Containers…"
 date: 2022-05-19 18:36:57
-categories: ["BcContainerHelper", "Docker"]
+categories: ["Archive"]
 tags: ["Azure DevOps", "Freeze", "GitHub Actions", "Hang", "Pipeline", "Workflow"]
 permalink: /2022/05/19/major-improvement-when-invoking-scripts-in-containers/
 ---

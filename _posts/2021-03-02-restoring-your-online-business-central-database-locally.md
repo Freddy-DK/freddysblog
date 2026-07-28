@@ -2,7 +2,7 @@
 layout: post
 title: "Restoring your online Business Central database locally"
 date: 2021-03-02 18:47:21
-categories: ["BcContainerHelper", "BcSaaS", "Docker", "PowerShell"]
+categories: ["Archive"]
 tags: ["Business Central", "Multitenancy", "restore", "Saas", "SQL on Host"]
 permalink: /2021/03/02/restoring-your-online-business-central-database-locally/
 ---

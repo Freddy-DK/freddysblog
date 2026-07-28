@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from the Cloud–part 5 out of 5"
 date: 2011-03-15 06:49:13
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["AppFabric", "Authentication", "Azure", "C#", "Proxy", "Service Reference", "Servicebus", "Silverlight", "WCF", "Web Services", "Windows Phone 7", "XAML"]
 permalink: /2011/03/15/connecting-to-nav-web-services-from-the-cloudpart-5-out-of-5/
 ---

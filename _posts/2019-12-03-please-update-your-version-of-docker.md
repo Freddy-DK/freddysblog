@@ -2,7 +2,7 @@
 layout: post
 title: "Please check your version of Docker!"
 date: 2019-12-03 07:34:52
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Docker", "NavContainerHelper", "Security", "TLS"]
 permalink: /2019/12/03/please-update-your-version-of-docker/
 ---

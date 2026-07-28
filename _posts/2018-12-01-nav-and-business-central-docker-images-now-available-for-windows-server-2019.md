@@ -2,7 +2,7 @@
 layout: post
 title: "NAV and Business Central Docker images now available for Windows Server 2019"
 date: 2018-12-01 01:21:57
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["1809", "ARM", "ltsc2016", "ltsc2019", "NavContainerHelper", "Windows Server 2016", "Windows Server 2019"]
 permalink: /2018/12/01/nav-and-business-central-docker-images-now-available-for-windows-server-2019/
 ---

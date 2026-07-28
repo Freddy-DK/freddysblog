@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from Java"
 date: 2010-01-19 14:09:39
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["Java", "NAV 2009 SP1", "Web Services"]
 permalink: /2010/01/19/connecting-to-nav-web-services-from-java/
 ---

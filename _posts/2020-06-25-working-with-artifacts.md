@@ -2,7 +2,7 @@
 layout: post
 title: "Working with artifacts"
 date: 2020-06-25 22:12:14
-categories: ["Docker", "PowerShell"]
+categories: ["Archive"]
 tags: ["Artifacts", "Docker", "Download-Artifacts", "Get-BcArtifactUrl", "Get-NavArtifactUrl", "New-BcContainer", "New-BcImage"]
 permalink: /2020/06/25/working-with-artifacts/
 ---

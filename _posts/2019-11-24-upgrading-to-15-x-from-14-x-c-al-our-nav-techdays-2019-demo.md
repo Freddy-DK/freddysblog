@@ -2,7 +2,7 @@
 layout: post
 title: "Upgrading to 15.x from 14.x C/AL – our NAV TechDays 2019 demo"
 date: 2019-11-24 15:26:05
-categories: ["AL Development", "Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["C/AL to AL", "Docker", "NavContainerHelper", "Upgrade"]
 permalink: /2019/11/24/upgrading-to-15-x-from-14-x-c-al-our-nav-techdays-2019-demo/
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: "Debugging “hangs” in Business Central Spring 2019 RTM and CU1"
 date: 2019-06-03 14:54:11
-categories: ["AL Development", "Docker"]
+categories: ["Archive"]
 tags: ["AL", "Debgging", "Docker"]
 permalink: /2019/06/03/debugging-hangs-in-business-central-spring-2019-rtm-and-cu1/
 ---

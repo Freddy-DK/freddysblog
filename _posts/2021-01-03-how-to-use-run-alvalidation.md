@@ -2,7 +2,7 @@
 layout: post
 title: "How to use Run-AlValidation"
 date: 2021-01-03 13:04:26
-categories: ["AL Development", "BcContainerHelper", "CI/CD"]
+categories: ["Archive"]
 tags: ["BcContainerHelper", "PowerShell", "Run-AlValidation"]
 permalink: /2021/01/03/how-to-use-run-alvalidation/
 ---

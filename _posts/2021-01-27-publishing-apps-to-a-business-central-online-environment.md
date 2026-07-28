@@ -2,7 +2,7 @@
 layout: post
 title: "Publishing apps to a Business Central Online Environment"
 date: 2021-01-27 08:11:18
-categories: ["AL Development", "BcContainerHelper", "CI/CD"]
+categories: ["Archive"]
 tags: ["App", "AppSource", "BcAuthContext", "Extension", "Install-BcAppFromAppSource", "Online", "PTE", "Publish", "Publish-BcContainerApp", "Publish-PerTenantExtensionApps"]
 permalink: /2021/01/27/publishing-apps-to-a-business-central-online-environment/
 ---

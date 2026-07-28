@@ -2,7 +2,7 @@
 layout: post
 title: "Ready To Go Office Hours, 2020-02-04"
 date: 2020-02-05 14:09:57
-categories: ["CI/CD"]
+categories: ["Archive"]
 tags: ["CD", "CI", "DevOps", "Office Hours"]
 permalink: /2020/02/05/ready-to-go-office-hours-2020-02-04/
 ---

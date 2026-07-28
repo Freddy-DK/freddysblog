@@ -2,7 +2,7 @@
 layout: post
 title: "NavContainerHelper – Create a SQL Server container and restore a .bak file"
 date: 2018-03-20 03:57:03
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["backup", "bakfile", "Database", "Docker", "NAV on Docker", "NavContainerHelper", "SQL container"]
 permalink: /2018/03/20/navcontainerhelper-create-a-sql-server-container-and-restore-a-bak-file/
 ---

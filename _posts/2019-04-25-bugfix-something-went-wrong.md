@@ -2,7 +2,7 @@
 layout: post
 title: "Bugfix: Something went wrong"
 date: 2019-04-25 13:22:37
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Bug", "Generic", "override"]
 permalink: /2019/04/25/bugfix-something-went-wrong/
 ---

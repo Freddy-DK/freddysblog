@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from Microsoft Dynamics NAV 2009 SP1"
 date: 2010-01-21 21:57:22
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["NAV 2009 SP1", "URL", "Web Services", "XML"]
 permalink: /2010/01/21/connecting-to-nav-web-services-from-microsoft-dynamics-nav-2009-sp1/
 ---

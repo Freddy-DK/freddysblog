@@ -2,7 +2,7 @@
 layout: post
 title: "One NAV 2017 on Azure – Loaded please…"
 date: 2016-11-19 12:52:03
-categories: ["Archive", "Azure"]
+categories: ["Archive"]
 tags: ["DEMO scripts", "Edit In Excel", "Flow", "Gallery", "NAV", "NAV 2017", "PowerApps", "Sharepoint", "That Was Easy"]
 permalink: /2016/11/19/one-nav-2017-on-azure-loaded-please/
 ---

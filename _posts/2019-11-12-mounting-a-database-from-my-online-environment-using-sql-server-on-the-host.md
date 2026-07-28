@@ -2,7 +2,7 @@
 layout: post
 title: "Mounting a database from my online environment using SQL Server on the host"
 date: 2019-11-12 11:40:41
-categories: ["Demo Environments", "Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["Business Central Sandbox", "Database", "Docker", "Multitenancy", "NavContainerHelper"]
 permalink: /2019/11/12/mounting-a-database-from-my-online-environment-using-sql-server-on-the-host/
 ---

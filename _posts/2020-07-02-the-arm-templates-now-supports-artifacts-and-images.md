@@ -2,7 +2,7 @@
 layout: post
 title: "The ARM Templates now supports artifacts… (and images)"
 date: 2020-07-02 12:05:58
-categories: ["Azure", "Demo Environments", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["ARM", "Artifacts", "Docker", "Get-BcArtifactUrl", "NavContainerHelper"]
 permalink: /2020/07/02/the-arm-templates-now-supports-artifacts-and-images/
 ---

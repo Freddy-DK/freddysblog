@@ -2,7 +2,7 @@
 layout: post
 title: "Having Demo Data while developing Business Central Apps with Docker"
 date: 2019-12-09 07:28:40
-categories: ["AL Development", "Docker", "NavContainerHelper", "PowerShell"]
+categories: ["Archive"]
 tags: ["Compile", "DEMO", "Development Environment", "Docker", "NavContainerHelper", "Publish", "Upgrade"]
 permalink: /2019/12/09/having-demo-data-while-developing-business-central-apps-with-docker/
 ---

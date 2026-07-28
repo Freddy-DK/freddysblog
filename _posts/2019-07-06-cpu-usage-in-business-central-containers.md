@@ -2,7 +2,7 @@
 layout: post
 title: "CPU usage in Business Central Containers"
 date: 2019-07-06 10:26:40
-categories: ["Docker", "NavContainerHelper"]
+categories: ["Archive"]
 tags: ["Containers", "CPU", "Docker", "NavContainerHelper", "new-navcontainer"]
 permalink: /2019/07/06/cpu-usage-in-business-central-containers/
 ---

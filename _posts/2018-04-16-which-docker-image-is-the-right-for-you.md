@@ -2,7 +2,7 @@
 layout: post
 title: "What Docker Image is right for you?"
 date: 2018-04-16 16:07:25
-categories: ["AL Development", "Docker"]
+categories: ["Archive"]
 tags: ["bcsandbox", "bcsandbox-master", "Docker", "dynamics-nav", "NAV on Docker", "support"]
 permalink: /2018/04/16/which-docker-image-is-the-right-for-you/
 ---

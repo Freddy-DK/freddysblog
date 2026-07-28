@@ -2,7 +2,7 @@
 layout: post
 title: "Weekend cleanup… – done"
 date: 2019-12-12 11:13:40
-categories: ["CI/CD", "Docker"]
+categories: ["Archive"]
 tags: ["Docker"]
 permalink: /2019/12/12/weekend-cleanup/
 ---

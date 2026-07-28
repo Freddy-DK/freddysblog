@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from C# using Service Reference (code version)"
 date: 2010-01-20 00:22:59
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["C#", "NAV 2009 SP1", "Service Reference", "Web Services"]
 permalink: /2010/01/20/connecting-to-nav-web-services-from-c-using-service-reference-code-version/
 ---

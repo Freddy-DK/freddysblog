@@ -2,7 +2,7 @@
 layout: post
 title: "http://aka.ms/navdemodeploy – under the hood"
 date: 2016-11-20 19:41:30
-categories: ["Archive", "Azure"]
+categories: ["Archive"]
 tags: ["Azure", "DEMO scripts", "Deployment", "Gallery", "Image", "NAV", "NAV 2017"]
 permalink: /2016/11/20/httpaka-msnavdemodeploy-under-the-hood/
 ---

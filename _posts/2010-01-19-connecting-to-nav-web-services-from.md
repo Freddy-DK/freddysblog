@@ -2,7 +2,7 @@
 layout: post
 title: "Connecting to NAV Web Services from …"
 date: 2010-01-19 11:47:58
-categories: ["Archive", "Web Services"]
+categories: ["Archive"]
 tags: ["NAV 2009 SP1", "Web Services"]
 permalink: /2010/01/19/connecting-to-nav-web-services-from/
 ---

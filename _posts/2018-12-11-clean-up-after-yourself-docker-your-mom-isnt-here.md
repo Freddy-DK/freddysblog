@@ -2,7 +2,7 @@
 layout: post
 title: "Clean up after yourself Docker, your mom isn’t here!"
 date: 2018-12-11 15:04:26
-categories: ["Docker"]
+categories: ["Archive"]
 tags: ["Cleanup", "Docker", "Go", "Layers", "NAV on Docker"]
 permalink: /2018/12/11/clean-up-after-yourself-docker-your-mom-isnt-here/
 ---

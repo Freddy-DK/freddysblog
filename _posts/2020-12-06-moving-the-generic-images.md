@@ -2,7 +2,7 @@
 layout: post
 title: "Moving the generic images!"
 date: 2020-12-06 07:47:03
-categories: ["BcContainerHelper", "Docker"]
+categories: ["Archive"]
 tags: ["Generic Image", "SQL Server 2017", "SQL Server 2019"]
 permalink: /2020/12/06/moving-the-generic-images/
 ---
