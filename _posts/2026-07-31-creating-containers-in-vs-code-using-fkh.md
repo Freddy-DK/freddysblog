@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Creating Containers in VS Code using Fkh
-date: 2026-07-31T18:00:00.000Z
+date: 2026-07-31T16:00:00.000Z
 categories: ["Fkh"]
 tags: [ "Fkh", "Open Source", "Kubernetes", "Docker", "GitHub", "AL-Go for GitHub" ]
 permalink: 2026/07/31/creating-containers-in-vs-code-using-fkh/
