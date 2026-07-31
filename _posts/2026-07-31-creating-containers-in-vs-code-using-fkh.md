@@ -25,8 +25,7 @@ Creating a container is a one-click operation for an AL-Go for GitHub project, w
 
 Fkh automatically discovers the AL-Go projects in your repository and list them in the projects view. Below, in the containers view you will see other containers you have running for other repos / projects.
 
-> [!NOTE]
-> In Fkh, you can setup the maximum number of containers allowed by people
+> **Note:** In Fkh, you can setup the maximum number of containers allowed by people
 
 Fkh reads your AL-Go settings files to understand the project structure, which artifacts to use, and how to configure the container - so there is very little for you to specify yourself.
 
