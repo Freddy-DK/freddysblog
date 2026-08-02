@@ -149,6 +149,14 @@
   }
 }
 
+// Rendered Mermaid diagrams
+pre.mermaid {
+  background: #f6f6f7;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
 // Full-size image overlay (lightbox)
 .lightbox-overlay {
   position: fixed;
@@ -176,7 +184,7 @@
   max-width: 95vw;
   max-height: 95vh;
   padding: 1.5rem;
-  background: #fff;
+  background: #f6f6f7;
   border-radius: 6px;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
 }
