@@ -170,3 +170,10 @@
   max-height: 95vh;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
 }
+
+.lightbox-overlay .lightbox-node svg {
+  max-width: 95vw;
+  max-height: 95vh;
+  width: auto;
+  height: auto;
+}

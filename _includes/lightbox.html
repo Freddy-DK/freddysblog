@@ -1,18 +1,31 @@
 <div class="lightbox-overlay" id="lightbox" aria-hidden="true">
   <img src="" alt="">
+  <div class="lightbox-node" hidden></div>
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     var overlay = document.getElementById('lightbox');
     var overlayImg = overlay.querySelector('img');
+    var nodeContainer = overlay.querySelector('.lightbox-node');
 
     function openLightbox(src) {
       overlayImg.src = src;
       overlay.classList.add('open');
     }
+    // Open an arbitrary element (e.g. a cloned Mermaid SVG) in the overlay.
+    window.openLightboxNode = function (node) {
+      overlayImg.style.display = 'none';
+      nodeContainer.hidden = false;
+      nodeContainer.innerHTML = '';
+      nodeContainer.appendChild(node);
+      overlay.classList.add('open');
+    };
     function closeLightbox() {
       overlay.classList.remove('open');
       overlayImg.src = '';
+      overlayImg.style.display = '';
+      nodeContainer.hidden = true;
+      nodeContainer.innerHTML = '';
     }
 
     overlay.addEventListener('click', closeLightbox);

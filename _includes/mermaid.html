@@ -11,5 +11,18 @@
     });
     mermaid.initialize({ startOnLoad: false });
     await mermaid.run();
+
+    // Make each rendered diagram open full-screen in the lightbox, like images.
+    document.querySelectorAll('.post-content pre.mermaid').forEach((pre) => {
+      pre.style.cursor = 'zoom-in';
+      pre.addEventListener('click', () => {
+        const svg = pre.querySelector('svg');
+        if (svg && window.openLightboxNode) {
+          const clone = svg.cloneNode(true);
+          clone.removeAttribute('style');
+          window.openLightboxNode(clone);
+        }
+      });
+    });
   }
 </script>
