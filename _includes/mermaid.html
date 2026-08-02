@@ -20,6 +20,14 @@
         if (svg && window.openLightboxNode) {
           const clone = svg.cloneNode(true);
           clone.removeAttribute('style');
+          // Size the clone to fit the viewport while preserving aspect ratio,
+          // so the surrounding panel shrink-wraps the diagram.
+          const vb = svg.viewBox.baseVal;
+          if (vb && vb.width && vb.height) {
+            const scale = Math.min(window.innerWidth * 0.9 / vb.width, window.innerHeight * 0.9 / vb.height);
+            clone.setAttribute('width', vb.width * scale);
+            clone.setAttribute('height', vb.height * scale);
+          }
           window.openLightboxNode(clone);
         }
       });
