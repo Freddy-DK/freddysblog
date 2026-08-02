@@ -7,7 +7,10 @@
       const pre = document.createElement('pre');
       pre.className = 'mermaid';
       pre.textContent = el.textContent;
-      el.replaceWith(pre);
+      // Replace minima's whole code-block wrapper so its framing/background
+      // (the outer .highlighter-rouge / pre) doesn't surround the diagram.
+      const block = el.closest('.highlighter-rouge') || el.closest('figure.highlight') || el.closest('pre') || el;
+      block.replaceWith(pre);
     });
     mermaid.initialize({ startOnLoad: false });
     await mermaid.run();
