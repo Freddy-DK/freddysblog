@@ -56,6 +56,8 @@ Select the database, create a new query and enjoy access to the database until i
 
 ![](/assets/images/2026-08-02-just-in-time-database-access-in-fkh/2026-08-02-23-43-15.png)
 
+> **Note:** you can always run the RevokeSqlAccess command if you want to close the network tunnel before timeout
+
 ## Request flow for database access
 
 The flow for requesting just-in-time database access follows the same pattern as the rest of Fkh - the backend function is the bearer of permissions, and the user just proves who they are with GitHub:
