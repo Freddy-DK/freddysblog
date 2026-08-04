@@ -15,7 +15,7 @@ In my [previous post](/2026/08/01/the-security-model-of-fkh/) I explained the se
 
 As explained in the [security model post](/2026/08/01/the-security-model-of-fkh/), the databases for your containers live on a SQL Server (Developer edition) running inside the Kubernetes cluster in your own Azure subscription. The containers connect to that SQL Server over TCP 1433 from within the cluster.
 
-This is by design. The SQL Server is **not** exposed to the public internet, and you do not have a permanent connection string, username or password on your local machine. There are no standing credentials to leak, rotate or lose.
+This is by design. The SQL Server is **not** exposed to the public internet, and you do not have a permanent connection string, username or password on your local machine. There are no standing credentials to leak, rotate, or lose.
 
 But sometimes you genuinely need to get into the database - to inspect data, run a query, troubleshoot an issue, or point SQL Server Management Studio (SSMS) or Azure Data Studio at it. That is where just-in-time database access comes in.
 
@@ -32,7 +32,7 @@ When you request access, Fkh will:
 
 No standing users, no shared passwords, no secrets stored on your machine.
 
-## How to get access form your computer
+## How to get access from your computer
 
 In VS Code you will need the Microsoft SQL Server extension (or another tool) as well as the Fkh extension. To open a tunnel from your machine to the SQL Server, you need to invoke one of the many commands from Fkh:
 
@@ -46,9 +46,9 @@ Specify the password you want to use for your temporary user in SQL:
 
 ![](/assets/images/2026-08-02-just-in-time-database-access-in-fkh/2026-08-02-23-32-12.png)
 
-> **Note:** you can also use the Fkh CLI to get access, works exactly the same way. More about this later.
+> **Note:** you can also use the Fkh CLI to get access; it works exactly the same way. More about this later.
 
-After successfully running the command, the output window displays the IP address of your SQL Connection. Use these info for creating a new connection in the SQL Server extension:
+After successfully running the command, the output window displays the IP address of your SQL Connection. Use this info to create a new connection in the SQL Server extension:
 
 ![](/assets/images/2026-08-02-just-in-time-database-access-in-fkh/2026-08-02-23-40-48.png)
 
@@ -56,7 +56,7 @@ Select the database, create a new query and enjoy access to the database until i
 
 ![](/assets/images/2026-08-02-just-in-time-database-access-in-fkh/2026-08-02-23-43-15.png)
 
-> **Note:** you can always run the RevokeSqlAccess command if you want to close the network tunnel before timeout
+> **Note:** you can always run the **Revoke Sql Access** command if you want to close the network tunnel before timeout.
 
 ## Request flow for database access
 
