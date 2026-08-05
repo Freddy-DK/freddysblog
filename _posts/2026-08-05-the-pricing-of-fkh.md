@@ -201,6 +201,16 @@ A few levers you have:
 - **Tune Log Analytics** retention and collection if telemetry ingestion grows.
 - **Turn on Kubecost** (`kubecost_enabled`) if you want per-namespace/per-container cost visibility - just remember it consumes a bit of node CPU/memory itself.
 
+## What if Business Central would run on Linux?
+
+Everything above assumes Business Central containers run on **Windows** nodes - and today they do. But a big part of the Windows compute cost is simply the **Windows licensing** baked into the VM price. A Linux VM of the same size is roughly **half** the hourly cost of its Windows counterpart, the Linux OS also uses less CPU and memory and Linux is more performant, meaning that we can pack more containers on the same compute. The day Business Central containers can run on **Linux**, the compute side of this whole post changes fundamentally.
+
+There is a catch during the transition, though. If you have **older (Windows) containers running at the same time as new (Linux) containers**, you will temporarily be paying for **two** container node pools instead of one - the existing Windows pool *and* a new Linux pool for the BC-on-Linux containers. During that overlap your bill actually goes **up** a little, because you are carrying both.
+
+But that is a temporary situation. As you retire the older Windows-based containers and everything moves onto Linux, you drop the expensive Windows node pool entirely, and the container compute lands on Linux nodes at roughly half the price. **The end result is that pricing drops pretty dramatically** - the single biggest variable cost in Fkh gets cut roughly in half, on top of all the levers (scale-to-zero, `StopFkh`, right-sizing) you already have.
+
+So the honest picture is: a short-term bump while you run old and new side by side, followed by a significant, lasting reduction once you are fully on Linux.
+
 ## Wrapping up
 
 Fkh is not free to run - it uses real Azure resources in your own subscription - but the design keeps the fixed cost small and pushes the variable cost onto Windows compute that you control. The tables above assume the node pool runs 24/7, but scaling the Windows node pool to zero out of hours - or stopping the whole cluster with `StopFkh` and paying only for the persisted disk - can remove more than half of that compute. The result is a bill that scales gracefully and gets *cheaper per running container* as your usage grows.
