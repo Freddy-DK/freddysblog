@@ -41,7 +41,7 @@ fkh uploadfile --localPath ".\my.bclicense" --fileName "mylicense" --fileVersion
 
 If you leave out `--fileVersion`, Fkh will simply stamp it with the current UTC time, which is a nice way to keep a rolling history without having to invent version labels yourself.
 
-> **Note:** files are not sorted after fileVersion - it is simply a tag and latest added file is the latest.
+> **Note:** Files are not sorted by `fileVersion` — it's simply a tag, and the most recently uploaded file becomes the latest.
 
 ## Downloading a file
 
