@@ -9,6 +9,10 @@ permalink: /2026/08/04/file-storage-in-fkh/
 
 In my [previous post](/2026/08/02/just-in-time-database-access-in-fkh/) I explained just-in-time database access in [**Fkh - Freddy's Kubernetes Helper**](https://github.com/Freddy-DK/Fkh) and promised to go into more detail about the file storage. This post does exactly that.
 
+The fkh file storage basically gets rid of SAS URLs or secret URLs - you have a trusted file storage which you can access from where you need it.
+
+![](/assets/images/2026-08-04-file-storage-in-fkh/2026-08-06-08-35-37.png)
+
 ## Why file storage?
 
 When you work with Business Central containers, there are always files you need to have around - license files, apps, configuration files, scripts, and much more. Rather than passing these around by hand or storing them in some ad-hoc location, Fkh gives you a proper, versioned file storage that lives in blob storage in **your own Azure subscription**.
@@ -21,15 +25,6 @@ The storage is **versioned**. Every file is stored under a name, and each upload
 
 While most of Fkh is available directly from VS Code, the file storage commands are a great example of where the **Fkh CLI** shines - especially when you want to script things or use them from a pipeline.
 
-All commands share a set of common options, the most important being:
-
-- `--backendUrl <url>` - override the backend URL.
-- `--ghUser <user>` - GitHub user account for `gh` auth token (or the `GH_USER` environment variable).
-- `--useOIDC` - fetch an OIDC token from GitHub Actions (auto-refreshes), which is what you use inside pipelines.
-- `--asJson` - output the result as JSON, handy for further processing.
-
-You can always append `-h` or `--help` to any command to see the full set of parameters.
-
 ## Uploading a file
 
 `fkh uploadfile` uploads a local file to blob storage and updates the version manifest (`all.json`) with all versions and the latest. This is an admin-only operation.
@@ -41,10 +36,12 @@ The key parameters are:
 - `--fileVersion <string>` (optional) - a version label for this file, used as the blob name. If you don't specify it, it defaults to the current UTC time as `yyyyMMddHHmm`.
 
 ```pwsh
-fkh uploadfile --localPath ".\my.flf" --fileName "license" --fileVersion "2026-08"
+fkh uploadfile --localPath ".\my.bclicense" --fileName "mylicense" --fileVersion "20260806"
 ```
 
 If you leave out `--fileVersion`, Fkh will simply stamp it with the current UTC time, which is a nice way to keep a rolling history without having to invent version labels yourself.
+
+> **Note:** files are not sorted after fileVersion - it is simply a tag and latest added file is the latest.
 
 ## Downloading a file
 
@@ -84,7 +81,7 @@ fkh listfiles
 fkh listfiles --file "*/*"
 
 # List all versions of the "license" file
-fkh listfiles --file "license/*"
+fkh listfiles --file "mylicense/*"
 ```
 
 Combine `--asJson` with these filters and you have a very scriptable way of inspecting exactly what is in your storage.
