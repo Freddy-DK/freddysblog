@@ -52,10 +52,10 @@ If you leave out `--fileVersion`, Fkh will simply stamp it with the current UTC 
 
 ```pwsh
 # Download the latest version of "license"
-fkh downloadfile --file "license" --output ".\my.flf"
+fkh downloadfile --file "mylicense" --output ".\my.bclicense"
 
 # Download a specific version
-fkh downloadfile --file "license/2026-08" --output ".\my.flf"
+fkh downloadfile --file "mylicense/20260806" --output ".\my.bclicense"
 ```
 
 Because you can always ask for just the name and get the latest version, scripts and pipelines can stay blissfully unaware of version labels while still getting the most recent file.
@@ -71,7 +71,7 @@ A few examples of what the filter can do:
 - `*/latest` (the default) - the latest version of every file.
 - `*/*` - all versions of all files.
 - `name/*` - all versions of a single file.
-- `My*/latest` or `log??/*` - pattern matching on both the name and the version.
+- `my*/latest` or `log??/*` - pattern matching on both the name and the version.
 
 ```pwsh
 # List the latest version of every file (default)
@@ -97,13 +97,13 @@ You specify the file as `name/version`, or just `name` to remove the latest vers
 
 ```pwsh
 # Remove a specific version
-fkh removefile --file "license/2026-08"
+fkh removefile --file "mylicense/20260806"
 
 # Remove the latest version (latest repoints to the previous one)
-fkh removefile --file "license"
+fkh removefile --file "mylicense"
 
 # Skip the confirmation prompt, e.g. from a pipeline
-fkh removefile --file "license/2026-08" --confirm
+fkh removefile --file "mylicense/20260806" --confirm
 ```
 
 The fact that removing the latest version automatically repoints *latest* to the previous version means you can safely roll back a bad upload without breaking anyone who is asking for the latest version.
