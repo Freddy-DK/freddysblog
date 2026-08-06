@@ -208,7 +208,7 @@ For most teams the default `D4s_v5` Linux node is plenty and you should only ups
 
 A few levers you have:
 
-- **Scale the Windows node pool to zero out of hours.** The Windows node pool can drop to **zero nodes** when no containers are running - nights, weekends, holidays - so you only pay for Windows compute while it is actually up. The tables above assume 24/7; scaling to zero outside working hours can easily cut the Windows compute line by **more than half** - and releases the per-container load balancer rules and public IPs too.
+- **Scale the Windows node pool to zero out of hours.** The Windows node pool can drop to **zero nodes** when no containers are running - nights, weekends, holidays - so you only pay for Windows compute while it is actually up. Compared to the **24/7** table above, scaling to zero outside working hours can easily cut the Windows compute line by **more than half** - and releases the per-container load balancer rules and public IPs too.
 - **Shut down the whole cluster with `StopFkh`.** During non-work hours you can stop the entire cluster with `StopFkh` - both the Linux and Windows node pools - removing almost all the compute cost and the load balancer cost. The one thing that keeps costing money is the **persisted Premium SSD disk**, which stays allocated (and billed) whether the cluster is running or not.
 - **Right-size the Windows node SKU.** Match the node size to your typical concurrent container count so nodes stay full (see [Choosing the right Windows node size](#choosing-the-right-windows-node-size)).
 - **Use spot nodes for throw-away containers.** Enable `windows_spot_enabled` for ephemeral, evictable workloads and let them ride the discount.
