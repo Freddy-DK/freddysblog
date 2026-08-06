@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The pricing of Fkh (Freddy's Kubernetes Helper)"
+title: "The pricing of running Fkh (Freddy's Kubernetes Helper)"
 date: 2026-08-05T10:00:00.000Z
 categories: ["Fkh"]
 tags: [ "Fkh", "Open Source", "Kubernetes", "SQL", "Docker", "GitHub", "AL-Go for GitHub", "Azure", "Pricing" ]
@@ -70,8 +70,8 @@ This is where your money goes when developers are actually working. Each Busines
 The important characteristics:
 
 - **It scales to zero.** When no containers are running - nights, weekends, holidays - the Windows node pool has no nodes and therefore no compute cost. You only pay while containers are up.
-- **It scales with the number of running containers, not headcount.** A single developer might have zero, one, or several containers up at once. What matters is how many containers are running *at the same time*, and for how long - not how many people are on the team.
-- **Packing matters.** A Business Central container needs roughly **3 GB**, so a `Standard_D4s_v5` (4 vCPU / 16 GB) comfortably hosts about **3 containers**. More concurrent containers means more nodes - or bigger nodes (see the next section).
+- **It scales with the number of running containers, not headcount.** A single developer might have zero, one, or several containers up at once. What matters is how many containers are running *at the same time*, and for how long - not how many people are on the team. You can define the max. number of containers allowed for each developer.
+- **Packing matters.** A Business Central container needs roughly **3 GB** (depending on the size of your apps - you can monitor this and define the requirement on a per project basis), so a `Standard_D4s_v5` (4 vCPU / 16 GB) comfortably hosts about **3 containers**. More concurrent containers means more nodes - or bigger nodes (see the next section).
 - **Spot can cut it dramatically.** Enabling the Windows Spot node pool (`windows_spot_enabled`) uses evictable spot capacity at a large discount - great for short-lived, throw-away containers that can tolerate an occasional eviction.
 
 ### Choosing the right Windows node size
@@ -130,7 +130,7 @@ Because the very first container already uses up the 5 free rules, **every conta
 
 Putting it together, the bill is essentially a **shared fixed baseline** plus **Windows compute** that scales with the number of concurrently running containers plus a little extra telemetry.
 
-The numbers below take a **conservative** view: the Windows node(s) run **24/7** (~730 hours/month), ~3 containers per `Standard_D4s_v5` node, `aks_sku_tier = Free`, and **no** spot node pool. "Running containers" means the *peak concurrent* number of containers. This is close to a worst case for compute - scaling the node pool to zero out of hours, or stopping the whole cluster with `StopFkh`, can cut these Windows numbers dramatically (see [Keeping the bill down](#keeping-the-bill-down)). The totals below include the per-container load balancer cost described above. Your mileage will vary.
+The numbers below assume a **realistic working pattern**: each container runs during a working day (~8 hours × ~22 workdays ≈ **176 hours/month**) and the **Windows node pool scales to zero** the rest of the time, ~3 containers per `Standard_D4s_v5` node, `aks_sku_tier = Free`, and **no** spot node pool. "Running containers" means the *peak concurrent* number of containers. The totals include the per-container load balancer cost described above. Your mileage will vary.
 
 **Shared baseline (independent of container count): ≈ $210/mo**
 
@@ -144,25 +144,7 @@ The numbers below take a **conservative** view: the Windows node(s) run **24/7**
 | Load Balancer base + egress IP | ~$22 |
 | Function App (`Y1` consumption) | ~$1 |
 
-**Total estimate including Windows compute and load balancer** - approximate total /mo depending on which Windows node SKU you pick (baseline + telemetry + Windows compute + per-container load balancer), with the node pool running **24/7**. Each cell shows **total /mo ($ per-container /mo) ×node count**:
-
-| Running containers (peak) | `D4s_v5` (3/node) | `D8s_v5` (8/node) | `D16s_v5` (20/node) | `D32s_v5` (40/node) |
-|---|---|---|---|---|
-| **1** | ~$495 ($495/c) ×1 | ~$770 ($770/c) ×1 | ~$1,320 ($1,320/c) ×1 | ~$2,420 ($2,420/c) ×1 |
-| **5** | ~$960 ($192/c) ×2 | ~$960 ($192/c) ×1 | ~$1,510 ($302/c) ×1 | ~$2,605 ($521/c) ×1 |
-| **10** | ~$1,730 ($173/c) ×4 | ~$1,735 ($174/c) ×2 | ~$1,735 ($174/c) ×1 | ~$2,830 ($283/c) ×1 |
-| **20** | ~$3,010 ($151/c) ×7 | ~$2,735 ($137/c) ×3 | ~$2,190 ($110/c) ×1 | ~$3,285 ($164/c) ×1 |
-| **40** | ~$5,825 ($146/c) ×14 | ~$4,735 ($118/c) ×5 | ~$4,185 ($105/c) ×2 | ~$4,185 ($105/c) ×1 |
-
-The pattern is clear: **for low concurrency the smaller SKUs are cheapest** (a `D4s_v5` or two), while **for high concurrency the bigger SKUs win** because they pack containers more densely and carry less per-node overhead. At 40 containers a single `D32s_v5` costs about a third less than fourteen `D4s_v5` nodes.
-
-> **Note:** the default Windows node pool autoscales `0–10`. The 14-node `D4s_v5` case for 40 containers would need `max_count` raised - another reason to reach for a bigger SKU at that scale.
-
-> **Remember:** these figures assume the node pool runs 24/7. In practice you rarely need Windows compute overnight or at weekends - scaling to zero out of hours, or stopping the cluster with `StopFkh`, can realistically halve the Windows compute line.
-
-### The same, but 8 hours a day
-
-Here is the exact same scenario, but assuming each container runs only during a working day (~8 hours × ~22 workdays ≈ **176 hours/month**) and the **Windows node pool scales to zero** the rest of the time (which also releases the per-container load balancers). The baseline is unchanged (the Linux node and the Premium SSD are still 24/7), but the Windows compute and the load balancer - and therefore the per-container cost - drop sharply:
+**Total estimate (8-hour working day)** - approximate total /mo depending on which Windows node SKU you pick (baseline + telemetry + Windows compute + per-container load balancer), with the node pool **scaling to zero outside working hours**. Each cell shows **total /mo ($ per-container /mo) ×node count**:
 
 | Running containers (peak) | `D4s_v5` (3/node) | `D8s_v5` (8/node) | `D16s_v5` (20/node) | `D32s_v5` (40/node) |
 |---|---|---|---|---|
@@ -172,7 +154,27 @@ Here is the exact same scenario, but assuming each container runs only during a 
 | **20** | ~$905 ($45/c) ×7 | ~$835 ($42/c) ×3 | ~$705 ($35/c) ×1 | ~$970 ($49/c) ×1 |
 | **40** | ~$1,590 ($40/c) ×14 | ~$1,325 ($33/c) ×5 | ~$1,195 ($30/c) ×2 | ~$1,195 ($30/c) ×1 |
 
-Comparing the two tables shows just how much of the bill is under your control: at 40 containers on a `D16s_v5`, moving from 24/7 to an 8-hour working day takes the total from ~$4,185 to ~$1,195 - both the Windows compute and the load balancer cost fall away outside working hours, because you simply are not paying for nodes or public IPs that nobody is using.
+The pattern is clear: **for low concurrency the smaller SKUs are cheapest** (a `D4s_v5` or two), while **for high concurrency the bigger SKUs win** because they pack containers more densely and carry less per-node overhead. At 40 containers a single `D32s_v5` costs about a third less than fourteen `D4s_v5` nodes.
+
+> **Note:** the default Windows node pool autoscales `0–10`. The 14-node `D4s_v5` case for 40 containers would need `max_count` raised - another reason to reach for a bigger SKU at that scale.
+
+> **Note also:** you can define default (or forced) shutdown time for containers and allow individual developers to extend or restart containers when working overtime (happens sometimes).
+
+### But what if you never shut down? (24/7)
+
+Here is the exact same scenario, but assuming you **never shut anything down** - the containers and their Windows nodes run **24/7** (~730 hours/month), and the per-container load balancers stay allocated around the clock. The baseline is unchanged (the Linux node and the Premium SSD are 24/7 either way), but the Windows compute and the load balancer - and therefore the per-container cost - go up substantially:
+
+| Running containers (peak) | `D4s_v5` (3/node) | `D8s_v5` (8/node) | `D16s_v5` (20/node) | `D32s_v5` (40/node) |
+|---|---|---|---|---|
+| **1** | ~$495 ($495/c) ×1 | ~$770 ($770/c) ×1 | ~$1,320 ($1,320/c) ×1 | ~$2,420 ($2,420/c) ×1 |
+| **5** | ~$960 ($192/c) ×2 | ~$960 ($192/c) ×1 | ~$1,510 ($302/c) ×1 | ~$2,605 ($521/c) ×1 |
+| **10** | ~$1,730 ($173/c) ×4 | ~$1,735 ($174/c) ×2 | ~$1,735 ($174/c) ×1 | ~$2,830 ($283/c) ×1 |
+| **20** | ~$3,010 ($151/c) ×7 | ~$2,735 ($137/c) ×3 | ~$2,190 ($110/c) ×1 | ~$3,285 ($164/c) ×1 |
+| **40** | ~$5,825 ($146/c) ×14 | ~$4,735 ($118/c) ×5 | ~$4,185 ($105/c) ×2 | ~$4,185 ($105/c) ×1 |
+
+Comparing the two tables shows just how much of the bill is under your control: at 40 containers on a `D16s_v5`, leaving everything running 24/7 instead of an 8-hour working day pushes the total from ~$1,195 up to ~$4,185 - you are now paying for nodes and public IPs around the clock, even when nobody is using them.
+
+> **Note:** there is a new feature coming out, where you can force the entire cluster to shut down during nights and public holidays to save cost.
 
 Two things stand out:
 
@@ -225,11 +227,39 @@ But that is a temporary situation. As you retire the older Windows-based contain
 
 So the honest picture is: a short-term bump while you run old and new side by side, followed by a significant, lasting reduction once you are fully on Linux.
 
+## Comparing with other services
+
+### Azure Container Instances
+
+When running Azure Container Instances with the standard Microsoft Business Central images, you cannot really stop and start containers - stopping a container removes the database as well, and starting a new ACI takes a very long time. In terms of pricing, an ACI with 2 vCPUs and 12 GB of memory is around $160 per month, and there is no real infrastructure around it - no integration with AL-Go or anything - so it wastes a lot of hours where your developers could be doing real work. With the current functionality in ACIs, I do not see them as relevant for Business Central work.
+
+### Azure VMs
+
+When running Azure VMs, you could use Traefik and pack more containers onto one VM, but this also requires serious infrastructure - or it wastes time for your developers and requires them to have permissions and budget in the Azure Portal. Pricing for an Azure VM is in the same ballpark as ACIs, but with more overhead on installation and maintenance.
+
+> **Idea:** I could build support in Fkh for using Azure VMs as an alternative to a K8s cluster, and then allowing Fkh to set up VMs and pack containers on these instead. This might make Fkh more useful for smaller partners as well, and it would be seamless for the developer.
+
+### Cosmo Alpaca
+
+For Cosmo Alpaca, you pay per container per minute, meaning that you have a much easier price calculation. Cheapest price I saw on their website is around $1 per hour (I think you can get a cheaper price when using a lot of compute), which would sum up to around $176 per month per container, but here you have a fully integrated VS Code extension, which helps you work with containers, saving time for your developers to do real work.
+
+### Locally running containers
+
+Locally running containers obviously doesn't incur any Azure costs, but they do take time away from your developers and this can be a significant amount of hours wasted.
+
+## Why I don't host Fkh for partners and customers
+
+There are many really, but the primary two are these:
+
+If I were to host Fkh, I would essentially be running the Linux SQL Server in Production and would have to pay license costs to Microsoft for hosting a SQL Server for my customers (not cheap) - even though they use it for Development and Test.
+
+Partners and customers would be tied to me as a vendor with nowhere else to go (without a moving cost). I don't want to put partners and customers in this situation and I don't think they would want to put themselves in that situation either.
+
 ## Wrapping up
 
 Fkh is not free to run - it uses real Azure resources in your own subscription - but the design keeps the fixed cost small and pushes the variable cost onto Windows compute that you control. The tables above assume the node pool runs 24/7, but scaling the Windows node pool to zero out of hours - or stopping the whole cluster with `StopFkh` and paying only for the persisted disk - can remove more than half of that compute. The result is a bill that scales gracefully and gets *cheaper per running container* as your usage grows.
 
-Realistically, in a company with 20 developers, you will be running containers at ~$32 per month or $0,003 per minute when setup right. But, the pricing isn't really the biggest advantage of Fkh. The biggest advantage is that it is all yours, you are in control, the data never leaves your subscriptions, the product is Open Source and the pricing is the Azure cost.
+Realistically, in a company with 20 developers, you will be running containers at ~$42 per month or $0,004 per minute when setup right. But, the pricing isn't really the biggest advantage of Fkh. The biggest advantage is that it is all yours, you are in control, the data never leaves your subscriptions, the product is Open Source, the pricing is the Azure cost, it is secure and your developers doesn't need any elevated privileges, permissions nor do they need access to Azure Resources or budget.
 
 As always, take a look at the project on GitHub: [https://github.com/Freddy-DK/Fkh](https://github.com/Freddy-DK/Fkh) and please consider [sponsoring me](https://github.com/sponsors/Freddy-DK) or setting up a [support service agreement](https://github.com/Freddy-DK/Fkh/blob/main/Support%20Service%20Agreement.md) to keep this project alive and thriving.
 
