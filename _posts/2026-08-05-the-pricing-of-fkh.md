@@ -249,7 +249,7 @@ Locally running containers obviously doesn't incur any Azure costs, but they do 
 
 ## Why I don't host Fkh for partners and customers
 
-There are many really, but the primary two are these:
+There are many reasons, but the primary two are these:
 
 If I were to host Fkh, I would essentially be running the Linux SQL Server in Production and would have to pay license costs to Microsoft for hosting a SQL Server for my customers (not cheap) - even though they use it for Development and Test.
 
