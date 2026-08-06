@@ -9,7 +9,7 @@ permalink: /2026/08/04/file-storage-in-fkh/
 
 In my [previous post](/2026/08/02/just-in-time-database-access-in-fkh/) I explained just-in-time database access in [**Fkh - Freddy's Kubernetes Helper**](https://github.com/Freddy-DK/Fkh) and promised to go into more detail about the file storage. This post does exactly that.
 
-The fkh file storage basically gets rid of SAS URLs or secret URLs - you have a trusted file storage which you can access from where you need it.
+The Fkh file storage basically gets rid of SAS URLs or secret URLs — you have a trusted file storage that you can access wherever you need it.
 
 ![](/assets/images/2026-08-04-file-storage-in-fkh/2026-08-06-08-35-37.png)
 
