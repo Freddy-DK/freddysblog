@@ -126,6 +126,8 @@ Standard Load Balancer pricing (West Europe, Aug 2026) is roughly:
 
 Because the very first container already uses up the 5 free rules, **every container after the first is billed for its 5 rules plus its public IP** - about **5 × $0.01 + $0.006 ≈ $0.056/hour ≈ ~$41/month per container** if it runs 24/7. Unlike compute, this cost is **identical whatever node SKU you use** - it scales with the number of running containers, not node size. The estimates below **include** this load balancer cost.
 
+> **Idea:** I an considering adding a feature to containers, where I can disable endpoints to save a buck or two on the load balancer. Let me know if you think that is a good idea. I could also create a traefik-like frontend to get rid of the load balancer all-tigether.
+
 ## Approximate monthly cost for 5, 10, 20 and 40 running containers
 
 Putting it together, the bill is essentially a **shared fixed baseline** plus **Windows compute** that scales with the number of concurrently running containers plus a little extra telemetry.
