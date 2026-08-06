@@ -51,7 +51,7 @@ If you leave out `--fileVersion`, Fkh will simply stamp it with the current UTC 
 - `--output <string>` (optional) - the file path to save the downloaded file to. Defaults to `blob-version` in the current directory.
 
 ```pwsh
-# Download the latest version of "license"
+# Download the latest version of "mylicense"
 fkh downloadfile --file "mylicense" --output ".\my.bclicense"
 
 # Download a specific version
