@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The pricing of running Fkh (Freddy's Kubernetes Helper)"
+title: "The price of running Fkh (Freddy's Kubernetes Helper)"
 date: 2026-08-05T10:00:00.000Z
 categories: ["Fkh"]
 tags: [ "Fkh", "Open Source", "Kubernetes", "SQL", "Docker", "GitHub", "AL-Go for GitHub", "Azure", "Pricing" ]
