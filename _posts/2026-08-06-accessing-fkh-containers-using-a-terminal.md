@@ -76,7 +76,9 @@ Auto Revoke: 2026-08-10 07:23 UTC (2h)
 Connect: Enter-PSSession -ConnectionUri https://4.166.125.97:5986/wsman -Credential (Get-Credential) -Authentication Basic -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
 ```
 
-And when you grab the line after connect and run that in the terminal, you will see something like:
+> **Note:** that the IP number displayed here is NOT the IP number of the container, it is the IP number of the load balancer in front of the container, which has a tunnel open to the container.
+
+When you now grab the line after connect and run that in the terminal, you will see something like:
 
 ![](/assets/images/2026-08-06-accessing-fkh-containers-using-a-terminal/2026-08-10-07-29-48.png)
 
