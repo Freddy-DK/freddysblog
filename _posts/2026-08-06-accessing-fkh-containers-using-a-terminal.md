@@ -51,7 +51,8 @@ Just like there is an **Allow Sql Access** command, there is an **Allow WinRm Ac
 Once the command has run, the output tells you the IP address to connect to. From there you create a PowerShell remoting session to the container and work with it as if it were local:
 
 ```pwsh
-$session = New-PSSession -ConnectionUri https://172.160.98.242:5986/wsman -Credential (Get-Credential) -Authentication Basic -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+$option = New-PSSessionOption -SkipCACheck -SkipCNCheck
+$session = New-PSSession -ConnectionUri https://172.160.98.242:5986/wsman -Credential (Get-Credential) -Authentication Basic -SessionOption $option
 Enter-PSSession $session
 ```
 
