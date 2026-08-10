@@ -68,10 +68,10 @@ The third way is actually the same as #2 - just from VS Code. If you right click
 In the output window, you will see something like:
 
 ```
-[AllowWinRmAccess] User: freddydk
-Container: freddydk-myapp-dk
-Allowed Ip: 83.89.248.19/32
-Win Rm Endpoint: 4.166.125.97:5986
+[AllowWinRmAccess] User: <github-user>
+Container: <container-name>
+Allowed IP: 203.0.113.19/32
+WinRM Endpoint: 203.0.113.97:5986
 Auto Revoke: 2026-08-10 07:23 UTC (2h)
 Connect: Enter-PSSession -ConnectionUri https://4.166.125.97:5986/wsman -Credential (Get-Credential) -Authentication Basic -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
 ```
