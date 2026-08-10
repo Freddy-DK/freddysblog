@@ -11,13 +11,15 @@ In my [previous post](/2026/08/05/the-pricing-of-fkh/) I broke down what it cost
 
 ## Why you don't have direct access to the container
 
-Just like the SQL Server we looked at in the [just-in-time database access post](/2026/08/02/just-in-time-database-access-in-fkh/), your Business Central containers run as pods inside the Kubernetes cluster in your own Azure subscription. They are **not** exposed to the public internet, and there is no permanent open door from the outside into a container.
+Just like the SQL Server we looked at in the [just-in-time database access post](/2026/08/02/just-in-time-database-access-in-fkh/), your Business Central containers run as pods inside the Kubernetes cluster in your own Azure subscription. They are **not** exposed to the public internet, and there is (by default) no permanent open door from the outside into a container.
 
 ![](/assets/images/2026-08-06-accessing-fkh-containers-using-a-terminal/2026-08-09-21-44-51.png)
 
-This is by design. The containers talk to each other and to the SQL Server from within the cluster, but from the outside there are no standing credentials and no public endpoint to reach in through, and while you could specify 5986 in the ports to open to your container, it wouldn't be very safe.
+This is by design. The containers talk to each other and to the SQL Server from within the cluster, but from the outside there are no standing credentials and no public endpoint to reach in through, and while you could specify 5986 in the ports to open to your container, it could come with a risk.
 
-Most of the time you don't need one - you create containers, publish apps and work with them straight from VS Code, the Web App or the CLI. But sometimes you genuinely need a shell inside the container - to inspect something, run a quick PowerShell command, look at the event log, or troubleshoot an issue that only shows up on the container itself.
+> **Note:** fkh containers are setup with Windows account lockout policy, meaning that if you decide to open the container to the internet. three failed attempts within a 15 minute timeframe would lock the account for 15 minutes, making brute-force attacks unlikely.
+
+Most of the time you don't need terminal access. You create containers, publish apps and work with them straight from VS Code, the Web App or the CLI. But sometimes you genuinely need a shell inside the container - to inspect something, run some PowerShell interactively, or troubleshoot an issue that only shows up on the container itself.
 
 We already saw how Fkh can create a just-in-time tunnel to the SQL Server. Getting into a container follows the same philosophy, and there are really two good ways to do it.
 
@@ -29,12 +31,14 @@ If you have `kubectl` installed and you have access to the cluster, the most dir
 fkh open --name <containername>
 ```
 
-fkh will check whether you have kubectl installed and if you have - it will make sure that you are authenticated to the right subscription and that you do have access.
+fkh will check whether you have kubectl installed and if you have - it will check that you are authenticated to the right subscription and that you do have access.
 If you do not have access (as many people wont), you will be redirected to the `poormansterminal`, which basically allows you to type in commands and have them executed in the container.
 
 > **Note:** you can add --poormansterminal to the fkh open to force the poor mans terminal, but you still need the fkh CLI installed.
 
-## Option 2: Open a WinRM session with allowwinrmaccess
+As this mechanism requires you to install the fkh CLI, kubectl and it requires you to have backend access, it is only for admins or infrastructure people.
+
+## Option 2: Open a WinRM session with allowwinrmaccess using fkh CLI
 
 The second way is the one that fits the Fkh model best, and it mirrors exactly how just-in-time database access works. Instead of exposing SQL over a temporary tunnel, Fkh opens a temporary, tightly-scoped door for **WinRM** from your IP address to the container.
 
@@ -55,9 +59,32 @@ Inside that session you have a full PowerShell prompt in the container, and you 
 
 > **Note:** just like with SQL access, you can run the corresponding **Revoke WinRm Access** command if you want to close the door before the timeout.
 
+## Option 3: Open a WinRM session with allowwinrmaccess using VS Code
+
+The third way is actually the same as #2 - just from VS Code. If you right click the container on which you want a terminal, you can select Allow WinRm Access and Fkh will open the tunnel for you.
+
+![](/assets/images/2026-08-06-accessing-fkh-containers-using-a-terminal/2026-08-10-07-27-36.png)
+
+In the output window, you will see something like:
+
+```
+[AllowWinRmAccess] User: freddydk
+Container: freddydk-myapp-dk
+Allowed Ip: 83.89.248.19/32
+Win Rm Endpoint: 4.166.125.97:5986
+Auto Revoke: 2026-08-10 07:23 UTC (2h)
+Connect: Enter-PSSession -ConnectionUri https://4.166.125.97:5986/wsman -Credential (Get-Credential) -Authentication Basic -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+```
+
+And when you grab the line after connect and run that in the terminal, you will see something like:
+
+![](/assets/images/2026-08-06-accessing-fkh-containers-using-a-terminal/2026-08-10-07-29-48.png)
+
+Now, your VS Code terminal is inside the container.
+
 ## Which one should you use?
 
-Both options get you a terminal in the container, so it really comes down to how you like to work:
+All options get you a terminal in the container, so it really comes down to how you like to work:
 
 - **kubectl** is great if you already live in Kubernetes tooling and have `kubectl` configured. It is direct and needs nothing really from Fkh - but it also assumes you have cluster access set up.
 - **Allow WinRm Access** is the Fkh-native option. It needs no cluster tooling on your machine, it is authenticated and authorized through GitHub, scoped to your IP, and time-limited - exactly like just-in-time database access.
