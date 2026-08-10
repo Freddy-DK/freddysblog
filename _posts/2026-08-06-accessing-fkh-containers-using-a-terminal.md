@@ -17,7 +17,7 @@ Just like the SQL Server we looked at in the [just-in-time database access post]
 
 This is by design. The containers talk to each other and to the SQL Server from within the cluster, but from the outside there are no standing credentials and no public endpoint to reach in through, and while you could specify 5986 in the ports to open to your container, it could come with a risk.
 
-> **Note:** fkh containers are setup with Windows account lockout policy, meaning that if you decide to open the container to the internet. three failed attempts within a 15 minute timeframe would lock the account for 15 minutes, making brute-force attacks unlikely.
+> **Note:** Fkh containers are set up with a Windows account lockout policy, meaning that if you decide to open the container to the internet, three failed attempts within a 15-minute timeframe would lock the account for 15 minutes, making brute-force attacks unlikely.
 
 Most of the time you don't need terminal access. You create containers, publish apps and work with them straight from VS Code, the Web App or the CLI. But sometimes you genuinely need a shell inside the container - to inspect something, run some PowerShell interactively, or troubleshoot an issue that only shows up on the container itself.
 
