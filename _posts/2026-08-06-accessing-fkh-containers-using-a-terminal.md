@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Accessing Fkh containers using a terminal (Freddy's Kubernetes Helper)"
+title: "Accessing Fkh containers using a terminal"
 date: 2026-08-06T10:00:00.000Z
 categories: ["Fkh"]
 tags: [ "Fkh", "Open Source", "Kubernetes", "Docker", "GitHub", "AL-Go for GitHub", "WinRM", "kubectl" ]
