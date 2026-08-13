@@ -15,7 +15,7 @@ At first glance it might seem a bit weird that Fkh has a web client at all. Most
 
 The answer is that it is actually pretty handy. When the web client is installed and running on your phone, you can perform some tasks in Fkh right from your phone - without opening a laptop, without a terminal, without VS Code.
 
-![](/assets/images/2026-08-13-the-fkh-web-client/2026-08-13-22-46-08.png)
+![Screenshot of the Fkh web client on a phone](/assets/images/2026-08-13-the-fkh-web-client/2026-08-13-22-46-08.png)
 
 At Bunker Holding, every feature developed must be code reviewed and tested in a test environment. The process that for every Pull Request created, you can ask for a review from a consultant, which will trigger the generation of a test environment, which is using AAD authentication. No sharing passwords, no need to submit passwords, secure by design. These PR environments are also shut down at 18:00 every evening and the consultant doesn't have VS Code and should certainly not need to install the Fkh CLI, so... a Web Client was born.
 
