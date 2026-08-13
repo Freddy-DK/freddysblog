@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Fkh Web Client (Freddy's Kubernetes Helper)"
+title: "The Fkh Web Client"
 date: 2026-08-13T09:00:00.000Z
 categories: ["Fkh"]
 tags: [ "Fkh", "Open Source", "Kubernetes", "Docker", "GitHub", "AL-Go for GitHub", "Web" ]
