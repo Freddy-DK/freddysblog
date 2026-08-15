@@ -7,7 +7,7 @@ tags: [ "AI", "Development" ]
 permalink: 2026/08/15/the-engineering-stairway-to-heaven/
 ---
 
-The word "engineering" has been through quite a journey over the last few years. When I started out, engineering meant writing code - carefully, line by line and I have spend 40+ years of my life doing that. Today, a big part of engineering is about telling an AI what to do, giving it the right context, building the machinery around it and orchestrating the whole thing.
+The word "engineering" has been through quite a journey over the last few years. When I started out, engineering meant writing code - carefully, line by line, and I have spent 40+ years of my life doing that. Today, a big part of engineering is about telling an AI what to do, giving it the right context, building the machinery around it and orchestrating the whole thing.
 
 I've been thinking about this as a kind of stairway - a set of steps, where each step builds on the one below it. You don't throw away the previous step when you climb to the next one, you build on top of it. And the further up you go, the more you move from doing the work yourself to designing the system that does the work for you.
 
