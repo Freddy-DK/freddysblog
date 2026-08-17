@@ -35,7 +35,7 @@ Every task can be scored along four dimensions. Each dimension answers exactly o
 
 A task can score brilliantly on one and terribly on another, and that's precisely why you need all four – any single one of them, on its own, will mislead you.
 
-Below is a list of dimensions, with questions and For each dimension I'll give the underlying question, the sub-questions that let you score it, and what a high and a low score actually look like.
+For each dimension I'll give the underlying question, the sub-questions that let you score it, and what a high and a low score actually look like.
 
 ## Dimension 1 — Economic attractiveness
 
@@ -120,6 +120,7 @@ Sub-questions that let you score it (here, *high* means low risk – safe to del
 | **Blast radius** | How bad is a mistake? | Sends money/deletes data → An unread draft |
 | **Reversibility** | Can the action be undone? | Irreversible → Fully reversible |
 | **Accountability** | Must a human stay answerable? | Legally required → No external stakes |
+| **Human participation** | Is a person's judgment, relationship, or leadership itself part of the value? | Essential → Irrelevant |
 | **Sensitive access** | Does it touch confidential data or critical systems? | Highly sensitive → None |
 | **Failure containment** | Can one mistake cascade? | Chain reaction → Fully contained |
 
@@ -135,13 +136,19 @@ Here is the insight that makes the framework actually useful rather than just a 
 
 **Delegation is not about the average of the four scores.**
 
-It's tempting to add the four scores up, take an average, and delegate anything above some line. That's exactly the wrong thing to do, because it lets a brilliant score on one dimension paper over a fatal weakness on another. Instead, treat each dimension as a **gate**:
+It's tempting to add the four scores up, take an average, and delegate anything above some line. That's exactly the wrong thing to do, because it lets a brilliant score on one dimension paper over a fatal weakness on another. Instead, look at the **weakest** dimension:
 
-> **If any one of the four dimensions is below a minimum threshold, the task is not ready for autonomous delegation – no matter how strong the other three are.**
+> **The weakest dimension determines the maximum level of autonomy you can safely grant.**
 
-A task can be wildly attractive economically, clearly feasible, and low-risk – but if it's barely verifiable, the answer is still *"not yet."* A single weak dimension vetoes the task. The average might look great; it doesn't matter. The weakest link decides.
+That turns the four scores into a simple scale:
 
-This is what turns four vague feelings into a decision. You're no longer asking *"does this feel like a good AI task?"* You're asking four specific questions, and any single firm "no" is enough to stop you.
+- **Very weak on any dimension → Not yet.** Don't delegate this autonomously.
+- **Medium on the weakest → Delegate with guardrails.** Hand it over, but with human review or restricted autonomy.
+- **Strong across all four → Delegate autonomously.**
+
+The average might look great; it doesn't matter. The weakest link sets the ceiling.
+
+This is what turns four vague feelings into a decision. You're no longer asking *"does this feel like a good AI task?"* You're asking four specific questions, and the weakest answer tells you exactly how much autonomy the task can take.
 
 ## Not suitable vs. not yet suitable
 
@@ -181,7 +188,7 @@ The task is attractive and mostly ready, but one or more dimensions need support
 
 The task still gets delegated. You just don't grant *full* autonomy – you grant *bounded* autonomy, and you use the weak dimension to decide where the boundary goes.
 
-> **NOTE:** when I say guardrails - I mean physical guardrails - not just a prompt.
+> **Note:** When I say guardrails, I mean enforced guardrails, like permissions, approval gates, access restrictions, validation checks—not merely instructions in a prompt.
 
 ### 3. Not yet
 At least one dimension is too weak to make delegation sensible or safe, and you can't (or won't) fix it right now. The right move is not to force it. Instead, note *which* dimension failed and *what would have to change*, and revisit the task when it does. "Not yet" is a parking space, not a rejection.
