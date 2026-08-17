@@ -6,7 +6,7 @@ categories: ["Freddy"]
 permalink: /2026/08/17/which-tasks-should-you-delegate-to-ai-agents/
 ---
 
-At this point, I think everybody agrees that AI is not going to replace people and take over current jobs. It is, however, going to perform **tasks**.
+Asking which jobs AI will replace is probably the wrong question. A job is a bundle of tasks, and AI agents don't need to take over the whole bundle to radically change how the job gets done
 
 That shift in framing matters more than it first appears. A *job* is a bundle of dozens of different tasks, held together by a title, a team, and a person who takes responsibility for the outcome. An *agent* doesn't take a job. It takes a task, does it, and hands the result back. So the interesting question is not *"which jobs will AI do?"* but rather:
 
