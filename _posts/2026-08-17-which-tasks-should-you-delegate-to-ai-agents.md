@@ -37,7 +37,7 @@ A task can score brilliantly on one and terribly on another, and that's precisel
 
 For each dimension I'll give the underlying question, the sub-questions that let you score it, and what a high and a low score actually look like.
 
-## Dimension 1 — Economic attractiveness
+## Dimension 1 - Economic attractiveness
 
 **The question: *Is it worth delegating?***
 
@@ -61,7 +61,7 @@ Sub-questions that let you score it:
 
 > Important: a high economic score is what makes a task **interesting**, but on its own it tells you nothing about whether you *should* delegate. Plenty of extremely attractive tasks are terrible delegation candidates because they fail one of the other three dimensions. That's the trap this dimension sets, and the next three are how you avoid it.
 
-## Dimension 2 — Agent feasibility
+## Dimension 2 - Agent feasibility
 
 **The question: *Can an agent realistically do it?***
 
@@ -83,7 +83,7 @@ Sub-questions that let you score it:
 
 > The crucial thing about feasibility is that it is the **most time-dependent** of the four dimensions. A task that scores low today can score high in six months – not because you did anything, but because models improved, tools matured, or the context finally got connected. We'll come back to this when we talk about *"not yet."*
 
-## Dimension 3 — Verifiability
+## Dimension 3 - Verifiability
 
 **The question: *Can we tell whether it did it correctly?***
 
@@ -107,7 +107,7 @@ Sub-questions that let you score it:
 
 > Here's why verifiability is such a powerful gate: **an agent you can't check is an agent you have to trust blindly.** Blind trust is fine when the stakes are low and fine when the model is perfect – and it's a disaster in every case in between. If you can't verify, you're not really delegating; you're gambling.
 
-## Dimension 4 — Risk & responsibility
+## Dimension 4 - Risk & responsibility
 
 **The question: *Can we safely allow it to do this?***
 
@@ -186,7 +186,7 @@ The task is attractive and mostly ready, but one or more dimensions need support
 
 The task still gets delegated. You just don't grant *full* autonomy – you grant *bounded* autonomy, and you use the weak dimension to decide where the boundary goes.
 
-> **Note:** When I say guardrails, I mean enforced guardrails, like permissions, approval gates, access restrictions, validation checks—not merely instructions in a prompt.
+> **Note:** When I say guardrails, I mean enforced guardrails, like permissions, approval gates, access restrictions, validation checks - not merely instructions in a prompt.
 
 ### 3. Not yet
 At least one dimension is too weak to make delegation sensible or safe, and you can't (or won't) fix it right now. The right move is not to force it. Instead, note *which* dimension failed and *what would have to change*, and revisit the task when it does. "Not yet" is a parking space, not a rejection.
@@ -206,11 +206,11 @@ Enjoy
 _**Freddy**_
 
 
-## Addendum — a worked example or two
+## Addendum - a worked example or two
 
 Let's run a couple of tasks through the framework to see how it feels in practice.
 
-**Example A — Summarising a batch of support tickets into weekly themes.**
+**Example A - Summarising a batch of support tickets into weekly themes.**
 
 - *Economic:* High. It's done every week, it's tedious, and it currently eats a chunk of a team lead's time. ✔
 - *Feasibility:* High. The tickets are text, they're accessible, and models are very good at this. ✔
@@ -219,7 +219,7 @@ Let's run a couple of tasks through the framework to see how it feels in practic
 
 All four clear the bar → **Delegate now.**
 
-**Example B — Drafting and sending replies to customer emails.**
+**Example B - Drafting and sending replies to customer emails.**
 
 - *Economic:* High. High volume, real time saved. ✔
 - *Feasibility:* High. Drafting a reply is well within reach. ✔
@@ -228,7 +228,7 @@ All four clear the bar → **Delegate now.**
 
 The economic and feasibility scores are excellent, but risk on the *send* step vetoes full autonomy. The fix is obvious once you see it: split the task. Let the agent draft; let a human approve the send. → **Delegate with guardrails.**
 
-**Example C — Reconciling month-end financial figures that feed a regulatory filing.**
+**Example C - Reconciling month-end financial figures that feed a regulatory filing.**
 
 - *Economic:* High. ✔
 - *Feasibility:* Possibly high. ✔
