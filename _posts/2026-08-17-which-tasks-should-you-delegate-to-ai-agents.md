@@ -26,7 +26,7 @@ That's what this framework does.
 
 Every task can be scored along four dimensions. Each dimension answers exactly one question:
 
-| Dimension | The question it answers | |
+| Dimension | The question it answers | What it measures |
 |---|---|---|
 | **Economic attractiveness** | *Is it worth delegating?* | Value |
 | **Agent feasibility** | *Can an agent realistically do it?* | Capability |
