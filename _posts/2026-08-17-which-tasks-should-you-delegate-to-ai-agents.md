@@ -6,13 +6,11 @@ categories: ["Freddy"]
 permalink: /2026/08/17/which-tasks-should-you-delegate-to-ai-agents/
 ---
 
-Asking which jobs AI will replace is probably the wrong question. A job is a bundle of tasks, and AI agents don't need to take over the whole bundle to radically change how the job gets done
-
-That shift in framing matters more than it first appears. A *job* is a bundle of dozens of different tasks, held together by a title, a team, and a person who takes responsibility for the outcome. An *agent* doesn't take a job. It takes a task, does it, and hands the result back. So the interesting question is not *"which jobs will AI do?"* but rather:
+Asking which jobs AI will replace is probably the wrong question. A job is a bundle of dozens of tasks, held together by a title, a team, and a person who takes responsibility for the outcome. An agent doesn't take a job – it takes a task, does it, and hands the result back. So the question worth asking is:
 
 > **Which tasks should I delegate to an AI agent – and which ones should I keep, at least for now?**
 
-This blog post describes a Framework, which is simple enough to keep in your head, but sharp enough to actually change your decisions. This post describes that framework in full: the four dimensions, the questions behind each one, how to score them, the gating rule that ties it together, and the three outcomes it produces.
+What follows is a framework for answering that – simple enough to keep in your head, but sharp enough to actually change your decisions. It has four dimensions, each with a question behind it, a way to score them, a rule that ties them together, and three outcomes it produces.
 
 ## Why not just "use AI for everything"?
 
@@ -65,7 +63,7 @@ Sub-questions that let you score it:
 
 **The question: *Can an agent realistically do it?***
 
-This is the capability dimension. Forget for a moment whether it's worth it or safe – can the technology, as it exists today, actually perform this task to an acceptable standard?
+Forget for a moment whether it's worth it or safe – can the technology, as it exists today, actually perform this task to an acceptable standard?
 
 Sub-questions that let you score it:
 
@@ -87,7 +85,7 @@ Sub-questions that let you score it:
 
 **The question: *Can we tell whether it did it correctly?***
 
-This, for me, is the dimension people most consistently underrate – and it's often the one that turns an obvious "yes" into a cautious "not yet."
+People consistently underrate this one – and it's often what turns an obvious "yes" into a cautious "not yet."
 
 Verifiability is about **observability of correctness**. After the agent finishes, how do you know whether the result is good? And more pointedly: how *expensive* is it to find that out?
 
@@ -132,8 +130,6 @@ Sub-questions that let you score it (here, *high* means low risk – safe to del
 
 ## The gating rule
 
-Here is the insight that makes the framework actually useful rather than just a nice diagram.
-
 **Delegation is not about the average of the four scores.**
 
 It's tempting to add the four scores up, take an average, and delegate anything above some line. That's exactly the wrong thing to do, because it lets a brilliant score on one dimension paper over a fatal weakness on another. Instead, look at the **weakest** dimension:
@@ -161,7 +157,7 @@ When a task fails on a dimension, don't just reject it – ask *why*, and *wheth
 - A low **verifiability** score is frequently *fixable by you*. Add automated tests. Introduce a structured review step. Build a reconciliation check. You can often *engineer* verifiability into a task that didn't have it.
 - A low **risk** score is often *fixable by design*. Add an approval gate so a human signs off before anything irreversible happens. Restrict what the agent is allowed to execute. Limit its access to sensitive systems. You can frequently shrink the blast radius until the task becomes safe.
 
-So a failing score isn't a dead end – it's a **diagnosis**. It tells you exactly what would have to change before the task becomes agent-ready. That reframing is, honestly, the most practically useful part of the whole framework.
+So a failing score isn't a dead end – it's a **diagnosis**. It tells you exactly what would have to change before the task becomes agent-ready, which is what makes the framework useful in practice rather than just a way to say no.
 
 > **NOTE:** If the task fails, decompose it and score the individual steps...
 
