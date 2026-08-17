@@ -10,6 +10,8 @@ Asking which jobs AI will replace is probably the wrong question. A job is a bun
 
 > **Which tasks should I delegate to an AI agent – and which ones should I keep, at least for now?**
 
+![](/assets/images/2026-08-17-which-tasks-should-you-delegate-to-ai-agents/2026-08-17-09-46-02.png)
+
 What follows is a framework for answering that – simple enough to keep in your head, but sharp enough to actually change your decisions. It has four dimensions, each with a question behind it, a way to score them, a rule that ties them together, and three outcomes it produces.
 
 ## Why not just "use AI for everything"?
@@ -163,7 +165,7 @@ So a failing score isn't a dead end – it's a **diagnosis**. It tells you exact
 
 ## Putting it to work
 
-You don't need a spreadsheet for this, though you certainly can build one. In practice, the framework works as four questions you run through in your head whenever you're tempted to hand something to an agent – or tempted to dismiss the idea:
+You don't need a spreadsheet for this, but if you like scoring things properly you can [download my scorecard here](/assets/files/2026-08-17-which-tasks-should-you-delegate-to-ai-agents/ai-delegation-scorecard.xlsx). In practice, though, the framework works as four questions you run through in your head whenever you're tempted to hand something to an agent – or tempted to dismiss the idea:
 
 1. **Is it worth delegating?** (economic attractiveness)
 2. **Can an agent realistically do it?** (feasibility)
