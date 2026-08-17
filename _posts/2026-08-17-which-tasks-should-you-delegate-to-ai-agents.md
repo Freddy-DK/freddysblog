@@ -10,7 +10,7 @@ Asking which jobs AI will replace is probably the wrong question. A job is a bun
 
 > **Which tasks should I delegate to an AI agent – and which ones should I keep, at least for now?**
 
-![](/assets/images/2026-08-17-which-tasks-should-you-delegate-to-ai-agents/2026-08-17-09-46-02.png)
+![Diagram showing the four dimensions for delegating tasks to AI agents](/assets/images/2026-08-17-which-tasks-should-you-delegate-to-ai-agents/2026-08-17-09-46-02.png)
 
 What follows is a framework for answering that – simple enough to keep in your head, but sharp enough to actually change your decisions. It has four dimensions, each with a question behind it, a way to score them, a rule that ties them together, and three outcomes it produces.
 
