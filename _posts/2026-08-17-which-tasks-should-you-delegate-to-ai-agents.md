@@ -29,7 +29,7 @@ Every task can be scored along four dimensions. Each dimension answers exactly o
 | Dimension | The question it answers | |
 |---|---|---|
 | **Economic attractiveness** | *Is it worth delegating?* | Value |
-| **Agent feasibility** | *Can an agent realistically do it?* | Capability 
+| **Agent feasibility** | *Can an agent realistically do it?* | Capability |
 | **Verifiability** | *Can we tell whether it did it correctly?* | Observability |
 | **Risk & responsibility** | *Can we safely allow it to do this?* | Safety |
 
