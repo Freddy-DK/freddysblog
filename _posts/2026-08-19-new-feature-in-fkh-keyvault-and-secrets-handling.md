@@ -7,7 +7,7 @@ tags: [ "Fkh", "Open Source", "Kubernetes", "Docker", "GitHub", "AL-Go for GitHu
 permalink: /2026/08/19/new-feature-in-fkh-keyvault-and-secrets-handling/
 ---
 
-In my [previous post](/2026/08/13/the-fkh-web-client/) I showed the Web Client for [**Fkh - Freddy's Kubernetes Helper**](https://github.com/Freddy-DK/Fkh). This post is about a brand new feature that lands when you update to the latest preview - a **KeyVault** of your own and proper **secrets handling**.
+This post is about a new feature that lands when you update to the latest preview - a **KeyVault** of your own and proper **secrets handling** in Fkh.
 
 ![Fkh secrets in the KeyVault](/assets/images/2026-08-19-new-feature-in-fkh-keyvault-and-secrets-handling/2026-08-19-08-45-22.png)
 
@@ -19,12 +19,12 @@ What has changed is that there are situations where you genuinely need a secret.
 
 When you update to the latest preview, Fkh now deploys an **Azure Key Vault** as part of your deployment. Just like everything else in Fkh, it lives in **your own Azure subscription**, and your secrets never leave it.
 
-## Basic or Premium - you decide
+## Basic or Premium
 
 The Key Vault comes in two flavours, and you get to choose which one you want when you deploy:
 
 - **Basic** (the default) - a standard, software-protected Key Vault. This is more than enough for the vast majority of scenarios.
-- **Premium** - backed by hardware security modules (HSM) for those who have compliance or policy requirements that mandate HSM-protected keys.
+- **Premium** - backed by hardware security modules (HSM) for those who have compliance or policy requirements that mandate HSM-protected keys (needed if you want to user this for code signing).
 
 You control this with a single configuration option in your deployment (`keyvault_sku`). If you don't set anything, you get **Basic**, so there is nothing you have to do to get going.
 
@@ -42,7 +42,7 @@ Once you are on the latest preview, you get three new operations to work with se
 
 These are just Fkh commands, so you invoke them the same way as everything else - from the command palette or the Fkh views. When you set a secret, the value is stored in the Key Vault in your subscription; when you read one back, the value is fetched on demand.
 
-Secrets can be **your own personal secrets** or **shared across everyone in your organization**, so a team can maintain a common set of secrets while individuals can still keep their own. When a secret is looked up, Fkh checks your personal secrets first and falls back to the shared ones.
+Secrets can be **your own personal secrets** or **shared across everyone in your organization**, so admins can maintain a common set of secrets while individuals can override and/or have their own. When a secret is looked up, Fkh checks your personal secrets first and falls back to the shared ones.
 
 ## ...and from the CLI
 
@@ -61,7 +61,7 @@ fkh setsecret --name adminPassword --value "<your password>"
 fkh getsecret --name adminPassword
 ```
 
-In a later version, you will also be able to use this KeyVault for your AL-Go repositories and have one single source for all your secrets, right in your own Azure Subscription.
+In a future version, you will also be able to use this KeyVault for your AL-Go repositories and have one single source for all your secrets, right in your own Azure Subscription.
 
 ## Using secrets as values for parameters
 
@@ -99,7 +99,7 @@ As handy as list/set/get and parameter defaulting are on their own, the most int
 
 - **KeyVault access for containers** - giving containers a controlled way to reach into the Key Vault, so an app running inside a container can consume secrets the same secure way. This actually comes from [Issue 69](https://github.com/Freddy-DK/Fkh/issues/69).
 
-Neither of those is in this preview - this post is about the foundation that makes them possible. Whether and when they show up depends a lot on what partners and customers using Fkh actually need, so if this is interesting to you, let me know.
+And probably more scenarios will pop up. Neither of those is in this preview - this post is about the foundation that makes them possible. Whether and when they show up depends a lot on what partners and customers using Fkh actually need, so if this is interesting to you, let me know.
 
 ## To use AI or not to use AI, that's the question
 
