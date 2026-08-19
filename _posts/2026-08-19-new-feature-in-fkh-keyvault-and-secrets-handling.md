@@ -101,8 +101,6 @@ As handy as list/set/get and parameter defaulting are on their own, the most int
 
 Neither of those is in this preview - this post is about the foundation that makes them possible. Whether and when they show up depends a lot on what partners and customers using Fkh actually need, so if this is interesting to you, let me know.
 
-Update to the latest preview to try it out, and take a look at the project on GitHub: [https://github.com/Freddy-DK/Fkh](https://github.com/Freddy-DK/Fkh) and please consider [sponsoring me](https://github.com/sponsors/Freddy-DK) or setting up a [support service agreement](https://github.com/Freddy-DK/Fkh/blob/main/Support%20Service%20Agreement.md) to keep this project alive and thriving.
-
 ## To use AI or not to use AI, that's the question
 
 During development of Fkh, I obviously use AI. I could have asked AI to solve Issue 69 - and I am fairly convinced that it would have found a way to fix that, but I am also convinced that AI wouldn't do this the way I wanted it done, using a sound and reusable architecture, which can be used as the foundation for other things. AI has never before written a tool like Fkh - and it will probably never do so. It doesn't understand the use cases, nor the complexity of this tool.
@@ -110,6 +108,8 @@ During development of Fkh, I obviously use AI. I could have asked AI to solve Is
 It isn't any different from asking a very skilled junior developer with no experience to build a tool like this - they will fail.
 
 I use AI as my team of engineers, who implement the features I have architected and described.
+
+Update to the latest preview to try it out, and take a look at the project on GitHub: [https://github.com/Freddy-DK/Fkh](https://github.com/Freddy-DK/Fkh) and please consider [sponsoring me](https://github.com/sponsors/Freddy-DK) or setting up a [support service agreement](https://github.com/Freddy-DK/Fkh/blob/main/Support%20Service%20Agreement.md) to keep this project alive and thriving.
 
 Enjoy
 
