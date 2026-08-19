@@ -24,7 +24,7 @@ When you update to the latest preview, Fkh now deploys an **Azure Key Vault** as
 The Key Vault comes in two flavours, and you get to choose which one you want when you deploy:
 
 - **Standard** (the default) - a standard, software-protected Key Vault. This is more than enough for the vast majority of scenarios.
-- **Premium** - backed by hardware security modules (HSM) for those who have compliance or policy requirements that mandate HSM-protected keys (needed if you want to user this for code signing).
+- **Premium** - backed by hardware security modules (HSM) for those who have compliance or policy requirements that mandate HSM-protected keys (needed if you want to use this for code signing).
 
 You control this with a single configuration option in your deployment (`keyvault_sku`). If you don't set anything, you get **Standard**, so there is nothing you have to do to get going.
 
@@ -55,7 +55,7 @@ A few examples of what that looks like:
 fkh listsecrets
 
 # Set (create or update) a secret
-fkh setsecret --name adminPassword --secret "<your password>"
+fkh setsecret --name adminPassword --secret (Read-Host "adminPassword")
 
 # Read a secret back
 fkh getsecret --name adminPassword
