@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "New feature in Fkh - a KeyVault and secrets handling"
-date: 2026-08-19T09:00:00.000Z
+date: 2026-08-19T07:00:00.000Z
 categories: ["Fkh"]
 tags: [ "Fkh", "Open Source", "Kubernetes", "Docker", "GitHub", "AL-Go for GitHub", "KeyVault", "Security" ]
 permalink: /2026/08/19/new-feature-in-fkh-keyvault-and-secrets-handling/
