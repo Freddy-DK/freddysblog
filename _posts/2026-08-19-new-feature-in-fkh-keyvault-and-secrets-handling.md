@@ -87,6 +87,8 @@ As explained in [Creating containers in VS Code using Fkh](/2026/07/31/creating-
 
 In your AL-Go settings, the admin password will now be read from the keyvault and inserted right into the Create Container dialog and you can press the Show/Hide button to see the value.
 
+![Defaulting parameters](/assets/images/2026-08-19-new-feature-in-fkh-keyvault-and-secrets-handling/2026-08-19-09-01-17.png)
+
 > **Note:** If you haven't setup the secret, the mandatory field will be there for you to fill out.
 
 ## The foundation for more
