@@ -17,7 +17,7 @@ Up until now, Fkh has been very deliberate about **not** storing humanly created
 
 What has changed is that there are situations where you genuinely need a secret. A container admin password is the obvious example, but there are plenty of others - license references, tokens for third party services, connection details you don't want to type over and over again.
 
-When you update to the latest preview, Fkh now deploys an **Azure Key Vault** as part of your deployment. Just like everything else in Fkh, it lives in **your own Azure subscription**, and your secrets never leave it.
+When you update to the latest preview, Fkh now deploys an **Azure Key Vault** as part of your deployment. Just like everything else in Fkh, it lives in **your own Azure subscription**, and that is where your secrets are stored - under your control.
 
 ## Standard or Premium
 
