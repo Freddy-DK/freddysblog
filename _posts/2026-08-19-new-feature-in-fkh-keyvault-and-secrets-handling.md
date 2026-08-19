@@ -19,14 +19,14 @@ What has changed is that there are situations where you genuinely need a secret.
 
 When you update to the latest preview, Fkh now deploys an **Azure Key Vault** as part of your deployment. Just like everything else in Fkh, it lives in **your own Azure subscription**, and your secrets never leave it.
 
-## Basic or Premium
+## Standard or Premium
 
 The Key Vault comes in two flavours, and you get to choose which one you want when you deploy:
 
-- **Basic** (the default) - a standard, software-protected Key Vault. This is more than enough for the vast majority of scenarios.
+- **Standard** (the default) - a standard, software-protected Key Vault. This is more than enough for the vast majority of scenarios.
 - **Premium** - backed by hardware security modules (HSM) for those who have compliance or policy requirements that mandate HSM-protected keys (needed if you want to user this for code signing).
 
-You control this with a single configuration option in your deployment (`keyvault_sku`). If you don't set anything, you get **Basic**, so there is nothing you have to do to get going.
+You control this with a single configuration option in your deployment (`keyvault_sku`). If you don't set anything, you get **Standard**, so there is nothing you have to do to get going.
 
 Because it is RBAC-enabled and wired directly into the Fkh backend, you never have to hand out access to the Key Vault yourself. The backend authenticates and authorizes you exactly like it does for every other operation - GitHub for who you are, GitHub team membership for what you are allowed to do.
 
@@ -55,7 +55,7 @@ A few examples of what that looks like:
 fkh listsecrets
 
 # Set (create or update) a secret
-fkh setsecret --name adminPassword --value "<your password>"
+fkh setsecret --name adminPassword --secret "<your password>"
 
 # Read a secret back
 fkh getsecret --name adminPassword
@@ -89,7 +89,7 @@ In your AL-Go settings, the admin password will now be read from the keyvault an
 
 ![Defaulting parameters](/assets/images/2026-08-19-new-feature-in-fkh-keyvault-and-secrets-handling/2026-08-19-09-01-17.png)
 
-> **Note:** If you haven't setup the secret, the mandatory field will be there for you to fill out.
+> **Note:** If you haven't set up the secret, the mandatory field will be there for you to fill out.
 
 ## The foundation for more
 
