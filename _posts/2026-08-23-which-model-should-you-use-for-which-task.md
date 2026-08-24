@@ -192,9 +192,11 @@ What you get in return is **control** - and for some tasks that's the whole poin
 - **Data never leaves your walls.** For confidential data, regulated industries, or anything you simply can't send to a third party, this can be the difference between "we can automate this" and "we're not allowed to."
 - **No per-token bill.** Once the hardware is paid for, running the model a million more times costs you electricity, not API fees. For high-volume, repetitive work, the economics flip hard in your favour.
 - **No rate limits, no outages, no surprise deprecations.** The model doesn't change under you unless *you* change it. The provider can't retire it, throttle you, or quietly swap it for something that behaves differently.
-- **Full determinism and reproducibility.** You control the weights, the version, the settings. You can pin exactly what runs, which matters enormously when you need the same input to give the same output next year.
+- **Determinism and reproducibility.** You control the weights, the version, the settings. You can pin exactly what runs, which matters enormously when you need the same input to give the same output next year.
 
 That determinism point deserves a moment, because we've all felt the opposite. You know the feeling: the model that was brilliant yesterday feels *off* today - a little dumber, a little more stubborn, like it got out of the wrong side of the bed. Sometimes that's just you noticing different failures; but sometimes it's real, because the provider tweaked something, rerouted you to different hardware, or quietly rolled out a new version under the same name. When you own the weights, that whole category of "why is it having a bad day?" simply goes away - the model behaves exactly the same today as it did yesterday, because nothing changed unless *you* changed it.
+
+> **Note:** this doesn't imply that yoiu get the exact same answer tomorrow that you did today, but you are more likely to have a more deterministic result with the same model, the same harness and the same skills.
 
 In team terms, this is **hiring your trainee in-house** instead of renting one by the hour. It only makes sense for steady, repetitive, well-understood work - you'd never self-host the rare, hard, judgment-heavy task, just as you'd bring in an outside specialist rather than keep one on payroll for a problem that shows up once a year. But for the bread-and-butter volume that runs constantly, your own model under your own roof is often the best answer of all.
 
