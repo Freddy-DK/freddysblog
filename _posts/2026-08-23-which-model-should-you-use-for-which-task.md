@@ -220,7 +220,7 @@ Those are the dimensions that made the decision *yours* in the first place, and 
 
 So **let the router handle the plumbing and the verifiable, low-stakes traffic - and keep the high-stakes, hard-to-verify decisions for yourself.** And note the control trade-off: self-hosting is maximum control and maximum responsibility; a router is maximum convenience and reach, at the cost of routing your traffic (and often your data) through an intermediary. Most real setups land in the middle - a router for the broad, low-sensitivity work, direct calls to a chosen frontier model for the hard judgment, and a self-hosted model for the high-volume, confidential grind.
 
-## Closing thought
+## Closing thoughts
 
 If you take one thing away from this post, make it this: **verifiability is the master lever.** Everything else - weaker models, skills, harnesses, self-hosting, auto-routing - only becomes safe *because* a task is verifiable. When you can cheaply catch a wrong answer, you're free to reach down, route away, or run it locally. When you can't, the model's judgment is all you have, so you reach up. Verifiable → a weak model is fine. Not verifiable → buy the best judgment you can.
 
