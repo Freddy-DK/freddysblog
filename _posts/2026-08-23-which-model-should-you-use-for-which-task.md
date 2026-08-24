@@ -50,7 +50,7 @@ Verifiability changes what a model's mistakes cost you.
 
 That's the whole lever. When the environment catches mistakes, you can afford a model that makes more of them. When nothing does, the model's judgment is your last line of defense - so buy the best you can.
 
-When it comes to coding, verifiability has a very concrete shape: it's your automated tests, your compiler, your cops/linter, and your code reviews - both the AI ones and the human ones. That's the machinery that catches a wrong answer before it ships. If you hand AI the keys to the bus with none of that in place - no tests, no review, no way to tell whether it's driving us off a cliff - then I want to get off. Most of that machinery is really the *harness* - more that later.)
+When it comes to coding, verifiability has a very concrete shape: it's your automated tests, your compiler, your cops/linter, and your code reviews - both the AI ones and the human ones. That's the machinery that catches a wrong answer before it ships. If you hand AI the keys to the bus with none of that in place - no tests, no review, no way to tell whether it's driving us off a cliff - then I want to get off. Most of that machinery is really the *harness* - more on that later.
 
 ## The four dimensions of "which model"
 
