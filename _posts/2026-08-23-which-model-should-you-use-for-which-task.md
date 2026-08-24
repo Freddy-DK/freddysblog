@@ -50,7 +50,7 @@ Verifiability changes what a model's mistakes cost you.
 
 That's the whole lever. When the environment catches mistakes, you can afford a model that makes more of them. When nothing does, the model's judgment is your last line of defense - so buy the best you can.
 
-When it comes to coding, verifiability has a very concrete shape: it's your automated tests, your compiler, your cops/linter, and your code reviews - both the AI ones and the human ones. That's the machinery that catches a wrong answer before it ships. If you hand AI the keys to the bus with none of that in place - no tests, no review, no way to tell whether it's driving us off a cliff - then I want to get off. Most of that machinery is really the *harness* - more that later.)
+When it comes to coding, verifiability has a very concrete shape: it's your automated tests, your compiler, your cops/linter, and your code reviews - both the AI ones and the human ones. That's the machinery that catches a wrong answer before it ships. If you hand AI the keys to the bus with none of that in place - no tests, no review, no way to tell whether it's driving us off a cliff - then I want to get off. Most of that machinery is really the *harness* - more on that later.
 
 ## The four dimensions of "which model"
 
@@ -191,7 +191,7 @@ What you get in return is **control** - and for some tasks that's the whole poin
 
 - **Data never leaves your walls.** For confidential data, regulated industries, or anything you simply can't send to a third party, this can be the difference between "we can automate this" and "we're not allowed to."
 - **No per-token bill.** Once the hardware is paid for, running the model a million more times costs you electricity, not API fees. For high-volume, repetitive work, the economics flip hard in your favour.
-- **No rate limits, no outages, no surprise deprecations.** The model doesn't change under you unless *you* change it. The provider can't retire it, throttle you, or quietly swap it for something that behaves differently.
+- **No provider-imposed rate limits, outages, or surprise deprecations.** You choose when to change the model and how much serving capacity to provision, although your own stack can still be rate-limited or unavailable.
 - **Determinism and reproducibility.** You control the weights, the version, the settings. You can pin exactly what runs, which matters enormously when you need the same input to give the same output next year.
 
 That determinism point deserves a moment, because we've all felt the opposite. You know the feeling: the model that was brilliant yesterday feels *off* today - a little dumber, a little more stubborn, like it got out of the wrong side of the bed. Sometimes that's just you noticing different failures; but sometimes it's real, because the provider tweaked something, rerouted you to different hardware, or quietly rolled out a new version under the same name. When you own the weights, that whole category of "why is it having a bad day?" simply goes away - the model behaves exactly the same today as it did yesterday, because nothing changed unless *you* changed it.
