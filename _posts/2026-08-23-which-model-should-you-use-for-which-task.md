@@ -187,7 +187,7 @@ This, however opens a whole new can of worms.
 
 ![A neural network with all the weights](/assets/images/2026-08-23-which-model-should-you-use-for-which-task/2026-08-25-07-33-13.png)
 
-Assuming that you do not have a rack of Vera Rubins at your disposal, you will be using an open weights model, and there are a ton of those available at [Huggingface](https://huggingface.co/). Note that there is a big difference between Open Source (where the source for the training software is open source) and Open Weights (where the result of the training is open "source"). Using Open Weights models doesn't give you any insight into how the model was trained or whether any post-training was added.
+Assuming that you do not have a rack of Vera Rubins at your disposal, you will be using an open weights model, and there are a ton of those available at [Hugging Face](https://huggingface.co/). Note that there is a big difference between Open Source (where the source for the training software is open source) and Open Weights (where the result of the training is open "source"). Using Open Weights models doesn't give you any insight into how the model was trained or whether any post-training was added.
 
 What is the biggest model you can run on your hardware? There are a number of things you need to be paying attention to:
 
