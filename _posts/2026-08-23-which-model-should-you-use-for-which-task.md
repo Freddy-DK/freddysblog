@@ -191,7 +191,7 @@ Assuming that you do not have a rack of Vera Rubins at your disposal, you will b
 
 What is the biggest model you can run on your hardware? There are a number of things you need to be paying attention to:
 
-- GPU memory - how much memory is available to your GPU (CPU memory doesn't really count here)
+- GPU and system memory - how much memory is available to your GPU, and whether your runtime can offload layers to system RAM/CPU (usually at a significant performance cost)
 - Number of parameters (QWEN3.8 is a 27B parameter model, Kimmi-K3 is a 2.3T, Anthropic and OpenAI doesn't disclose their parameter size, but 27B is fairly good)
 - Quantization of weights (QWEN3.8 uses natively 16Bit floating point weights, which means that you would need 27Gb*2 + housekeeping to run the model locally. By loosing precision and going for Q8 or Q4 you go to 27Gb or 13½Gb + housekeeping)
 - Licensing - under which license is the model released? This is an important one - you want Apache-2.0, MIT or like. Read the license terms.
