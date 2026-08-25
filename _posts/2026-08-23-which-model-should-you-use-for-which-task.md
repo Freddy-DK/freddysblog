@@ -13,7 +13,7 @@ In an [earlier post](/2026/08/17/which-tasks-should-you-delegate-to-ai-agents/) 
 
 It's tempting to answer that with a single word: the best one. Reach for the biggest, smartest, most expensive frontier model, point it at everything, and stop thinking. But that's a bit like insisting your most senior architect personally handles every task in the building - from designing the system down to renaming a variable. It works, technically. It's also slow, wildly expensive, and a waste of the thing that makes that architect valuable.
 
-![](/assets/images/2026-08-23-which-model-should-you-use-for-which-task/2026-08-23-22-08-04.png)
+![AI Supermarket](/assets/images/2026-08-23-which-model-should-you-use-for-which-task/2026-08-23-22-08-04.png)
 
 So let me try to build a small framework for matching models to tasks - simple enough to keep in your head, but sharp enough to actually change which model you reach for.
 
@@ -185,7 +185,7 @@ Now, you might be thinking - if I am going for a weaker model, could I host it m
 
 This, however opens a whole new can of worms.
 
-![](/assets/images/2026-08-23-which-model-should-you-use-for-which-task/2026-08-25-07-33-13.png)
+![A neural network with all the weights](/assets/images/2026-08-23-which-model-should-you-use-for-which-task/2026-08-25-07-33-13.png)
 
 Assuming that you do not have a rack of Vera Rubins at your disposal, you will be using an open weights model, and there are a ton of those available at [Huggingface](https://huggingface.co/). Note that there is a big difference between Open Source (where the source for the training software is open source) and Open Weights (where the result of the training is open "source"). Using Open Weights models doesn't give you any insight into how the model was trained or whether any post-training was added.
 
