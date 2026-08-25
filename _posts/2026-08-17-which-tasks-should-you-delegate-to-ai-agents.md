@@ -2,7 +2,8 @@
 layout: post
 title: "Which Tasks Should You Delegate to AI Agents?"
 date: 2026-08-17 09:00:00
-categories: ["Freddy"]
+categories: ["AI"]
+tags: [ "AI", "Task", "Development" ]
 permalink: /2026/08/17/which-tasks-should-you-delegate-to-ai-agents/
 ---
 

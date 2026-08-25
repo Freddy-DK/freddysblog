@@ -2,7 +2,7 @@
 layout: post
 title: The Engineering Stairway to Heaven
 date: 2026-08-15T06:00:00.000Z
-categories: ["Freddy"]
+categories: ["AI"]
 tags: [ "AI", "Development" ]
 permalink: 2026/08/15/the-engineering-stairway-to-heaven/
 ---
