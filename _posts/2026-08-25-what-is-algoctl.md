@@ -39,7 +39,7 @@ Every command has a `--help`, so if you forget the options you can always ask.
 algoctl createrepo - create a new repository from a template repository.
 
 Usage:
-    algoctl createrepo --repo <owner/repo|url> --ghuser <user> [options]
+    algoctl createrepo --repo <owner/repo|url> [--ghuser <user>] [options]
 
 Options:
     --templaterepo <owner/repo|url>   Template repository to copy content from.
