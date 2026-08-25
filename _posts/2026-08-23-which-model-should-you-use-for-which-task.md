@@ -183,7 +183,7 @@ Both let you reach down. Which reframes the question one last time: not *"how li
 
 Now, you might be thinking - if I am going for a weaker model, could I host it myself?
 
-This, however opens a whole new can of worms.
+This, however, opens a whole new can of worms.
 
 ![A neural network with all the weights](/assets/images/2026-08-23-which-model-should-you-use-for-which-task/2026-08-25-07-33-13.png)
 
