@@ -102,7 +102,7 @@ Options:
 
 UpdateRepo runs Update AL-Go System Files for you, but it does one extra thing first:
 
-- **It copies UpdateGitHubGoSystemFiles.yaml from the new template repo** before running the update. This matters for two reasons - to avoid breaking changes in the update workflow itself, and to cope with AL-Go versions that have been deleted. If the workflow file in your repo is old, running the update on GitHub might try to invoke actions which no longer exists or are no longer supported. Grabbing the fresh yaml file from the template first makes the whole thing a lot more robust.
+- **It copies UpdateGitHubGoSystemFiles.yaml from the new template repo** before running the update. This matters for two reasons - to avoid breaking changes in the update workflow itself, and to cope with AL-Go versions that have been deleted. If the workflow file in your repo is old, running the update on GitHub might try to invoke actions which no longer exist or are no longer supported. Grabbing the fresh yaml file from the template first makes the whole thing a lot more robust.
 - **It then invokes the Update AL-Go System Files workflow** using your GitHub account.
 
 ## CreateRelease
