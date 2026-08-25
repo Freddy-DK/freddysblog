@@ -108,6 +108,43 @@ UpdateRepo runs Update AL-Go System Files for you, but it does one extra thing f
 ## CreateRelease
 
 ```
+algoctl createrelease - run the AL-Go CreateRelease.yaml workflow in an
+existing repository to promote a build to a GitHub release.
+
+Usage:
+    algoctl createrelease --repo <owner/repo|url> --ghuser <user> --name <name> --tag <tag> [options]
+
+Options:
+    --repo <owner/repo|url>           The repository to create the release in. Short form
+                                      defaults to github.com. (required)
+    --ghuser <user>                   GitHub CLI account to use for running the workflow.
+                                      Default: the active account on the target host.
+    --branch <branch>                 Branch (ref) to run the workflow on.
+                                      Default: the repository's default branch.
+    --name <name>                     Name of this release. (required)
+    --tag <tag>                       Tag of this release; must be a semantic version
+                                      string (https://semver.org, e.g. 1.0.0). A pattern
+                                      ending in '*' (e.g. 1.0.*) resolves to the latest
+                                      matching tag with its patch incremented, or the
+                                      first one (e.g. 1.0.0) when none exist. (required)
+    --buildversion <version>          Build version to promote to release.
+                                      Default: latest
+    --releasetype <Release|Prerelease|Draft>
+                                      Release, prerelease or draft? Default: Release
+    --createreleasebranch             Create a release branch. Default: false
+    --releasebranchprefix <prefix>    Prefix for the release branch. Used only if
+                                      --createreleasebranch is set. Default: release/
+    --updateversionnumber <version>   New version number in the main branch. Use
+                                      Major.Minor (optionally add .Build for versioning
+                                      strategy 3) for an absolute change, or +1, +0.1
+                                      (or +0.0.1 for versioning strategy 3) for an
+                                      incremental change. Default: (none)
+    --skipupdatingdependencies        Skip updating dependency version numbers in all
+                                      apps. Default: false
+    --directcommit                    Direct commit? Default: false
+    --useghtokenworkflow              Use GhTokenWorkflow for PR/commit? Default: false
+    --confirm                         Skip the interactive confirmation prompt.
+    --help, -h                        Show this help.
 ```
 
 CreateRelease creates a release in an AL-Go for GitHub repo. Two things are worth calling out here:
