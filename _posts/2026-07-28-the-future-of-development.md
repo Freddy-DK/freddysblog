@@ -2,7 +2,7 @@
 layout: post
 title: The future of Development...
 date: 2026-07-28T06:00:00.000Z
-categories: ["Freddy"]
+categories: ["AI"]
 tags: [ "Open Source", "GitHub", "Development" ]
 permalink: 2026/07/28/the-future-of-development/
 ---

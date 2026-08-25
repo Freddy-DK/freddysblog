@@ -2,8 +2,8 @@
 layout: post
 title: "Which AI Model Should You Use for Which Task?"
 date: 2026-08-23 09:00:00
-categories: ["Freddy"]
-tags: [ "AI", "Development" ]
+categories: ["AI"]
+tags: [ "AI", "Task", "Development" ]
 permalink: /2026/08/23/which-model-should-you-use-for-which-task/
 ---
 
