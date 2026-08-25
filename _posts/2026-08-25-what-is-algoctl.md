@@ -17,7 +17,7 @@ Right now it does three things: **CreateRepo**, **UpdateRepo** and **CreateRelea
 - **UpdateRepo** - update AL-Go for GitHub system files based on a template.
 - **CreateRelease** - create a release in an AL-Go for GitHub repo.
 
-So yes, the ALGoCtl image above is a bit overpromising. but hey, who knows where it ends...
+So yes, the ALGoCtl image above is a bit overpromising, but hey, who knows where it ends...
 
 ## Why not just use GitHub???
 
