@@ -179,28 +179,25 @@ So skills and harnesses sit right next to verifiability in the framework:
 
 Both let you reach down. Which reframes the question one last time: not *"how little intelligence can this task get away with?"* but *"how little, once I've written the skill and built the harness?"* Often the highest-leverage move isn't a bigger model at all - it's better scaffolding around a cheaper one. That pays off on every call, forever; a bigger model just charges you more on every call, forever.
 
-## Don't forget the self-hosted option
+## What about the self-hosted options?
 
-There's a whole tier I've been ignoring, and for the right task it's the most interesting of all: the model you run **yourself**.
+Now, you might be thinking - if I am going for a weaker model, could I host it myself?
 
-Everything above assumed you call a model over an API - someone else's model, on someone else's hardware, billed per token. But for the work at the "reach down" end - **tedious, repetitive, well-described** tasks with **high verifiability** and **low difficulty** - a small open-weights model on your own hardware becomes genuinely attractive. The tasks a trainee can do are also the tasks a *local* trainee can do.
+This, however opens a whole new can of worms.
 
-You know the shape of these tasks: classifying support tickets, extracting fields from documents, reformatting data, tagging, routing, translating boilerplate. Narrow, repeated thousands of times, easy to check, no frontier reasoning required. That's exactly where a 7B or 8B model on a machine you own shines - and where paying frontier prices per call, forever, would be absurd.
+![](/assets/images/2026-08-23-which-model-should-you-use-for-which-task/2026-08-25-07-33-13.png)
 
-What you get in return is **control** - and for some tasks that's the whole point, not a nice-to-have:
+Assuming that you do not have a rack of Vera Rubins at your disposal, you will be using an open weights model, and there are a ton of those available at [Huggingface](https://huggingface.co/). Note that there is a big difference between Open Source (where the source for the training software is open source) and Open Weights (where the result of the training is open "source"). Using Open Weights models doesn't give you any insight into how the model was trained or whether any post-training was added.
 
-- **Data never leaves your walls.** For confidential data, regulated industries, or anything you simply can't send to a third party, this can be the difference between "we can automate this" and "we're not allowed to."
-- **No per-token bill.** Once the hardware is paid for, running the model a million more times costs you electricity, not API fees. For high-volume, repetitive work, the economics flip hard in your favour.
-- **No provider-imposed rate limits, outages, or surprise deprecations.** You choose when to change the model and how much serving capacity to provision, although your own stack can still be rate-limited or unavailable.
-- **Determinism and reproducibility.** You control the weights, the version, the settings. You can pin exactly what runs, which matters enormously when you need the same input to give the same output next year.
+What is the biggest model you can run on your hardware? There are a number of things you need to be paying attention to:
 
-That determinism point deserves a moment, because we've all felt the opposite. You know the feeling: the model that was brilliant yesterday feels *off* today - a little dumber, a little more stubborn, like it got out of the wrong side of the bed. Sometimes that's just you noticing different failures; but sometimes it's real, because the provider tweaked something, rerouted you to different hardware, or quietly rolled out a new version under the same name. When you own the weights, that whole category of "why is it having a bad day?" simply goes away - the model behaves exactly the same today as it did yesterday, because nothing changed unless *you* changed it.
+- GPU memory - how much memory is available to your GPU (CPU memory doesn't really count here)
+- Number of parameters (QWEN3.8 is a 27B parameter model, Kimmi-K3 is a 2.3T, Anthropic and OpenAI doesn't disclose their parameter size, but 27B is fairly good)
+- Quantization of weights (QWEN3.8 uses natively 16Bit floating point weights, which means that you would need 27Gb*2 + housekeeping to run the model locally. By loosing precision and going for Q8 or Q4 you go to 27Gb or 13½Gb + housekeeping)
+- Licensing - under which license is the model released? This is an important one - you want Apache-2.0, MIT or like. Read the license terms.
+- And a lot more...
 
-> **Note:** this doesn't imply that yoiu get the exact same answer tomorrow that you did today, but you are more likely to have a more deterministic result with the same model, the same harness and the same skills.
-
-In team terms, this is **hiring your trainee in-house** instead of renting one by the hour. It only makes sense for steady, repetitive, well-understood work - you'd never self-host the rare, hard, judgment-heavy task, just as you'd bring in an outside specialist rather than keep one on payroll for a problem that shows up once a year. But for the bread-and-butter volume that runs constantly, your own model under your own roof is often the best answer of all.
-
-The catch is that you now own the serving stack: the hardware, the updates, the monitoring. That's real work, and it only pays off past a certain volume. But above that volume, self-hosting turns a recurring API bill into a fixed asset - and hands you complete control.
+This will become a blog post of its own, but you can use [ModelFit](https://modelfit.io/) if you want to investigate which model you can use on your hardware and with the right harness, skills and tools - you might find the smaller models surpricingly good at day-to-day tasks.
 
 ## What about letting something else choose - OpenRouter and routing services
 
