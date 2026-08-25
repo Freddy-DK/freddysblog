@@ -28,7 +28,7 @@ Good question. For most of this, you can just use GitHub - create a repo from a 
 ALGoCtl is available on NuGet as a dotnet tool: [https://www.nuget.org/packages/ALGoCtl/](https://www.nuget.org/packages/ALGoCtl/)
 
 ```pwsh
-dotnet tool update ALGoCtl --global [--prerelease]
+dotnet tool install --global ALGoCtl
 ```
 
 Every command has a `--help`, so if you forget the options you can always ask.
