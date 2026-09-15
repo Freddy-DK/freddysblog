@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The End Justifies the Means"
-date: 2026-09-15 09:00:00
+date: 2026-09-15 06:00:00
 categories: ["AI"]
 tags: [ "AI", "Safety", "Alignment", "Ethics" ]
 permalink: /2026/09/15/the-end-justifies-the-means/
