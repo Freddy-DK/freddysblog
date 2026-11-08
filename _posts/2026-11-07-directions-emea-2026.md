@@ -163,7 +163,7 @@ BTW. Niklas, my oldest son, is in Chemical Engineering and is likely not joining
 
 ## After-days
 
-Having most of my family there, we stayed a few days in Paris to see the Eiffel tower, the Louvre and a log of other things, including trying the famous Lobster dog. Fortunately we didn't run into any of the demonstrations and riots and had a few amazing days. In the Louvre I found out that I must be a remote descendent of some famous french count on this painting*
+Having most of my family there, we stayed a few days in Paris to see the Eiffel tower, the Louvre and a lot of other things, including trying the famous Lobster dog. Fortunately we didn't run into any of the demonstrations and riots and had a few amazing days. In the Louvre I found out that I must be a remote descendent of some famous french count on this painting*
 
 ![](/assets/images/2026-11-07-directions-emea-2026/2026-11-08-14-04-12.png)
 
