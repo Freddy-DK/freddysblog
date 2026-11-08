@@ -7,9 +7,7 @@ tags: ["Directions","EMEA2026", "EMEA"]
 permalink: /2026/11/07/directions-emea-2026/
 ---
 
-## Introduction
-
-I've attended every Directions EMEA except the first, in Disneyland Paris in 2008. Until Poznan last year, I went as a Microsoftee and a speaker. Some years I had a few sessions; at my busiest, eight or nine. Poznan was my first as a non-Microsoftee, and a very different, wonderful experience.
+I think I have attended every Directions EMEA except the first, in Disneyland Paris in 2008. Until Poznan last year, I went as a Microsoftee and a speaker. Some years I had a few sessions; at my busiest, eight or nine. Poznan was my first as a non-Microsoftee, and a very different, wonderful experience.
 
 In Poznan, we introduced the Zone concept. The sessions and discussions were good, and the zones showed promise. We also learned what needed fixing and this year in Paris, we fixed it.
 
