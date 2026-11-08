@@ -155,7 +155,7 @@ And finally, the Directions team continues to amaze me. Their professionalism an
 
 Quite a few people asked me about the two other "Dalgas Kristiansen" professionals attending Directions - are they your sons?
 
-And yes, I am the proud father of 3 boys (they are actually men now, but for me they will always be boys), of which two are full time in the Business Central channel, Mads in Abakion and Jonas in the App Channel. They have already made significant impact in the comunity and are really making a name of themselves. Couldn't be more proud and happy to see that they both made a good impression on stage in panels and ISV sessions this year.
+And yes, I am the proud father of 3 boys (they are actually men now, but for me they will always be boys), of which two are full time in the Business Central channel, Mads in Abakion and Jonas in the App Channel. They have already made significant impact in the community and are really making a name of themselves. Couldn't be more proud and happy to see that they both made a good impression on stage in panels and ISV sessions this year.
 
 ![Proud dad](/assets/images/2026-11-07-directions-emea-2026/2026-11-08-14-37-31.png)
 
