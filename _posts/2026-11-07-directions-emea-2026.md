@@ -69,7 +69,7 @@ Speakers: Tine Staric (MVP), Msangi Masera (MVP), Roberto Corella (MVP) and AJ A
 
 At first, the participants didn't agree on much. But as the discussion went on, they began to converge on this: the most valuable Business Central professional of the future may be a kind of solution architect, with enough development knowledge and a deep understanding of business processes and Business Central.
 
-**Note**, this wasn't a question with a right or wrong answer. It was about opinions and predictions. I think the conclusion makes sense, and I don't think I steered the discussion too much.
+**Note**, the panels wasn't questions with a right or wrong answer. It was about opinions and predictions. I think the conclusion in this one makes sense, and I don't think I steered the discussion too much.
 
 Speaker ratings: 4.45
 
