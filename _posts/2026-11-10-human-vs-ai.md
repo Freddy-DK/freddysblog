@@ -7,7 +7,7 @@ tags: [ "AI" ]
 permalink: /2026/11/10/human-vs-ai/
 ---
 
-This blog post will try to map the various aspects of human intelligence to artificial intelligence.
+This is a blog post I have had on my mind for quite a long time. This blog post will try to map the various aspects of human intelligence, learning and doing to artificial intelligence.
 
 Most companies have processes in place for hiring talent and making new employees a success in their unique workplace. My thinking is here that just as a human requires onboarding and training in "How we do things", the AI needs the same. Yes, an AI can do amazing things, but it can also make amazing mistakes if it hasn't been told how we do things... Just like humans.
 
