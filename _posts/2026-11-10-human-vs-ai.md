@@ -9,11 +9,15 @@ permalink: /2026/11/10/human-vs-ai/
 
 This blog post will try to map the various aspects of human intelligence to artificial intelligence.
 
-Most companies have processes in place for hiring talent and making them a success in their unique workplace. My thinking is here that just as a human requires onboarding and training in "How we do things", the AI needs the same. Yes, an AI can do amazing things, but it can also make amazing mistakes if it hasn't been told how we do things... Just like humans.
+Most companies have processes in place for hiring talent and making new employees a success in their unique workplace. My thinking is here that just as a human requires onboarding and training in "How we do things", the AI needs the same. Yes, an AI can do amazing things, but it can also make amazing mistakes if it hasn't been told how we do things... Just like humans.
 
 ![Human vs. AI](/assets/images/2026-11-10-human-vs-ai/2026-11-11-14-39-43.png)
 
 How do humans gain the necessary knowledge and skills to perform a task and how does an AI do it?
+
+And please note - I do NOT suggest that AI take over any human job 1:1, but it will take over quite a number of the tasks we do today and allow us to do other things / more.
+
+Having said that, there are people today, who find themselves doing tasks, which later will be done by various AIs, they will have to learn new skills. After all - a job is just a collection of responsibilities and tasks (very simplified).
 
 Note that my comparisons need to be taken with a grain of salt and aren't intended to be a scientific description of how AI works.
 
