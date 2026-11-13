@@ -150,6 +150,7 @@ But in the end - all the intelligence in the world cannot magically just fix eve
 
 Note, that the things that make a team of humans successful are kind of the same things that make utilizing AI successful, the work behind making things happen is quite different though. Just make sure that you have all the other things don't skip any of the vital steps, it will come back and haunt you.
 
+The most dangerous thing you can do today is probably to rely a new model release to make it up for your lack of processes, rules and structure.
 
 Enjoy
 
