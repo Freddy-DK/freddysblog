@@ -9,6 +9,8 @@ permalink: /2026/11/10/human-vs-ai/
 
 This blog post will try to map the various aspects of human intelligence to artificial intelligence.
 
+Most companies have processes in place for hiring talent and making them a success in their unique workplace. My thinking is here that just as a human requires onboarding and training in "How we do things", the AI needs the same. Yes, an AI can do amazing things, but it can also make amazing mistakes if it hasn't been told how we do things... Just like humans.
+
 ![Human vs. AI](/assets/images/2026-11-10-human-vs-ai/2026-11-11-14-39-43.png)
 
 How do humans gain the necessary knowledge and skills to perform a task and how does an AI do it?
@@ -22,6 +24,8 @@ Human intelligence is defined as your ability to figure things out. On the AI si
 Intelligence is nothing without proper education though, and the same goes for AI: the number of parameters doesn't really matter if they haven't been trained.
 
 Having said that, a higher level of intelligence also yields an increased ability to learn, and that also applies to AI models - the more parameters, the higher the ability to solve problems they haven't been trained to solve.
+
+Higher intelligence (and larger models) also sometimes (not you obviously) tend to overthink tasks, which can be just as bad as jumping to conclusions, we need to find the right amount of effort to put into a task, which again is why it needs to be verifiable.
 
 ## Education == Training + Reasoning
 
@@ -42,11 +46,13 @@ Besides the total number of parameters, the various models also differ in how ma
 
 In a normal work environment, only a few tasks really require the highest education. In AI, we tend to ask the biggest model to do most tasks.
 
-Human education tends to be very narrow compared to AI training. Human education will take us in a specific direction, whereas most frontier models have no problems writing code, solving math problems and writing poems like Shakespeare. I don't think Einstein was quite as versatile.
+Human education is normally very narrow compared to AI training. Human education will take us in a specific direction, whereas most frontier models have no problems writing code, solving math problems and writing poems like Shakespeare. I don't think Einstein was quite as versatile.
 
 ![Education](/assets/images/2026-11-10-human-vs-ai/2026-11-12-09-40-44.png)
 
 This also might be one of the areas where we will be seeing AI change - is it really necessary to use a model that can draw like Da Vinci, write plays like Shakespeare, make music like Beethoven to write a simple AL function?
+
+This is the way Microsoft is going with its MAI models and in the end, I think this is a better recipe than one model to know it all, but we are not there yet. 
 
 ## Experience + Specialized Education == Post-training
 
@@ -56,13 +62,13 @@ These things are taught through experience and specialized education. In AI, mos
 
 I cannot help thinking that a good coding model post-trained on AL and Business Central business processes might be better (and much cheaper) at creating apps than a frontier model that can do everything in the world.
 
-## Project experience == CLAUDE.md
+## Project experience == AGENTS.md
 
 Experience from current projects is typically something we as developers have in our heads. In complex codebases, we would frequently ask the person who knew about a certain part of the code to be the reviewer as they would remember why things were done in one way or the other.
 
-Many developers probably also remember coming back to a piece of code after a year on other projects, thinking: "What was I thinking?" This is exactly the knowledge CLAUDE.md is meant to capture.
+Many developers probably also remember coming back to a piece of code after a year on other projects, thinking: "What was I thinking?" This is exactly the knowledge AGENTS.md is meant to capture.
 
-When using AI, the experience is written in files like CLAUDE.md (or AGENTS.md / copilot-instructions.md), which basically contain the experience from this area of the codebase. Without giving this information to AI, AI will have to spend more tokens to search the codebase for patterns and usage and will more frequently get things wrong due to context window overflow.
+When using AI, the experience is written in files like AGENTS.md (or CLAUDE.md / copilot-instructions.md), which basically contain the experience from this area of the codebase. Without giving this information to AI, AI will have to spend more tokens to search the codebase for patterns and usage and will more frequently get things wrong due to context window overflow.
 
 ## Memory + Information in front of you == Context
 
@@ -88,7 +94,7 @@ The harness (like Claude Code or GitHub Copilot) is the workplace for the AI, de
 
 Many Business Central partners didn't have a structured description of their processes and rules until they started implementing DevOps a few years ago. DevOps forced structure into the processes, and this helps immensely when implementing AI.
 
-Companies without DevOps processes might struggle to implement an AI harness from scratch, even though we have things like [BCQuality](https://github.com/microsoft/BCQuality) and [AL-Go for GitHub](https://github.com/microsoft/AL-Go), which can help you quite a bit when getting started. Besides that, consult people who know and have tried this before.
+Companies without DevOps processes might struggle to implement an AI harness from scratch, even though we have things like [BCQuality](https://github.com/microsoft/BCQuality) and [AL-Go for GitHub](https://github.com/microsoft/AL-Go), which can help partners quite a bit when getting started. Besides that, partners should consult professionals who know more and have tried this before.
 
 ## Tools you work with == MCP/Tools
 
@@ -100,7 +106,7 @@ Tools are also what keeps both humans and AI honest. You might be convinced that
 
 But just like a developer with 200 extensions installed doesn't get more productive, giving the AI too many tools fills up the context window with tool descriptions and makes it harder for the AI to pick the right one.
 
-Depending on where the AI is running, some of the tools might be the same, but if agents are running autonomously then Docker is not an option. For this, I have created [Fkh](https://github.com/Freddy-DK/Fkh) (Freddy's Kubernetes Helper), more about that at a different time.
+Depending on where the AI is running, some of the tools might be the same, but if agents are running autonomously then local Docker is not an option. For this, I have created [Fkh](https://github.com/Freddy-DK/Fkh) (Freddy's Kubernetes Helper), more about that at a different time.
 
 ## Routines you know by heart == Skills
 
@@ -118,7 +124,7 @@ A good team also has different roles - someone writes the code, someone else tes
 
 The loop is only as good as the verification though. A team iterating without tests is just guessing in circles and so is an AI - which is why the tools and the harness from the previous sections are so important.
 
-![Teams](/assets/images/2026-11-10-human-vs-ai/2026-11-12-11-02-33.png)
+![Teams](/assets/images/2026-11-10-human-vs-ai/2026-11-13-05-16-49.png)
 
 ## Assignment == Prompt
 
@@ -132,9 +138,13 @@ No matter who gets the assignment, describing what "done" looks like is always a
 
 ## Conclusion
 
-Every time a new model is released, we tend to think that this model can do it all. But in the end - all the intelligence in the world cannot magically just fix everything - you need the training, experience, context, harness and everything else. With all of this in place, you might find that you don't need superior intelligence for all tasks and you will save a lot at the same time...
+When hiring humans, we tend to hire the right person for the job. We don't just hire the most intelligent person for every task.
 
-Note, that the things that make a team of humans successful are kind of the same things that make utilizing AI successful, the work behind making things happen is quite different though. Just make sure that you don't skip any of the vital steps, it will come back and hunt you.
+Every time a new model is released, we tend to think that this model can do it all and this is the model we will use.
+
+But in the end - all the intelligence in the world cannot magically just fix everything - you need the training, experience, context, harness and everything else. With all of this in place, you might find that you don't need superior intelligence for all tasks and you will save a lot of money at the same time...
+
+Note, that the things that make a team of humans successful are kind of the same things that make utilizing AI successful, the work behind making things happen is quite different though. Just make sure that you have all the other things don't skip any of the vital steps, it will come back and haunt you.
 
 
 Enjoy
